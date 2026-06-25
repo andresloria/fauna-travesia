@@ -185,7 +185,17 @@ details.how p{margin-top:8px;color:#d8cdb2;line-height:1.5}
 .legtag{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;color:#3a2c0a;background:linear-gradient(90deg,#e8c558,#f3d98a);padding:2px 8px;border-radius:20px}
 .editname{font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:var(--paper);padding:6px 0}
 
+/* ---------- botón de sonido ---------- */
+.soundbtn{position:fixed;top:12px;right:12px;z-index:40;width:42px;height:42px;border-radius:50%;
+  border:1px solid rgba(196,160,78,.45);background:rgba(11,26,23,.82);backdrop-filter:blur(4px);
+  font-size:19px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.4);transition:transform .12s,border-color .15s}
+.soundbtn:hover{transform:scale(1.08);border-color:var(--gold)}
+.soundbtn:active{transform:scale(.96)}
+.soundbtn.off{opacity:.6;filter:grayscale(.4)}
+
 @media(max-width:520px){
+  .soundbtn{top:8px;right:8px;width:38px;height:38px;font-size:17px}
   .acard{width:96px}.acard .art{width:78px;height:78px}.empty-slot{width:96px}
   .mnode{width:50px}.mnode .disc{width:40px;height:40px;font-size:19px}
   .editp{grid-template-columns:1fr}.editcard{margin-bottom:4px}

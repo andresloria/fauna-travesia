@@ -37,14 +37,20 @@ def fetch(url):
     with urllib.request.urlopen(req, timeout=30) as r:
         return r.read()
 
-def save(folder, name, url):
+# Ambiente de fondo (Freesound, CC0 = dominio público, sin atribución).
+# "Peruvian Amazon birds frogs daytime" de nonamethefish — selva neotropical real.
+AUDIO = {
+  "selva": "https://cdn.freesound.org/previews/653/653743_8323061-hq.mp3",
+}
+
+def save(folder, name, url, ext="svg"):
     path = os.path.join(ROOT, "assets", folder)
     os.makedirs(path, exist_ok=True)
     try:
         data = fetch(url)
-        if len(data) < 100 or b"<svg" not in data:
-            return f"  ! {name}: respuesta vacia/no-svg ({url})"
-        with open(os.path.join(path, name + ".svg"), "wb") as f:
+        if len(data) < 100 or (ext == "svg" and b"<svg" not in data):
+            return f"  ! {name}: respuesta vacia/invalida ({url})"
+        with open(os.path.join(path, name + "." + ext), "wb") as f:
             f.write(data)
         return f"  ok {name} ({len(data)//1024 or 1}kb)"
     except urllib.error.HTTPError as e:
@@ -63,4 +69,8 @@ for slug, iso in COUNTRIES.items():
         continue
     print(save("paises", slug, MAP.format(iso)))
 
-print("\nListo. Assets en assets/animales/ y assets/paises/.\n")
+print("\nAudio de ambiente (Freesound, CC0):")
+for name, url in AUDIO.items():
+    print(save("audio", name, url, ext="mp3"))
+
+print("\nListo. Assets en assets/animales/, assets/paises/ y assets/audio/.\n")

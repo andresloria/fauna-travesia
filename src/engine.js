@@ -33,10 +33,11 @@ export function setLevel(a, L) { while (a.level < L) levelUp(a); return a; }
 
 // ---------- dificultad (perillas para balancear) ----------
 // La dificultad sube por PROFUNDIDAD (países ya cruzados), no por cuál país tocó.
-// depth 0: retador 1-2 · jefe 2-3   |   depth 4: retador 3-4 · jefe 4-5
-export function retSize(depth)  { return Math.min(4, 1 + Math.floor(depth / 2) + rnd(2)); }
-export function bossSize(depth) { return Math.min(5, 2 + Math.floor(depth / 2) + rnd(2)); }
-export function enemyLevel(depth, isBoss) { return (isBoss ? 2 : 1) + depth; }
+// depth 0: retador tam 2-3 (Nv2) · jefe tam 3-4 (Nv3)  |  depth 4: retador 4-5 · jefe 5
+// Para hacerlo más fácil/difícil, movés estas 4 perillas (base de tamaño y de nivel).
+export function retSize(depth)  { return Math.min(5, 2 + Math.floor(depth / 2) + rnd(2)); }
+export function bossSize(depth) { return Math.min(5, 3 + Math.floor(depth / 2) + rnd(2)); }
+export function enemyLevel(depth, isBoss) { return (isBoss ? 3 : 2) + depth; }
 export function wildLevel(depth) { return 1 + depth; }
 
 export function genEnemy(country, size, lvl) {

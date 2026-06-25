@@ -109,6 +109,13 @@ Como el motor ya está aislado y no depende del DOM, ese paso es sobre todo
 - Equipo en panel propio bien visible (orden de pelea numerado, “pelea 1°”).
 - Países al azar cada run; la dificultad escala por profundidad, no por el país.
 - Fondo del mapa con la silueta del país que tocó (océano para Mar abierto).
+- **Música de ambiente** (selva neotropical) con botón 🔊/🔇 (preferencia guardada, arranca tras el primer toque).
+
+## 🎨 Créditos de assets
+
+- **Arte de animales:** [OpenMoji](https://openmoji.org/) — CC BY-SA 4.0.
+- **Siluetas de país:** [mapsicon](https://github.com/djaiss/mapsicon) — MIT.
+- **Ambiente de selva:** “Peruvian Amazon birds frogs daytime” de *nonamethefish* ([Freesound](https://freesound.org/people/nonamethefish/sounds/653743/)) — CC0.
 
 ## 💡 Ideas para mejorar (cuando querás)
 
