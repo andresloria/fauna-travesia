@@ -1,0 +1,11 @@
+{
+  "name": "fauna-travesia",
+  "version": "0.1.0",
+  "description": "Roguelike de fauna (estilo Pokelike): mapa ramificado, captura, evolución y combate por turnos.",
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve .",
+    "test": "node test/engine.test.mjs"
+  },
+  "license": "MIT"
+}

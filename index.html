@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAUNA · Travesía</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900&family=Spectral:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Roguelike de fauna · modo travesía</div>
+  <h1>Fauna · Travesía<span class="sub">Escogé tu ruta, criá tu equipo, cruzá el mundo</span></h1>
+
+  <details class="how"><summary>Cómo se juega</summary>
+    <p>Avanzás por un mapa que se ramifica: <b>escogés por dónde ir</b>. Cada nodo es un bioma (🌳🌾🌊⛰️) donde aparece un animal al azar para capturar, un retador ⚔️ que al vencerlo <b>sube de nivel</b> a tu equipo (y al llegar a cierto nivel los animales <b>evolucionan</b>: cambian de marco y crecen), un tesoro 🎁 o un descanso 🏕️. Cada animal trae un <b>efecto</b> (veneno, escudo, furia…): combinalos bien. Tocá una carta del equipo para <b>editarla</b> (nombre, objetos, orden). Al final del mapa está el <b>aeropuerto ✈️</b>: vencé al jefe y viajás a otro país <b>al azar</b> —la dificultad sube con cada país cruzado—. Perdé un combate y perdés un corazón ❤️. Sin corazones, termina la run. ¿Hasta dónde llegás?</p>
+  </details>
+
+  <div class="runbar" id="runbar"></div>
+  <div id="phaseArea"></div>
+  <div class="log" id="log"></div>
+</div>
+
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

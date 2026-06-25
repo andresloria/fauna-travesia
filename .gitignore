@@ -1,0 +1,10 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# dependencias (por si algún día se agregan)
+node_modules/
+
+# mockups descartables
+_mockup*.html
