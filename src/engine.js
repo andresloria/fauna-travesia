@@ -32,16 +32,20 @@ export function levelUp(a) {
 export function setLevel(a, L) { while (a.level < L) levelUp(a); return a; }
 
 // ---------- dificultad (perillas para balancear) ----------
-// La dificultad sube por PROFUNDIDAD (países ya cruzados), no por cuál país tocó.
-// depth 0: retador tam 2-3 (Nv2) · jefe tam 3-4 (Nv3)  |  depth 4: retador 4-5 · jefe 5
-// Para hacerlo más fácil/difícil, movés estas 4 perillas (base de tamaño y de nivel).
+// Sube por PROFUNDIDAD (países ya cruzados), no por cuál país tocó.
+// CURVA ACELERADA: el término d²/RAMP es ~0 en los primeros países (inicio
+// SENCILLO) y se dispara al final. Tu poder crece rápido (cada victoria sube de
+// nivel a TODO el equipo + capturás + evolucionás), así que el enemigo tiene que
+// acelerar para seguir siendo un reto. Bajá RAMP = más difícil; subilo = más fácil.
+const RAMP = 5;
+const accel = (depth) => depth + Math.floor(depth * depth / RAMP);
 export function retSize(depth)  { return Math.min(5, 2 + Math.floor(depth / 2) + rnd(2)); }
 export function bossSize(depth) { return Math.min(5, 3 + Math.floor(depth / 2) + rnd(2)); }
-export function enemyLevel(depth, isBoss) { return (isBoss ? 3 : 2) + depth; }
+export function enemyLevel(depth, isBoss) { return (isBoss ? 3 : 2) + accel(depth); }
 export function wildLevel(depth) { return 1 + depth; }
-// cazadores furtivos: equipos FUERTES (mini-jefe), más que un retador normal.
+// cazadores furtivos: equipos FUERTES (mini-jefe), por encima de un retador.
 export function poacherSize(depth)  { return Math.min(5, 3 + Math.floor(depth / 2) + rnd(2)); }
-export function poacherLevel(depth) { return 3 + depth + rnd(2); }
+export function poacherLevel(depth) { return 3 + accel(depth) + rnd(2); }
 
 export function genEnemy(country, size, lvl) {
   const team = [];
