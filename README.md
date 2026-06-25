@@ -113,6 +113,8 @@ Como el motor ya está aislado y no depende del DOM, ese paso es sobre todo
 - **Cazadores furtivos 🏹** (nodo de alto riesgo): equipos fuertes. Si te ganan: −1 corazón y te roban un animal. Si les ganás: doble nivel + objeto raro.
 - **Intercambio 🔄** (nodo): entregás un animal y recibís otro 2-3 niveles más alto.
 - **13 países y 50+ animales** para más variedad (Indonesia, Egipto, China, México, Argentina + pools ampliados).
+- **Campaña de 8 países** (`RULES.RUN_LENGTH`): al conquistarlos se abre un **nivel secreto**, la *Tierra Perdida* ❄️, con **fauna extinta** (mamut, dinos, dodo) y marco "EXTINTO". Vencer su jefe = pantalla de victoria 👑.
+- **Dificultad escalonada**: sube por país (profundidad) y por cuán adentro del mapa estás (fila del nodo).
 
 ## 🎨 Créditos de assets
 

@@ -16,8 +16,8 @@ export function createUI(game) {
   // ---------- tarjeta de animal ----------
   function animalCard(a, opts = {}) {
     const stage = Math.min(2, a.evo || 0);
-    const tcls = a.leg ? 'legendary' : ['t-base', 't-evo1', 't-evo2'][stage];
-    const stageLabel = a.leg ? 'LEGENDARIO' : STAGE[stage];
+    const tcls = a.ext ? 'extinct' : a.leg ? 'legendary' : ['t-base', 't-evo1', 't-evo2'][stage];
+    const stageLabel = a.ext ? 'EXTINTO' : a.leg ? 'LEGENDARIO' : STAGE[stage];
     const ab = ABILITIES[a.ab];
     const act = opts.trade ? 'trade' : opts.edit ? 'edit' : null;
     const cls = 'acard ' + tcls
@@ -55,7 +55,7 @@ export function createUI(game) {
     runbar.innerHTML = `${av}
       <div class="chip country"><div class="k">País</div><div class="v">${s.country ? s.country.flag + ' ' + s.country.n : '—'}</div></div>
       <div class="chip"><div class="k">Corazones</div><div class="hearts">${'❤'.repeat(s.hearts) || '—'}</div></div>
-      <div class="chip"><div class="k">Países cruzados</div><div class="v">${s.cleared}</div></div>
+      <div class="chip"><div class="k">Conquista</div><div class="v">${s.cleared}/${RULES.RUN_LENGTH}</div></div>
       <div class="chip"><div class="k">Equipo</div><div class="v">${s.team.length}/${RULES.MAX_TEAM}</div></div>
       <div class="chip"><div class="k">Mochila</div><div class="v">${s.bag.length ? s.bag.map(i => i.e).join('') : '—'}</div></div>`;
   }
@@ -214,6 +214,17 @@ export function createUI(game) {
       </div>`;
   }
 
+  function renderWin(s) {
+    const best = s.team.length ? Math.max(...s.team.map(a => a.level)) : 1;
+    const who = s.avatar ? `${s.avatar.flag} <b>${s.avatar.name}</b> ` : '';
+    $('modal').innerHTML = `
+      <div class="crest">👑</div><h2>¡Sos una leyenda!</h2>
+      <p>${who}conquistó los ${RULES.RUN_LENGTH} países 🌍 y domó la <b style="color:var(--gold)">Tierra Perdida</b> ❄️.
+         Tu mejor animal llegó a nivel ${best}. Pocos llegan acá.</p>
+      <button class="btn" data-act="restart">Nueva travesía</button>`;
+    $('overlay').classList.add('show');
+  }
+
   function renderGameOver(s) {
     const best = s.team.length ? Math.max(...s.team.map(a => a.level)) : 1;
     $('modal').innerHTML = `
@@ -282,6 +293,7 @@ export function createUI(game) {
     else if (s.phase === 'trade') renderTrade(s);
     else if (s.phase === 'event') renderEvent(s);
     else if (s.phase === 'edit') renderEdit(s);
+    else if (s.phase === 'win') renderWin(s);
     else if (s.phase === 'over') renderGameOver(s);
     // 'battle' lo maneja playBattle directamente
     wire(s);

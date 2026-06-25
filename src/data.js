@@ -69,6 +69,12 @@ export const SP = {
   morfo:      { n:'Morfo Azul',     e:'🦋', atk:5, hp:4, bio:'bosque',  ab:'first',  leg:true },
   calamar:    { n:'Calamar Gigante',e:'🦑', atk:7, hp:6, bio:'agua',    ab:'poison', leg:true },
   llama:      { n:'Llama Dorada',   e:'🦙', atk:4, hp:8, bio:'montana', ab:'heal',   leg:true },
+
+  // ── EXTINTOS ── solo en el nivel secreto "Tierra Perdida". Brutales. `ext:true`.
+  mamut:      { n:'Mamut',          e:'🦣', atk:6, hp:12, bio:'montana', ab:'shield', ext:true },
+  dino:       { n:'Brontosaurio',   e:'🦕', atk:5, hp:14, bio:'bosque',  ab:'rage',   ext:true },
+  trex:       { n:'Tiranosaurio',   e:'🦖', atk:9, hp:9,  bio:'sabana',  ab:'rage',   ext:true },
+  dodo:       { n:'Dodo',           e:'🦤', atk:3, hp:5,  bio:'bosque',  ab:'first',  ext:true },
 };
 
 export const BIOMES = {
@@ -108,6 +114,13 @@ export const COUNTRIES = [
   { flag:'⛰️', n:'Los Andes',   map:'los-andes',  legend:'llama',       pool:['condor','oso','lobo','buho','alce','foca','gato','caballo'] },
 ];
 
+// NIVEL SECRETO — se desbloquea al conquistar los RUN_LENGTH países. No entra
+// en el sorteo normal. Fauna extinta, el desafío final; vencer su jefe = ganar.
+export const SECRET = {
+  flag:'❄️', n:'Tierra Perdida', map:'antartida', secret:true,
+  pool:['mamut','dino','trex','dodo'],
+};
+
 // Banderas para el avatar del jugador (identidad, sin efecto en el juego).
 export const PLAYER_FLAGS = ['🇨🇷','🇲🇽','🇪🇸','🇦🇷','🇨🇴','🇧🇷','🇺🇸','🇨🇦','🇫🇷','🇩🇪','🇯🇵','🇬🇧'];
 
@@ -133,4 +146,5 @@ export const RULES = {
   STARTER_LEVEL: 2,    // nivel inicial de tu primer compañero
   EVO_LEVELS: [3, 6],  // niveles en los que un animal evoluciona (crece extra)
   LEG_CHANCE: 0.01,    // probabilidad de que un encuentro de bioma sea legendario (~1%)
+  RUN_LENGTH: 8,       // países a conquistar antes de la Tierra Perdida (nivel secreto)
 };

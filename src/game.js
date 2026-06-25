@@ -5,7 +5,7 @@
 // ============================================================
 
 import * as E from './engine.js';
-import { ITEMS, RARE_ITEMS, RULES } from './data.js';
+import { ITEMS, RARE_ITEMS, SECRET, RULES } from './data.js';
 
 export class Game {
   constructor(ui = null) {
@@ -84,13 +84,14 @@ export class Game {
 
   resolveNode(n) {
     const s = this.s, d = this.depth();
+    const rb = Math.floor((n.r || 0) / 2);   // ramp dentro del mapa: cuanto más cerca del aeropuerto, más duro
     switch (n.type) {
       case 'bioma':    return this.wildEncounter(n.bio);
       case 'combate':  return this.startBattle(
-        E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false)),
+        E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false) + rb),
         'Retador', '🦴', 'retador');
       case 'cazador':  return this.startBattle(
-        E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d)),
+        E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d) + rb),
         'Cazadores furtivos', '🏹', 'cazador');
       case 'intercambio': {
         const maxLv = s.team.reduce((m, a) => Math.max(m, a.level), 1);
@@ -118,7 +119,21 @@ export class Game {
   }
 
   backToMap() { this.s.phase = 'map'; this.s.editId = null; this.render(); }
-  nextCountry() { this.enterCountry(); }
+  nextCountry() {
+    if (this.s.cleared >= RULES.RUN_LENGTH) return this.enterSecret();
+    this.enterCountry();
+  }
+  // nivel secreto: la Tierra Perdida (fauna extinta). Vencer su jefe = ganar.
+  enterSecret() {
+    const s = this.s;
+    s.country = SECRET;
+    s.map = E.generateMap(SECRET);
+    s.currentId = s.map.startId;
+    this.current().visited = true;
+    s.phase = 'map';
+    this.log(`❄️ Cruzás el portal a la <b>${SECRET.n}</b>… fauna que no debería existir.`);
+    this.render();
+  }
 
   // ---------- encuentro salvaje ----------
   wildEncounter(bio) {
@@ -166,12 +181,16 @@ export class Game {
     const s = this.s, b = s.battle, won = b.result === 'W';
     if (b.kind === 'jefe') {
       if (won) {
+        if (s.country.secret) return this.victory();   // ¡venciste la Tierra Perdida!
         s.cleared++;
         s.team.forEach(a => E.levelUp(a));
         s.hearts = Math.min(RULES.MAX_HEARTS, s.hearts + 1);
-        return this.showEvent('🏆', '¡Aeropuerto despejado!',
-          `Venciste al jefe de ${s.country.n}. Tu equipo subió de nivel y recuperás un corazón ❤️.`,
-          [{ label: 'Despegar ✈️', action: () => this.nextCountry() }]);
+        const last = s.cleared >= RULES.RUN_LENGTH;
+        return this.showEvent('🏆', last ? '¡Conquistaste el mundo!' : '¡Aeropuerto despejado!',
+          last
+            ? `Cruzaste los ${RULES.RUN_LENGTH} países 🌍. Tu equipo subió de nivel… pero un portal helado se abre frente a vos. ❄️`
+            : `Venciste al jefe de ${s.country.n}. Tu equipo subió de nivel y recuperás un corazón ❤️.`,
+          [{ label: last ? 'Entrar a la Tierra Perdida ❄️' : 'Despegar ✈️', action: () => this.nextCountry() }]);
       }
       return this.gameOver();
     }
@@ -275,6 +294,7 @@ export class Game {
     this.render();
   }
   gameOver() { this.s.phase = 'over'; this.render(); }
+  victory()  { this.s.phase = 'win'; this.render(); }
 
   render() { if (this.ui) this.ui.render(this.s); }
 }

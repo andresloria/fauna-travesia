@@ -29,6 +29,8 @@ ANIMALS = {
   "ardilla":"1F43F","murcielago":"1F987","camello":"1F42B","escorpion":"1F982",
   "gato":"1F408","pinguino":"1F427","lagarto":"1F98E","cangrejo":"1F980",
   "pezglobo":"1F421","abeja":"1F41D","caballo":"1F40E","bufalo":"1F403",
+  # extintos (solo en el nivel secreto "Tierra Perdida")
+  "mamut":"1F9A3","dino":"1F995","trex":"1F996","dodo":"1F9A4",
 }
 
 # pais (slug usado en data.js) -> ISO2 mapsicon  |  None = sin silueta (motivo propio)
@@ -36,6 +38,7 @@ COUNTRIES = {
   "costa-rica":"cr","kenia":"ke","australia":"au","canada":"ca",
   "brasil":"br","india":"in","los-andes":"pe","mar-abierto":None,
   "indonesia":"id","egipto":"eg","china":"cn","mexico":"mx","argentina":"ar",
+  "antartida":"aq",   # nivel secreto
 }
 
 def fetch(url):

@@ -185,6 +185,13 @@ details.how p{margin-top:8px;color:#d8cdb2;line-height:1.5}
 .legbanner{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#3a2c0a;
   background:linear-gradient(90deg,#e8c558,#f3d98a);display:inline-block;padding:4px 12px;border-radius:20px;margin-bottom:6px}
 .legtag{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;color:#3a2c0a;background:linear-gradient(90deg,#e8c558,#f3d98a);padding:2px 8px;border-radius:20px}
+/* tier EXTINTO (nivel secreto) — marco helado/ancestral */
+.acard.extinct{border:none;background:linear-gradient(180deg,#eef5f9,#cfe0ea)}
+.acard.extinct::before{content:"";position:absolute;inset:-3px;border-radius:15px;z-index:-1;
+  background:linear-gradient(135deg,#9fd8ec,#e9f3f8,#6f9fc0,#bfe6f2);box-shadow:0 0 18px rgba(143,208,232,.5)}
+.acard.extinct .stage{background:linear-gradient(90deg,#3f6f8c,#8fd0e8);color:#0b2230}
+.acard.extinct .art{background:radial-gradient(circle at 50% 35%,#ffffff,#dbe9f1)}
+.acard.extinct .an{color:#244a5c}
 .editname{font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:var(--paper);padding:6px 0}
 
 /* ---------- botón de sonido ---------- */

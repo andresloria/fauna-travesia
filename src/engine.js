@@ -20,7 +20,7 @@ export function shuffle(a) {
 let UID = 0;
 export function mkAnimal(key) {
   const s = SP[key];
-  return { uid: ++UID, key, n: s.n, e: s.e, bio: s.bio, ab: s.ab, leg: !!s.leg,
+  return { uid: ++UID, key, n: s.n, e: s.e, bio: s.bio, ab: s.ab, leg: !!s.leg, ext: !!s.ext,
            atk: s.atk, hp: s.hp, level: 1, evo: 0, items: [] };
 }
 // Sube un nivel. Devuelve true si en este nivel EVOLUCIONÓ (creció extra).
