@@ -111,6 +111,8 @@ Como el motor ya está aislado y no depende del DOM, ese paso es sobre todo
 - Fondo del mapa con la silueta del país que tocó (océano para Mar abierto).
 - **Música de ambiente** (selva neotropical) con botón 🔊/🔇 (preferencia guardada, arranca tras el primer toque).
 - **Cazadores furtivos 🏹** (nodo de alto riesgo): equipos fuertes. Si te ganan: −1 corazón y te roban un animal. Si les ganás: doble nivel + objeto raro.
+- **Intercambio 🔄** (nodo): entregás un animal y recibís otro 2-3 niveles más alto.
+- **13 países y 50+ animales** para más variedad (Indonesia, Egipto, China, México, Argentina + pools ampliados).
 
 ## 🎨 Créditos de assets
 

@@ -107,11 +107,20 @@ export function generateMap(country) {
 function nearest(row, c) { return row.reduce((b, x) => Math.abs(x.c - c) < Math.abs(b.c - c) ? x : b); }
 function pickType() {
   const r = rnd(100);
-  if (r < 40) return 'bioma';
-  if (r < 66) return 'combate';
-  if (r < 74) return 'cazador';   // ~8%: nodo de alto riesgo/recompensa
-  if (r < 88) return 'tesoro';
+  if (r < 38) return 'bioma';
+  if (r < 62) return 'combate';
+  if (r < 70) return 'cazador';     // ~8%: alto riesgo/recompensa
+  if (r < 77) return 'intercambio'; // ~7%: cambiás un animal por uno de más nivel
+  if (r < 89) return 'tesoro';
   return 'descanso';
+}
+
+// Oferta de intercambio: un animal al azar 2-3 niveles arriba del nivel dado.
+export function genTrade(maxLevel) {
+  const keys = Object.keys(SP).filter(k => !SP[k].leg);
+  const a = mkAnimal(pick(keys));
+  setLevel(a, maxLevel + 2 + rnd(2));   // +2 o +3
+  return a;
 }
 export function biomesOf(country) { return [...new Set(country.pool.map(k => SP[k].bio))]; }
 

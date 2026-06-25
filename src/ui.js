@@ -19,11 +19,12 @@ export function createUI(game) {
     const tcls = a.leg ? 'legendary' : ['t-base', 't-evo1', 't-evo2'][stage];
     const stageLabel = a.leg ? 'LEGENDARIO' : STAGE[stage];
     const ab = ABILITIES[a.ab];
+    const act = opts.trade ? 'trade' : opts.edit ? 'edit' : null;
     const cls = 'acard ' + tcls
       + (opts.fainted ? ' fainted' : '') + (opts.cls ? ' ' + opts.cls : '')
-      + (opts.edit ? ' clickable' : '') + (opts.lead ? ' lead' : '');
+      + (act ? ' clickable' : '') + (opts.lead ? ' lead' : '');
     const bio = BIOMES[a.bio] ? BIOMES[a.bio].e : '';
-    const data = opts.edit ? `data-act="edit" data-uid="${a.uid}"` : '';
+    const data = act ? `data-act="${act}" data-uid="${a.uid}"` : '';
     const abil = ab ? `<span class="abil ${ab.cls}">${ab.sym} ${ab.n}</span>` : '';
     const lead = opts.lead ? `<span class="leadtag">PELEA 1°</span>` : '';
     const ord = opts.order ? `<span class="ord">${opts.order}</span>` : '';
@@ -39,7 +40,7 @@ export function createUI(game) {
   function teamHTML(team, o = {}) {
     if (!team.length) return `<div class="team"><div class="empty-slot">🦴</div></div>`;
     const cards = team.map((a, i) =>
-      animalCard(a, { edit: o.editable, order: o.order ? i + 1 : null, lead: o.order && i === 0 })).join('');
+      animalCard(a, { edit: o.editable, trade: o.trade, order: o.order ? i + 1 : null, lead: o.order && i === 0 })).join('');
     const inner = `<div class="team">${cards}</div>`;
     if (!o.panel) return inner;
     return `<div class="teampanel">
@@ -112,9 +113,9 @@ export function createUI(game) {
         (n.visited && n !== current) ? 'visited' : '',
         (!avail && !n.visited && n !== current) ? 'locked' : ''].join(' ');
       const ic = n.type === 'bioma' ? BIOMES[n.bio].e : n.type === 'combate' ? '⚔️' : n.type === 'cazador' ? '🏹'
-        : n.type === 'tesoro' ? '🎁' : n.type === 'descanso' ? '🏕️' : n.type === 'airport' ? '✈️' : '🧭';
+        : n.type === 'intercambio' ? '🔄' : n.type === 'tesoro' ? '🎁' : n.type === 'descanso' ? '🏕️' : n.type === 'airport' ? '✈️' : '🧭';
       const lab = n.type === 'bioma' ? BIOMES[n.bio].n : n.type === 'combate' ? 'Retador' : n.type === 'cazador' ? 'Cazadores'
-        : n.type === 'tesoro' ? 'Tesoro' : n.type === 'descanso' ? 'Descanso' : n.type === 'airport' ? 'Aeropuerto' : 'Inicio';
+        : n.type === 'intercambio' ? 'Intercambio' : n.type === 'tesoro' ? 'Tesoro' : n.type === 'descanso' ? 'Descanso' : n.type === 'airport' ? 'Aeropuerto' : 'Inicio';
       const data = avail ? `data-act="node" data-id="${n.id}"` : '';
       return `<div class="${cls}" style="left:${X[n.c]}%;top:${yFor(n.r)}%" ${data}>
         <div class="disc">${ic}</div><div class="ml">${lab}</div></div>`;
@@ -146,6 +147,19 @@ export function createUI(game) {
           `<button class="btn ${k === 'leave' ? 'ghost' : ''}" data-act="wild" data-k="${k}">${t}</button>`).join('')}</div>
       </div>
       ${teamHTML(s.team, { panel: true, order: true })}`;
+  }
+
+  function renderTrade(s) {
+    const a = s.offer;
+    phaseArea.innerHTML = `
+      <div class="section-h trade-h">🔄 Intercambio · te ofrecen un animal de más nivel</div>
+      <div class="event-box trade-box">
+        <div style="margin:0 auto;max-width:150px">${animalCard(a, {})}</div>
+        <div class="desc">Llega a <b>Nv ${a.level}</b> (2-3 niveles arriba de tu mejor). Entregá uno de los tuyos a cambio, o seguí sin cambiar.</div>
+        <div class="center"><button class="btn ghost" data-act="trade-skip">Seguir sin cambiar</button></div>
+      </div>
+      <div class="section-h">👇 Tocá el animal que querés ENTREGAR</div>
+      ${teamHTML(s.team, { panel: true, order: true, trade: true })}`;
   }
 
   function renderEvent(s) {
@@ -265,6 +279,7 @@ export function createUI(game) {
     else if (s.phase === 'starter') renderStarter(s);
     else if (s.phase === 'map') renderMap(s);
     else if (s.phase === 'wild') renderWild(s);
+    else if (s.phase === 'trade') renderTrade(s);
     else if (s.phase === 'event') renderEvent(s);
     else if (s.phase === 'edit') renderEdit(s);
     else if (s.phase === 'over') renderGameOver(s);
@@ -282,6 +297,8 @@ export function createUI(game) {
         else if (act === 'edit-avatar') game.editAvatar();
         else if (act === 'node') game.goNode(+elm.dataset.id);
         else if (act === 'edit') game.openEdit(+elm.dataset.uid);
+        else if (act === 'trade') game.tradeFor(+elm.dataset.uid);
+        else if (act === 'trade-skip') game.skipTrade();
         else if (act === 'edit-close') game.closeEdit();
         else if (act === 'edit-move') game.moveAnimal(s.editId, +elm.dataset.dir);
         else if (act === 'edit-front') game.frontAnimal(s.editId);

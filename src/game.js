@@ -25,7 +25,7 @@ export class Game {
       map: null, currentId: null,
       starters: E.shuffle(noLeg).slice(0, 3).map(k => E.mkAnimal(k)),
       bag: [],                 // objetos (tesoros) sin equipar
-      pendingWild: null, event: null, battle: null, editId: null, log: [],
+      pendingWild: null, offer: null, event: null, battle: null, editId: null, log: [],
     };
     this.render();
   }
@@ -92,6 +92,13 @@ export class Game {
       case 'cazador':  return this.startBattle(
         E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d)),
         'Cazadores furtivos', '🏹', 'cazador');
+      case 'intercambio': {
+        const maxLv = s.team.reduce((m, a) => Math.max(m, a.level), 1);
+        s.offer = E.genTrade(maxLv);
+        s.phase = 'trade';
+        this.log(`🔄 Te ofrecen ${s.offer.e} <b>${s.offer.n}</b> (Nv ${s.offer.level})`);
+        return this.render();
+      }
       case 'airport':  return this.startBattle(
         E.genEnemy(s.country, E.bossSize(d), E.enemyLevel(d, true)),
         'Jefe del aeropuerto', '🛂', 'jefe');
@@ -135,6 +142,17 @@ export class Game {
     this.backToMap();
   }
   leaveWild() { this.backToMap(); }
+
+  // ---------- intercambio ----------
+  tradeFor(uid) {
+    const s = this.s, i = s.team.findIndex(a => a.uid === uid);
+    if (i < 0 || !s.offer) return;
+    const old = s.team[i];
+    s.team[i] = s.offer; s.offer = null;
+    this.log(`🔄 Cambiaste ${old.e} ${old.n} por ${s.team[i].e} <b>${s.team[i].n}</b> (Nv ${s.team[i].level})`);
+    this.backToMap();
+  }
+  skipTrade() { this.s.offer = null; this.backToMap(); }
 
   // ---------- combate ----------
   startBattle(enemy, oppName, oppEmoji, kind) {

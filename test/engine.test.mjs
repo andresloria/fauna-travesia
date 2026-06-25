@@ -149,4 +149,27 @@ test('los cazadores son más fuertes que un retador y dan objeto raro', () => {
   assert.ok(E.RARE_ITEMS && E.RARE_ITEMS.length > 0, 'hay objetos raros');
 });
 
+test('intercambio: el animal ofrecido es 2-3 niveles más alto y no legendario', () => {
+  for (let i = 0; i < 500; i++) {
+    const maxLv = 1 + E.rnd(8);
+    const a = E.genTrade(maxLv);
+    assert.ok(a.level === maxLv + 2 || a.level === maxLv + 3, `nivel ofrecido fuera de rango (${a.level} vs ${maxLv})`);
+    assert.ok(!a.leg, 'el intercambio no debe ofrecer legendarios');
+  }
+});
+
+test('aparecen nodos de intercambio en el mapa', () => {
+  let found = false;
+  for (let i = 0; i < 400 && !found; i++) {
+    const m = E.generateMap(COUNTRIES[0]);
+    if (Object.values(m.nodesById).some(n => n.type === 'intercambio')) found = true;
+  }
+  assert.ok(found, 'debería generarse algún nodo de intercambio');
+});
+
+test('hay más variedad: 13 países y +50 especies', () => {
+  assert.ok(COUNTRIES.length >= 13, 'al menos 13 países');
+  assert.ok(Object.keys(E.SP).length >= 50, 'al menos 50 especies');
+});
+
 console.log(`\n${passed} pruebas OK\n`);

@@ -24,12 +24,18 @@ ANIMALS = {
   # legendarios (muy raros, atados a un país; ver COUNTRIES[*].legend en data.js)
   "pavoreal":"1F99A","rinoceronte":"1F98F","bisonte":"1F9AC",
   "morfo":"1F98B","calamar":"1F991","llama":"1F999",
+  # tanda 2: más variedad
+  "gorila":"1F98D","orangutan":"1F9A7","panda":"1F43C","mapache":"1F99D",
+  "ardilla":"1F43F","murcielago":"1F987","camello":"1F42B","escorpion":"1F982",
+  "gato":"1F408","pinguino":"1F427","lagarto":"1F98E","cangrejo":"1F980",
+  "pezglobo":"1F421","abeja":"1F41D","caballo":"1F40E","bufalo":"1F403",
 }
 
 # pais (slug usado en data.js) -> ISO2 mapsicon  |  None = sin silueta (motivo propio)
 COUNTRIES = {
   "costa-rica":"cr","kenia":"ke","australia":"au","canada":"ca",
   "brasil":"br","india":"in","los-andes":"pe","mar-abierto":None,
+  "indonesia":"id","egipto":"eg","china":"cn","mexico":"mx","argentina":"ar",
 }
 
 def fetch(url):
