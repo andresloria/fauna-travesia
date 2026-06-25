@@ -132,4 +132,21 @@ test('rollWild puede dar el legendario del país (raro pero posible)', () => {
   assert.ok(seen, 'con suficientes intentos debe aparecer el legendario del país');
 });
 
+test('aparecen nodos de cazadores furtivos en el mapa', () => {
+  let found = false;
+  for (let i = 0; i < 400 && !found; i++) {
+    const m = E.generateMap(COUNTRIES[0]);
+    if (Object.values(m.nodesById).some(n => n.type === 'cazador')) found = true;
+  }
+  assert.ok(found, 'debería generarse algún nodo cazador');
+});
+
+test('los cazadores son más fuertes que un retador y dan objeto raro', () => {
+  for (const d of [0, 2, 4]) {
+    assert.ok(E.poacherLevel(d) > E.enemyLevel(d, false), 'el cazador supera en nivel al retador');
+    assert.ok(E.poacherSize(d) >= 3, 'equipos fuertes (mínimo 3)');
+  }
+  assert.ok(E.RARE_ITEMS && E.RARE_ITEMS.length > 0, 'hay objetos raros');
+});
+
 console.log(`\n${passed} pruebas OK\n`);

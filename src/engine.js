@@ -5,7 +5,7 @@
 // multiplayer (el cliente solo dibuja; el servidor decide).
 // ============================================================
 
-import { SP, BIOMES, COUNTRIES, ITEMS, ABILITIES, RULES } from './data.js';
+import { SP, BIOMES, COUNTRIES, ITEMS, RARE_ITEMS, ABILITIES, RULES } from './data.js';
 
 // ---------- utilidades de azar ----------
 export const rnd  = (n) => Math.floor(Math.random() * n);
@@ -39,6 +39,9 @@ export function retSize(depth)  { return Math.min(5, 2 + Math.floor(depth / 2) +
 export function bossSize(depth) { return Math.min(5, 3 + Math.floor(depth / 2) + rnd(2)); }
 export function enemyLevel(depth, isBoss) { return (isBoss ? 3 : 2) + depth; }
 export function wildLevel(depth) { return 1 + depth; }
+// cazadores furtivos: equipos FUERTES (mini-jefe), más que un retador normal.
+export function poacherSize(depth)  { return Math.min(5, 3 + Math.floor(depth / 2) + rnd(2)); }
+export function poacherLevel(depth) { return 3 + depth + rnd(2); }
 
 export function genEnemy(country, size, lvl) {
   const team = [];
@@ -104,8 +107,9 @@ export function generateMap(country) {
 function nearest(row, c) { return row.reduce((b, x) => Math.abs(x.c - c) < Math.abs(b.c - c) ? x : b); }
 function pickType() {
   const r = rnd(100);
-  if (r < 42) return 'bioma';
-  if (r < 74) return 'combate';
+  if (r < 40) return 'bioma';
+  if (r < 66) return 'combate';
+  if (r < 74) return 'cazador';   // ~8%: nodo de alto riesgo/recompensa
   if (r < 88) return 'tesoro';
   return 'descanso';
 }
@@ -165,4 +169,4 @@ export function fight(teamA, teamB) {
   return { result, steps };
 }
 
-export { SP, BIOMES, COUNTRIES, ITEMS, ABILITIES, RULES };
+export { SP, BIOMES, COUNTRIES, ITEMS, RARE_ITEMS, ABILITIES, RULES };

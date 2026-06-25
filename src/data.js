@@ -95,6 +95,14 @@ export const ITEMS = [
   { n:'Caparazón', e:'🛡️', atk:0, hp:4 },
 ];
 
+// Objetos RAROS — recompensa por vencer a los cazadores furtivos. Más fuertes.
+export const RARE_ITEMS = [
+  { n:'Gema de poder',      e:'💎', atk:4, hp:2 },
+  { n:'Tótem guardián',     e:'🗿', atk:2, hp:6 },
+  { n:'Colmillo ancestral', e:'🦷', atk:3, hp:4 },
+  { n:'Amuleto salvaje',    e:'🧿', atk:2, hp:5 },
+];
+
 export const RULES = {
   MAX_TEAM: 5,
   MAX_HEARTS: 3,

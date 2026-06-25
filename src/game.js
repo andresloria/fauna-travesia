@@ -5,7 +5,7 @@
 // ============================================================
 
 import * as E from './engine.js';
-import { ITEMS, RULES } from './data.js';
+import { ITEMS, RARE_ITEMS, RULES } from './data.js';
 
 export class Game {
   constructor(ui = null) {
@@ -89,6 +89,9 @@ export class Game {
       case 'combate':  return this.startBattle(
         E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false)),
         'Retador', '🦴', 'retador');
+      case 'cazador':  return this.startBattle(
+        E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d)),
+        'Cazadores furtivos', '🏹', 'cazador');
       case 'airport':  return this.startBattle(
         E.genEnemy(s.country, E.bossSize(d), E.enemyLevel(d, true)),
         'Jefe del aeropuerto', '🛂', 'jefe');
@@ -154,12 +157,42 @@ export class Game {
       }
       return this.gameOver();
     }
+    if (b.kind === 'cazador') {
+      if (won) {
+        s.team.forEach(a => {            // DOBLE nivel
+          E.levelUp(a);
+          if (E.levelUp(a)) this.log(`✨ ${a.e} <b>${a.n}</b> evolucionó a nivel ${a.level}!`);
+        });
+        const it = E.pick(RARE_ITEMS);
+        s.bag.push(it);
+        this.log(`🏆 Venciste a los cazadores: doble nivel + ${it.e} <b>${it.n}</b>`);
+        return this.showEvent('🏆', '¡Cazadores derrotados!',
+          `Liberaste a los animales 🕊️. Tu equipo subió <b>DOBLE nivel</b> y te llevás un objeto raro: ${it.e} <b>${it.n}</b> (+${it.atk}⚔ +${it.hp}❤). Está en tu mochila.`,
+          [{ label: 'Continuar', action: () => this.backToMap() }]);
+      }
+      return this.poachLoss();
+    }
     if (won) {
       s.team.forEach(a => { if (E.levelUp(a)) this.log(`✨ ${a.e} <b>${a.n}</b> evolucionó a nivel ${a.level}!`); });
       this.log('Tu equipo subió de nivel');
       return this.backToMap();
     }
     return this.hurt();
+  }
+  // perder contra cazadores: corazón + te roban un animal (nunca el último)
+  poachLoss() {
+    const s = this.s; s.hearts--;
+    let robo = '';
+    if (s.team.length > 1) {
+      const [a] = s.team.splice(E.rnd(s.team.length), 1);
+      robo = ` Te robaron ${a.e} <b>${a.n}</b>. 😱`;
+      this.log(`🏹 Los cazadores te robaron ${a.e} <b>${a.n}</b>`);
+    }
+    this.log(`Perdiste contra los cazadores — corazones: ${'❤'.repeat(Math.max(0, s.hearts)) || '0'}`);
+    if (s.hearts <= 0) return this.gameOver();
+    this.showEvent('💔', 'Te ganaron los cazadores',
+      `Bajás un corazón (${s.hearts}/${RULES.MAX_HEARTS}).${robo} Seguí adelante.`,
+      [{ label: 'Continuar', action: () => this.backToMap() }]);
   }
   hurt() {
     const s = this.s; s.hearts--;

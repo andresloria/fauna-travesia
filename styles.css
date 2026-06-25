@@ -3,7 +3,7 @@
   --brass:#c4a04e;--brass-deep:#9a7a30;--atk:#cc6b4a;--hp:#5aa86b;--gold:#e8c558;
   --t1:#8a8f7a;--t2:#5a87a0;--t3:#b08a3e;
   --bosque:#4f7d4a;--sabana:#c8923f;--agua:#2f6f8f;--montana:#8a6f9a;
-  --combate:#a63d2e;--tesoro:#c4a04e;--descanso:#5aa86b;--airport:#7a6f53;
+  --combate:#a63d2e;--tesoro:#c4a04e;--descanso:#5aa86b;--airport:#7a6f53;--cazador:#3a1f2a;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:radial-gradient(130% 90% at 50% -8%,#14352c 0%,var(--bg-mid) 44%,var(--bg-deep) 100%);
@@ -43,6 +43,7 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .mnode.bioma-bosque .disc{background:var(--bosque)} .mnode.bioma-sabana .disc{background:var(--sabana)}
 .mnode.bioma-agua .disc{background:var(--agua)} .mnode.bioma-montana .disc{background:var(--montana)}
 .mnode.combate .disc{background:var(--combate)} .mnode.tesoro .disc{background:var(--tesoro)}
+.mnode.cazador .disc{background:var(--cazador);border-color:rgba(204,107,74,.7)}
 .mnode.descanso .disc{background:var(--descanso)} .mnode.airport .disc{background:var(--airport);width:52px;height:52px;font-size:26px}
 .mnode.start .disc{background:#3a4a44}
 .mnode.available{cursor:pointer} .mnode.available .disc{border-color:var(--gold);box-shadow:0 0 0 3px rgba(232,197,88,.35),0 3px 10px rgba(0,0,0,.4);animation:pulse 1.4s infinite}
