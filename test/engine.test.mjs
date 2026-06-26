@@ -92,6 +92,18 @@ test('efecto Primer golpe: tumba sin recibir daño', () => {
   assert.equal(steps[0].aHp, 3, 'no recibió daño porque tumbó al rival primero');
 });
 
+test('velocidad: el más rápido pega primero y puede tumbar sin recibir daño', () => {
+  const A = [{ uid: 1, atk: 5, hp: 3, spd: 9, ab: null }];   // rápido
+  const B = [{ uid: 2, atk: 9, hp: 3, spd: 1, ab: null }];   // lento pero fuerte
+  const { result, steps } = E.fight(A, B);
+  assert.equal(result, 'W', 'el más rápido gana el intercambio');
+  assert.equal(steps[0].aHp, 3, 'no recibió daño porque pegó primero y tumbó al lento');
+});
+
+test('mkAnimal trae velocidad (spd)', () => {
+  assert.ok(typeof E.mkAnimal('jaguar').spd === 'number', 'el animal tiene spd numérico');
+});
+
 test('efecto Escudo: absorbe el primer golpe', () => {
   const A = [{ uid: 1, atk: 2, hp: 5, ab: 'shield' }];
   const B = [{ uid: 2, atk: 10, hp: 1, ab: null }];

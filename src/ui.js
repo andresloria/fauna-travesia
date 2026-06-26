@@ -34,7 +34,7 @@ export function createUI(game) {
       <span class="bio">${bio}</span>
       <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
       <div class="an">${a.n}</div>
-      <div class="stats"><span class="st atk">⚔${a.atk}</span><span class="st hp">❤${Math.max(0, a.hp)}</span></div>
+      <div class="stats"><span class="st atk">⚔${a.atk}</span><span class="st hp">❤${Math.max(0, a.hp)}</span><span class="st spd">💨${a.spd}</span></div>
       ${abil}${ord}</div>`;
   }
   function teamHTML(team, o = {}) {
@@ -199,6 +199,7 @@ export function createUI(game) {
             <div class="statline">
               <div class="statbox"><div class="k">Ataque</div><div class="v" style="color:var(--atk)">${a.atk}</div></div>
               <div class="statbox"><div class="k">Vida</div><div class="v" style="color:var(--hp)">${a.hp}</div></div>
+              <div class="statbox"><div class="k">Velocidad</div><div class="v" style="color:#7fb0e0">${a.spd}</div></div>
               <div class="statbox"><div class="k">Nivel</div><div class="v">${a.level}</div></div>
               <div class="statbox"><div class="k">Efecto</div><div class="v abil-v">${ab ? ab.sym + ' ' + ab.n : '—'}</div></div>
             </div></div>
@@ -253,7 +254,7 @@ export function createUI(game) {
       <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
       <div class="an">${a.n}</div>
       <div class="hpbar"><div class="hpfill"></div></div>
-      <div class="bstats"><span class="st atk">⚔${a.atk}</span><span class="hpnum">❤<span class="hpcur">${a.hp}</span>/${max}</span></div>
+      <div class="bstats"><span class="st atk">⚔${a.atk}</span><span class="st spd">💨${a.spd}</span><span class="hpnum">❤<span class="hpcur">${a.hp}</span>/${max}</span></div>
       ${ab ? `<span class="abil ${ab.cls}">${ab.sym} ${ab.n}</span>` : ''}
       <div class="hitlayer"></div></div>`;
   }
@@ -271,7 +272,7 @@ export function createUI(game) {
       <div class="section-h">Combate · ${s.country.flag} ${s.country.n} <span id="turnbadge" class="turnbadge"></span></div>
       <div class="arena">
         <div class="vsrow">
-          <div class="bside"><div class="side-label">🏕️ Tu refugio</div><div class="team">${s.team.map(a => battleCard(a, max[a.uid])).join('')}</div></div>
+          <div class="bside"><div class="side-label">🏕️ Tu refugio</div><div class="team">${s.team.slice().reverse().map(a => battleCard(a, max[a.uid])).join('')}</div></div>
           <div class="vs-badge">VS</div>
           <div class="bside"><div class="side-label">${b.oppEmoji} ${b.oppName}</div><div class="team">${b.enemy.map(a => battleCard(a, max[a.uid])).join('')}</div></div>
         </div>
@@ -298,20 +299,26 @@ export function createUI(game) {
       const p = document.createElement('span'); p.className = 'popup ' + cls; p.textContent = text;
       el.appendChild(p); setTimeout(() => p.remove(), 1150);
     };
-    const clearFront = () => document.querySelectorAll('.battlecard.front').forEach(e => { e.classList.remove('front', 'enemy'); e.style.transform = ''; });
+    // pone a los dos que pelean en primer plano (.front) y al resto atrás (.benched)
+    const setStage = (auid, buid) => document.querySelectorAll('.battlecard').forEach(e => {
+      const u = +e.id.slice(3), active = (u === auid || u === buid);
+      e.classList.toggle('benched', !active);
+      if (!active) { e.classList.remove('front', 'enemy'); e.style.transform = ''; }
+    });
+    const clearStage = () => document.querySelectorAll('.battlecard').forEach(e => { e.classList.remove('front', 'enemy', 'benched'); e.style.transform = ''; });
     Object.keys(hp).forEach(setHp);
     const msg = document.getElementById('bmsg'), turnb = document.getElementById('turnbadge');
 
     let i = 0;
     const tick = () => {
       if (i >= b.steps.length) {
-        clearFront();
+        clearStage();
         if (msg) msg.textContent = b.result === 'W' ? '¡Ganaste! 🏆' : b.result === 'T' ? 'Empate (cuenta como derrota)' : 'Perdiste…';
         return setTimeout(done, T_END);
       }
       const st = b.steps[i++];
       if (turnb) turnb.textContent = 'Turno ' + i;
-      clearFront();
+      setStage(st.aUid, st.bUid);   // los dos que pelean al frente, el resto atrás
       const ca = card(st.aUid), cb = card(st.bUid);
       if (ca) ca.classList.add('front');
       if (cb) cb.classList.add('front', 'enemy');

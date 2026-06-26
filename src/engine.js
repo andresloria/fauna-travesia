@@ -21,7 +21,7 @@ let UID = 0;
 export function mkAnimal(key) {
   const s = SP[key];
   return { uid: ++UID, key, n: s.n, e: s.e, bio: s.bio, ab: s.ab, leg: !!s.leg, ext: !!s.ext,
-           atk: s.atk, hp: s.hp, level: 1, evo: 0, items: [] };
+           atk: s.atk, hp: s.hp, spd: s.spd || 3, level: 1, evo: 0, items: [] };
 }
 // Sube un nivel. Devuelve true si en este nivel EVOLUCIONÓ (creció extra).
 export function levelUp(a) {
@@ -134,7 +134,7 @@ export function biomesOf(country) { return [...new Set(country.pool.map(k => SP[
 // efectos se dispararon (fx) para que la UI los muestre.
 // result: 'W' (gana tu equipo) | 'L' (gana B) | 'T' (empate, cuenta como derrota)
 export function fight(teamA, teamB) {
-  const mk = (c) => ({ uid: c.uid, atk: c.atk, hp: c.hp, max: c.hp, ab: c.ab, shield: c.ab === 'shield' });
+  const mk = (c) => ({ uid: c.uid, atk: c.atk, hp: c.hp, max: c.hp, spd: c.spd || 0, ab: c.ab, shield: c.ab === 'shield' });
   const A = teamA.map(mk), B = teamB.map(mk);
   let fallenA = 0, fallenB = 0;
   const steps = [];
@@ -153,8 +153,11 @@ export function fight(teamA, teamB) {
       if (defender.ab === 'thorns' && dmg > 0) { attacker.hp -= 1; fx.push('thorns'); }
     };
 
-    const aFirst = a.ab === 'first' && b.ab !== 'first';
-    const bFirst = b.ab === 'first' && a.ab !== 'first';
+    // quién pega primero: el de más VELOCIDAD (el efecto 'first' = +100, siempre primero)
+    const spdA = a.spd + (a.ab === 'first' ? 100 : 0);
+    const spdB = b.spd + (b.ab === 'first' ? 100 : 0);
+    const aFirst = spdA > spdB;
+    const bFirst = spdB > spdA;
     if (aFirst) {
       hit(a, atkA, b);
       if (b.hp > 0) hit(b, atkB, a); else fx.push('first');

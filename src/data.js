@@ -5,45 +5,45 @@
 // No hay lógica acá: solo datos.
 // ============================================================
 
-// Cada especie: nombre, emoji (respaldo), ataque/vida base, bioma y efecto (ab).
-// El arte real vive en assets/animales/<key>.svg (ver make_assets.py).
+// Cada especie: nombre, emoji (respaldo), ataque/vida base, VELOCIDAD (spd, decide
+// quién pega primero), bioma y efecto (ab). Arte real en assets/animales/<key>.svg.
 export const SP = {
   // ── BOSQUE / selva húmeda ──
-  perezoso:  { n:'Perezoso',     e:'🦥', atk:1, hp:7, bio:'bosque',  ab:'heal' },
-  monocara:  { n:'Mono carablanca', e:'🐒', atk:2, hp:3, bio:'bosque', ab:'first' },
-  tucan:     { n:'Tucán',        e:'🦜', atk:2, hp:3, bio:'bosque',  ab:'first' },
-  ranadardo: { n:'Rana dardo',   e:'🐸', atk:4, hp:1, bio:'bosque',  ab:'poison' },
-  serpiente: { n:'Terciopelo',   e:'🐍', atk:5, hp:2, bio:'bosque',  ab:'poison' },
-  jaguar:    { n:'Jaguar',       e:'🐆', atk:5, hp:4, bio:'bosque',  ab:'rage' },
-  manigordo: { n:'Manigordo',    e:'🐈', atk:3, hp:3, bio:'bosque',  ab:'first' },
-  pizote:    { n:'Pizote',       e:'🦝', atk:3, hp:4, bio:'bosque',  ab:'first' },
-  murcielago:{ n:'Murciélago',   e:'🦇', atk:3, hp:2, bio:'bosque',  ab:'poison' },
-  mariposa:  { n:'Morfo azul',   e:'🦋', atk:2, hp:2, bio:'bosque',  ab:'first' },
-  abeja:     { n:'Abeja',        e:'🐝', atk:3, hp:1, bio:'bosque',  ab:'poison' },
+  perezoso:  { n:'Perezoso',     e:'🦥', atk:1, hp:7, spd:1, bio:'bosque',  ab:'heal' },
+  monocara:  { n:'Mono carablanca', e:'🐒', atk:2, hp:3, spd:8, bio:'bosque', ab:'first' },
+  tucan:     { n:'Tucán',        e:'🦜', atk:2, hp:3, spd:8, bio:'bosque',  ab:'first' },
+  ranadardo: { n:'Rana dardo',   e:'🐸', atk:4, hp:1, spd:4, bio:'bosque',  ab:'poison' },
+  serpiente: { n:'Terciopelo',   e:'🐍', atk:5, hp:2, spd:6, bio:'bosque',  ab:'poison' },
+  jaguar:    { n:'Jaguar',       e:'🐆', atk:5, hp:4, spd:7, bio:'bosque',  ab:'rage' },
+  manigordo: { n:'Manigordo',    e:'🐈', atk:3, hp:3, spd:8, bio:'bosque',  ab:'first' },
+  pizote:    { n:'Pizote',       e:'🦝', atk:3, hp:4, spd:5, bio:'bosque',  ab:'first' },
+  murcielago:{ n:'Murciélago',   e:'🦇', atk:3, hp:2, spd:8, bio:'bosque',  ab:'poison' },
+  mariposa:  { n:'Morfo azul',   e:'🦋', atk:2, hp:2, spd:7, bio:'bosque',  ab:'first' },
+  abeja:     { n:'Abeja',        e:'🐝', atk:3, hp:1, spd:7, bio:'bosque',  ab:'poison' },
 
   // ── MONTAÑA / bosque nuboso ──
-  quetzal:   { n:'Quetzal',      e:'🐦', atk:2, hp:4, bio:'montana', ab:'heal' },
-  puma:      { n:'Puma',         e:'🐆', atk:5, hp:5, bio:'montana', ab:'rage' },
-  coyote:    { n:'Coyote',       e:'🐺', atk:4, hp:3, bio:'montana', ab:'first' },
+  quetzal:   { n:'Quetzal',      e:'🐦', atk:2, hp:4, spd:7, bio:'montana', ab:'heal' },
+  puma:      { n:'Puma',         e:'🐆', atk:5, hp:5, spd:7, bio:'montana', ab:'rage' },
+  coyote:    { n:'Coyote',       e:'🐺', atk:4, hp:3, spd:7, bio:'montana', ab:'first' },
 
   // ── SABANA / bosque seco (Guanacaste) ──
-  venado:    { n:'Venado',       e:'🦌', atk:2, hp:6, bio:'sabana',  ab:'shield' },
-  saino:     { n:'Saíno',        e:'🐗', atk:4, hp:5, bio:'sabana',  ab:'rage' },
-  iguana:    { n:'Iguana',       e:'🦎', atk:2, hp:5, bio:'sabana',  ab:'thorns' },
-  garza:     { n:'Garza',        e:'🐦', atk:2, hp:3, bio:'sabana',  ab:'first' },
+  venado:    { n:'Venado',       e:'🦌', atk:2, hp:6, spd:7, bio:'sabana',  ab:'shield' },
+  saino:     { n:'Saíno',        e:'🐗', atk:4, hp:5, spd:4, bio:'sabana',  ab:'rage' },
+  iguana:    { n:'Iguana',       e:'🦎', atk:2, hp:5, spd:4, bio:'sabana',  ab:'thorns' },
+  garza:     { n:'Garza',        e:'🐦', atk:2, hp:3, spd:6, bio:'sabana',  ab:'first' },
 
   // ── AGUA / costas y ríos ──
-  cocodrilo: { n:'Cocodrilo',    e:'🐊', atk:5, hp:6, bio:'agua',    ab:'first' },
-  tortuga:   { n:'Tortuga marina', e:'🐢', atk:1, hp:8, bio:'agua',  ab:'shield' },
-  ballena:   { n:'Ballena jorobada', e:'🐋', atk:6, hp:8, bio:'agua', ab:'rage' },
-  delfin:    { n:'Delfín',       e:'🐬', atk:3, hp:3, bio:'agua',    ab:'first' },
-  tiburon:   { n:'Tiburón',      e:'🦈', atk:6, hp:4, bio:'agua',    ab:'rage' },
-  cangrejo:  { n:'Cangrejo',     e:'🦀', atk:2, hp:5, bio:'agua',    ab:'thorns' },
-  basilisco: { n:'Basilisco',    e:'🦎', atk:3, hp:3, bio:'agua',    ab:'first' },
+  cocodrilo: { n:'Cocodrilo',    e:'🐊', atk:5, hp:6, spd:3, bio:'agua',    ab:'first' },
+  tortuga:   { n:'Tortuga marina', e:'🐢', atk:1, hp:8, spd:1, bio:'agua',  ab:'shield' },
+  ballena:   { n:'Ballena jorobada', e:'🐋', atk:6, hp:8, spd:3, bio:'agua', ab:'rage' },
+  delfin:    { n:'Delfín',       e:'🐬', atk:3, hp:3, spd:8, bio:'agua',    ab:'first' },
+  tiburon:   { n:'Tiburón',      e:'🦈', atk:6, hp:4, spd:6, bio:'agua',    ab:'rage' },
+  cangrejo:  { n:'Cangrejo',     e:'🦀', atk:2, hp:5, spd:3, bio:'agua',    ab:'thorns' },
+  basilisco: { n:'Basilisco',    e:'🦎', atk:3, hp:3, spd:8, bio:'agua',    ab:'first' },
 
   // ── LEGENDARIOS ── rarísimos, no van en ningún pool; salen vía .legend.
-  lapa:         { n:'Lapa roja',     e:'🦜', atk:5, hp:6, bio:'bosque',  ab:'rage', leg:true },
-  quetzaldorado:{ n:'Quetzal Dorado', e:'🐦', atk:4, hp:9, bio:'montana', ab:'heal', leg:true },
+  lapa:         { n:'Lapa roja',     e:'🦜', atk:5, hp:6, spd:6, bio:'bosque',  ab:'rage', leg:true },
+  quetzaldorado:{ n:'Quetzal Dorado', e:'🐦', atk:4, hp:9, spd:8, bio:'montana', ab:'heal', leg:true },
 };
 
 export const BIOMES = {
@@ -58,7 +58,7 @@ export const ABILITIES = {
   poison:{ n:'Veneno',       sym:'☣', cls:'poison', desc:'El enemigo del frente pierde 1 ❤ cada turno aunque no lo golpeen.' },
   shield:{ n:'Escudo',       sym:'🛡', cls:'shield', desc:'Aguanta el primer golpe que recibiría sin perder vida.' },
   heal:  { n:'Regenera',     sym:'✚', cls:'heal',   desc:'Si sobrevive el turno, recupera 1 ❤ al final.' },
-  first: { n:'Primer golpe', sym:'⚡', cls:'first',  desc:'Ataca antes que el rival: puede tumbarlo sin recibir daño.' },
+  first: { n:'Primer golpe', sym:'⚡', cls:'first',  desc:'Siempre ataca primero, sin importar la velocidad: puede tumbar al rival sin recibir daño.' },
   rage:  { n:'Furia',        sym:'🔥', cls:'rage',   desc:'+2 ⚔ por cada compañero ya caído en este combate.' },
   thorns:{ n:'Púas',         sym:'🌵', cls:'thorns', desc:'Devuelve 1 de daño a quien lo ataque.' },
 };
