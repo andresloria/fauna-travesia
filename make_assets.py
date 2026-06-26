@@ -35,7 +35,7 @@ ANIMALS = {
   "monocara":"1F412","serpiente":"1F40D","manigordo":"1F408","mariposa":"1F98B",
   "quetzal":"1F426","puma":"1F406","coyote":"1F43A","venado":"1F98C",
   "saino":"1F417","garza":"1F426","ballena":"1F40B","basilisco":"1F98E",
-  "lapa":"1F99C","quetzaldorado":"1F426",
+  "lapa":"1F99C","quetzaldorado":"1F426","pizote":"1F99D","iguana":"1F98E",
 }
 
 # pais (slug usado en data.js) -> ISO2 mapsicon  |  None = sin silueta (motivo propio)

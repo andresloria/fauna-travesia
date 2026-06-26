@@ -239,51 +239,97 @@ export function createUI(game) {
     $('overlay').classList.add('show');
   }
 
-  // ---------- combate animado ----------
+  // ---------- combate animado (DOM estable: se construye una vez y se anima) ----------
   const FX = { poison:'☣', shield:'🛡', heal:'✚', first:'⚡', rage:'🔥', thorns:'🌵' };
-  function fxLabel(fx) {
-    if (!fx || !fx.length) return '⚔️';
-    return [...new Set(fx)].map(k => FX[k] || '').join(' ');
+  // carta de combate, con barra de vida y vida actual/máx
+  function battleCard(a, max) {
+    const stage = Math.min(2, a.evo || 0);
+    const tcls = a.ext ? 'extinct' : a.leg ? 'legendary' : ['t-base', 't-evo1', 't-evo2'][stage];
+    const stageLabel = a.ext ? 'EXTINTO' : a.leg ? 'LEGENDARIO' : STAGE[stage];
+    const ab = ABILITIES[a.ab];
+    const bio = BIOMES[a.bio] ? BIOMES[a.bio].e : '';
+    return `<div class="acard ${tcls} battlecard" id="bc-${a.uid}">
+      <span class="stage">${stageLabel} · Nv${a.level}</span><span class="bio">${bio}</span>
+      <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
+      <div class="an">${a.n}</div>
+      <div class="hpbar"><div class="hpfill"></div></div>
+      <div class="bstats"><span class="st atk">⚔${a.atk}</span><span class="hpnum">❤<span class="hpcur">${a.hp}</span>/${max}</span></div>
+      ${ab ? `<span class="abil ${ab.cls}">${ab.sym} ${ab.n}</span>` : ''}</div>`;
   }
-  function renderArena(s, hp, aliveA, aliveB, msg, fronts) {
-    const b = s.battle;
-    const left = s.team.map(a =>
-      animalCard({ ...a, hp: hp[a.uid] }, { fainted: !aliveA.has(a.uid), cls: fronts && fronts.a === a.uid ? 'attacking' : '' })).join('');
-    const right = b.enemy.map(a =>
-      animalCard({ ...a, hp: hp[a.uid] }, { fainted: !aliveB.has(a.uid), cls: fronts && fronts.b === a.uid ? 'attacking' : '' })).join('');
-    phaseArea.innerHTML = `
-      <div class="section-h">Combate · ${s.country.flag} ${s.country.n}</div>
-      <div class="arena"><div class="battle-msg">${msg || ''}</div>
-        <div class="vsrow">
-          <div><div class="side-label">🧭 Tu equipo</div><div class="team">${left || '<div class="empty-slot">☠️</div>'}</div></div>
-          <div class="vs-badge">VS</div>
-          <div><div class="side-label">${b.oppEmoji} ${b.oppName}</div><div class="team">${right || '<div class="empty-slot">☠️</div>'}</div></div>
-        </div></div>`;
-  }
+
   function playBattle(s, done) {
     const b = s.battle;
-    const hp = {}; s.team.forEach(a => hp[a.uid] = a.hp); b.enemy.forEach(a => hp[a.uid] = a.hp);
-    const aliveA = new Set(s.team.map(a => a.uid)), aliveB = new Set(b.enemy.map(a => a.uid));
+    const max = {}, abOf = {};
+    s.team.forEach(a => { max[a.uid] = a.hp; abOf[a.uid] = a.ab; });
+    b.enemy.forEach(a => { max[a.uid] = a.hp; abOf[a.uid] = a.ab; });
+    const hp = {}; Object.keys(max).forEach(u => hp[u] = max[u]);
+    const nameOf = (uid) => { const a = s.team.find(x => x.uid === uid) || b.enemy.find(x => x.uid === uid); return a ? a.e + ' ' + a.n : ''; };
+
     renderRunbar(s);
+    phaseArea.innerHTML = `
+      <div class="section-h">Combate · ${s.country.flag} ${s.country.n} <span id="turnbadge" class="turnbadge"></span></div>
+      <div class="arena">
+        <div class="vsrow">
+          <div class="bside"><div class="side-label">🏕️ Tu refugio</div><div class="team">${s.team.map(a => battleCard(a, max[a.uid])).join('')}</div></div>
+          <div class="vs-badge">VS</div>
+          <div class="bside"><div class="side-label">${b.oppEmoji} ${b.oppName}</div><div class="team">${b.enemy.map(a => battleCard(a, max[a.uid])).join('')}</div></div>
+        </div>
+        <div class="battle-msg" id="bmsg">¡Empieza el combate!</div>
+      </div>`;
+
+    const card = (uid) => document.getElementById('bc-' + uid);
+    const setHp = (uid) => {
+      const el = card(uid); if (!el) return;
+      const pct = Math.max(0, Math.round(100 * Math.max(0, hp[uid]) / max[uid]));
+      const f = el.querySelector('.hpfill');
+      f.style.width = pct + '%';
+      f.className = 'hpfill' + (pct <= 25 ? ' low' : pct <= 50 ? ' mid' : '');
+      const c = el.querySelector('.hpcur'); if (c) c.textContent = Math.max(0, hp[uid]);
+    };
+    const popup = (uid, text, cls) => {
+      const el = card(uid); if (!el) return;
+      const p = document.createElement('span'); p.className = 'popup ' + cls; p.textContent = text;
+      el.appendChild(p); setTimeout(() => p.remove(), 950);
+    };
+    const clearFront = () => document.querySelectorAll('.battlecard.front').forEach(e => e.classList.remove('front', 'enemy', 'lungeA', 'lungeB'));
+    Object.keys(hp).forEach(setHp);
+    const msg = document.getElementById('bmsg'), turnb = document.getElementById('turnbadge');
+
     let i = 0;
-    renderArena(s, hp, aliveA, aliveB, '¡Combate!');
     const tick = () => {
       if (i >= b.steps.length) {
-        const msg = b.result === 'W' ? '¡Ganaste! 🏆' : b.result === 'T' ? 'Empate (cuenta como derrota)' : 'Perdiste…';
-        renderArena(s, hp, aliveA, aliveB, msg);
-        return setTimeout(done, 1300);
+        clearFront();
+        if (msg) msg.textContent = b.result === 'W' ? '¡Ganaste! 🏆' : b.result === 'T' ? 'Empate (cuenta como derrota)' : 'Perdiste…';
+        return setTimeout(done, 1400);
       }
       const st = b.steps[i++];
-      renderArena(s, hp, aliveA, aliveB, fxLabel(st.fx), { a: st.aUid, b: st.bUid });
+      if (turnb) turnb.textContent = 'Turno ' + i;
+      clearFront();
+      const ca = card(st.aUid), cb = card(st.bUid);
+      if (ca) ca.classList.add('front', 'lungeA');
+      if (cb) cb.classList.add('front', 'enemy', 'lungeB');
+      const fxTxt = (st.fx && st.fx.length) ? ' · ' + [...new Set(st.fx)].map(k => FX[k] + ' ' + (ABILITIES[k] ? ABILITIES[k].n : '')).join('  ') : '';
+      if (msg) msg.innerHTML = `${nameOf(st.aUid)} ⚔️ ${nameOf(st.bUid)}${fxTxt}`;
       setTimeout(() => {
+        const dA = hp[st.aUid] - st.aHp, dB = hp[st.bUid] - st.bHp;
         hp[st.aUid] = st.aHp; hp[st.bUid] = st.bHp;
-        if (st.faintA) aliveA.delete(st.aUid);
-        if (st.faintB) aliveB.delete(st.bUid);
-        renderArena(s, hp, aliveA, aliveB, '');
-        setTimeout(tick, 360);
-      }, 360);
+        setHp(st.aUid); setHp(st.bUid);
+        if (dB > 0) popup(st.bUid, '−' + dB, 'dmg'); else if (dB < 0) popup(st.bUid, '+' + (-dB), 'heal');
+        if (dA > 0) popup(st.aUid, '−' + dA, 'dmg'); else if (dA < 0) popup(st.aUid, '+' + (-dA), 'heal');
+        // efectos atribuidos al portador (sabemos su ability)
+        (st.fx || []).forEach(k => {
+          const sym = FX[k];
+          if (k === 'poison') { if (abOf[st.aUid] === 'poison') popup(st.bUid, sym, 'fx'); if (abOf[st.bUid] === 'poison') popup(st.aUid, sym, 'fx'); }
+          else if (k === 'thorns') { if (abOf[st.aUid] === 'thorns') popup(st.bUid, sym, 'fx'); if (abOf[st.bUid] === 'thorns') popup(st.aUid, sym, 'fx'); }
+          else if (k === 'shield') { if (abOf[st.aUid] === 'shield') popup(st.aUid, sym, 'fx'); if (abOf[st.bUid] === 'shield') popup(st.bUid, sym, 'fx'); }
+          else if (k === 'heal') { if (abOf[st.aUid] === 'heal') popup(st.aUid, sym, 'fx'); if (abOf[st.bUid] === 'heal') popup(st.bUid, sym, 'fx'); }
+        });
+        if (st.faintA && ca) ca.classList.add('fainted');
+        if (st.faintB && cb) cb.classList.add('fainted');
+        setTimeout(tick, 540);
+      }, 320);
     };
-    setTimeout(tick, 700);
+    setTimeout(tick, 800);
   }
 
   // ---------- dispatcher + wiring ----------

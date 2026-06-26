@@ -37,7 +37,7 @@ export function setLevel(a, L) { while (a.level < L) levelUp(a); return a; }
 // SENCILLO) y se dispara al final. Tu poder crece rápido (cada victoria sube de
 // nivel a TODO el equipo + capturás + evolucionás), así que el enemigo tiene que
 // acelerar para seguir siendo un reto. Bajá RAMP = más difícil; subilo = más fácil.
-const RAMP = 5;
+const RAMP = 7;
 const accel = (depth) => depth + Math.floor(depth * depth / RAMP);
 export function retSize(depth)  { return Math.min(5, 2 + Math.floor(depth / 2) + rnd(2)); }
 export function bossSize(depth) { return Math.min(5, 3 + Math.floor(depth / 2) + rnd(2)); }
