@@ -109,6 +109,13 @@ export class Game {
           `Encontraste ${it.e} <b>${it.n}</b> (+${it.atk}⚔ +${it.hp}❤). Lo guardás en la mochila — equipalo a un animal desde su ficha.`,
           [{ label: 'Continuar', action: () => this.backToMap() }]);
       }
+      case 'entrenamiento': {
+        s.team.forEach(a => { if (E.levelUp(a)) this.log(`🌿 ${a.e} <b>${a.n}</b> se recuperó hasta nivel ${a.level}!`); });
+        this.log('📈 Entrenaste a tu refugio: +1 nivel a todos');
+        return this.showEvent('📈', 'Entrenamiento',
+          `Tu equipo entrena y sube <b>1 nivel</b> 💪. Una buena ruta para fortalecerte sin pelear.`,
+          [{ label: 'Continuar', action: () => this.backToMap() }]);
+      }
       case 'descanso':
         s.hearts = Math.min(RULES.MAX_HEARTS, s.hearts + 1);
         return this.showEvent('🏕️', 'Refugio',
