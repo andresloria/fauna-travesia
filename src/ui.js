@@ -254,7 +254,8 @@ export function createUI(game) {
       <div class="an">${a.n}</div>
       <div class="hpbar"><div class="hpfill"></div></div>
       <div class="bstats"><span class="st atk">⚔${a.atk}</span><span class="hpnum">❤<span class="hpcur">${a.hp}</span>/${max}</span></div>
-      ${ab ? `<span class="abil ${ab.cls}">${ab.sym} ${ab.n}</span>` : ''}</div>`;
+      ${ab ? `<span class="abil ${ab.cls}">${ab.sym} ${ab.n}</span>` : ''}
+      <div class="hitlayer"></div></div>`;
   }
 
   function playBattle(s, done) {
@@ -278,8 +279,12 @@ export function createUI(game) {
       </div>`;
 
     // ritmo del combate (ms) — subir para más lento, bajar para más rápido
-    const T_START = 950, T_IMPACT = 450, T_SETTLE = 780, T_END = 1700;
+    const T_START = 1100, T_IMPACT = 650, T_SETTLE = 1150, T_END = 2000;
+    const sideA = new Set(s.team.map(a => a.uid));   // para saber hacia dónde embiste cada carta
     const card = (uid) => document.getElementById('bc-' + uid);
+    const lunge = (uid) => { const el = card(uid); if (el) el.style.transform = `translateX(${sideA.has(uid) ? 34 : -34}px) scale(1.06)`; };
+    const rest = (uid) => { const el = card(uid); if (el) el.style.transform = ''; };
+    const flash = (uid) => { const el = card(uid); if (!el) return; const h = el.querySelector('.hitlayer'); if (!h) return; h.classList.remove('flash'); void h.offsetWidth; h.classList.add('flash'); };
     const setHp = (uid) => {
       const el = card(uid); if (!el) return;
       const pct = Math.max(0, Math.round(100 * Math.max(0, hp[uid]) / max[uid]));
@@ -293,7 +298,7 @@ export function createUI(game) {
       const p = document.createElement('span'); p.className = 'popup ' + cls; p.textContent = text;
       el.appendChild(p); setTimeout(() => p.remove(), 1150);
     };
-    const clearFront = () => document.querySelectorAll('.battlecard.front').forEach(e => e.classList.remove('front', 'enemy', 'lungeA', 'lungeB'));
+    const clearFront = () => document.querySelectorAll('.battlecard.front').forEach(e => { e.classList.remove('front', 'enemy'); e.style.transform = ''; });
     Object.keys(hp).forEach(setHp);
     const msg = document.getElementById('bmsg'), turnb = document.getElementById('turnbadge');
 
@@ -308,8 +313,9 @@ export function createUI(game) {
       if (turnb) turnb.textContent = 'Turno ' + i;
       clearFront();
       const ca = card(st.aUid), cb = card(st.bUid);
-      if (ca) ca.classList.add('front', 'lungeA');
-      if (cb) cb.classList.add('front', 'enemy', 'lungeB');
+      if (ca) ca.classList.add('front');
+      if (cb) cb.classList.add('front', 'enemy');
+      lunge(st.aUid); lunge(st.bUid);   // ambas cartas embisten hacia el rival
       const fxTxt = (st.fx && st.fx.length) ? ' · ' + [...new Set(st.fx)].map(k => FX[k] + ' ' + (ABILITIES[k] ? ABILITIES[k].n : '')).join('  ') : '';
       if (msg) msg.innerHTML = `${nameOf(st.aUid)} ⚔️ ${nameOf(st.bUid)}${fxTxt}`;
       setTimeout(() => {
@@ -326,6 +332,9 @@ export function createUI(game) {
           else if (k === 'shield') { if (abOf[st.aUid] === 'shield') popup(st.aUid, sym, 'fx'); if (abOf[st.bUid] === 'shield') popup(st.bUid, sym, 'fx'); }
           else if (k === 'heal') { if (abOf[st.aUid] === 'heal') popup(st.aUid, sym, 'fx'); if (abOf[st.bUid] === 'heal') popup(st.bUid, sym, 'fx'); }
         });
+        if (dB > 0) flash(st.bUid);   // destello rojo en quien recibió daño
+        if (dA > 0) flash(st.aUid);
+        rest(st.aUid); rest(st.bUid); // vuelven a su lugar tras el golpe
         if (st.faintA && ca) ca.classList.add('fainted');
         if (st.faintB && cb) cb.classList.add('fainted');
         setTimeout(tick, T_SETTLE);

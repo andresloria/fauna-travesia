@@ -133,7 +133,10 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .battle-msg{font-style:italic;font-size:15px;color:var(--paper);min-height:1.5em;text-align:center;margin-top:6px}
 .turnbadge{flex:0 0 auto;font-family:'DM Mono',monospace;font-size:9px;background:rgba(232,197,88,.16);color:var(--gold);padding:2px 8px;border-radius:20px;letter-spacing:.06em}
 /* carta de combate: barra de vida + vida actual/máx */
-.battlecard{transition:transform .18s,box-shadow .18s,opacity .3s}
+.battlecard{transition:transform .22s ease,box-shadow .18s,opacity .3s}
+.battlecard .hitlayer{position:absolute;inset:0;border-radius:12px;background:#ff2f1f;opacity:0;pointer-events:none;z-index:5}
+.battlecard .hitlayer.flash{animation:redflash .5s ease}
+@keyframes redflash{0%{opacity:0}22%{opacity:.6}100%{opacity:0}}
 .battlecard .hpbar{height:7px;background:rgba(0,0,0,.32);border-radius:4px;overflow:hidden;margin-top:5px;width:100%}
 .battlecard .hpfill{height:100%;width:100%;background:var(--hp);border-radius:4px;transition:width .4s ease,background .3s}
 .battlecard .hpfill.mid{background:var(--sabana)} .battlecard .hpfill.low{background:var(--atk)}
@@ -141,10 +144,6 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .battlecard .hpnum{font-family:'DM Mono',monospace;font-weight:600;font-size:11px;color:var(--hp)}
 .battlecard.front{box-shadow:0 0 0 2px var(--gold),0 8px 16px rgba(0,0,0,.45);z-index:4}
 .battlecard.front.enemy{box-shadow:0 0 0 2px var(--atk),0 8px 16px rgba(0,0,0,.45)}
-.battlecard.lungeA{animation:lungeA .42s ease}
-.battlecard.lungeB{animation:lungeB .42s ease}
-@keyframes lungeA{45%{transform:translateX(12px) scale(1.05)}}
-@keyframes lungeB{45%{transform:translateX(-12px) scale(1.05)}}
 .popup{position:absolute;left:50%;top:0;transform:translateX(-50%);font-family:'DM Mono',monospace;font-weight:600;pointer-events:none;z-index:6;animation:floatup 1.15s ease forwards}
 .popup.dmg{color:#ff6a4a;font-size:19px;text-shadow:0 1px 2px rgba(0,0,0,.5)}
 .popup.heal{color:#7fe0a0;font-size:17px;text-shadow:0 1px 2px rgba(0,0,0,.5)}
