@@ -277,6 +277,8 @@ export function createUI(game) {
         <div class="battle-msg" id="bmsg">¡Empieza el combate!</div>
       </div>`;
 
+    // ritmo del combate (ms) — subir para más lento, bajar para más rápido
+    const T_START = 950, T_IMPACT = 450, T_SETTLE = 780, T_END = 1700;
     const card = (uid) => document.getElementById('bc-' + uid);
     const setHp = (uid) => {
       const el = card(uid); if (!el) return;
@@ -289,7 +291,7 @@ export function createUI(game) {
     const popup = (uid, text, cls) => {
       const el = card(uid); if (!el) return;
       const p = document.createElement('span'); p.className = 'popup ' + cls; p.textContent = text;
-      el.appendChild(p); setTimeout(() => p.remove(), 950);
+      el.appendChild(p); setTimeout(() => p.remove(), 1150);
     };
     const clearFront = () => document.querySelectorAll('.battlecard.front').forEach(e => e.classList.remove('front', 'enemy', 'lungeA', 'lungeB'));
     Object.keys(hp).forEach(setHp);
@@ -300,7 +302,7 @@ export function createUI(game) {
       if (i >= b.steps.length) {
         clearFront();
         if (msg) msg.textContent = b.result === 'W' ? '¡Ganaste! 🏆' : b.result === 'T' ? 'Empate (cuenta como derrota)' : 'Perdiste…';
-        return setTimeout(done, 1400);
+        return setTimeout(done, T_END);
       }
       const st = b.steps[i++];
       if (turnb) turnb.textContent = 'Turno ' + i;
@@ -326,10 +328,10 @@ export function createUI(game) {
         });
         if (st.faintA && ca) ca.classList.add('fainted');
         if (st.faintB && cb) cb.classList.add('fainted');
-        setTimeout(tick, 540);
-      }, 320);
+        setTimeout(tick, T_SETTLE);
+      }, T_IMPACT);
     };
-    setTimeout(tick, 800);
+    setTimeout(tick, T_START);
   }
 
   // ---------- dispatcher + wiring ----------
