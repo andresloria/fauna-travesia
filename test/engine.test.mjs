@@ -144,17 +144,21 @@ test('rollWild puede dar el legendario del país (raro pero posible)', () => {
   assert.ok(seen, 'con suficientes intentos debe aparecer el legendario del país');
 });
 
-test('aparecen nodos de cazadores furtivos en el mapa', () => {
-  let found = false;
-  for (let i = 0; i < 400 && !found; i++) {
-    const m = E.generateMap(COUNTRIES[0]);
-    if (Object.values(m.nodesById).some(n => n.type === 'cazador')) found = true;
-  }
-  assert.ok(found, 'debería generarse algún nodo cazador');
+test('traficantes: NO aparecen al inicio (prov.1-3), sí más adelante (prov.4+)', () => {
+  const has = (depth) => {
+    for (let i = 0; i < 500; i++) {
+      const m = E.generateMap(COUNTRIES[0], depth);
+      if (Object.values(m.nodesById).some(n => n.type === 'cazador')) return true;
+    }
+    return false;
+  };
+  assert.ok(!has(0), 'sin traficantes en la provincia 1');
+  assert.ok(!has(2), 'sin traficantes en la provincia 3');
+  assert.ok(has(3), 'aparecen traficantes desde la provincia 4');
 });
 
-test('los cazadores superan en NIVEL al retador y dan objeto raro', () => {
-  for (const d of [0, 2, 4]) assert.ok(E.poacherLevel(d) > E.enemyLevel(d, false), 'el cazador supera en nivel al retador');
+test('traficantes: nivel de furtivo normal (no más fuertes) y dan objeto raro', () => {
+  for (const d of [3, 4, 6]) assert.equal(E.poacherLevel(d), E.enemyLevel(d, false), 'mismo nivel que un furtivo');
   assert.ok(E.RARE_ITEMS && E.RARE_ITEMS.length > 0, 'hay objetos raros');
 });
 

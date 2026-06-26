@@ -126,11 +126,20 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .editbtns{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap}
 .editbtns .btn{padding:9px 15px;font-size:10px}
 
-.arena{display:flex;flex-direction:column;gap:10px;align-items:center;width:100%}
-.vsrow{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%}
-.bside{width:100%}
-.side-label{font-family:'Fraunces',serif;font-weight:900;font-size:14px;text-align:center;margin-bottom:6px}
-.vs-badge{font-family:'Fraunces',serif;font-style:italic;font-size:18px;color:var(--brass);align-self:center;opacity:.8}
+.arena{display:flex;flex-direction:column;gap:5px;align-items:center;width:100%}
+/* zona de duelo: los dos que pelean, enfrentados (tu carta arriba, enemiga abajo) */
+.duel{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%}
+.duelslot{display:flex;justify-content:center;min-height:0}
+/* bancas: los que no pelean, como miniaturas */
+.bench{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;min-height:0;margin:2px 0;min-height:30px}
+.benchthumb{width:46px}
+.benchthumb .thart{width:46px;height:46px;border-radius:9px;background:linear-gradient(180deg,#f4ead2,var(--paper-edge));display:flex;align-items:center;justify-content:center;border:1px solid var(--paper-edge);box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.benchthumb .thart img{width:80%;height:80%;object-fit:contain}
+.benchthumb .thbar{height:4px;background:rgba(0,0,0,.3);border-radius:3px;overflow:hidden;margin-top:3px}
+.benchthumb .thfill{height:100%;background:var(--hp);width:100%}
+.side-label{font-family:'Fraunces',serif;font-weight:900;font-size:13px;text-align:center;margin:1px 0}
+.enemy-label{color:#e09b8a}
+.vs-badge{font-family:'Fraunces',serif;font-style:italic;font-size:16px;color:var(--brass);opacity:.75}
 .battle-msg{font-style:italic;font-size:15px;color:var(--paper);min-height:1.5em;text-align:center;margin-top:6px}
 .turnbadge{flex:0 0 auto;font-family:'DM Mono',monospace;font-size:9px;background:rgba(232,197,88,.16);color:var(--gold);padding:2px 8px;border-radius:20px;letter-spacing:.06em}
 /* carta de combate: barra de vida + vida actual/máx */
@@ -145,8 +154,6 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .battlecard .hpnum{font-family:'DM Mono',monospace;font-weight:600;font-size:11px;color:var(--hp)}
 .battlecard.front{box-shadow:0 0 0 2px var(--gold),0 8px 18px rgba(0,0,0,.5);z-index:4}
 .battlecard.front.enemy{box-shadow:0 0 0 2px var(--atk),0 8px 18px rgba(0,0,0,.5)}
-/* los que NO pelean: encogidos y atrás, para que se vea quién está peleando */
-.battlecard.benched{transform:scale(.78);opacity:.45;filter:saturate(.85)}
 .st.spd{color:#7fb0e0}
 .popup{position:absolute;left:50%;top:0;transform:translateX(-50%);font-family:'DM Mono',monospace;font-weight:600;pointer-events:none;z-index:6;animation:floatup 1.15s ease forwards}
 .popup.dmg{color:#ff6a4a;font-size:19px;text-shadow:0 1px 2px rgba(0,0,0,.5)}
@@ -234,11 +241,11 @@ details.how p{margin-top:8px;color:#d8cdb2;line-height:1.5}
   .editp{grid-template-columns:1fr}.editcard{margin-bottom:4px}
   .statline{gap:6px}.statbox{min-width:60px;padding:6px 6px}.statbox .v{font-size:16px}
   .runbar{gap:6px}.chip{padding:5px 9px}.chip .v{font-size:15px}.chip.country .v{font-size:13px}
-  /* combate: cartas más chicas y juntas para que entren los dos bandos */
-  .vsrow{gap:5px}.bside .team{gap:5px;min-height:0}
-  .battlecard{width:84px;padding:6px 5px 7px}.battlecard .art{width:70px;height:70px}
-  .battlecard .an{font-size:11px;min-height:20px}.battlecard .abil{font-size:8px;padding:2px 6px}
+  /* combate en celular: duelo central + bancas compactas */
+  .battlecard{width:100px}.battlecard .art{width:82px;height:82px}
+  .battlecard .abil{font-size:8px;padding:2px 6px}
   .battlecard .bstats .st,.battlecard .hpnum{font-size:10px}
-  .side-label{font-size:12px}.vs-badge{font-size:16px}.battle-msg{font-size:13px}
+  .bench{min-height:26px}.benchthumb{width:40px}.benchthumb .thart{width:40px;height:40px}
+  .side-label{font-size:12px}.vs-badge{font-size:15px}.battle-msg{font-size:13px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

@@ -65,7 +65,7 @@ export class Game {
     const s = this.s;
     const draw = E.drawCountry(s.countryBag, s.lastCountryIdx);
     s.country = draw.country; s.countryBag = draw.bag; s.lastCountryIdx = draw.idx;
-    s.map = E.generateMap(s.country);
+    s.map = E.generateMap(s.country, this.depth());
     s.currentId = s.map.startId;
     this.current().visited = true;
     s.phase = 'map';
@@ -127,7 +127,7 @@ export class Game {
   enterSecret() {
     const s = this.s;
     s.country = SECRET;
-    s.map = E.generateMap(SECRET);
+    s.map = E.generateMap(SECRET, this.depth());
     s.currentId = s.map.startId;
     this.current().visited = true;
     s.phase = 'map';

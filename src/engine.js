@@ -48,7 +48,7 @@ export function bossSize(depth)    { return Math.min(5, depth + 2); }
 // NIVEL de los enemigos (su fuerza): sube con la curva acelerada (no el tamaño).
 export function enemyLevel(depth, isBoss) { return (isBoss ? 3 : 2) + accel(depth); }
 export function wildLevel(depth) { return 1 + depth; }
-export function poacherLevel(depth) { return 3 + accel(depth) + rnd(2); }   // traficantes: más nivel que un furtivo
+export function poacherLevel(depth) { return enemyLevel(depth, false); }   // traficantes: nivel de furtivo normal (su gracia es el robo + recompensa, no la fuerza)
 
 export function genEnemy(country, size, lvl) {
   const team = [];
@@ -81,7 +81,7 @@ export function drawCountry(bag, avoid = null) {
 }
 
 // ---------- mapa ramificado (estilo Slay the Spire / Pokelike) ----------
-export function generateMap(country) {
+export function generateMap(country, depth = 0) {
   const nodesById = {};
   const node = (r, c, type, bio = null) => {
     const o = { id: ++UID, r, c, type, bio, visited: false, children: [] };
@@ -93,7 +93,7 @@ export function generateMap(country) {
   for (let r = 1; r <= 4; r++) {
     const cols = shuffle([0, 1, 2]).slice(0, 2 + rnd(2)).sort((a, b) => a - b);
     rows[r] = cols.map(c => {
-      const t = pickType();
+      const t = pickType(depth);
       return node(r, c, t, t === 'bioma' ? pick(biomes) : null);
     });
   }
@@ -112,12 +112,13 @@ export function generateMap(country) {
   return { rows, nodesById, startId: rows[0][0].id };
 }
 function nearest(row, c) { return row.reduce((b, x) => Math.abs(x.c - c) < Math.abs(b.c - c) ? x : b); }
-function pickType() {
+function pickType(depth = 0) {
   const r = rnd(100);
   if (r < 38) return 'bioma';
   if (r < 62) return 'combate';
-  if (r < 70) return 'cazador';     // ~8%: alto riesgo/recompensa
-  if (r < 77) return 'intercambio'; // ~7%: cambiás un animal por uno de más nivel
+  // traficantes SOLO de la provincia 4 en adelante (depth>=3); antes es combate normal.
+  if (r < 70) return depth >= 3 ? 'cazador' : 'combate';
+  if (r < 77) return 'intercambio';
   if (r < 89) return 'tesoro';
   return 'descanso';
 }

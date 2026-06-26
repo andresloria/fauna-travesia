@@ -271,20 +271,27 @@ export function createUI(game) {
     phaseArea.innerHTML = `
       <div class="section-h">Combate · ${s.country.flag} ${s.country.n} <span id="turnbadge" class="turnbadge"></span></div>
       <div class="arena">
-        <div class="vsrow">
-          <div class="bside"><div class="side-label">🏕️ Tu refugio</div><div class="team">${s.team.slice().reverse().map(a => battleCard(a, max[a.uid])).join('')}</div></div>
+        <div class="side-label">🏕️ Tu refugio</div>
+        <div class="bench" id="benchA"></div>
+        <div class="duel">
+          <div class="duelslot" id="duelA"></div>
           <div class="vs-badge">VS</div>
-          <div class="bside"><div class="side-label">${b.oppEmoji} ${b.oppName}</div><div class="team">${b.enemy.map(a => battleCard(a, max[a.uid])).join('')}</div></div>
+          <div class="duelslot" id="duelB"></div>
         </div>
+        <div class="bench" id="benchB"></div>
+        <div class="side-label enemy-label">${b.oppEmoji} ${b.oppName}</div>
         <div class="battle-msg" id="bmsg">¡Empieza el combate!</div>
       </div>`;
 
     // ritmo del combate (ms) — subir para más lento, bajar para más rápido
-    const T_START = 1100, T_IMPACT = 650, T_SETTLE = 1150, T_END = 2000;
-    const sideA = new Set(s.team.map(a => a.uid));   // para saber hacia dónde embiste cada carta
+    const T_START = 1000, T_IMPACT = 600, T_SETTLE = 1050, T_END = 1900;
+    const sideA = new Set(s.team.map(a => a.uid));   // tu equipo arriba, enemigo abajo
+    const DY = window.innerWidth <= 520 ? 16 : 26;   // duelo vertical: tu carta baja, la enemiga sube
+    const aliveA = new Set(s.team.map(a => a.uid)), aliveB = new Set(b.enemy.map(a => a.uid));
+    const animOf = (uid) => s.team.find(x => x.uid === uid) || b.enemy.find(x => x.uid === uid);
     const card = (uid) => document.getElementById('bc-' + uid);
-    const lunge = (uid) => { const el = card(uid); if (el) el.style.transform = `translateX(${sideA.has(uid) ? 34 : -34}px) scale(1.06)`; };
-    const rest = (uid) => { const el = card(uid); if (el) el.style.transform = ''; };
+    const lunge = (uid) => { const el = card(uid); if (el) el.style.transform = `translateY(${sideA.has(uid) ? DY : -DY}px) scale(1.07)`; };
+    const rest = (uid) => { const el = card(uid); if (el) el.style.transform = 'scale(1.04)'; };
     const flash = (uid) => { const el = card(uid); if (!el) return; const h = el.querySelector('.hitlayer'); if (!h) return; h.classList.remove('flash'); void h.offsetWidth; h.classList.add('flash'); };
     const setHp = (uid) => {
       const el = card(uid); if (!el) return;
@@ -299,30 +306,37 @@ export function createUI(game) {
       const p = document.createElement('span'); p.className = 'popup ' + cls; p.textContent = text;
       el.appendChild(p); setTimeout(() => p.remove(), 1150);
     };
-    // pone a los dos que pelean en primer plano (.front) y al resto atrás (.benched)
-    const setStage = (auid, buid) => document.querySelectorAll('.battlecard').forEach(e => {
-      const u = +e.id.slice(3), active = (u === auid || u === buid);
-      e.classList.toggle('benched', !active);
-      if (!active) { e.classList.remove('front', 'enemy'); e.style.transform = ''; }
-    });
-    const clearStage = () => document.querySelectorAll('.battlecard').forEach(e => { e.classList.remove('front', 'enemy', 'benched'); e.style.transform = ''; });
-    Object.keys(hp).forEach(setHp);
+    // miniatura para la "banca" (los que no están peleando)
+    const benchThumb = (a) => {
+      const pct = Math.max(0, Math.round(100 * Math.max(0, hp[a.uid]) / max[a.uid]));
+      return `<div class="benchthumb"><div class="thart"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
+        <div class="thbar"><div class="thfill" style="width:${pct}%"></div></div></div>`;
+    };
+    // pone a los dos que pelean en la ZONA DE DUELO (centro, enfrentados) y al resto en las bancas
+    let curA = null, curB = null;
+    const setDuel = (auid, buid) => {
+      document.getElementById('duelA').innerHTML = battleCard(animOf(auid), max[auid]);
+      document.getElementById('duelB').innerHTML = battleCard(animOf(buid), max[buid]);
+      card(auid).classList.add('front'); card(auid).style.transform = 'scale(1.04)';
+      card(buid).classList.add('front', 'enemy'); card(buid).style.transform = 'scale(1.04)';
+      setHp(auid); setHp(buid);
+      document.getElementById('benchA').innerHTML = s.team.filter(a => a.uid !== auid && aliveA.has(a.uid)).map(benchThumb).join('');
+      document.getElementById('benchB').innerHTML = b.enemy.filter(a => a.uid !== buid && aliveB.has(a.uid)).map(benchThumb).join('');
+      curA = auid; curB = buid;
+    };
     const msg = document.getElementById('bmsg'), turnb = document.getElementById('turnbadge');
+    setDuel(s.team[0].uid, b.enemy[0].uid);   // mostrar el duelo de entrada (sin esperar el primer turno)
 
     let i = 0;
     const tick = () => {
       if (i >= b.steps.length) {
-        clearStage();
         if (msg) msg.textContent = b.result === 'W' ? '¡Ganaste! 🏆' : b.result === 'T' ? 'Empate (cuenta como derrota)' : 'Perdiste…';
         return setTimeout(done, T_END);
       }
       const st = b.steps[i++];
       if (turnb) turnb.textContent = 'Turno ' + i;
-      setStage(st.aUid, st.bUid);   // los dos que pelean al frente, el resto atrás
-      const ca = card(st.aUid), cb = card(st.bUid);
-      if (ca) ca.classList.add('front');
-      if (cb) cb.classList.add('front', 'enemy');
-      lunge(st.aUid); lunge(st.bUid);   // ambas cartas embisten hacia el rival
+      if (st.aUid !== curA || st.bUid !== curB) setDuel(st.aUid, st.bUid);   // traé a los nuevos al centro
+      lunge(st.aUid); lunge(st.bUid);   // se embisten en el centro (vertical)
       const fxTxt = (st.fx && st.fx.length) ? ' · ' + [...new Set(st.fx)].map(k => FX[k] + ' ' + (ABILITIES[k] ? ABILITIES[k].n : '')).join('  ') : '';
       if (msg) msg.innerHTML = `${nameOf(st.aUid)} ⚔️ ${nameOf(st.bUid)}${fxTxt}`;
       setTimeout(() => {
@@ -331,7 +345,6 @@ export function createUI(game) {
         setHp(st.aUid); setHp(st.bUid);
         if (dB > 0) popup(st.bUid, '−' + dB, 'dmg'); else if (dB < 0) popup(st.bUid, '+' + (-dB), 'heal');
         if (dA > 0) popup(st.aUid, '−' + dA, 'dmg'); else if (dA < 0) popup(st.aUid, '+' + (-dA), 'heal');
-        // efectos atribuidos al portador (sabemos su ability)
         (st.fx || []).forEach(k => {
           const sym = FX[k];
           if (k === 'poison') { if (abOf[st.aUid] === 'poison') popup(st.bUid, sym, 'fx'); if (abOf[st.bUid] === 'poison') popup(st.aUid, sym, 'fx'); }
@@ -339,11 +352,11 @@ export function createUI(game) {
           else if (k === 'shield') { if (abOf[st.aUid] === 'shield') popup(st.aUid, sym, 'fx'); if (abOf[st.bUid] === 'shield') popup(st.bUid, sym, 'fx'); }
           else if (k === 'heal') { if (abOf[st.aUid] === 'heal') popup(st.aUid, sym, 'fx'); if (abOf[st.bUid] === 'heal') popup(st.bUid, sym, 'fx'); }
         });
-        if (dB > 0) flash(st.bUid);   // destello rojo en quien recibió daño
+        if (dB > 0) flash(st.bUid);
         if (dA > 0) flash(st.aUid);
-        rest(st.aUid); rest(st.bUid); // vuelven a su lugar tras el golpe
-        if (st.faintA && ca) ca.classList.add('fainted');
-        if (st.faintB && cb) cb.classList.add('fainted');
+        rest(st.aUid); rest(st.bUid);   // vuelven al centro tras el golpe
+        if (st.faintA) { const c = card(st.aUid); if (c) c.classList.add('fainted'); aliveA.delete(st.aUid); }
+        if (st.faintB) { const c = card(st.bUid); if (c) c.classList.add('fainted'); aliveB.delete(st.bUid); }
         setTimeout(tick, T_SETTLE);
       }, T_IMPACT);
     };
