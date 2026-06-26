@@ -167,21 +167,18 @@ test('aparecen nodos de intercambio en el mapa', () => {
   assert.ok(found, 'debería generarse algún nodo de intercambio');
 });
 
-test('hay más variedad: 13 países y +50 especies', () => {
-  assert.ok(COUNTRIES.length >= 13, 'al menos 13 países');
-  assert.ok(Object.keys(E.SP).length >= 50, 'al menos 50 especies');
+test('Costa Rica: 7 provincias y fauna tica', () => {
+  assert.equal(COUNTRIES.length, 7, 'las 7 provincias');
+  assert.equal(RULES.RUN_LENGTH, 7, 'la campaña es de 7 provincias');
+  assert.ok(E.SP.quetzal && E.SP.perezoso && E.SP.lapa, 'incluye fauna tica');
 });
 
-test('nivel secreto: Tierra Perdida con fauna extinta tras 8 países', () => {
-  assert.ok(SECRET && SECRET.secret, 'existe el nivel secreto');
-  assert.equal(RULES.RUN_LENGTH, 8, 'la campaña es de 8 países');
-  for (const k of SECRET.pool) assert.ok(E.SP[k] && E.SP[k].ext, `${k} debe ser extinto`);
-  for (const c of COUNTRIES)
-    for (const k of c.pool)
-      assert.ok(!E.SP[k].ext, `un extinto (${k}) no debe estar en ${c.n}`);
-  // el mapa secreto se genera y tiene ruta al jefe
+test('final Monteverde: se abre tras las 7 provincias con el Quetzal Dorado', () => {
+  assert.ok(SECRET && SECRET.secret, 'existe el final');
+  assert.equal(SECRET.legend, 'quetzaldorado', 'su legendario es el Quetzal Dorado');
+  assert.ok(E.SP[SECRET.legend] && E.SP[SECRET.legend].leg, 'el Quetzal Dorado es legendario');
   const m = E.generateMap(SECRET);
-  assert.ok(Object.values(m.nodesById).some(n => n.type === 'airport'), 'el secreto tiene jefe final');
+  assert.ok(Object.values(m.nodesById).some(n => n.type === 'airport'), 'Monteverde tiene jefe final');
 });
 
 console.log(`\n${passed} pruebas OK\n`);

@@ -20,7 +20,7 @@ export class Game {
     this.s = {
       phase: avatar ? 'starter' : 'avatar',   // si ya tenés avatar, vas directo a elegir compañero
       avatar,
-      team: [], hearts: RULES.MAX_HEARTS, cleared: 0,
+      team: [], hearts: RULES.MAX_HEARTS, cleared: 0, released: 0,
       country: null, countryBag: null, lastCountryIdx: null,
       map: null, currentId: null,
       starters: E.shuffle(noLeg).slice(0, 3).map(k => E.mkAnimal(k)),
@@ -56,7 +56,7 @@ export class Game {
     const a = this.s.starters[i];
     E.setLevel(a, RULES.STARTER_LEVEL);
     this.s.team.push(a);
-    this.log(`Empezás con ${a.e} <b>${a.n}</b> (Nv ${a.level})`);
+    this.log(`🩹 Tu primer rescate: ${a.e} <b>${a.n}</b> (Nv ${a.level})`);
     this.enterCountry();
   }
 
@@ -69,7 +69,7 @@ export class Game {
     s.currentId = s.map.startId;
     this.current().visited = true;
     s.phase = 'map';
-    this.log(`✈️ Llegás a ${s.country.flag} <b>${s.country.n}</b> (nivel ${this.depth() + 1})`);
+    this.log(`🧭 Llegás a la provincia de ${s.country.flag} <b>${s.country.n}</b> (${this.depth() + 1}/${RULES.RUN_LENGTH})`);
     this.render();
   }
 
@@ -89,10 +89,10 @@ export class Game {
       case 'bioma':    return this.wildEncounter(n.bio);
       case 'combate':  return this.startBattle(
         E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false) + rb),
-        'Retador', '🦴', 'retador');
+        'Furtivo', '🪤', 'retador');
       case 'cazador':  return this.startBattle(
         E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d) + rb),
-        'Cazadores furtivos', '🏹', 'cazador');
+        'Banda de traficantes', '🏹', 'cazador');
       case 'intercambio': {
         const maxLv = s.team.reduce((m, a) => Math.max(m, a.level), 1);
         s.offer = E.genTrade(maxLv);
@@ -102,18 +102,18 @@ export class Game {
       }
       case 'airport':  return this.startBattle(
         E.genEnemy(s.country, E.bossSize(d), E.enemyLevel(d, true)),
-        'Jefe del aeropuerto', '🛂', 'jefe');
+        s.country.secret ? 'El Cabecilla' : 'Cabecilla furtivo', '🚨', 'jefe');
       case 'tesoro': {
         const it = E.pick(ITEMS);
         s.bag.push(it);
-        return this.showEvent('🎁', 'Tesoro',
+        return this.showEvent('🎁', 'Hallazgo',
           `Encontraste ${it.e} <b>${it.n}</b> (+${it.atk}⚔ +${it.hp}❤). Lo guardás en la mochila — equipalo a un animal desde su ficha.`,
           [{ label: 'Continuar', action: () => this.backToMap() }]);
       }
       case 'descanso':
         s.hearts = Math.min(RULES.MAX_HEARTS, s.hearts + 1);
-        return this.showEvent('🏕️', 'Descanso',
-          `Recuperás un corazón ❤️ (${s.hearts}/${RULES.MAX_HEARTS}).`,
+        return this.showEvent('🏕️', 'Refugio',
+          `Descansás en el refugio y recuperás un corazón ❤️ (${s.hearts}/${RULES.MAX_HEARTS}).`,
           [{ label: 'Continuar', action: () => this.backToMap() }]);
     }
   }
@@ -123,7 +123,7 @@ export class Game {
     if (this.s.cleared >= RULES.RUN_LENGTH) return this.enterSecret();
     this.enterCountry();
   }
-  // nivel secreto: la Tierra Perdida (fauna extinta). Vencer su jefe = ganar.
+  // final: el bosque nuboso de Monteverde. Vencer al Cabecilla = ganar.
   enterSecret() {
     const s = this.s;
     s.country = SECRET;
@@ -131,7 +131,7 @@ export class Game {
     s.currentId = s.map.startId;
     this.current().visited = true;
     s.phase = 'map';
-    this.log(`❄️ Cruzás el portal a la <b>${SECRET.n}</b>… fauna que no debería existir.`);
+    this.log(`☁️ Subís al bosque nuboso de <b>${SECRET.n}</b>… acá se esconde el cabecilla.`);
     this.render();
   }
 
@@ -139,21 +139,21 @@ export class Game {
   wildEncounter(bio) {
     const s = this.s;
     s.pendingWild = E.rollWild(s.country, bio, this.depth());   // el motor decide si sale legendario
-    if (s.pendingWild.leg) this.log(`✦ ¡Apareció un LEGENDARIO: ${s.pendingWild.e} <b>${s.pendingWild.n}</b>!`);
+    if (s.pendingWild.leg) this.log(`✦ ¡Un animal LEGENDARIO necesita ayuda: ${s.pendingWild.e} <b>${s.pendingWild.n}</b>!`);
     s.phase = 'wild';
     this.render();
   }
   captureWild() {
     const s = this.s;
     s.team.push(s.pendingWild);
-    this.log(`🐾 Capturaste ${s.pendingWild.e} <b>${s.pendingWild.n}</b> (Nv ${s.pendingWild.level})`);
+    this.log(`🩹 Rescataste a ${s.pendingWild.e} <b>${s.pendingWild.n}</b> (Nv ${s.pendingWild.level})`);
     this.backToMap();
   }
   captureReplace() {
     const s = this.s; let wi = 0;
     s.team.forEach((x, i) => { if ((x.atk + x.hp) < (s.team[wi].atk + s.team[wi].hp)) wi = i; });
     const old = s.team[wi]; s.team[wi] = s.pendingWild;
-    this.log(`🐾 ${s.pendingWild.e} <b>${s.pendingWild.n}</b> reemplazó a ${old.e} ${old.n}`);
+    this.log(`🩹 Rescataste a ${s.pendingWild.e} <b>${s.pendingWild.n}</b> (el refugio estaba lleno; soltaste a ${old.e} ${old.n})`);
     this.backToMap();
   }
   leaveWild() { this.backToMap(); }
@@ -181,62 +181,65 @@ export class Game {
     const s = this.s, b = s.battle, won = b.result === 'W';
     if (b.kind === 'jefe') {
       if (won) {
-        if (s.country.secret) return this.victory();   // ¡venciste la Tierra Perdida!
+        if (s.country.secret) return this.victory();   // ¡venciste al Cabecilla en Monteverde!
         s.cleared++;
         s.team.forEach(a => E.levelUp(a));
         s.hearts = Math.min(RULES.MAX_HEARTS, s.hearts + 1);
+        s.released += 2;                                // liberás a los animales que tenían cautivos
+        this.log(`🌿 Liberaste a los animales cautivos de ${s.country.n} (conservación +2)`);
         const last = s.cleared >= RULES.RUN_LENGTH;
-        return this.showEvent('🏆', last ? '¡Conquistaste el mundo!' : '¡Aeropuerto despejado!',
+        return this.showEvent('🏆', last ? '¡Las 7 provincias a salvo!' : '¡Provincia liberada!',
           last
-            ? `Cruzaste los ${RULES.RUN_LENGTH} países 🌍. Tu equipo subió de nivel… pero un portal helado se abre frente a vos. ❄️`
-            : `Venciste al jefe de ${s.country.n}. Tu equipo subió de nivel y recuperás un corazón ❤️.`,
-          [{ label: last ? 'Entrar a la Tierra Perdida ❄️' : 'Despegar ✈️', action: () => this.nextCountry() }]);
+            ? `Recorriste las 7 provincias 🇨🇷 y desbarataste a los furtivos. Tu refugio se fortalece… y se abre el sendero al bosque nuboso de Monteverde. ☁️`
+            : `Frenaste a los furtivos de ${s.country.n} y liberaste a sus animales. Tu refugio se fortalece y recuperás un corazón ❤️.`,
+          [{ label: last ? 'Subir a Monteverde ☁️' : 'Seguir viaje 🧭', action: () => this.nextCountry() }]);
       }
       return this.gameOver();
     }
     if (b.kind === 'cazador') {
       if (won) {
-        s.team.forEach(a => {            // DOBLE nivel
+        s.team.forEach(a => {            // DOBLE rehabilitación
           E.levelUp(a);
-          if (E.levelUp(a)) this.log(`✨ ${a.e} <b>${a.n}</b> evolucionó a nivel ${a.level}!`);
+          if (E.levelUp(a)) this.log(`🌿 ${a.e} <b>${a.n}</b> se recuperó hasta nivel ${a.level}!`);
         });
         const it = E.pick(RARE_ITEMS);
         s.bag.push(it);
-        this.log(`🏆 Venciste a los cazadores: doble nivel + ${it.e} <b>${it.n}</b>`);
-        return this.showEvent('🏆', '¡Cazadores derrotados!',
-          `Liberaste a los animales 🕊️. Tu equipo subió <b>DOBLE nivel</b> y te llevás un objeto raro: ${it.e} <b>${it.n}</b> (+${it.atk}⚔ +${it.hp}❤). Está en tu mochila.`,
+        s.released += 1;
+        this.log(`🏆 Frenaste a los traficantes: doble recuperación + ${it.e} <b>${it.n}</b> (conservación +1)`);
+        return this.showEvent('🏆', '¡Traficantes frenados!',
+          `Liberaste a los animales que llevaban 🌿 (conservación +1). Tu refugio sube <b>DOBLE</b> y te llevás un objeto raro: ${it.e} <b>${it.n}</b> (+${it.atk}⚔ +${it.hp}❤).`,
           [{ label: 'Continuar', action: () => this.backToMap() }]);
       }
       return this.poachLoss();
     }
     if (won) {
-      s.team.forEach(a => { if (E.levelUp(a)) this.log(`✨ ${a.e} <b>${a.n}</b> evolucionó a nivel ${a.level}!`); });
-      this.log('Tu equipo subió de nivel');
+      s.team.forEach(a => { if (E.levelUp(a)) this.log(`🌿 ${a.e} <b>${a.n}</b> se recuperó hasta nivel ${a.level}!`); });
+      this.log('Tu refugio sumó experiencia');
       return this.backToMap();
     }
     return this.hurt();
   }
-  // perder contra cazadores: corazón + te roban un animal (nunca el último)
+  // perder contra traficantes: corazón + se llevan un animal (nunca el último)
   poachLoss() {
     const s = this.s; s.hearts--;
     let robo = '';
     if (s.team.length > 1) {
       const [a] = s.team.splice(E.rnd(s.team.length), 1);
-      robo = ` Te robaron ${a.e} <b>${a.n}</b>. 😱`;
-      this.log(`🏹 Los cazadores te robaron ${a.e} <b>${a.n}</b>`);
+      robo = ` Se llevaron a ${a.e} <b>${a.n}</b>. 😱`;
+      this.log(`🏹 Los traficantes se llevaron a ${a.e} <b>${a.n}</b>`);
     }
-    this.log(`Perdiste contra los cazadores — corazones: ${'❤'.repeat(Math.max(0, s.hearts)) || '0'}`);
+    this.log(`Te ganaron los traficantes — corazones: ${'❤'.repeat(Math.max(0, s.hearts)) || '0'}`);
     if (s.hearts <= 0) return this.gameOver();
-    this.showEvent('💔', 'Te ganaron los cazadores',
+    this.showEvent('💔', 'Te ganaron los traficantes',
       `Bajás un corazón (${s.hearts}/${RULES.MAX_HEARTS}).${robo} Seguí adelante.`,
       [{ label: 'Continuar', action: () => this.backToMap() }]);
   }
   hurt() {
     const s = this.s; s.hearts--;
-    this.log(`Perdiste un combate — corazones: ${'❤'.repeat(Math.max(0, s.hearts)) || '0'}`);
+    this.log(`Perdiste el combate — corazones: ${'❤'.repeat(Math.max(0, s.hearts)) || '0'}`);
     if (s.hearts <= 0) return this.gameOver();
     this.showEvent('💔', 'Derrota',
-      `Perdiste y bajás un corazón (${s.hearts}/${RULES.MAX_HEARTS}). Seguí adelante.`,
+      `Los furtivos te ganaron y bajás un corazón (${s.hearts}/${RULES.MAX_HEARTS}). Seguí adelante.`,
       [{ label: 'Continuar', action: () => this.backToMap() }]);
   }
 
@@ -269,13 +272,20 @@ export class Game {
     t.unshift(t.splice(i, 1)[0]);
     this.render();
   }
+  // LIBERAR a la naturaleza. Si está PLENO (rehabilitado del todo) suma
+  // conservación: ese ES el objetivo del juego. Si no, igual lo soltás (sin punto).
   releaseAnimal(uid) {
-    const t = this.s.team;
-    if (t.length <= 1) return;             // no podés quedarte sin equipo
+    const s = this.s, t = s.team;
+    if (t.length <= 1) return;             // no podés quedarte sin refugio
     const i = t.findIndex(a => a.uid === uid);
     if (i < 0) return;
     const [a] = t.splice(i, 1);
-    this.log(`👋 Liberaste a ${a.e} ${a.n}`);
+    if ((a.evo || 0) >= RULES.PLENO_EVO) {
+      s.released++;
+      this.log(`🌿 Liberaste a ${a.e} <b>${a.n}</b> PLENO a la naturaleza. ¡Conservación +1! (${s.released})`);
+    } else {
+      this.log(`🌿 Soltaste a ${a.e} ${a.n} (aún no estaba pleno).`);
+    }
     this.backToMap();
   }
 

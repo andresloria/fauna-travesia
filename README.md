@@ -1,8 +1,11 @@
-# 🐾 FAUNA · Travesía
+# 🐾 FAUNA · Travesía — Guardianes de Costa Rica
 
-Roguelike de fauna estilo *Pokelike*: viajás por un mapa que se ramifica, capturás
-animales por bioma, los subís de nivel y evolucionás, y al final de cada país
-peleás contra el jefe del **aeropuerto ✈️**. Run roguelike: ¿hasta dónde llegás?
+Roguelike de fauna **100% tica**: sos guardaparques y recorrés las **7 provincias**
+de Costa Rica **rescatando** animales, **rehabilitándolos** (herido → recuperándose
+→ pleno) y peleando batallas de cartas contra **furtivos y traficantes** para
+liberar a sus animales. El objetivo no es coleccionar: es **devolver** fauna sana a
+la naturaleza (puntaje de conservación 🌿). Al final, el bosque nuboso de
+**Monteverde ☁️** y el Cabecilla. ¿Cuántos animales salvás?
 
 ---
 

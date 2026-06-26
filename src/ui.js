@@ -7,7 +7,7 @@
 import { BIOMES, ABILITIES, RULES, PLAYER_FLAGS } from './data.js';
 
 const ART = (key) => `assets/animales/${key}.svg`;
-const STAGE = ['BASE', 'EVO I', 'EVO II'];
+const STAGE = ['HERIDO', 'RECUPERA', 'PLENO'];   // etapas de rehabilitación
 
 export function createUI(game) {
   const $ = (id) => document.getElementById(id);
@@ -44,7 +44,7 @@ export function createUI(game) {
     const inner = `<div class="team">${cards}</div>`;
     if (!o.panel) return inner;
     return `<div class="teampanel">
-      <div class="teamhead"><span class="t">🐾 Tu equipo</span><span class="s">orden de pelea →  ·  tocá una carta para editarla</span></div>
+      <div class="teamhead"><span class="t">🏕️ Tu refugio</span><span class="s">orden de pelea →  ·  tocá una carta para ver/liberar</span></div>
       ${inner}</div>`;
   }
 
@@ -53,10 +53,11 @@ export function createUI(game) {
     const av = s.avatar
       ? `<div class="chip avatar"><div class="k">Jugador</div><div class="v">${s.avatar.flag} ${s.avatar.name}</div></div>` : '';
     runbar.innerHTML = `${av}
-      <div class="chip country"><div class="k">País</div><div class="v">${s.country ? s.country.flag + ' ' + s.country.n : '—'}</div></div>
+      <div class="chip country"><div class="k">Provincia</div><div class="v">${s.country ? s.country.flag + ' ' + s.country.n : '—'}</div></div>
       <div class="chip"><div class="k">Corazones</div><div class="hearts">${'❤'.repeat(s.hearts) || '—'}</div></div>
-      <div class="chip"><div class="k">Conquista</div><div class="v">${s.cleared}/${RULES.RUN_LENGTH}</div></div>
-      <div class="chip"><div class="k">Equipo</div><div class="v">${s.team.length}/${RULES.MAX_TEAM}</div></div>
+      <div class="chip"><div class="k">Provincias</div><div class="v">${s.cleared}/${RULES.RUN_LENGTH}</div></div>
+      <div class="chip"><div class="k">Refugio</div><div class="v">${s.team.length}/${RULES.MAX_TEAM}</div></div>
+      <div class="chip"><div class="k">Liberados</div><div class="v" style="color:var(--hp)">🌿 ${s.released || 0}</div></div>
       <div class="chip"><div class="k">Mochila</div><div class="v">${s.bag.length ? s.bag.map(i => i.e).join('') : '—'}</div></div>`;
   }
   function renderLog(s) { logBox.innerHTML = s.log.map(l => `<div class="le">${l}</div>`).join(''); }
@@ -74,26 +75,26 @@ export function createUI(game) {
     const sel = cur.flag || PLAYER_FLAGS[0];
     phaseArea.innerHTML = `
       <div class="avatarbox">
-        <div class="big">🧭</div><h3>¿Quién viaja?</h3>
-        <label>Tu nombre</label>
+        <div class="big">🧭</div><h3>¿Quién protege la fauna?</h3>
+        <label>Tu nombre de guardaparques</label>
         <input type="text" id="avName" maxlength="18" placeholder="Tu nombre" value="${cur.name || ''}">
         <label>Tu país</label>
         <div class="flaggrid">${PLAYER_FLAGS.map(f =>
           `<div class="flagopt ${f === sel ? 'sel' : ''}" data-act="flag" data-flag="${f}">${f}</div>`).join('')}</div>
-        <div class="center"><button class="btn" data-act="avatar-go">Empezar travesía ✈️</button></div>
-        <div class="map-hint" style="margin-top:12px">Es tu identidad de jugador (sale en tu barra y al final). Lo podés cambiar luego.</div>
+        <div class="center"><button class="btn" data-act="avatar-go">Empezar la misión 🌿</button></div>
+        <div class="map-hint" style="margin-top:12px">Es tu identidad (sale en tu barra y al final). Lo podés cambiar luego.</div>
       </div>`;
   }
 
   function renderStarter(s) {
     const who = s.avatar
-      ? `<div class="map-hint" style="margin-bottom:10px">Jugando como ${s.avatar.flag} <b>${s.avatar.name}</b> · <button class="linklike" data-act="edit-avatar">cambiar</button></div>` : '';
+      ? `<div class="map-hint" style="margin-bottom:10px">Guardaparques ${s.avatar.flag} <b>${s.avatar.name}</b> · <button class="linklike" data-act="edit-avatar">cambiar</button></div>` : '';
     phaseArea.innerHTML = `
       ${who}
-      <div class="section-h">Elegí tu primer compañero</div>
+      <div class="section-h">Elegí tu primer rescate</div>
       <div class="starters">${s.starters.map((a, i) =>
         `<div class="starter" data-act="starter" data-i="${i}">${animalCard(a, {})}</div>`).join('')}</div>
-      <div class="map-hint">Cada animal trae un <b>efecto</b> distinto. Con él arrancás; los demás los capturás en el camino.</div>`;
+      <div class="map-hint">Cada animal trae un <b>efecto</b> distinto. Con él arrancás tu refugio; a los demás los rescatás en el camino.</div>`;
   }
 
   function renderMap(s) {
@@ -112,31 +113,32 @@ export function createUI(game) {
         n === current ? 'current' : '', avail ? 'available' : '',
         (n.visited && n !== current) ? 'visited' : '',
         (!avail && !n.visited && n !== current) ? 'locked' : ''].join(' ');
-      const ic = n.type === 'bioma' ? BIOMES[n.bio].e : n.type === 'combate' ? '⚔️' : n.type === 'cazador' ? '🏹'
-        : n.type === 'intercambio' ? '🔄' : n.type === 'tesoro' ? '🎁' : n.type === 'descanso' ? '🏕️' : n.type === 'airport' ? '✈️' : '🧭';
-      const lab = n.type === 'bioma' ? BIOMES[n.bio].n : n.type === 'combate' ? 'Retador' : n.type === 'cazador' ? 'Cazadores'
-        : n.type === 'intercambio' ? 'Intercambio' : n.type === 'tesoro' ? 'Tesoro' : n.type === 'descanso' ? 'Descanso' : n.type === 'airport' ? 'Aeropuerto' : 'Inicio';
+      const ic = n.type === 'bioma' ? BIOMES[n.bio].e : n.type === 'combate' ? '🪤' : n.type === 'cazador' ? '🏹'
+        : n.type === 'intercambio' ? '🔄' : n.type === 'tesoro' ? '🎁' : n.type === 'descanso' ? '🏕️' : n.type === 'airport' ? '🚨' : '🧭';
+      const lab = n.type === 'bioma' ? BIOMES[n.bio].n : n.type === 'combate' ? 'Furtivo' : n.type === 'cazador' ? 'Traficantes'
+        : n.type === 'intercambio' ? 'Traslado' : n.type === 'tesoro' ? 'Hallazgo' : n.type === 'descanso' ? 'Refugio' : n.type === 'airport' ? (s.country.secret ? 'Cabecilla' : 'Cabecilla') : 'Inicio';
       const data = avail ? `data-act="node" data-id="${n.id}"` : '';
       return `<div class="${cls}" style="left:${X[n.c]}%;top:${yFor(n.r)}%" ${data}>
         <div class="disc">${ic}</div><div class="ml">${lab}</div></div>`;
     }).join('');
+    const meta = s.country.secret ? 'enfrentá al Cabecilla 🚨' : 'cruzá la provincia y frená a los furtivos 🚨';
     phaseArea.innerHTML = `
-      <div class="section-h">${s.country.flag} ${s.country.n} · escogé tu ruta hacia el aeropuerto ✈️</div>
+      <div class="section-h">${s.country.flag} ${s.country.n} · ${meta}</div>
       <div class="mapwrap">${countryBg(s)}
-        <div class="maptag">${s.country.flag} <b>${s.country.n}</b> · nivel ${s.cleared + 1}</div>
+        <div class="maptag">${s.country.flag} <b>${s.country.n}</b> · ${s.country.secret ? 'final ☁️' : 'provincia ' + (s.cleared + 1) + '/' + RULES.RUN_LENGTH}</div>
         <svg viewBox="0 0 100 100" preserveAspectRatio="none">${lines}</svg>${nodes}</div>
-      <div class="map-hint">Tocá un nodo iluminado para avanzar. Sabés el bioma, pero el animal sale al azar.</div>
+      <div class="map-hint">Tocá un nodo iluminado para avanzar. Sabés el bioma, pero el animal a rescatar sale al azar.</div>
       ${teamHTML(s.team, { editable: true, panel: true, order: true })}`;
   }
 
   function renderWild(s) {
     const a = s.pendingWild, ab = ABILITIES[a.ab], full = s.team.length >= RULES.MAX_TEAM;
     const acts = full
-      ? [['Cambiar por el más débil', 'replace'], ['Dejarlo ir', 'leave']]
-      : [['Capturar 🐾', 'capture'], ['Dejarlo ir', 'leave']];
+      ? [['Rescatar (refugio lleno)', 'replace'], ['Dejarlo', 'leave']]
+      : [['Rescatar 🩹', 'capture'], ['Dejarlo', 'leave']];
     const head = a.leg
-      ? `<div class="section-h legend-h">✦ ¡Apareció un LEGENDARIO! · ${BIOMES[a.bio].e} ${BIOMES[a.bio].n}</div>`
-      : `<div class="section-h">${BIOMES[a.bio].e} ${BIOMES[a.bio].n} · ¡apareció un animal!</div>`;
+      ? `<div class="section-h legend-h">✦ ¡Un LEGENDARIO necesita rescate! · ${BIOMES[a.bio].e} ${BIOMES[a.bio].n}</div>`
+      : `<div class="section-h">${BIOMES[a.bio].e} ${BIOMES[a.bio].n} · un animal necesita rescate 🩹</div>`;
     phaseArea.innerHTML = `
       ${head}
       <div class="event-box${a.leg ? ' legend-box' : ''}">
@@ -204,34 +206,36 @@ export function createUI(game) {
             <div class="slots">${slots.join('')}</div></div>
           <div class="field"><label>Mochila — tocá para equipar</label>
             <div class="bagrow">${bag}</div></div>
+          <div class="field"><label>Conservación</label>
+            <div class="map-hint" style="margin:0;text-align:left">${(a.evo || 0) >= RULES.PLENO_EVO
+              ? '🌿 Está <b>PLENO</b>: liberarlo suma a tu conservación (el objetivo del juego).'
+              : 'Aún se está recuperando. Liberalo cuando esté <b>pleno</b> para sumar conservación.'}</div></div>
           <div class="editbtns">
             <button class="btn ghost" data-act="edit-move" data-dir="-1">◀ Mover</button>
             <button class="btn ghost" data-act="edit-move" data-dir="1">Mover ▶</button>
-            <button class="btn" data-act="edit-front">Poner al frente</button>
-            <button class="btn danger" data-act="edit-release" ${s.team.length <= 1 ? 'disabled' : ''}>Liberar</button>
+            <button class="btn" data-act="edit-front">Al frente</button>
+            <button class="btn ${(a.evo || 0) >= RULES.PLENO_EVO ? 'liberar' : 'ghost'}" data-act="edit-release" ${s.team.length <= 1 ? 'disabled' : ''}>Liberar 🌿</button>
           </div>
         </div>
       </div>`;
   }
 
   function renderWin(s) {
-    const best = s.team.length ? Math.max(...s.team.map(a => a.level)) : 1;
     const who = s.avatar ? `${s.avatar.flag} <b>${s.avatar.name}</b> ` : '';
     $('modal').innerHTML = `
-      <div class="crest">👑</div><h2>¡Sos una leyenda!</h2>
-      <p>${who}conquistó los ${RULES.RUN_LENGTH} países 🌍 y domó la <b style="color:var(--gold)">Tierra Perdida</b> ❄️.
-         Tu mejor animal llegó a nivel ${best}. Pocos llegan acá.</p>
-      <button class="btn" data-act="restart">Nueva travesía</button>`;
+      <div class="crest">🦋</div><h2>¡Costa Rica a salvo!</h2>
+      <p>${who}protegió las <b>7 provincias</b> 🇨🇷, venció al Cabecilla en <b style="color:var(--gold)">Monteverde</b> ☁️
+         y devolvió <b style="color:var(--hp)">🌿 ${s.released || 0}</b> ${s.released === 1 ? 'animal' : 'animales'} sanos a la naturaleza.</p>
+      <button class="btn" data-act="restart">Nueva misión</button>`;
     $('overlay').classList.add('show');
   }
 
   function renderGameOver(s) {
-    const best = s.team.length ? Math.max(...s.team.map(a => a.level)) : 1;
     $('modal').innerHTML = `
-      <div class="crest">🍂</div><h2>Fin de la travesía</h2>
-      <p>Cruzaste <b style="color:var(--gold)">${s.cleared}</b> ${s.cleared === 1 ? 'país' : 'países'} antes de caer.
-         Tu mejor animal llegó a nivel ${best}.</p>
-      <button class="btn" data-act="restart">Nueva travesía</button>`;
+      <div class="crest">🍂</div><h2>Fin de la misión</h2>
+      <p>Recorriste <b style="color:var(--gold)">${s.cleared}</b> ${s.cleared === 1 ? 'provincia' : 'provincias'} y liberaste
+         <b style="color:var(--hp)">🌿 ${s.released || 0}</b> ${s.released === 1 ? 'animal' : 'animales'} antes de caer.</p>
+      <button class="btn" data-act="restart">Nueva misión</button>`;
     $('overlay').classList.add('show');
   }
 

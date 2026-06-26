@@ -95,6 +95,7 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
   border:1px solid var(--brass);background:var(--brass);color:var(--bg-deep);cursor:pointer;transition:transform .1s,background .15s}
 .btn:hover{background:#d8b766}.btn:active{transform:translateY(1px)} .btn.ghost{background:transparent;color:var(--brass)}
 .btn.danger{background:transparent;border-color:var(--atk);color:var(--atk)}
+.btn.liberar{background:var(--hp);border-color:var(--hp);color:#08110a}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .center{text-align:center;margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 

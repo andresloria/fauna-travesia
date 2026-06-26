@@ -1,80 +1,49 @@
 // ============================================================
-// data.js — CONTENIDO del juego (lo más fácil de tocar)
-// Para balancear o agregar animales/países, editá este archivo.
+// data.js — CONTENIDO del juego (lo más fácil de tocar).
+// Guardianes de Costa Rica: fauna 100% tica, recorrés las 7 provincias
+// rescatando y rehabilitando animales, peleás contra furtivos y los liberás.
 // No hay lógica acá: solo datos.
 // ============================================================
 
-// Cada especie: nombre, emoji (respaldo), ataque/vida base (Nv1), bioma y efecto (ab).
+// Cada especie: nombre, emoji (respaldo), ataque/vida base, bioma y efecto (ab).
 // El arte real vive en assets/animales/<key>.svg (ver make_assets.py).
 export const SP = {
-  perezoso:{ n:'Perezoso',   e:'🦥', atk:1, hp:6, bio:'bosque',  ab:'heal' },
-  tucan:   { n:'Tucán',      e:'🦜', atk:2, hp:3, bio:'bosque',  ab:'first' },
-  ranadardo:{n:'Rana dardo', e:'🐸', atk:4, hp:1, bio:'bosque',  ab:'poison' },
-  jaguar:  { n:'Jaguar',     e:'🐆', atk:5, hp:4, bio:'bosque',  ab:'rage' },
-  mono:    { n:'Mono',       e:'🐒', atk:2, hp:3, bio:'bosque',  ab:'first' },
-  tigre:   { n:'Tigre',      e:'🐅', atk:6, hp:5, bio:'bosque',  ab:'rage' },
-  koala:   { n:'Koala',      e:'🐨', atk:1, hp:5, bio:'bosque',  ab:'shield' },
-  pangolin:{ n:'Pangolín',   e:'🦔', atk:1, hp:5, bio:'bosque',  ab:'thorns' },
-
-  leon:    { n:'León',       e:'🦁', atk:5, hp:5, bio:'sabana',  ab:'rage' },
-  elefante:{ n:'Elefante',   e:'🐘', atk:3, hp:9, bio:'sabana',  ab:'shield' },
-  jirafa:  { n:'Jirafa',     e:'🦒', atk:2, hp:7, bio:'sabana',  ab:'first' },
-  guepardo:{ n:'Guepardo',   e:'🐆', atk:6, hp:2, bio:'sabana',  ab:'first' },
-  cebra:   { n:'Cebra',      e:'🦓', atk:2, hp:5, bio:'sabana',  ab:'heal' },
-  canguro: { n:'Canguro',    e:'🦘', atk:4, hp:4, bio:'sabana',  ab:'first' },
-  emu:     { n:'Emú',        e:'🦤', atk:3, hp:3, bio:'sabana',  ab:'thorns' },
-  cobra:   { n:'Cobra',      e:'🐍', atk:5, hp:2, bio:'sabana',  ab:'poison' },
-
-  hipo:    { n:'Hipopótamo', e:'🦛', atk:4, hp:8, bio:'agua',    ab:'shield' },
-  cocodrilo:{n:'Cocodrilo',  e:'🐊', atk:5, hp:6, bio:'agua',    ab:'first' },
-  tiburon: { n:'Tiburón',    e:'🦈', atk:6, hp:4, bio:'agua',    ab:'rage' },
-  pulpo:   { n:'Pulpo',      e:'🐙', atk:3, hp:4, bio:'agua',    ab:'poison' },
-  orca:    { n:'Orca',       e:'🐋', atk:6, hp:6, bio:'agua',    ab:'rage' },
-  delfin:  { n:'Delfín',     e:'🐬', atk:3, hp:3, bio:'agua',    ab:'first' },
-  tortuga: { n:'Tortuga',    e:'🐢', atk:1, hp:8, bio:'agua',    ab:'shield' },
-  anaconda:{ n:'Anaconda',   e:'🐍', atk:4, hp:5, bio:'agua',    ab:'poison' },
-  capibara:{ n:'Capibara',   e:'🦫', atk:1, hp:6, bio:'agua',    ab:'heal' },
-  pirana:  { n:'Piraña',     e:'🐟', atk:5, hp:1, bio:'agua',    ab:'rage' },
-
-  oso:     { n:'Oso pardo',  e:'🐻', atk:5, hp:7, bio:'montana', ab:'rage' },
-  alce:    { n:'Alce',       e:'🫎', atk:3, hp:8, bio:'montana', ab:'shield' },
-  lobo:    { n:'Lobo',       e:'🐺', atk:4, hp:3, bio:'montana', ab:'first' },
-  buho:    { n:'Búho',       e:'🦉', atk:3, hp:2, bio:'montana', ab:'first' },
-  condor:  { n:'Cóndor',     e:'🦅', atk:4, hp:3, bio:'montana', ab:'first' },
-  foca:    { n:'Foca',       e:'🦭', atk:3, hp:5, bio:'montana', ab:'heal' },
-
-  // ── más variedad ──
-  gorila:    { n:'Gorila',       e:'🦍', atk:6, hp:6, bio:'bosque',  ab:'rage' },
-  orangutan: { n:'Orangután',    e:'🦧', atk:3, hp:6, bio:'bosque',  ab:'heal' },
-  panda:     { n:'Panda',        e:'🐼', atk:3, hp:7, bio:'montana', ab:'shield' },
-  mapache:   { n:'Mapache',      e:'🦝', atk:3, hp:4, bio:'bosque',  ab:'first' },
-  ardilla:   { n:'Ardilla',      e:'🐿️', atk:2, hp:2, bio:'bosque',  ab:'first' },
-  murcielago:{ n:'Murciélago',   e:'🦇', atk:3, hp:2, bio:'montana', ab:'poison' },
-  camello:   { n:'Camello',      e:'🐫', atk:3, hp:8, bio:'sabana',  ab:'shield' },
-  escorpion: { n:'Escorpión',    e:'🦂', atk:5, hp:2, bio:'sabana',  ab:'poison' },
-  gato:      { n:'Gato montés',  e:'🐈', atk:3, hp:3, bio:'sabana',  ab:'first' },
-  pinguino:  { n:'Pingüino',     e:'🐧', atk:2, hp:5, bio:'montana', ab:'shield' },
-  lagarto:   { n:'Lagarto',      e:'🦎', atk:3, hp:3, bio:'bosque',  ab:'thorns' },
-  cangrejo:  { n:'Cangrejo',     e:'🦀', atk:2, hp:5, bio:'agua',    ab:'thorns' },
-  pezglobo:  { n:'Pez globo',    e:'🐡', atk:2, hp:3, bio:'agua',    ab:'thorns' },
+  // ── BOSQUE / selva húmeda ──
+  perezoso:  { n:'Perezoso',     e:'🦥', atk:1, hp:7, bio:'bosque',  ab:'heal' },
+  monocara:  { n:'Mono carablanca', e:'🐒', atk:2, hp:3, bio:'bosque', ab:'first' },
+  tucan:     { n:'Tucán',        e:'🦜', atk:2, hp:3, bio:'bosque',  ab:'first' },
+  ranadardo: { n:'Rana dardo',   e:'🐸', atk:4, hp:1, bio:'bosque',  ab:'poison' },
+  serpiente: { n:'Terciopelo',   e:'🐍', atk:5, hp:2, bio:'bosque',  ab:'poison' },
+  jaguar:    { n:'Jaguar',       e:'🐆', atk:5, hp:4, bio:'bosque',  ab:'rage' },
+  manigordo: { n:'Manigordo',    e:'🐈', atk:3, hp:3, bio:'bosque',  ab:'first' },
+  pizote:    { n:'Pizote',       e:'🦝', atk:3, hp:4, bio:'bosque',  ab:'first' },
+  murcielago:{ n:'Murciélago',   e:'🦇', atk:3, hp:2, bio:'bosque',  ab:'poison' },
+  mariposa:  { n:'Morfo azul',   e:'🦋', atk:2, hp:2, bio:'bosque',  ab:'first' },
   abeja:     { n:'Abeja',        e:'🐝', atk:3, hp:1, bio:'bosque',  ab:'poison' },
-  caballo:   { n:'Caballo',      e:'🐎', atk:4, hp:6, bio:'sabana',  ab:'rage' },
-  bufalo:    { n:'Búfalo',       e:'🐃', atk:5, hp:8, bio:'sabana',  ab:'rage' },
 
-  // ── LEGENDARIOS ── no van en ningún pool; salen muy rara vez vía COUNTRIES[*].legend.
-  // Stats superiores y `leg:true` para el marco prismático.
-  pavoreal:   { n:'Pavo Real',      e:'🦚', atk:4, hp:7, bio:'sabana',  ab:'heal',   leg:true },
-  rinoceronte:{ n:'Rinoceronte',    e:'🦏', atk:6, hp:9, bio:'sabana',  ab:'shield', leg:true },
-  bisonte:    { n:'Bisonte',        e:'🦬', atk:6, hp:8, bio:'montana', ab:'rage',   leg:true },
-  morfo:      { n:'Morfo Azul',     e:'🦋', atk:5, hp:4, bio:'bosque',  ab:'first',  leg:true },
-  calamar:    { n:'Calamar Gigante',e:'🦑', atk:7, hp:6, bio:'agua',    ab:'poison', leg:true },
-  llama:      { n:'Llama Dorada',   e:'🦙', atk:4, hp:8, bio:'montana', ab:'heal',   leg:true },
+  // ── MONTAÑA / bosque nuboso ──
+  quetzal:   { n:'Quetzal',      e:'🐦', atk:2, hp:4, bio:'montana', ab:'heal' },
+  puma:      { n:'Puma',         e:'🐆', atk:5, hp:5, bio:'montana', ab:'rage' },
+  coyote:    { n:'Coyote',       e:'🐺', atk:4, hp:3, bio:'montana', ab:'first' },
 
-  // ── EXTINTOS ── solo en el nivel secreto "Tierra Perdida". Brutales. `ext:true`.
-  mamut:      { n:'Mamut',          e:'🦣', atk:6, hp:12, bio:'montana', ab:'shield', ext:true },
-  dino:       { n:'Brontosaurio',   e:'🦕', atk:5, hp:14, bio:'bosque',  ab:'rage',   ext:true },
-  trex:       { n:'Tiranosaurio',   e:'🦖', atk:9, hp:9,  bio:'sabana',  ab:'rage',   ext:true },
-  dodo:       { n:'Dodo',           e:'🦤', atk:3, hp:5,  bio:'bosque',  ab:'first',  ext:true },
+  // ── SABANA / bosque seco (Guanacaste) ──
+  venado:    { n:'Venado',       e:'🦌', atk:2, hp:6, bio:'sabana',  ab:'shield' },
+  saino:     { n:'Saíno',        e:'🐗', atk:4, hp:5, bio:'sabana',  ab:'rage' },
+  iguana:    { n:'Iguana',       e:'🦎', atk:2, hp:5, bio:'sabana',  ab:'thorns' },
+  garza:     { n:'Garza',        e:'🐦', atk:2, hp:3, bio:'sabana',  ab:'first' },
+
+  // ── AGUA / costas y ríos ──
+  cocodrilo: { n:'Cocodrilo',    e:'🐊', atk:5, hp:6, bio:'agua',    ab:'first' },
+  tortuga:   { n:'Tortuga marina', e:'🐢', atk:1, hp:8, bio:'agua',  ab:'shield' },
+  ballena:   { n:'Ballena jorobada', e:'🐋', atk:6, hp:8, bio:'agua', ab:'rage' },
+  delfin:    { n:'Delfín',       e:'🐬', atk:3, hp:3, bio:'agua',    ab:'first' },
+  tiburon:   { n:'Tiburón',      e:'🦈', atk:6, hp:4, bio:'agua',    ab:'rage' },
+  cangrejo:  { n:'Cangrejo',     e:'🦀', atk:2, hp:5, bio:'agua',    ab:'thorns' },
+  basilisco: { n:'Basilisco',    e:'🦎', atk:3, hp:3, bio:'agua',    ab:'first' },
+
+  // ── LEGENDARIOS ── rarísimos, no van en ningún pool; salen vía .legend.
+  lapa:         { n:'Lapa roja',     e:'🦜', atk:5, hp:6, bio:'bosque',  ab:'rage', leg:true },
+  quetzaldorado:{ n:'Quetzal Dorado', e:'🐦', atk:4, hp:9, bio:'montana', ab:'heal', leg:true },
 };
 
 export const BIOMES = {
@@ -85,7 +54,6 @@ export const BIOMES = {
 };
 
 // Efectos roguelike. `sym` es el símbolo de la insignia; `cls` la clase de color.
-// La LÓGICA de cada efecto vive en engine.js (fight). Acá solo el texto/estilo.
 export const ABILITIES = {
   poison:{ n:'Veneno',       sym:'☣', cls:'poison', desc:'El enemigo del frente pierde 1 ❤ cada turno aunque no lo golpeen.' },
   shield:{ n:'Escudo',       sym:'🛡', cls:'shield', desc:'Aguanta el primer golpe que recibiría sin perder vida.' },
@@ -95,56 +63,50 @@ export const ABILITIES = {
   thorns:{ n:'Púas',         sym:'🌵', cls:'thorns', desc:'Devuelve 1 de daño a quien lo ataque.' },
 };
 
-// Países. El ORDEN ya NO define dificultad: el juego sortea el destino y la
-// dificultad sube por cuántos llevás cruzados (profundidad). `map` = slug de la
-// silueta en assets/paises/; `ocean:true` = sin silueta (motivo de océano).
+// Las 7 PROVINCIAS de Costa Rica (se recorren todas en una run). El orden lo
+// sortea el juego; la dificultad sube por cuántas llevás. `map` = silueta de CR.
 export const COUNTRIES = [
-  { flag:'🇨🇷', n:'Costa Rica',  map:'costa-rica', legend:'morfo',       pool:['perezoso','tucan','ranadardo','jaguar','mono','hipo','cocodrilo','lagarto','abeja','mapache'] },
-  { flag:'🇰🇪', n:'Kenia',       map:'kenia',      legend:'rinoceronte', pool:['leon','elefante','jirafa','guepardo','cebra','hipo','cobra','bufalo','escorpion'] },
-  { flag:'🇦🇺', n:'Australia',   map:'australia',  pool:['canguro','koala','cocodrilo','emu','tiburon','cobra','murcielago','lagarto'] },
-  { flag:'🇨🇦', n:'Canadá',      map:'canada',     legend:'bisonte',     pool:['oso','alce','lobo','buho','foca','mapache','ardilla'] },
-  { flag:'🇧🇷', n:'Brasil',      map:'brasil',     pool:['anaconda','capibara','pirana','jaguar','tucan','mono','murcielago','abeja','lagarto'] },
-  { flag:'🇮🇳', n:'India',       map:'india',      legend:'pavoreal',    pool:['tigre','elefante','cobra','pangolin','mono','condor','murcielago','gato'] },
-  { flag:'🇮🇩', n:'Indonesia',   map:'indonesia',  pool:['orangutan','tigre','cocodrilo','murcielago','lagarto','pulpo','pezglobo','mono'] },
-  { flag:'🇪🇬', n:'Egipto',      map:'egipto',     pool:['camello','escorpion','cobra','gato','condor','cocodrilo','jaguar'] },
-  { flag:'🇨🇳', n:'China',       map:'china',      pool:['panda','tigre','oso','mono','murcielago','condor','ardilla'] },
-  { flag:'🇲🇽', n:'México',      map:'mexico',     pool:['jaguar','lobo','condor','cobra','gato','escorpion','mapache','tucan'] },
-  { flag:'🇦🇷', n:'Argentina',   map:'argentina',  pool:['condor','capibara','pinguino','caballo','foca','jaguar','bufalo'] },
-  { flag:'🌊',  n:'Mar abierto', map:null, ocean:true, legend:'calamar', pool:['tiburon','pulpo','orca','delfin','tortuga','foca','cangrejo','pezglobo'] },
-  { flag:'⛰️', n:'Los Andes',   map:'los-andes',  legend:'llama',       pool:['condor','oso','lobo','buho','alce','foca','gato','caballo'] },
+  { flag:'🏙️', n:'San José',   map:'costa-rica', pool:['monocara','tucan','perezoso','manigordo','murcielago','mariposa','coyote'] },
+  { flag:'🌋', n:'Alajuela',   map:'costa-rica', pool:['perezoso','ranadardo','jaguar','tucan','serpiente','cocodrilo','mariposa'] },
+  { flag:'⛰️', n:'Cartago',    map:'costa-rica', pool:['quetzal','puma','venado','coyote','murcielago'] },
+  { flag:'🌿', n:'Heredia',    map:'costa-rica', pool:['quetzal','monocara','perezoso','tucan','pizote','mariposa'] },
+  { flag:'🌾', n:'Guanacaste', map:'costa-rica', legend:'lapa', pool:['saino','iguana','venado','garza','jaguar','cocodrilo','serpiente'] },
+  { flag:'🌊', n:'Puntarenas', map:'costa-rica', legend:'lapa', pool:['cocodrilo','tortuga','ballena','delfin','tiburon','jaguar','basilisco'] },
+  { flag:'🏝️', n:'Limón',      map:'costa-rica', pool:['perezoso','monocara','ranadardo','tortuga','cocodrilo','pizote','serpiente','cangrejo'] },
 ];
 
-// NIVEL SECRETO — se desbloquea al conquistar los RUN_LENGTH países. No entra
-// en el sorteo normal. Fauna extinta, el desafío final; vencer su jefe = ganar.
+// FINAL — el bosque nuboso de Monteverde. Se abre al recorrer las 7 provincias.
+// Aquí vive el Quetzal Dorado y el cabecilla de los furtivos. Vencerlo = ganar.
 export const SECRET = {
-  flag:'❄️', n:'Tierra Perdida', map:'antartida', secret:true,
-  pool:['mamut','dino','trex','dodo'],
+  flag:'☁️', n:'Monteverde', map:'costa-rica', secret:true, legend:'quetzaldorado',
+  pool:['quetzal','puma','venado','coyote','monocara','mariposa'],
 };
+
+export const ITEMS = [
+  { n:'Hoja medicinal', e:'🌿', atk:0, hp:3 },
+  { n:'Fruta madura',   e:'🍌', atk:2, hp:1 },
+  { n:'Vendaje',        e:'🩹', atk:0, hp:4 },
+  { n:'Néctar',         e:'🍯', atk:2, hp:0 },
+];
+
+// Objetos RAROS — recompensa por vencer a traficantes/cazadores.
+export const RARE_ITEMS = [
+  { n:'Collar GPS',      e:'📡', atk:4, hp:2 },
+  { n:'Suero vital',     e:'💉', atk:2, hp:6 },
+  { n:'Amuleto boruca',  e:'🪆', atk:3, hp:4 },
+  { n:'Piedra esfera',   e:'🪨', atk:2, hp:5 },
+];
 
 // Banderas para el avatar del jugador (identidad, sin efecto en el juego).
 export const PLAYER_FLAGS = ['🇨🇷','🇲🇽','🇪🇸','🇦🇷','🇨🇴','🇧🇷','🇺🇸','🇨🇦','🇫🇷','🇩🇪','🇯🇵','🇬🇧'];
-
-export const ITEMS = [
-  { n:'Músculo',   e:'💪', atk:2, hp:0 },
-  { n:'Carne',     e:'🥩', atk:0, hp:3 },
-  { n:'Adrenalina',e:'⚡', atk:2, hp:1 },
-  { n:'Caparazón', e:'🛡️', atk:0, hp:4 },
-];
-
-// Objetos RAROS — recompensa por vencer a los cazadores furtivos. Más fuertes.
-export const RARE_ITEMS = [
-  { n:'Gema de poder',      e:'💎', atk:4, hp:2 },
-  { n:'Tótem guardián',     e:'🗿', atk:2, hp:6 },
-  { n:'Colmillo ancestral', e:'🦷', atk:3, hp:4 },
-  { n:'Amuleto salvaje',    e:'🧿', atk:2, hp:5 },
-];
 
 export const RULES = {
   MAX_TEAM: 5,
   MAX_HEARTS: 3,
   MAX_ITEMS: 3,        // objetos que se le pueden equipar a un animal
-  STARTER_LEVEL: 2,    // nivel inicial de tu primer compañero
-  EVO_LEVELS: [3, 6],  // niveles en los que un animal evoluciona (crece extra)
-  LEG_CHANCE: 0.01,    // probabilidad de que un encuentro de bioma sea legendario (~1%)
-  RUN_LENGTH: 8,       // países a conquistar antes de la Tierra Perdida (nivel secreto)
+  STARTER_LEVEL: 2,    // nivel inicial de tu primer rescatado
+  EVO_LEVELS: [3, 6],  // niveles en los que un animal se RECUPERA (etapa de rehabilitación)
+  LEG_CHANCE: 0.02,    // probabilidad de toparte un animal legendario (~2%)
+  RUN_LENGTH: 7,       // provincias a recorrer antes de Monteverde (el final)
+  PLENO_EVO: 2,        // etapa de rehabilitación a la que se considera "pleno" (listo para liberar)
 };
