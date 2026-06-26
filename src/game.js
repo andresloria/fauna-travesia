@@ -25,7 +25,7 @@ export class Game {
       map: null, currentId: null,
       starters: E.shuffle(noLeg).slice(0, 3).map(k => E.mkAnimal(k)),
       bag: [],                 // objetos (tesoros) sin equipar
-      pendingWild: null, offer: null, event: null, battle: null, editId: null, log: [],
+      wilds: null, wildLeg: false, offer: null, event: null, battle: null, editId: null, log: [],
     };
     this.render();
   }
@@ -137,23 +137,29 @@ export class Game {
 
   // ---------- encuentro salvaje ----------
   wildEncounter(bio) {
-    const s = this.s;
-    s.pendingWild = E.rollWild(s.country, bio, this.depth());   // el motor decide si sale legendario
-    if (s.pendingWild.leg) this.log(`✦ ¡Un animal LEGENDARIO necesita ayuda: ${s.pendingWild.e} <b>${s.pendingWild.n}</b>!`);
+    const s = this.s, d = this.depth();
+    // muy rara vez, encuentro legendario (uno solo); si no, 3 animales para elegir
+    if (s.country.legend && E.rnd(100) < RULES.LEG_CHANCE * 100) {
+      const a = E.mkAnimal(s.country.legend); E.setLevel(a, E.wildLevel(d));
+      s.wilds = [a]; s.wildLeg = true;
+      this.log(`✦ ¡Un LEGENDARIO necesita ayuda: ${a.e} <b>${a.n}</b>!`);
+    } else {
+      s.wilds = E.genWildChoices(s.country, bio, d, 3); s.wildLeg = false;
+    }
     s.phase = 'wild';
     this.render();
   }
-  captureWild() {
-    const s = this.s;
-    s.team.push(s.pendingWild);
-    this.log(`🩹 Rescataste a ${s.pendingWild.e} <b>${s.pendingWild.n}</b> (Nv ${s.pendingWild.level})`);
-    this.backToMap();
-  }
-  captureReplace() {
-    const s = this.s; let wi = 0;
-    s.team.forEach((x, i) => { if ((x.atk + x.hp) < (s.team[wi].atk + s.team[wi].hp)) wi = i; });
-    const old = s.team[wi]; s.team[wi] = s.pendingWild;
-    this.log(`🩹 Rescataste a ${s.pendingWild.e} <b>${s.pendingWild.n}</b> (el refugio estaba lleno; soltaste a ${old.e} ${old.n})`);
+  captureWild(idx) {
+    const s = this.s, a = s.wilds && s.wilds[idx];
+    if (!a) return;
+    if (s.team.length >= RULES.MAX_TEAM) {       // refugio lleno: reemplaza al más débil
+      let wi = 0; s.team.forEach((x, i) => { if ((x.atk + x.hp) < (s.team[wi].atk + s.team[wi].hp)) wi = i; });
+      const old = s.team[wi]; s.team[wi] = a;
+      this.log(`🩹 Rescataste a ${a.e} <b>${a.n}</b> (Nv ${a.level}); soltaste a ${old.e} ${old.n}`);
+    } else {
+      s.team.push(a);
+      this.log(`🩹 Rescataste a ${a.e} <b>${a.n}</b> (Nv ${a.level})`);
+    }
     this.backToMap();
   }
   leaveWild() { this.backToMap(); }

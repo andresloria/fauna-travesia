@@ -164,6 +164,11 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .starters{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .starter{cursor:pointer;transition:transform .12s}
 .starter:hover{transform:translateY(-6px)}
+/* rescate: 3 animales para elegir */
+.wildrow{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+.wildpick{display:flex;flex-direction:column;align-items:center;gap:7px;background:rgba(0,0,0,.22);border:1px solid rgba(196,160,78,.22);border-radius:13px;padding:11px}
+.wildpick .wilddesc{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:#bdae90}
+.wildpick .btn{padding:8px 14px;font-size:10px}
 
 .log{background:rgba(0,0,0,.28);border:1px solid rgba(196,160,78,.2);border-radius:10px;padding:10px 13px;font-size:12px;line-height:1.5;max-height:110px;overflow:auto;margin-top:14px}
 .log .le{padding:2px 0;color:#d8cdb2;border-bottom:1px solid rgba(196,160,78,.1)} .log .le b{color:var(--brass)}

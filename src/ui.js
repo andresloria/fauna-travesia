@@ -132,22 +132,35 @@ export function createUI(game) {
   }
 
   function renderWild(s) {
-    const a = s.pendingWild, ab = ABILITIES[a.ab], full = s.team.length >= RULES.MAX_TEAM;
-    const acts = full
-      ? [['Rescatar (refugio lleno)', 'replace'], ['Dejarlo', 'leave']]
-      : [['Rescatar 🩹', 'capture'], ['Dejarlo', 'leave']];
-    const head = a.leg
-      ? `<div class="section-h legend-h">✦ ¡Un LEGENDARIO necesita rescate! · ${BIOMES[a.bio].e} ${BIOMES[a.bio].n}</div>`
-      : `<div class="section-h">${BIOMES[a.bio].e} ${BIOMES[a.bio].n} · un animal necesita rescate 🩹</div>`;
+    const wilds = s.wilds, full = s.team.length >= RULES.MAX_TEAM;
+    const bio = BIOMES[wilds[0].bio];
+    const rescBtn = full ? 'Rescatar (cambia al más débil)' : 'Rescatar 🩹';
+    if (s.wildLeg) {
+      const a = wilds[0], ab = ABILITIES[a.ab];
+      phaseArea.innerHTML = `
+        <div class="section-h legend-h">✦ ¡Un LEGENDARIO necesita rescate! · ${bio.e} ${bio.n}</div>
+        <div class="event-box legend-box">
+          <div class="legbanner">✦ Encuentro rarísimo — no aparece seguido</div>
+          <div style="margin:0 auto;max-width:150px">${animalCard(a, {})}</div>
+          <div class="desc">${ab ? `<b>${ab.sym} ${ab.n}</b> — ${ab.desc}` : ''}</div>
+          <div class="center"><button class="btn" data-act="wild" data-i="0">${rescBtn}</button>
+            <button class="btn ghost" data-act="wild" data-i="-1">Dejarlo</button></div>
+        </div>
+        ${teamHTML(s.team, { panel: true, order: true })}`;
+      return;
+    }
+    const cards = wilds.map((a, i) => {
+      const ab = ABILITIES[a.ab];
+      return `<div class="wildpick">
+        ${animalCard(a, {})}
+        <div class="wilddesc">${ab ? `${ab.sym} ${ab.n}` : ''}</div>
+        <button class="btn" data-act="wild" data-i="${i}">${rescBtn}</button>
+      </div>`;
+    }).join('');
     phaseArea.innerHTML = `
-      ${head}
-      <div class="event-box${a.leg ? ' legend-box' : ''}">
-        ${a.leg ? `<div class="legbanner">✦ Encuentro rarísimo — no aparece seguido</div>` : ''}
-        <div style="margin:0 auto;max-width:150px">${animalCard(a, {})}</div>
-        <div class="desc">${ab ? `<b>${ab.sym} ${ab.n}</b> — ${ab.desc}` : ''}</div>
-        <div class="center">${acts.map(([t, k]) =>
-          `<button class="btn ${k === 'leave' ? 'ghost' : ''}" data-act="wild" data-k="${k}">${t}</button>`).join('')}</div>
-      </div>
+      <div class="section-h">${bio.e} ${bio.n} · 3 animales necesitan rescate — elegí uno 🩹</div>
+      <div class="wildrow">${cards}</div>
+      <div class="center"><button class="btn ghost" data-act="wild" data-i="-1">Seguir sin rescatar</button></div>
       ${teamHTML(s.team, { panel: true, order: true })}`;
   }
 
@@ -398,10 +411,8 @@ export function createUI(game) {
         else if (act === 'edit-release') game.releaseAnimal(s.editId);
         else if (act === 'equip') game.equipItem(s.editId, +elm.dataset.bag);
         else if (act === 'wild') {
-          const k = elm.dataset.k;
-          if (k === 'capture') game.captureWild();
-          else if (k === 'replace') game.captureReplace();
-          else game.leaveWild();
+          const idx = +elm.dataset.i;
+          if (idx >= 0) game.captureWild(idx); else game.leaveWild();
         } else if (act === 'event') s.event.actions[+elm.dataset.i].action();
       });
     });

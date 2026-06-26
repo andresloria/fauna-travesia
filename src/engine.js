@@ -93,7 +93,7 @@ export function generateMap(country, depth = 0) {
   for (let r = 1; r <= 4; r++) {
     const cols = shuffle([0, 1, 2]).slice(0, 2 + rnd(2)).sort((a, b) => a - b);
     rows[r] = cols.map(c => {
-      const t = pickType(depth);
+      const t = pickType(depth, r);
       return node(r, c, t, t === 'bioma' ? pick(biomes) : null);
     });
   }
@@ -112,15 +112,36 @@ export function generateMap(country, depth = 0) {
   return { rows, nodesById, startId: rows[0][0].id };
 }
 function nearest(row, c) { return row.reduce((b, x) => Math.abs(x.c - c) < Math.abs(b.c - c) ? x : b); }
-function pickType(depth = 0) {
+// El mapa tiene filas 1-4 (luego el aeropuerto en la 5). Los ATACANTES (furtivos/
+// traficantes) solo aparecen en las ÚLTIMAS casillas (filas 3-4): primero explorás
+// y rescatás, y peleás cerca del jefe. Las primeras casillas son pacíficas.
+function pickType(depth = 0, row = 4) {
   const r = rnd(100);
-  if (r < 38) return 'bioma';
-  if (r < 62) return 'combate';
-  // traficantes SOLO de la provincia 4 en adelante (depth>=3); antes es combate normal.
-  if (r < 70) return depth >= 3 ? 'cazador' : 'combate';
-  if (r < 77) return 'intercambio';
-  if (r < 89) return 'tesoro';
+  if (row < 3) {
+    // primeras casillas: rescate / hallazgo / traslado / refugio (sin atacantes)
+    if (r < 58) return 'bioma';
+    if (r < 76) return 'tesoro';
+    if (r < 88) return 'intercambio';
+    return 'descanso';
+  }
+  // últimas casillas: aparecen los atacantes
+  if (r < 30) return 'bioma';
+  if (r < 68) return 'combate';
+  if (r < 78) return depth >= 3 ? 'cazador' : 'combate';   // traficantes solo de la provincia 4 en adelante
+  if (r < 90) return 'tesoro';
   return 'descanso';
+}
+
+// Tres animales DIFERENTES para que el jugador elija a cuál rescatar.
+// Prioriza los del bioma; si no alcanzan, completa con otras especies del país
+// (siempre distintas). Solo repite como último recurso si el país tiene < count.
+export function genWildChoices(country, bio, depth, count = 3) {
+  const nonLeg = country.pool.filter(k => !SP[k].leg);
+  let keys = shuffle(nonLeg.filter(k => SP[k].bio === bio));
+  if (keys.length < count) keys = keys.concat(shuffle(nonLeg.filter(k => !keys.includes(k))));
+  keys = keys.slice(0, count);
+  while (keys.length < count) keys.push(pick(nonLeg));
+  return keys.map(k => { const a = mkAnimal(k); setLevel(a, wildLevel(depth)); return a; });
 }
 
 // Oferta de intercambio: un animal al azar 2-3 niveles arriba del nivel dado.

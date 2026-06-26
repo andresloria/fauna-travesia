@@ -203,4 +203,22 @@ test('final Monteverde: se abre tras las 7 provincias con el Quetzal Dorado', ()
   assert.ok(Object.values(m.nodesById).some(n => n.type === 'airport'), 'Monteverde tiene jefe final');
 });
 
+test('los atacantes (combate/cazador) solo en las últimas casillas (filas 3-4)', () => {
+  for (let t = 0; t < 200; t++) {
+    const m = E.generateMap(COUNTRIES[0], 5);   // depth alto: permite cazador
+    for (const n of Object.values(m.nodesById))
+      if (n.type === 'combate' || n.type === 'cazador')
+        assert.ok(n.r >= 3, `atacante en fila ${n.r}, debería ser >= 3`);
+  }
+});
+
+test('genWildChoices ofrece 3 animales válidos y DISTINTOS', () => {
+  for (const c of COUNTRIES) for (const bio of ['bosque', 'sabana', 'agua', 'montana']) {
+    const ch = E.genWildChoices(c, bio, 2, 3);
+    assert.equal(ch.length, 3, '3 opciones');
+    assert.equal(new Set(ch.map(a => a.key)).size, 3, `3 especies distintas (${c.n}/${bio})`);
+    assert.ok(ch.every(a => a.level >= 1 && a.atk > 0 && !a.leg), 'válidos y no legendarios');
+  }
+});
+
 console.log(`\n${passed} pruebas OK\n`);
