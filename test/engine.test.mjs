@@ -153,12 +153,18 @@ test('aparecen nodos de cazadores furtivos en el mapa', () => {
   assert.ok(found, 'debería generarse algún nodo cazador');
 });
 
-test('los cazadores son más fuertes que un retador y dan objeto raro', () => {
-  for (const d of [0, 2, 4]) {
-    assert.ok(E.poacherLevel(d) > E.enemyLevel(d, false), 'el cazador supera en nivel al retador');
-    assert.ok(E.poacherSize(d) >= 3, 'equipos fuertes (mínimo 3)');
-  }
+test('los cazadores superan en NIVEL al retador y dan objeto raro', () => {
+  for (const d of [0, 2, 4]) assert.ok(E.poacherLevel(d) > E.enemyLevel(d, false), 'el cazador supera en nivel al retador');
   assert.ok(E.RARE_ITEMS && E.RARE_ITEMS.length > 0, 'hay objetos raros');
+});
+
+test('tamaño de equipo: rampa por provincia (furtivos depth+1, jefe depth+2, tope 5)', () => {
+  const exp = [[1, 2], [2, 3], [3, 4], [4, 5], [5, 5], [5, 5], [5, 5]];
+  for (let d = 0; d < 7; d++) {
+    assert.equal(E.retSize(d), exp[d][0], `furtivos provincia ${d + 1}`);
+    assert.equal(E.poacherSize(d), exp[d][0], `traficantes provincia ${d + 1}`);
+    assert.equal(E.bossSize(d), exp[d][1], `cabecilla provincia ${d + 1}`);
+  }
 });
 
 test('intercambio: el animal ofrecido es 2-3 niveles más alto y no legendario', () => {

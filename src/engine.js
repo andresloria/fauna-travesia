@@ -39,13 +39,16 @@ export function setLevel(a, L) { while (a.level < L) levelUp(a); return a; }
 // acelerar para seguir siendo un reto. Bajá RAMP = más difícil; subilo = más fácil.
 const RAMP = 7;
 const accel = (depth) => depth + Math.floor(depth * depth / RAMP);
-export function retSize(depth)  { return Math.min(5, 2 + Math.floor(depth / 2) + rnd(2)); }
-export function bossSize(depth) { return Math.min(5, 3 + Math.floor(depth / 2) + rnd(2)); }
+// TAMAÑO del equipo enemigo (cuántos animales): rampa lineal y DETERMINISTA.
+// Furtivos/traficantes = nº de provincia (depth+1); el Cabecilla siempre uno más.
+// Prov.1 (depth0): furtivos 1, jefe 2 · Prov.2: 2 y 3 · … · Prov.5+ (depth4): todos 5.
+export function retSize(depth)     { return Math.min(5, depth + 1); }
+export function poacherSize(depth) { return Math.min(5, depth + 1); }
+export function bossSize(depth)    { return Math.min(5, depth + 2); }
+// NIVEL de los enemigos (su fuerza): sube con la curva acelerada (no el tamaño).
 export function enemyLevel(depth, isBoss) { return (isBoss ? 3 : 2) + accel(depth); }
 export function wildLevel(depth) { return 1 + depth; }
-// cazadores furtivos: equipos FUERTES (mini-jefe), por encima de un retador.
-export function poacherSize(depth)  { return Math.min(5, 3 + Math.floor(depth / 2) + rnd(2)); }
-export function poacherLevel(depth) { return 3 + accel(depth) + rnd(2); }
+export function poacherLevel(depth) { return 3 + accel(depth) + rnd(2); }   // traficantes: más nivel que un furtivo
 
 export function genEnemy(country, size, lvl) {
   const team = [];
