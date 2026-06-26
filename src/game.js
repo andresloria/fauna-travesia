@@ -84,14 +84,13 @@ export class Game {
 
   resolveNode(n) {
     const s = this.s, d = this.depth();
-    const rb = Math.floor((n.r || 0) / 2);   // ramp dentro del mapa: cuanto más cerca del aeropuerto, más duro
     switch (n.type) {
       case 'bioma':    return this.wildEncounter(n.bio);
       case 'combate':  return this.startBattle(
-        E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false) + rb),
+        E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false)),
         'Furtivo', '🪤', 'retador');
       case 'cazador':  return this.startBattle(
-        E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d) + rb),
+        E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d)),
         'Banda de traficantes', '🏹', 'cazador');
       case 'intercambio': {
         const maxLv = s.team.reduce((m, a) => Math.max(m, a.level), 1);
