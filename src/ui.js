@@ -114,9 +114,9 @@ export function createUI(game) {
         (n.visited && n !== current) ? 'visited' : '',
         (!avail && !n.visited && n !== current) ? 'locked' : ''].join(' ');
       const ic = n.type === 'bioma' ? BIOMES[n.bio].e : n.type === 'combate' ? '🪤' : n.type === 'cazador' ? '🏹'
-        : n.type === 'entrenamiento' ? '📈' : n.type === 'intercambio' ? '🔄' : n.type === 'tesoro' ? '🎁' : n.type === 'descanso' ? '🏕️' : n.type === 'airport' ? '🚨' : '🧭';
+        : n.type === 'salvaje' ? '🐾' : n.type === 'intercambio' ? '🔄' : n.type === 'tesoro' ? '🎁' : n.type === 'descanso' ? '🏕️' : n.type === 'airport' ? '🚨' : '🧭';
       const lab = n.type === 'bioma' ? BIOMES[n.bio].n : n.type === 'combate' ? 'Furtivo' : n.type === 'cazador' ? 'Traficantes'
-        : n.type === 'entrenamiento' ? 'Entrenar' : n.type === 'intercambio' ? 'Traslado' : n.type === 'tesoro' ? 'Hallazgo' : n.type === 'descanso' ? 'Refugio' : n.type === 'airport' ? 'Cabecilla' : 'Inicio';
+        : n.type === 'salvaje' ? 'Salvaje' : n.type === 'intercambio' ? 'Traslado' : n.type === 'tesoro' ? 'Hallazgo' : n.type === 'descanso' ? 'Refugio' : n.type === 'airport' ? 'Cabecilla' : 'Inicio';
       const data = avail ? `data-act="node" data-id="${n.id}"` : '';
       return `<div class="${cls}" style="left:${X[n.c]}%;top:${yFor(n.r)}%" ${data}>
         <div class="disc">${ic}</div><div class="ml">${lab}</div></div>`;

@@ -118,9 +118,9 @@ function nearest(row, c) { return row.reduce((b, x) => Math.abs(x.c - c) < Math.
 function pickType(depth = 0, row = 4) {
   const r = rnd(100);
   if (row < 3) {
-    // primeras casillas: pacíficas. Rescate / entrenamiento (subir nivel) / hallazgo / traslado / refugio.
+    // primeras casillas: rescate / animal salvaje (pelea justa para subir de nivel) / hallazgo / traslado / refugio.
     if (r < 44) return 'bioma';
-    if (r < 64) return 'entrenamiento';   // ~20%: subir de nivel sin pelear
+    if (r < 64) return 'salvaje';   // ~20%: pelea contra un animal salvaje a tu nivel
     if (r < 78) return 'tesoro';
     if (r < 88) return 'intercambio';
     return 'descanso';

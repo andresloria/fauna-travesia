@@ -212,15 +212,15 @@ test('los atacantes (combate/cazador) solo en las últimas casillas (filas 3-4)'
   }
 });
 
-test('hay casillas de entrenamiento, solo en las primeras filas (1-2)', () => {
+test('hay casillas de animal salvaje, solo en las primeras filas (1-2)', () => {
   let found = false;
   for (let t = 0; t < 300; t++) {
     const m = E.generateMap(COUNTRIES[0], 0);
     for (const n of Object.values(m.nodesById)) {
-      if (n.type === 'entrenamiento') { found = true; assert.ok(n.r < 3, `entrenamiento en fila ${n.r}, debería ser < 3`); }
+      if (n.type === 'salvaje') { found = true; assert.ok(n.r < 3, `salvaje en fila ${n.r}, debería ser < 3`); }
     }
   }
-  assert.ok(found, 'debería generarse alguna casilla de entrenamiento');
+  assert.ok(found, 'debería generarse alguna casilla de animal salvaje');
 });
 
 test('genWildChoices ofrece 3 animales válidos y DISTINTOS', () => {
