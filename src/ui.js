@@ -4,7 +4,8 @@
 // Si algún día cambiás el look, es acá.
 // ============================================================
 
-import { BIOMES, ABILITIES, RULES, PLAYER_FLAGS } from './data.js';
+import { SP, BIOMES, ABILITIES, RULES, PLAYER_FLAGS } from './data.js';
+import * as M from './meta.js';
 
 // Arte pixel por especie. Todo el roster (SP) tiene su PNG en assets/animales/
 // (generado con gen_pixel.py). Si algún día agregás una especie sin PNG, generala.
@@ -104,8 +105,20 @@ export function createUI(game) {
   function renderStarter(s) {
     const who = s.avatar
       ? `<div class="map-hint" style="margin-bottom:10px">Guardaparques ${s.avatar.flag} <b>${s.avatar.name}</b> · <button class="linklike" data-act="edit-avatar">cambiar</button></div>` : '';
+    const furtivo = s.mode === 'furtivo';
+    const modeSel = `<div class="modesel">
+      <span class="ms-k">Modo de juego</span>
+      <div class="ms-opts">
+        <button class="ms-opt ${!furtivo ? 'on' : ''}" data-act="mode" data-mode="normal">🌿 Normal</button>
+        <button class="ms-opt ${furtivo ? 'on danger' : ''}" data-act="mode" data-mode="furtivo">🪤 Furtivo</button>
+      </div>
+      <span class="ms-d">${furtivo
+        ? '<b>Difícil:</b> si derrotan a un animal tuyo en combate, los cazadores <b>se lo roban</b> (desaparece).'
+        : 'Los animales caídos en combate vuelven a tu refugio al terminar la pelea.'}</span>
+    </div>`;
     phaseArea.innerHTML = `
       ${who}
+      ${modeSel}
       <div class="section-h">Elegí tu primer rescate</div>
       <div class="starters">${s.starters.map((a, i) =>
         `<div class="starter" data-act="starter" data-i="${i}">${animalCard(a, {})}</div>`).join('')}</div>
@@ -399,6 +412,7 @@ export function createUI(game) {
       const act = elm.dataset.act;
       elm.addEventListener('click', () => {
         if (act === 'starter') game.chooseStarter(+elm.dataset.i);
+        else if (act === 'mode') game.setMode(elm.dataset.mode);
         else if (act === 'flag') { phaseArea.querySelectorAll('.flagopt').forEach(f => f.classList.remove('sel')); elm.classList.add('sel'); }
         else if (act === 'avatar-go') { const sel = phaseArea.querySelector('.flagopt.sel'); game.chooseAvatar(phaseArea.querySelector('#avName').value, sel ? sel.dataset.flag : '🌎'); }
         else if (act === 'edit-avatar') game.editAvatar();
@@ -421,5 +435,55 @@ export function createUI(game) {
     if (restart) restart.onclick = () => { $('overlay').classList.remove('show'); game.newRun(); };
   }
 
-  return { render, playBattle };
+  // ---------- paneles meta (colección + logros) y avisos ----------
+  function openPanel(html) {
+    const m = $('modal'); m.className = 'modal panel'; m.innerHTML = html;
+    $('overlay').classList.add('show');
+    const close = m.querySelector('[data-act="panel-close"]'); if (close) close.onclick = closePanel;
+    $('overlay').onclick = (e) => { if (e.target === $('overlay')) closePanel(); };
+  }
+  function closePanel() { $('overlay').classList.remove('show'); $('modal').className = 'modal'; $('overlay').onclick = null; }
+
+  function dexHtml() {
+    const dex = M.getDex();
+    const keys = [...Object.keys(SP).filter(k => !SP[k].leg), ...Object.keys(SP).filter(k => SP[k].leg)];
+    const got = keys.filter(k => dex.has(k)).length;
+    const cell = (k) => {
+      const has = dex.has(k), sp = SP[k];
+      return `<div class="dexcell ${has ? 'got' : 'locked'} ${sp.leg ? 'leg' : ''}">
+        <div class="dexart">${has ? `<img src="${ART(k)}" alt="${sp.n}">` : '<span class="qm">?</span>'}</div>
+        <div class="dexn">${has ? sp.n : '? ? ?'}</div></div>`;
+    };
+    return `<div class="panelhead"><h3>📖 Colección · <b>${got}/${keys.length}</b></h3>
+      <button class="btn ghost" data-act="panel-close">Cerrar ✕</button></div>
+      <p class="panelsub">Especies de fauna tica que rescataste alguna vez. Se guardan entre partidas.</p>
+      <div class="dexgrid">${keys.map(cell).join('')}</div>`;
+  }
+  function achHtml() {
+    const got = M.getAch();
+    const n = M.ACHIEVEMENTS.filter(a => got.has(a.id)).length;
+    const rows = M.ACHIEVEMENTS.map(a => {
+      const has = got.has(a.id);
+      return `<div class="achrow ${has ? 'got' : 'locked'}">
+        <div class="ache">${has ? a.e : '🔒'}</div>
+        <div class="achtx"><div class="achn">${has ? a.n : '???'}</div><div class="achd">${a.d}</div></div>
+        ${has ? '<div class="achok">✓</div>' : ''}</div>`;
+    }).join('');
+    return `<div class="panelhead"><h3>🏆 Logros · <b>${n}/${M.ACHIEVEMENTS.length}</b></h3>
+      <button class="btn ghost" data-act="panel-close">Cerrar ✕</button></div>
+      <div class="achlist">${rows}</div>`;
+  }
+  function toast(a) {
+    const t = document.createElement('div'); t.className = 'toast';
+    t.innerHTML = `<span class="te">${a.e}</span><span><b>¡Logro!</b> ${a.n}</span>`;
+    document.body.appendChild(t);
+    requestAnimationFrame(() => t.classList.add('show'));
+    setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 2800);
+  }
+  // botones fijos (📖 colección, 🏆 logros)
+  const dexBtn = $('dexBtn'), achBtn = $('achBtn');
+  if (dexBtn) dexBtn.onclick = () => openPanel(dexHtml());
+  if (achBtn) achBtn.onclick = () => openPanel(achHtml());
+
+  return { render, playBattle, toast };
 }

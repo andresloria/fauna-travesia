@@ -5,6 +5,7 @@
 // ============================================================
 
 import * as E from './engine.js';
+import * as M from './meta.js';
 import { ITEMS, RARE_ITEMS, SECRET, RULES } from './data.js';
 
 export class Game {
@@ -17,9 +18,11 @@ export class Game {
   newRun() {
     const avatar = this.loadAvatar();
     const noLeg = Object.keys(E.SP).filter(k => !E.SP[k].leg);   // los starters no son legendarios
+    let mode = 'normal';
+    try { mode = localStorage.getItem('fauna_mode') || 'normal'; } catch {}
     this.s = {
       phase: avatar ? 'starter' : 'avatar',   // si ya tenés avatar, vas directo a elegir compañero
-      avatar,
+      avatar, mode,                            // 'normal' | 'furtivo' (si te derrotan un animal, se lo roban)
       team: [], hearts: RULES.MAX_HEARTS, cleared: 0, released: 0,
       country: null, countryBag: null, lastCountryIdx: null,
       map: null, currentId: null,
@@ -44,6 +47,32 @@ export class Game {
     this.render();
   }
   editAvatar() { this.s.phase = 'avatar'; this.render(); }
+  // modo de juego (normal / furtivo); se recuerda como preferencia
+  setMode(mode) {
+    this.s.mode = (mode === 'furtivo') ? 'furtivo' : 'normal';
+    try { localStorage.setItem('fauna_mode', this.s.mode); } catch {}
+    this.render();
+  }
+
+  // ---------- meta-progreso (colección + logros, persisten entre partidas) ----------
+  award(id) {
+    const a = M.unlock(id);
+    if (a) { this.log(`🏆 Logro desbloqueado: ${a.e} <b>${a.n}</b>`); if (this.ui && this.ui.toast) this.ui.toast(a); }
+  }
+  registerDex(a) {            // registra una especie rescatada + revisa hitos
+    if (!a) return;
+    M.addDex(a.key);
+    if (a.leg) this.award('legendario');
+    const c = M.dexCount();
+    if (c >= 10) this.award('dex10');
+    if (c >= 25) this.award('dex25');
+    if (c >= 50) this.award('dex50');
+    if (this.s.team.length >= RULES.MAX_TEAM) this.award('refugio');
+  }
+  checkConserva() {
+    if (this.s.released >= 5) this.award('conserva5');
+    if (this.s.released >= 15) this.award('conserva15');
+  }
 
   log(msg) { this.s.log.unshift(msg); if (this.s.log.length > 50) this.s.log.pop(); }
   node(id) { return this.s.map.nodesById[id]; }
@@ -57,6 +86,7 @@ export class Game {
     E.setLevel(a, RULES.STARTER_LEVEL);
     this.s.team.push(a);
     this.log(`🩹 Tu primer rescate: ${a.e} <b>${a.n}</b> (Nv ${a.level})`);
+    this.award('prim_rescate'); this.registerDex(a);
     this.enterCountry();
   }
 
@@ -166,6 +196,7 @@ export class Game {
       s.team.push(a);
       this.log(`🩹 Rescataste a ${a.e} <b>${a.n}</b> (Nv ${a.level})`);
     }
+    this.registerDex(a);
     this.backToMap();
   }
   leaveWild() { this.backToMap(); }
@@ -177,6 +208,7 @@ export class Game {
     const old = s.team[i];
     s.team[i] = s.offer; s.offer = null;
     this.log(`🔄 Cambiaste ${old.e} ${old.n} por ${s.team[i].e} <b>${s.team[i].n}</b> (Nv ${s.team[i].level})`);
+    this.registerDex(s.team[i]);
     this.backToMap();
   }
   skipTrade() { this.s.offer = null; this.backToMap(); }
@@ -184,13 +216,21 @@ export class Game {
   // ---------- combate ----------
   startBattle(enemy, oppName, oppEmoji, kind) {
     const s = this.s;
-    const { result, steps } = E.fight(s.team, enemy);  // el motor decide; la UI solo anima
+    const { result, steps, fallenAUids } = E.fight(s.team, enemy);  // el motor decide; la UI solo anima
     s.phase = 'battle';
-    s.battle = { enemy, oppName, oppEmoji, steps, result, kind };
+    s.battle = { enemy, oppName, oppEmoji, steps, result, kind, fallenAUids };
     this.ui.playBattle(s, () => this.onBattleEnd());
   }
   onBattleEnd() {
     const s = this.s, b = s.battle, won = b.result === 'W';
+    if (won && !(b.fallenAUids && b.fallenAUids.length)) this.award('impecable');
+    // MODO FURTIVO: a los animales que cayeron en combate se los roban (desaparecen)
+    if (s.mode === 'furtivo' && b.fallenAUids && b.fallenAUids.length) {
+      const stolen = [];
+      b.fallenAUids.forEach(uid => { const i = s.team.findIndex(a => a.uid === uid); if (i >= 0) stolen.push(s.team.splice(i, 1)[0]); });
+      if (stolen.length) this.log(`🪤 <b>Modo Furtivo</b>: los cazadores se llevaron ${stolen.map(a => a.e + ' ' + a.n).join(', ')} 😱`);
+      if (s.team.length === 0) return this.gameOver();
+    }
     if (b.kind === 'jefe') {
       if (won) {
         if (s.country.secret) return this.victory();   // ¡venciste al Cabecilla en Monteverde!
@@ -199,7 +239,10 @@ export class Game {
         s.hearts = Math.min(RULES.MAX_HEARTS, s.hearts + 1);
         s.released += 2;                                // liberás a los animales que tenían cautivos
         this.log(`🌿 Liberaste a los animales cautivos de ${s.country.n} (conservación +2)`);
+        this.award('prov1'); this.checkConserva();
+        if (s.mode === 'furtivo') this.award('furtivo');
         const last = s.cleared >= RULES.RUN_LENGTH;
+        if (last) this.award('prov7');
         return this.showEvent('🏆', last ? '¡Las 7 provincias a salvo!' : '¡Provincia liberada!',
           last
             ? `Recorriste las 7 provincias 🇨🇷 y desbarataste a los furtivos. Tu refugio se fortalece… y se abre el sendero al bosque nuboso de Monteverde. ☁️`
@@ -217,6 +260,7 @@ export class Game {
         const it = E.pick(RARE_ITEMS);
         s.bag.push(it);
         s.released += 1;
+        this.award('traficantes'); this.checkConserva();
         this.log(`🏆 Frenaste a los traficantes: doble recuperación + ${it.e} <b>${it.n}</b> (conservación +1)`);
         return this.showEvent('🏆', '¡Traficantes frenados!',
           `Liberaste a los animales que llevaban 🌿 (conservación +1). Tu refugio sube <b>DOBLE</b> y te llevás un objeto raro: ${it.e} <b>${it.n}</b> (+${it.atk}⚔ +${it.hp}❤).`,
@@ -294,6 +338,7 @@ export class Game {
     const [a] = t.splice(i, 1);
     if ((a.evo || 0) >= RULES.PLENO_EVO) {
       s.released++;
+      this.checkConserva();
       this.log(`🌿 Liberaste a ${a.e} <b>${a.n}</b> PLENO a la naturaleza. ¡Conservación +1! (${s.released})`);
     } else {
       this.log(`🌿 Soltaste a ${a.e} ${a.n} (aún no estaba pleno).`);
@@ -316,7 +361,7 @@ export class Game {
     this.render();
   }
   gameOver() { this.s.phase = 'over'; this.render(); }
-  victory()  { this.s.phase = 'win'; this.render(); }
+  victory()  { this.award('cabecilla'); this.award('prov7'); this.s.phase = 'win'; this.render(); }
 
   render() { if (this.ui) this.ui.render(this.s); }
 }

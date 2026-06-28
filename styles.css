@@ -285,3 +285,49 @@ details.how p{margin-top:8px;color:#d8cdb2;line-height:1.5}
   .side-label{font-size:12px}.vs-badge{font-size:15px}.battle-msg{font-size:13px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== meta: botones, colección, logros, toast, modo ===== */
+.soundbtn.meta1{right:108px}
+.soundbtn.meta2{right:60px}
+@media(max-width:520px){ .soundbtn.meta1{right:92px} .soundbtn.meta2{right:50px} }
+
+.modal.panel{max-width:600px;max-height:84vh;overflow-y:auto;text-align:left;padding:18px}
+.panelhead{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:-18px;
+  background:linear-gradient(180deg,#13302a,#13302aee);padding:6px 0 8px;margin:-4px 0 6px;border-bottom:1px solid var(--brass-deep)}
+.panelhead h3{margin:0;font-family:'Fraunces',serif;font-size:18px}
+.panelsub{color:#bcae90;font-size:12px;margin:0 0 10px}
+.btn.ghost{background:transparent;border:1px solid rgba(196,160,78,.4);font-size:12px;padding:5px 9px}
+
+.dexgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:7px}
+.dexcell{border:1px solid rgba(196,160,78,.18);border-radius:9px;background:rgba(0,0,0,.18);padding:5px 3px;text-align:center}
+.dexcell.got{background:linear-gradient(180deg,#f4ead2,#e7d6b0);border-color:var(--paper-edge)}
+.dexcell.leg.got{background:linear-gradient(180deg,#fff3c4,#ffe08a);border-color:var(--gold)}
+.dexart{height:46px;display:flex;align-items:center;justify-content:center}
+.dexart img{height:100%;object-fit:contain}
+.dexart .qm{font-size:22px;color:#6b7a5e}
+.dexn{font-size:9px;line-height:1.1;margin-top:3px;color:#3a2a1e}
+.dexcell.locked .dexn{color:#7a8a6e}
+
+.achlist{display:flex;flex-direction:column;gap:6px}
+.achrow{display:flex;align-items:center;gap:10px;border:1px solid rgba(196,160,78,.18);border-radius:10px;padding:8px 10px;background:rgba(0,0,0,.16)}
+.achrow.got{background:linear-gradient(180deg,rgba(110,180,90,.16),rgba(0,0,0,.1));border-color:rgba(140,196,84,.5)}
+.ache{font-size:23px;width:30px;text-align:center}
+.achtx{flex:1;min-width:0}
+.achn{font-weight:700;font-size:13px;color:#e7dcc0}
+.achd{font-size:11px;color:#a9b596}
+.achrow.locked .achn{color:#8a9a7e}
+.achok{color:#9cc454;font-weight:900;font-size:18px}
+
+.toast{position:fixed;top:14px;left:50%;transform:translate(-50%,-20px);z-index:60;display:flex;align-items:center;gap:9px;
+  background:linear-gradient(180deg,#1f3d22,#15301a);border:1px solid var(--gold);border-radius:12px;padding:9px 15px;
+  color:#f0e7cf;font-size:13px;box-shadow:0 12px 30px rgba(0,0,0,.5);opacity:0;transition:transform .3s,opacity .3s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast .te{font-size:20px}
+
+.modesel{border:1px solid rgba(196,160,78,.25);border-radius:12px;padding:10px 12px;margin:0 0 12px;background:rgba(0,0,0,.14);text-align:center}
+.modesel .ms-k{display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);margin-bottom:6px}
+.ms-opts{display:inline-flex;gap:6px;margin-bottom:6px}
+.ms-opt{font-family:'DM Mono',monospace;font-size:13px;padding:7px 14px;border:1px solid rgba(196,160,78,.4);background:rgba(11,26,23,.6);color:#d8cdb2;border-radius:8px;cursor:pointer}
+.ms-opt.on{background:#9cc454;color:#14210f;border-color:#9cc454;font-weight:700}
+.ms-opt.on.danger{background:#c0492f;border-color:#c0492f;color:#fff}
+.ms-d{display:block;font-size:11px;color:#bcae90;max-width:48ch;margin:0 auto;line-height:1.45}
