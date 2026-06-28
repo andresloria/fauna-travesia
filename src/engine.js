@@ -154,61 +154,99 @@ export function genTrade(maxLevel) {
 }
 export function biomesOf(country) { return [...new Set(country.pool.map(k => SP[k].bio))]; }
 
-// ---------- combate (autobattler con efectos) ----------
-// Resuelve la pelea entera y devuelve el resultado + los "pasos" para animar.
-// Cada paso reporta el hp resultante de los dos del frente, quién cayó y qué
-// efectos se dispararon (fx) para que la UI los muestre.
-// result: 'W' (gana tu equipo) | 'L' (gana B) | 'T' (empate, cuenta como derrota)
+// ---------- combate SIMULTÁNEO (autobattler estratégico) ----------
+// TODOS los animales de ambos equipos pelean a la vez. En cada ronda actúan por
+// orden de VELOCIDAD (mayor primero); los de igual velocidad atacan AL MISMO
+// TIEMPO (su daño se calcula con el estado al inicio del "tier" → pueden matarse
+// mutuamente). El efecto 'first' (primer golpe) da prioridad por encima de la
+// velocidad UNA sola vez por pelea; luego ese animal va por su velocidad normal.
+// Objetivo: AL AZAR entre los enemigos vivos, salvo que haya animal(es) con
+// ESCUDO → funcionan como TAUNT (hay que pegarles a ellos; 50/50 si hay 2).
+// Efectos: escudo (taunt + absorbe el 1er golpe), púas (devuelve 1), rage
+// (+2⚔ por compañero caído), veneno y regenera (al final de la ronda).
+// Pasos para animar:
+//   { kind:'strike', attacks:[{from,to,dmg,fx:[]}], faints:[uid], hp:{uid:hp} }
+//   { kind:'effect', effects:[{uid,to?,type}],      faints:[uid], hp:{uid:hp} }
+// result: 'W' (gana A) | 'L' (gana B) | 'T' (empate = derrota).
+// fallenAUids: uids del equipo A que cayeron (para el Modo Furtivo).
 export function fight(teamA, teamB) {
-  const mk = (c) => ({ uid: c.uid, atk: c.atk, hp: c.hp, max: c.hp, spd: c.spd || 0, ab: c.ab, shield: c.ab === 'shield' });
-  const A = teamA.map(mk), B = teamB.map(mk);
-  let fallenA = 0, fallenB = 0;
+  const mk = (c, side) => ({
+    uid: c.uid, side, atk: c.atk, hp: c.hp, max: c.hp, spd: c.spd || 0, ab: c.ab,
+    shieldAbsorb: c.ab === 'shield',   // absorbe el primer golpe (una vez)
+    firstReady: c.ab === 'first',      // prioridad por encima de la velocidad (una vez)
+    alive: true,
+  });
+  const A = teamA.map(c => mk(c, 'A')), B = teamB.map(c => mk(c, 'B'));
+  const ALL = [...A, ...B];
+  const fallen = { A: 0, B: 0 };
   const steps = [];
-  let g = 0;
 
-  while (A.length && B.length && g++ < 600) {
-    const a = A[0], b = B[0];
-    const fx = [];
-    const atkA = a.atk + (a.ab === 'rage' ? 2 * fallenA : 0);
-    const atkB = b.atk + (b.ab === 'rage' ? 2 * fallenB : 0);
+  const aliveIn = (arr) => arr.filter(x => x.alive);
+  const foesOf = (side) => aliveIn(side === 'A' ? B : A);
+  const hpSnap = () => { const o = {}; ALL.forEach(x => { o[x.uid] = Math.max(0, x.hp); }); return o; };
+  const prio = (x) => (x.firstReady ? 1e6 : 0) + x.spd;     // clave de orden del tier
+  // objetivo: al azar entre los enemigos; si hay escudo(s), taunt (50/50 si 2)
+  const pickTarget = (attacker) => {
+    const foes = foesOf(attacker.side);
+    if (!foes.length) return null;
+    const shields = foes.filter(f => f.ab === 'shield');
+    const poolT = shields.length ? shields : foes;
+    return poolT[rnd(poolT.length)];
+  };
+  const reapFaints = () => {
+    const faints = [];
+    ALL.forEach(x => { if (x.alive && x.hp <= 0) { x.alive = false; fallen[x.side]++; faints.push(x.uid); } });
+    return faints;
+  };
 
-    // un golpe: aplica escudo (absorbe una vez) y púas (devuelve 1 al atacante)
-    const hit = (attacker, dmg, defender) => {
-      if (defender.shield && dmg > 0) { defender.shield = false; fx.push('shield'); return; }
-      defender.hp -= dmg;
-      if (defender.ab === 'thorns' && dmg > 0) { attacker.hp -= 1; fx.push('thorns'); }
-    };
-
-    // quién pega primero: el de más VELOCIDAD (el efecto 'first' = +100, siempre primero)
-    const spdA = a.spd + (a.ab === 'first' ? 100 : 0);
-    const spdB = b.spd + (b.ab === 'first' ? 100 : 0);
-    const aFirst = spdA > spdB;
-    const bFirst = spdB > spdA;
-    if (aFirst) {
-      hit(a, atkA, b);
-      if (b.hp > 0) hit(b, atkB, a); else fx.push('first');
-    } else if (bFirst) {
-      hit(b, atkB, a);
-      if (a.hp > 0) hit(a, atkA, b); else fx.push('first');
-    } else {
-      hit(a, atkA, b); hit(b, atkB, a);
+  let guard = 0;
+  while (aliveIn(A).length && aliveIn(B).length && guard++ < 400) {
+    // ----- una RONDA: tiers de mayor a menor (prioridad 'first', luego velocidad) -----
+    const tiers = [...new Set(aliveIn(ALL).map(prio))].sort((p, q) => q - p);
+    for (const k of tiers) {
+      if (!aliveIn(A).length || !aliveIn(B).length) break;
+      const group = aliveIn(ALL).filter(x => prio(x) === k);
+      if (!group.length) continue;
+      // SIMULTÁNEO: cada uno elige objetivo y daño con el estado al inicio del tier
+      const plan = [];
+      for (const at of group) {
+        const tgt = pickTarget(at);
+        if (!tgt) continue;
+        const dmg = at.atk + (at.ab === 'rage' ? 2 * fallen[at.side] : 0);
+        plan.push({ at, tgt, dmg });
+        if (at.firstReady) at.firstReady = false;   // consume la prioridad (una vez por pelea)
+      }
+      const attacks = [];
+      for (const p of plan) {
+        const fx = [];
+        let dealt = p.dmg;
+        if (p.tgt.alive) {
+          if (p.tgt.shieldAbsorb && dealt > 0) { p.tgt.shieldAbsorb = false; dealt = 0; fx.push('shield'); }
+          else if (dealt > 0) { p.tgt.hp -= dealt; }
+          if (p.tgt.ab === 'thorns' && p.dmg > 0) { p.at.hp -= 1; fx.push('thorns'); }
+        }
+        attacks.push({ from: p.at.uid, to: p.tgt.uid, dmg: dealt, fx });
+      }
+      steps.push({ kind: 'strike', attacks, faints: reapFaints(), hp: hpSnap() });
     }
-
-    // veneno: el portador (si sigue vivo) baja 1 ❤ al enemigo del frente vivo
-    if (a.hp > 0 && a.ab === 'poison' && b.hp > 0) { b.hp -= 1; fx.push('poison'); }
-    if (b.hp > 0 && b.ab === 'poison' && a.hp > 0) { a.hp -= 1; fx.push('poison'); }
-    // regenera: si sobrevivió el turno, +1 ❤ (sin pasar su máximo)
-    if (a.hp > 0 && a.ab === 'heal' && a.hp < a.max) { a.hp++; fx.push('heal'); }
-    if (b.hp > 0 && b.ab === 'heal' && b.hp < b.max) { b.hp++; fx.push('heal'); }
-
-    const faintA = a.hp <= 0, faintB = b.hp <= 0;
-    steps.push({ aUid: a.uid, bUid: b.uid, aHp: a.hp, bHp: b.hp, faintA, faintB, fx });
-    if (faintA) { A.shift(); fallenA++; }
-    if (faintB) { B.shift(); fallenB++; }
+    // ----- fin de ronda: veneno (DoT) y regenera -----
+    const effects = [];
+    for (const x of aliveIn(ALL)) {
+      if (x.ab === 'poison') {
+        const foes = foesOf(x.side);
+        if (foes.length) { const t = foes[rnd(foes.length)]; t.hp -= 1; effects.push({ uid: x.uid, to: t.uid, type: 'poison' }); }
+      }
+    }
+    for (const x of aliveIn(ALL)) {
+      if (x.ab === 'heal' && x.hp < x.max) { x.hp++; effects.push({ uid: x.uid, type: 'heal' }); }
+    }
+    if (effects.length) steps.push({ kind: 'effect', effects, faints: reapFaints(), hp: hpSnap() });
   }
 
-  const result = (A.length && !B.length) ? 'W' : (B.length && !A.length) ? 'L' : 'T';
-  return { result, steps };
+  const result = aliveIn(A).length && !aliveIn(B).length ? 'W'
+    : aliveIn(B).length && !aliveIn(A).length ? 'L' : 'T';
+  const fallenAUids = A.filter(x => !x.alive).map(x => x.uid);
+  return { result, steps, fallenAUids };
 }
 
 export { SP, BIOMES, COUNTRIES, ITEMS, RARE_ITEMS, ABILITIES, RULES };

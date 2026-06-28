@@ -84,12 +84,14 @@ test('drawCountry no repite el país que acaba de salir', () => {
   }
 });
 
+const finalHp = (steps, uid) => steps[steps.length - 1].hp[uid];
+
 test('efecto Primer golpe: tumba sin recibir daño', () => {
   const A = [{ uid: 1, atk: 5, hp: 3, ab: 'first' }];
   const B = [{ uid: 2, atk: 9, hp: 3, ab: null }];
   const { result, steps } = E.fight(A, B);
   assert.equal(result, 'W', 'el de primer golpe gana');
-  assert.equal(steps[0].aHp, 3, 'no recibió daño porque tumbó al rival primero');
+  assert.equal(finalHp(steps, 1), 3, 'no recibió daño porque tumbó al rival primero');
 });
 
 test('velocidad: el más rápido pega primero y puede tumbar sin recibir daño', () => {
@@ -97,7 +99,39 @@ test('velocidad: el más rápido pega primero y puede tumbar sin recibir daño',
   const B = [{ uid: 2, atk: 9, hp: 3, spd: 1, ab: null }];   // lento pero fuerte
   const { result, steps } = E.fight(A, B);
   assert.equal(result, 'W', 'el más rápido gana el intercambio');
-  assert.equal(steps[0].aHp, 3, 'no recibió daño porque pegó primero y tumbó al lento');
+  assert.equal(finalHp(steps, 1), 3, 'no recibió daño porque pegó primero y tumbó al lento');
+});
+
+test('Primer golpe: prioridad UNA vez por pelea, luego manda la velocidad', () => {
+  const A = [{ uid: 1, atk: 1, hp: 30, spd: 1, ab: 'first' }];  // lento, pero con prioridad
+  const B = [{ uid: 2, atk: 1, hp: 30, spd: 5, ab: null }];     // rápido
+  const strikes = E.fight(A, B).steps.filter(s => s.kind === 'strike');
+  assert.equal(strikes[0].attacks[0].from, 1, 'la PRIMERA acción es del de primer golpe');
+  assert.ok(strikes.some((s, i) => i > 0 && s.attacks[0].from === 2), 'luego el más rápido actúa antes');
+});
+
+test('empate de velocidad: atacan a la vez y pueden caer juntos (T)', () => {
+  const A = [{ uid: 1, atk: 5, hp: 3, spd: 3, ab: null }];
+  const B = [{ uid: 2, atk: 5, hp: 3, spd: 3, ab: null }];
+  const { result, steps } = E.fight(A, B);
+  assert.equal(result, 'T', 'doble KO simultáneo cuenta como empate');
+  const s = steps.find(x => x.kind === 'strike');
+  assert.deepEqual(new Set(s.faints), new Set([1, 2]), 'caen los dos en el mismo tier');
+});
+
+test('Escudo = TAUNT: hay que pegarle al del escudo, no al débil', () => {
+  const A = [{ uid: 1, atk: 3, hp: 8, spd: 5, ab: null }];
+  const B = [{ uid: 2, atk: 1, hp: 6, spd: 1, ab: 'shield' },
+             { uid: 3, atk: 1, hp: 1, spd: 1, ab: null }];
+  const first = E.fight(A, B).steps.find(s => s.kind === 'strike');
+  const atk = first.attacks.find(a => a.from === 1);
+  assert.equal(atk.to, 2, 'el atacante apunta al escudo (taunt), no al de 1 ❤');
+});
+
+test('combate simultáneo: 3 atacantes a la vez tumban al solitario', () => {
+  const A = [{ uid: 1, atk: 2, hp: 4, spd: 5 }, { uid: 2, atk: 2, hp: 4, spd: 5 }, { uid: 3, atk: 2, hp: 4, spd: 5 }];
+  const B = [{ uid: 9, atk: 3, hp: 5, spd: 5 }];
+  assert.equal(E.fight(A, B).result, 'W', '3 vs 1 simultáneo lo gana el trío');
 });
 
 test('mkAnimal trae velocidad (spd)', () => {

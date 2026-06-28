@@ -141,6 +141,23 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 /* emblema del enemigo (cazador / cabecilla en pixel) */
 .opp-emblem{height:30px;vertical-align:middle;image-rendering:pixelated;
   filter:drop-shadow(0 1px 2px rgba(0,0,0,.6));margin-right:3px}
+/* filas de equipo en el combate simultáneo (cartas compactas) */
+.teamrow{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;width:100%;min-height:44px;margin:2px 0}
+.teamrow .battlecard{width:96px;margin:0;transition:transform .18s ease}
+.teamrow .battlecard .art{height:48px}
+.teamrow .battlecard .an{font-size:10px;line-height:1.12}
+.teamrow .battlecard .stage{font-size:7.5px}
+.teamrow .battlecard .bio{font-size:11px}
+.teamrow .battlecard .bstats{font-size:9px;gap:3px}
+.teamrow .battlecard .abil{font-size:7.5px;padding:1px 4px}
+.teamrow .battlecard.fainted{opacity:.34;filter:grayscale(.7)}
+@media(max-width:520px){
+  .teamrow{gap:3px}
+  .teamrow .battlecard{width:70px}
+  .teamrow .battlecard .art{height:36px}
+  .teamrow .battlecard .an{font-size:8.5px}
+  .teamrow .battlecard .bstats{font-size:8px}
+}
 /* zona de duelo: los dos que pelean, enfrentados (tu carta arriba, enemiga abajo) */
 .duel{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%}
 .duelslot{display:flex;justify-content:center;min-height:0}

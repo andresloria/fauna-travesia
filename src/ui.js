@@ -287,14 +287,15 @@ export function createUI(game) {
       <div class="hitlayer"></div></div>`;
   }
 
+  // Combate SIMULTÁNEO: dos filas (tu equipo arriba, enemigo abajo). Cada paso del
+  // motor es un "tier" (los de igual velocidad embisten a la vez) o un efecto de
+  // fin de ronda. La UI solo anima los `steps` que ya calculó el motor.
   function playBattle(s, done) {
-    window.faunaMusic?.set('battle');   // entra el tema de combate
+    window.faunaMusic?.set('battle');
     const b = s.battle;
-    const max = {}, abOf = {};
-    s.team.forEach(a => { max[a.uid] = a.hp; abOf[a.uid] = a.ab; });
-    b.enemy.forEach(a => { max[a.uid] = a.hp; abOf[a.uid] = a.ab; });
-    const hp = {}; Object.keys(max).forEach(u => hp[u] = max[u]);
-    const nameOf = (uid) => { const a = s.team.find(x => x.uid === uid) || b.enemy.find(x => x.uid === uid); return a ? a.e + ' ' + a.n : ''; };
+    const max = {}, hp = {};
+    const sideA = new Set(s.team.map(a => a.uid));   // tu equipo (arriba)
+    [...s.team, ...b.enemy].forEach(a => { max[a.uid] = a.hp; hp[a.uid] = a.hp; });
 
     renderRunbar(s);
     phaseArea.innerHTML = `
@@ -302,60 +303,47 @@ export function createUI(game) {
       <div class="arena">
         <div class="arenabg" style="background-image:url('${sceneFor(s.country)}')"></div>
         <div class="side-label">🏕️ Tu refugio</div>
-        <div class="bench" id="benchA"></div>
-        <div class="duel">
-          <div class="duelslot" id="duelA"></div>
-          <div class="vs-badge">VS</div>
-          <div class="duelslot" id="duelB"></div>
-        </div>
-        <div class="bench" id="benchB"></div>
+        <div class="teamrow" id="rowA">${s.team.map(a => battleCard(a, max[a.uid])).join('')}</div>
+        <div class="vs-badge">VS</div>
+        <div class="teamrow" id="rowB">${b.enemy.map(a => battleCard(a, max[a.uid])).join('')}</div>
         <div class="side-label enemy-label">${enemyEmblem(b.kind) || b.oppEmoji} ${b.oppName}</div>
         <div class="battle-msg" id="bmsg">¡Empieza el combate!</div>
       </div>`;
 
-    // ritmo del combate (ms) — subir para más lento, bajar para más rápido
-    const T_START = 1000, T_IMPACT = 600, T_SETTLE = 1050, T_END = 1900;
-    const sideA = new Set(s.team.map(a => a.uid));   // tu equipo arriba, enemigo abajo
-    const DY = window.innerWidth <= 520 ? 16 : 26;   // duelo vertical: tu carta baja, la enemiga sube
-    const aliveA = new Set(s.team.map(a => a.uid)), aliveB = new Set(b.enemy.map(a => a.uid));
-    const animOf = (uid) => s.team.find(x => x.uid === uid) || b.enemy.find(x => x.uid === uid);
+    // ritmo (ms) — subí para más lento
+    const T_START = 700, T_LUNGE = 540, T_SETTLE = 680, T_END = 1700;
+    const DY = window.innerWidth <= 520 ? 11 : 16;
     const card = (uid) => document.getElementById('bc-' + uid);
-    const lunge = (uid) => { const el = card(uid); if (el) el.style.transform = `translateY(${sideA.has(uid) ? DY : -DY}px) scale(1.07)`; };
-    const rest = (uid) => { const el = card(uid); if (el) el.style.transform = 'scale(1.04)'; };
+    const dead = (uid) => { const el = card(uid); return el && el.classList.contains('fainted'); };
+    const lunge = (uid) => { const el = card(uid); if (el && !dead(uid)) el.style.transform = `translateY(${sideA.has(uid) ? DY : -DY}px) scale(1.06)`; };
+    const rest = (uid) => { const el = card(uid); if (el && !dead(uid)) el.style.transform = ''; };
     const flash = (uid) => { const el = card(uid); if (!el) return; const h = el.querySelector('.hitlayer'); if (!h) return; h.classList.remove('flash'); void h.offsetWidth; h.classList.add('flash'); };
     const setHp = (uid) => {
       const el = card(uid); if (!el) return;
       const pct = Math.max(0, Math.round(100 * Math.max(0, hp[uid]) / max[uid]));
-      const f = el.querySelector('.hpfill');
-      f.style.width = pct + '%';
-      f.className = 'hpfill' + (pct <= 25 ? ' low' : pct <= 50 ? ' mid' : '');
+      const f = el.querySelector('.hpfill'); if (f) { f.style.width = pct + '%'; f.className = 'hpfill' + (pct <= 25 ? ' low' : pct <= 50 ? ' mid' : ''); }
       const c = el.querySelector('.hpcur'); if (c) c.textContent = Math.max(0, hp[uid]);
     };
     const popup = (uid, text, cls) => {
       const el = card(uid); if (!el) return;
       const p = document.createElement('span'); p.className = 'popup ' + cls; p.textContent = text;
-      el.appendChild(p); setTimeout(() => p.remove(), 1150);
+      el.appendChild(p); setTimeout(() => p.remove(), 1100);
     };
-    // miniatura para la "banca" (los que no están peleando)
-    const benchThumb = (a) => {
-      const pct = Math.max(0, Math.round(100 * Math.max(0, hp[a.uid]) / max[a.uid]));
-      return `<div class="benchthumb"><div class="thart"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
-        <div class="thbar"><div class="thfill" style="width:${pct}%"></div></div></div>`;
+    const faint = (uid) => { const el = card(uid); if (el) el.classList.add('fainted'); };
+    // aplica el snapshot de vida del paso: barras + popups de daño/cura + destello
+    const applyHp = (snap) => {
+      Object.keys(snap).forEach(uid => {
+        const d = hp[uid] - snap[uid];
+        if (d !== 0) {
+          hp[uid] = snap[uid]; setHp(uid);
+          if (d > 0) { popup(uid, '−' + d, 'dmg'); flash(uid); }
+          else { popup(uid, '+' + (-d), 'heal'); }
+        }
+      });
     };
-    // pone a los dos que pelean en la ZONA DE DUELO (centro, enfrentados) y al resto en las bancas
-    let curA = null, curB = null;
-    const setDuel = (auid, buid) => {
-      document.getElementById('duelA').innerHTML = battleCard(animOf(auid), max[auid]);
-      document.getElementById('duelB').innerHTML = battleCard(animOf(buid), max[buid]);
-      card(auid).classList.add('front'); card(auid).style.transform = 'scale(1.04)';
-      card(buid).classList.add('front', 'enemy'); card(buid).style.transform = 'scale(1.04)';
-      setHp(auid); setHp(buid);
-      document.getElementById('benchA').innerHTML = s.team.filter(a => a.uid !== auid && aliveA.has(a.uid)).map(benchThumb).join('');
-      document.getElementById('benchB').innerHTML = b.enemy.filter(a => a.uid !== buid && aliveB.has(a.uid)).map(benchThumb).join('');
-      curA = auid; curB = buid;
-    };
+    Object.keys(max).forEach(setHp);
     const msg = document.getElementById('bmsg'), turnb = document.getElementById('turnbadge');
-    setDuel(s.team[0].uid, b.enemy[0].uid);   // mostrar el duelo de entrada (sin esperar el primer turno)
+    const fxLabel = (keys) => [...new Set(keys)].map(k => FX[k] + ' ' + (ABILITIES[k] ? ABILITIES[k].n : '')).join('  ');
 
     let i = 0;
     const tick = () => {
@@ -365,30 +353,25 @@ export function createUI(game) {
       }
       const st = b.steps[i++];
       if (turnb) turnb.textContent = 'Turno ' + i;
-      if (st.aUid !== curA || st.bUid !== curB) setDuel(st.aUid, st.bUid);   // traé a los nuevos al centro
-      lunge(st.aUid); lunge(st.bUid);   // se embisten en el centro (vertical)
-      const fxTxt = (st.fx && st.fx.length) ? ' · ' + [...new Set(st.fx)].map(k => FX[k] + ' ' + (ABILITIES[k] ? ABILITIES[k].n : '')).join('  ') : '';
-      if (msg) msg.innerHTML = `${nameOf(st.aUid)} ⚔️ ${nameOf(st.bUid)}${fxTxt}`;
-      setTimeout(() => {
-        const dA = hp[st.aUid] - st.aHp, dB = hp[st.bUid] - st.bHp;
-        hp[st.aUid] = st.aHp; hp[st.bUid] = st.bHp;
-        setHp(st.aUid); setHp(st.bUid);
-        if (dB > 0) popup(st.bUid, '−' + dB, 'dmg'); else if (dB < 0) popup(st.bUid, '+' + (-dB), 'heal');
-        if (dA > 0) popup(st.aUid, '−' + dA, 'dmg'); else if (dA < 0) popup(st.aUid, '+' + (-dA), 'heal');
-        (st.fx || []).forEach(k => {
-          const sym = FX[k];
-          if (k === 'poison') { if (abOf[st.aUid] === 'poison') popup(st.bUid, sym, 'fx'); if (abOf[st.bUid] === 'poison') popup(st.aUid, sym, 'fx'); }
-          else if (k === 'thorns') { if (abOf[st.aUid] === 'thorns') popup(st.bUid, sym, 'fx'); if (abOf[st.bUid] === 'thorns') popup(st.aUid, sym, 'fx'); }
-          else if (k === 'shield') { if (abOf[st.aUid] === 'shield') popup(st.aUid, sym, 'fx'); if (abOf[st.bUid] === 'shield') popup(st.bUid, sym, 'fx'); }
-          else if (k === 'heal') { if (abOf[st.aUid] === 'heal') popup(st.aUid, sym, 'fx'); if (abOf[st.bUid] === 'heal') popup(st.bUid, sym, 'fx'); }
-        });
-        if (dB > 0) flash(st.bUid);
-        if (dA > 0) flash(st.aUid);
-        rest(st.aUid); rest(st.bUid);   // vuelven al centro tras el golpe
-        if (st.faintA) { const c = card(st.aUid); if (c) c.classList.add('fainted'); aliveA.delete(st.aUid); }
-        if (st.faintB) { const c = card(st.bUid); if (c) c.classList.add('fainted'); aliveB.delete(st.bUid); }
+      if (st.kind === 'strike') {
+        const froms = [...new Set(st.attacks.map(a => a.from))];
+        froms.forEach(lunge);   // embisten todos los del tier a la vez
+        const fxk = st.attacks.flatMap(a => a.fx || []);
+        if (msg) msg.innerHTML = '⚔️ ¡Chocan!' + (fxk.length ? ' · ' + fxLabel(fxk) : '');
+        setTimeout(() => {
+          applyHp(st.hp);
+          st.attacks.forEach(a => { if ((a.fx || []).includes('shield')) popup(a.to, FX.shield, 'fx'); if ((a.fx || []).includes('thorns')) popup(a.from, FX.thorns, 'fx'); });
+          (st.faints || []).forEach(faint);
+          froms.forEach(rest);
+          setTimeout(tick, T_SETTLE);
+        }, T_LUNGE);
+      } else {   // efecto de fin de ronda (veneno / regenera)
+        if (msg) msg.innerHTML = fxLabel(st.effects.map(e => e.type)) || 'Fin de ronda';
+        applyHp(st.hp);
+        st.effects.forEach(e => popup(e.type === 'poison' ? e.to : e.uid, FX[e.type], 'fx'));
+        (st.faints || []).forEach(faint);
         setTimeout(tick, T_SETTLE);
-      }, T_IMPACT);
+      }
     };
     setTimeout(tick, T_START);
   }
