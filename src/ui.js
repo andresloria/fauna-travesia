@@ -6,7 +6,9 @@
 
 import { BIOMES, ABILITIES, RULES, PLAYER_FLAGS } from './data.js';
 
-const ART = (key) => `assets/animales/${key}.svg`;
+// Especies con arte ilustrado propio (PNG). El resto usa el vector OpenMoji (.svg).
+const PNG_ART = new Set(['jaguar', 'perezoso']);
+const ART = (key) => `assets/animales/${key}.${PNG_ART.has(key) ? 'png' : 'svg'}`;
 const STAGE = ['HERIDO', 'RECUPERA', 'PLENO'];   // etapas de rehabilitación
 
 export function createUI(game) {
