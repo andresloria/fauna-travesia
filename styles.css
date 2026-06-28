@@ -32,6 +32,9 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .mapbg.ocean{opacity:.13;background:
   repeating-linear-gradient(0deg,transparent 0 26px,rgba(94,168,180,.6) 26px 28px,transparent 28px 54px);
   -webkit-mask:none;mask:none}
+/* fondo: mapa de Costa Rica en pixel (sutil, detrás de los nodos) */
+.mapbg.cr{opacity:.20;background-size:cover;background-position:center;image-rendering:pixelated;
+  -webkit-mask:none;mask:none}
 .maptag{position:absolute;top:11px;left:13px;z-index:3;font-family:'DM Mono',monospace;font-size:10px;
   letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:7px}
 .maptag b{font-family:'Fraunces',serif;font-weight:900;font-size:17px;letter-spacing:0;text-transform:none}
@@ -127,7 +130,17 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .editbtns{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap}
 .editbtns .btn{padding:9px 15px;font-size:10px}
 
-.arena{display:flex;flex-direction:column;gap:5px;align-items:center;width:100%}
+.arena{position:relative;display:flex;flex-direction:column;gap:5px;align-items:center;width:100%;
+  padding:10px 8px;border-radius:14px;overflow:hidden;border:1px solid rgba(196,160,78,.18)}
+/* paisaje de la provincia detrás del combate */
+.arenabg{position:absolute;inset:0;background-size:cover;background-position:center;
+  opacity:.30;pointer-events:none;image-rendering:pixelated}
+.arena::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(20,8,12,.45),rgba(20,8,12,.30) 45%,rgba(20,8,12,.6))}
+.arena > :not(.arenabg){position:relative;z-index:1}
+/* emblema del enemigo (cazador / cabecilla en pixel) */
+.opp-emblem{height:30px;vertical-align:middle;image-rendering:pixelated;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.6));margin-right:3px}
 /* zona de duelo: los dos que pelean, enfrentados (tu carta arriba, enemiga abajo) */
 .duel{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%}
 .duelslot{display:flex;justify-content:center;min-height:0}

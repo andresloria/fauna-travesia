@@ -64,11 +64,24 @@ export function createUI(game) {
   }
   function renderLog(s) { logBox.innerHTML = s.log.map(l => `<div class="le">${l}</div>`).join(''); }
 
-  // ---------- fondo del país ----------
+  // ---------- escenarios por provincia ----------
+  const PROV_SCENE = {
+    'San José': 'lugar_sanjose', 'Alajuela': 'lugar_alajuela', 'Cartago': 'lugar_cartago',
+    'Heredia': 'lugar_heredia', 'Guanacaste': 'lugar_guanacaste', 'Puntarenas': 'lugar_puntarenas',
+    'Limón': 'lugar_limon', 'Monteverde': 'lugar_monteverde',
+  };
+  const SCN = (slug) => `assets/escenarios/${slug}.png`;
+  // paisaje/lugar emblemático de la provincia (fondo de combate y descanso)
+  const sceneFor = (c) => SCN(c && PROV_SCENE[c.n] ? PROV_SCENE[c.n] : 'bioma_bosque');
+  // emblema del bando enemigo (cazador o cabecilla en pixel); null si es animal salvaje
+  function enemyEmblem(kind) {
+    const slug = kind === 'jefe' ? 'cabecilla' : (kind === 'cazador' || kind === 'retador') ? 'cazador' : null;
+    return slug ? `<img class="opp-emblem" src="${SCN(slug)}" alt="">` : '';
+  }
+
+  // ---------- fondo del mapa: Costa Rica en pixel ----------
   function countryBg(s) {
-    if (!s.country) return '';
-    if (s.country.ocean || !s.country.map) return `<div class="mapbg ocean"></div>`;
-    return `<div class="mapbg" style="-webkit-mask-image:url('assets/paises/${s.country.map}.svg');mask-image:url('assets/paises/${s.country.map}.svg')"></div>`;
+    return `<div class="mapbg cr" style="background-image:url('${SCN('mapa_cr')}')"></div>`;
   }
 
   // ---------- pantallas ----------
@@ -287,6 +300,7 @@ export function createUI(game) {
     phaseArea.innerHTML = `
       <div class="section-h">Combate · ${s.country.flag} ${s.country.n} <span id="turnbadge" class="turnbadge"></span></div>
       <div class="arena">
+        <div class="arenabg" style="background-image:url('${sceneFor(s.country)}')"></div>
         <div class="side-label">🏕️ Tu refugio</div>
         <div class="bench" id="benchA"></div>
         <div class="duel">
@@ -295,7 +309,7 @@ export function createUI(game) {
           <div class="duelslot" id="duelB"></div>
         </div>
         <div class="bench" id="benchB"></div>
-        <div class="side-label enemy-label">${b.oppEmoji} ${b.oppName}</div>
+        <div class="side-label enemy-label">${enemyEmblem(b.kind) || b.oppEmoji} ${b.oppName}</div>
         <div class="battle-msg" id="bmsg">¡Empieza el combate!</div>
       </div>`;
 
