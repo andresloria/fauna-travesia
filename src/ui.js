@@ -35,6 +35,8 @@ export function createUI(game) {
     const downTag = a.down ? `<span class="downtag">💤 Debilitado</span>` : '';
     const lead = opts.lead ? `<span class="leadtag">PELEA 1°</span>` : '';
     const ord = opts.order ? `<span class="ord">${opts.order}</span>` : '';
+    const items = (a.items && a.items.length)
+      ? `<div class="cititems">${a.items.map(it => `<span title="${it.n} (+${it.atk}⚔ +${it.hp}❤)">${it.e}</span>`).join('')}</div>` : '';
     return `<div class="${cls}" ${data}>
       ${lead}${rarTag}${downTag}
       <span class="stage">${stageLabel} · Nv${a.level}</span>
@@ -42,7 +44,7 @@ export function createUI(game) {
       <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
       <div class="an">${a.n}</div>
       <div class="stats"><span class="st atk">⚔${a.atk}</span><span class="st hp">❤${Math.max(0, a.hp)}</span><span class="st spd">💨${a.spd}</span><span class="st hab">🌀${a.hab || 0}</span></div>
-      ${abil}${ord}</div>`;
+      ${abil}${items}${ord}</div>`;
   }
   function teamHTML(team, o = {}) {
     if (!team.length) return `<div class="team"><div class="empty-slot">🦴</div></div>`;

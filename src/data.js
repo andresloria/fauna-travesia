@@ -40,19 +40,23 @@ export const RARITY = {
   extinto:   { n:'Extinto',    w:0.5,  cls:'r-ext',    color:'#d8643f' },
 };
 
+// Objetos TICOS — tesoros 🎁 del mapa. Dan un buen empujón de ⚔/❤ al equiparlos.
 export const ITEMS = [
-  { n:'Hoja medicinal', e:'🌿', atk:0, hp:3 },
-  { n:'Fruta madura',   e:'🍌', atk:2, hp:1 },
-  { n:'Vendaje',        e:'🩹', atk:0, hp:4 },
-  { n:'Néctar',         e:'🍯', atk:2, hp:0 },
+  { n:'Chonete',        e:'👒', atk:1, hp:5 },   // el sombrero tico: aguante
+  { n:'Salsa Lizano',   e:'🥫', atk:4, hp:1 },   // el sabor que da garra
+  { n:'Gallo pinto',    e:'🫘', atk:2, hp:4 },   // desayuno tico, puro aguante
+  { n:'Café chorreado', e:'☕', atk:4, hp:2 },   // energía pura
+  { n:'Casado',         e:'🍛', atk:3, hp:4 },   // plato completo, balanceado
+  { n:'Agua dulce',     e:'🍯', atk:2, hp:3 },   // tapa de dulce, dulzura tica
 ];
 
-// Objetos RAROS — recompensa por vencer a traficantes/cazadores.
+// Objetos RAROS y ticos — recompensa por vencer a traficantes/cazadores. Más fuertes.
 export const RARE_ITEMS = [
-  { n:'Collar GPS',      e:'📡', atk:4, hp:2 },
-  { n:'Suero vital',     e:'💉', atk:2, hp:6 },
-  { n:'Amuleto boruca',  e:'🪆', atk:3, hp:4 },
-  { n:'Piedra esfera',   e:'🪨', atk:2, hp:5 },
+  { n:'Carreta típica',    e:'🛞', atk:6, hp:5 },   // patrimonio: empuje
+  { n:'Esfera del Diquís', e:'🪨', atk:4, hp:8 },   // poder ancestral
+  { n:'Marimba',           e:'🪇', atk:8, hp:3 },   // el ritmo que envalentona
+  { n:'Guaria morada',     e:'🌸', atk:3, hp:9 },   // la flor nacional
+  { n:'Bandera tica',      e:'🇨🇷', atk:6, hp:6 },   // orgullo patrio
 ];
 
 // Banderas para el avatar del jugador (identidad, sin efecto en el juego).
