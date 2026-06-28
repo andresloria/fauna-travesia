@@ -37,7 +37,7 @@ export function createUI(game) {
       <span class="bio">${bio}</span>
       <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
       <div class="an">${a.n}</div>
-      <div class="stats"><span class="st atk">⚔${a.atk}</span><span class="st hp">❤${Math.max(0, a.hp)}</span><span class="st spd">💨${a.spd}</span></div>
+      <div class="stats"><span class="st atk">⚔${a.atk}</span><span class="st hp">❤${Math.max(0, a.hp)}</span><span class="st spd">💨${a.spd}</span><span class="st hab">🌀${a.hab || 0}</span></div>
       ${abil}${ord}</div>`;
   }
   function teamHTML(team, o = {}) {
@@ -282,7 +282,8 @@ export function createUI(game) {
   }
 
   // ---------- combate animado (DOM estable: se construye una vez y se anima) ----------
-  const FX = { poison:'☣', shield:'🛡', heal:'✚', first:'⚡', rage:'🔥', thorns:'🌵' };
+  const FX = { poison:'☣', shield:'🛡', heal:'✚', first:'⚡', rage:'🔥', thorns:'🌵', dodge:'🌀' };
+  const FXN = { dodge:'Esquiva', heal:'Regenera' };   // nombres para fx que no son ABILITIES
   // carta de combate, con barra de vida y vida actual/máx
   function battleCard(a, max) {
     const stage = Math.min(2, a.evo || 0);
@@ -295,7 +296,7 @@ export function createUI(game) {
       <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
       <div class="an">${a.n}</div>
       <div class="hpbar"><div class="hpfill"></div></div>
-      <div class="bstats"><span class="st atk">⚔${a.atk}</span><span class="st spd">💨${a.spd}</span><span class="hpnum">❤<span class="hpcur">${a.hp}</span>/${max}</span></div>
+      <div class="bstats"><span class="st atk">⚔${a.atk}</span><span class="st spd">💨${a.spd}</span><span class="st hab">🌀${a.hab || 0}</span><span class="hpnum">❤<span class="hpcur">${a.hp}</span>/${max}</span></div>
       ${ab ? `<span class="abil ${ab.cls}">${ab.sym} ${ab.n}</span>` : ''}
       <div class="hitlayer"></div></div>`;
   }
@@ -324,7 +325,7 @@ export function createUI(game) {
       </div>`;
 
     // ritmo (ms) — subí para más lento
-    const T_START = 700, T_LUNGE = 540, T_SETTLE = 680, T_END = 1700;
+    const T_START = 480, T_LUNGE = 340, T_SETTLE = 360, T_END = 1500;
     const DY = window.innerWidth <= 520 ? 11 : 16;
     const card = (uid) => document.getElementById('bc-' + uid);
     const dead = (uid) => { const el = card(uid); return el && el.classList.contains('fainted'); };
@@ -356,7 +357,8 @@ export function createUI(game) {
     };
     Object.keys(max).forEach(setHp);
     const msg = document.getElementById('bmsg'), turnb = document.getElementById('turnbadge');
-    const fxLabel = (keys) => [...new Set(keys)].map(k => FX[k] + ' ' + (ABILITIES[k] ? ABILITIES[k].n : '')).join('  ');
+    const nameOf = (uid) => { const a = [...s.team, ...b.enemy].find(x => x.uid === uid); return a ? a.n : ''; };
+    const fxLabel = (keys) => [...new Set(keys)].map(k => FX[k] + ' ' + (ABILITIES[k] ? ABILITIES[k].n : (FXN[k] || ''))).join('  ');
 
     let i = 0;
     const tick = () => {
@@ -367,18 +369,24 @@ export function createUI(game) {
       const st = b.steps[i++];
       if (turnb) turnb.textContent = 'Turno ' + i;
       if (st.kind === 'strike') {
+        const a0 = st.attacks[0];                 // un atacante por paso (por turnos)
         const froms = [...new Set(st.attacks.map(a => a.from))];
-        froms.forEach(lunge);   // embisten todos los del tier a la vez
+        froms.forEach(lunge);                     // el atacante embiste a su objetivo
         const fxk = st.attacks.flatMap(a => a.fx || []);
-        if (msg) msg.innerHTML = '⚔️ ¡Chocan!' + (fxk.length ? ' · ' + fxLabel(fxk) : '');
+        if (msg) msg.innerHTML = `${nameOf(a0.from)} ⚔️ ${nameOf(a0.to)}` + (fxk.length ? ' · ' + fxLabel(fxk) : '');
         setTimeout(() => {
           applyHp(st.hp);
-          st.attacks.forEach(a => { if ((a.fx || []).includes('shield')) popup(a.to, FX.shield, 'fx'); if ((a.fx || []).includes('thorns')) popup(a.from, FX.thorns, 'fx'); });
+          st.attacks.forEach(a => {
+            const fx = a.fx || [];
+            if (fx.includes('dodge')) popup(a.to, FX.dodge, 'fx');       // esquivó: sin daño
+            if (fx.includes('shield')) popup(a.to, FX.shield, 'fx');
+            if (fx.includes('thorns')) popup(a.from, FX.thorns, 'fx');
+          });
           (st.faints || []).forEach(faint);
           froms.forEach(rest);
           setTimeout(tick, T_SETTLE);
         }, T_LUNGE);
-      } else {   // efecto de fin de ronda (veneno / regenera)
+      } else {   // efecto de fin de ronda (veneno)
         if (msg) msg.innerHTML = fxLabel(st.effects.map(e => e.type)) || 'Fin de ronda';
         applyHp(st.hp);
         st.effects.forEach(e => popup(e.type === 'poison' ? e.to : e.uid, FX[e.type], 'fx'));

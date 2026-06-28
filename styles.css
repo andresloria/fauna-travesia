@@ -141,6 +141,8 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 /* emblema del enemigo (cazador / cabecilla en pixel) */
 .opp-emblem{height:30px;vertical-align:middle;image-rendering:pixelated;
   filter:drop-shadow(0 1px 2px rgba(0,0,0,.6));margin-right:3px}
+.st.hab{color:#56c6bf}                 /* habilidad / esquiva */
+.stats,.bstats{flex-wrap:wrap}
 /* filas de equipo en el combate simultáneo (cartas compactas) */
 .teamrow{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;width:100%;min-height:44px;margin:2px 0}
 .teamrow .battlecard{width:96px;margin:0;transition:transform .18s ease}

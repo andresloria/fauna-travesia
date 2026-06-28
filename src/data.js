@@ -23,8 +23,8 @@ export const BIOMES = {
 export const ABILITIES = {
   poison:{ n:'Veneno',       sym:'☣', cls:'poison', desc:'El enemigo del frente pierde 1 ❤ cada turno aunque no lo golpeen.' },
   shield:{ n:'Escudo',       sym:'🛡', cls:'shield', desc:'Aguanta el primer golpe que recibiría sin perder vida.' },
-  heal:  { n:'Regenera',     sym:'✚', cls:'heal',   desc:'Si sobrevive el turno, recupera 1 ❤ al final.' },
-  first: { n:'Primer golpe', sym:'⚡', cls:'first',  desc:'Siempre ataca primero, sin importar la velocidad: puede tumbar al rival sin recibir daño.' },
+  heal:  { n:'Regenera',     sym:'✚', cls:'heal',   desc:'Al atacar, cura un poco de ❤ a un aliado herido al azar (según su nivel).' },
+  first: { n:'Primer golpe', sym:'⚡', cls:'first',  desc:'Ataca con prioridad la primera vez del combate; después manda la velocidad.' },
   rage:  { n:'Furia',        sym:'🔥', cls:'rage',   desc:'+2 ⚔ por cada compañero ya caído en este combate.' },
   thorns:{ n:'Púas',         sym:'🌵', cls:'thorns', desc:'Devuelve 1 de daño a quien lo ataque.' },
 };

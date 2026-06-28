@@ -110,13 +110,35 @@ test('Primer golpe: prioridad UNA vez por pelea, luego manda la velocidad', () =
   assert.ok(strikes.some((s, i) => i > 0 && s.attacks[0].from === 2), 'luego el más rápido actúa antes');
 });
 
-test('empate de velocidad: atacan a la vez y pueden caer juntos (T)', () => {
-  const A = [{ uid: 1, atk: 5, hp: 3, spd: 3, ab: null }];
-  const B = [{ uid: 2, atk: 5, hp: 3, spd: 3, ab: null }];
-  const { result, steps } = E.fight(A, B);
-  assert.equal(result, 'T', 'doble KO simultáneo cuenta como empate');
-  const s = steps.find(x => x.kind === 'strike');
-  assert.deepEqual(new Set(s.faints), new Set([1, 2]), 'caen los dos en el mismo tier');
+test('orden: a igual velocidad pega primero el de MENOS ataque', () => {
+  const A = [{ uid: 1, atk: 2, hp: 3, spd: 5, ab: null }];   // menos ataque
+  const B = [{ uid: 2, atk: 9, hp: 3, spd: 5, ab: null }];   // más ataque, misma velocidad
+  const { steps } = E.fight(A, B);
+  assert.equal(steps[0].attacks[0].from, 1, 'abre el de menos ataque, no atacan a la vez');
+  assert.equal(steps[0].attacks.length, 1, 'cada paso es UN solo atacante (no simultáneo)');
+});
+
+test('habilidad: un animal muy ágil a veces ESQUIVA el golpe', () => {
+  let dodges = 0;
+  for (let i = 0; i < 300; i++) {
+    const A = [{ uid: 1, atk: 3, hp: 50, spd: 9, hab: 0 }];
+    const B = [{ uid: 2, atk: 1, hp: 50, spd: 1, hab: 8 }];   // mucha habilidad
+    if (E.fight(A, B).steps.some(s => s.kind === 'strike' && (s.attacks[0].fx || []).includes('dodge'))) dodges++;
+  }
+  assert.ok(dodges > 0, 'con habilidad alta debería esquivar alguna vez');
+});
+
+test('regenera: al ATACAR cura a un aliado herido', () => {
+  const A = [{ uid: 1, atk: 1, hp: 12, spd: 9, ab: 'heal', level: 8 },
+             { uid: 2, atk: 1, hp: 12, spd: 9, ab: null }];
+  const B = [{ uid: 9, atk: 4, hp: 60, spd: 5, ab: null }];
+  const { steps } = E.fight(A, B);
+  let healed = false, prev = {};
+  for (const s of steps) {
+    for (const u of [1, 2]) if (prev[u] !== undefined && s.hp[u] > prev[u]) healed = true;
+    prev = s.hp;
+  }
+  assert.ok(healed, 'el de regenerar subió la vida de un aliado al atacar');
 });
 
 test('Escudo = TAUNT: hay que pegarle al del escudo, no al débil', () => {
@@ -128,10 +150,10 @@ test('Escudo = TAUNT: hay que pegarle al del escudo, no al débil', () => {
   assert.equal(atk.to, 2, 'el atacante apunta al escudo (taunt), no al de 1 ❤');
 });
 
-test('combate simultáneo: 3 atacantes a la vez tumban al solitario', () => {
+test('combate por turnos: 3 contra 1 lo gana el trío', () => {
   const A = [{ uid: 1, atk: 2, hp: 4, spd: 5 }, { uid: 2, atk: 2, hp: 4, spd: 5 }, { uid: 3, atk: 2, hp: 4, spd: 5 }];
   const B = [{ uid: 9, atk: 3, hp: 5, spd: 5 }];
-  assert.equal(E.fight(A, B).result, 'W', '3 vs 1 simultáneo lo gana el trío');
+  assert.equal(E.fight(A, B).result, 'W', '3 vs 1 lo gana el trío');
 });
 
 test('mkAnimal trae velocidad (spd)', () => {
@@ -139,10 +161,10 @@ test('mkAnimal trae velocidad (spd)', () => {
 });
 
 test('efecto Escudo: absorbe el primer golpe', () => {
-  const A = [{ uid: 1, atk: 2, hp: 5, ab: 'shield' }];
-  const B = [{ uid: 2, atk: 10, hp: 1, ab: null }];
+  const A = [{ uid: 1, atk: 2, hp: 5, spd: 1, ab: 'shield' }];
+  const B = [{ uid: 2, atk: 10, hp: 1, spd: 9, ab: null }];   // más rápido: pega primero
   const { result } = E.fight(A, B);
-  assert.equal(result, 'W', 'el escudo absorbe el golpe letal y gana');
+  assert.equal(result, 'W', 'el escudo absorbe el golpe letal y después gana');
 });
 
 test('efecto Veneno: rompe el empate a favor del portador', () => {

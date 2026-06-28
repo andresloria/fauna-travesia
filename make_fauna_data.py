@@ -18,33 +18,33 @@ EMOJI = {"Mamíferos": "🐾", "Aves": "🐦", "Anfibios": "🐸",
 
 # ---- 1) Los 27 actuales, PRESERVADOS exactos (incluye legendarios) ----
 EXISTING = {
-    "perezoso":  dict(n="Perezoso", e="🦥", atk=1, hp=7, spd=1, bio="bosque", ab="heal"),
-    "monocara":  dict(n="Mono carablanca", e="🐒", atk=2, hp=3, spd=8, bio="bosque", ab="first"),
-    "tucan":     dict(n="Tucán", e="🦜", atk=2, hp=3, spd=8, bio="bosque", ab="first"),
-    "ranadardo": dict(n="Rana dardo", e="🐸", atk=4, hp=1, spd=4, bio="bosque", ab="poison"),
-    "serpiente": dict(n="Terciopelo", e="🐍", atk=5, hp=2, spd=6, bio="bosque", ab="poison"),
-    "jaguar":    dict(n="Jaguar", e="🐆", atk=5, hp=4, spd=7, bio="bosque", ab="rage"),
-    "manigordo": dict(n="Manigordo", e="🐈", atk=3, hp=3, spd=8, bio="bosque", ab="first"),
-    "pizote":    dict(n="Pizote", e="🦝", atk=3, hp=4, spd=5, bio="bosque", ab="first"),
-    "murcielago":dict(n="Murciélago", e="🦇", atk=3, hp=2, spd=8, bio="bosque", ab="poison"),
-    "mariposa":  dict(n="Morfo azul", e="🦋", atk=2, hp=2, spd=7, bio="bosque", ab="first"),
-    "abeja":     dict(n="Abeja", e="🐝", atk=3, hp=1, spd=7, bio="bosque", ab="poison"),
-    "quetzal":   dict(n="Quetzal", e="🐦", atk=2, hp=4, spd=7, bio="montana", ab="heal"),
-    "puma":      dict(n="Puma", e="🐆", atk=5, hp=5, spd=7, bio="montana", ab="rage"),
-    "coyote":    dict(n="Coyote", e="🐺", atk=4, hp=3, spd=7, bio="montana", ab="first"),
-    "venado":    dict(n="Venado", e="🦌", atk=2, hp=6, spd=7, bio="sabana", ab="shield"),
-    "saino":     dict(n="Saíno", e="🐗", atk=4, hp=5, spd=4, bio="sabana", ab="rage"),
-    "iguana":    dict(n="Iguana", e="🦎", atk=2, hp=5, spd=4, bio="sabana", ab="thorns"),
-    "garza":     dict(n="Garza", e="🐦", atk=2, hp=3, spd=6, bio="sabana", ab="first"),
-    "cocodrilo": dict(n="Cocodrilo", e="🐊", atk=5, hp=6, spd=3, bio="agua", ab="first"),
-    "tortuga":   dict(n="Tortuga verde", e="🐢", atk=1, hp=8, spd=1, bio="agua", ab="shield"),
-    "ballena":   dict(n="Ballena jorobada", e="🐋", atk=6, hp=8, spd=3, bio="agua", ab="rage"),
-    "delfin":    dict(n="Delfín", e="🐬", atk=3, hp=3, spd=8, bio="agua", ab="first"),
-    "tiburon":   dict(n="Tiburón", e="🦈", atk=6, hp=4, spd=6, bio="agua", ab="rage"),
-    "cangrejo":  dict(n="Cangrejo", e="🦀", atk=2, hp=5, spd=3, bio="agua", ab="thorns"),
-    "basilisco": dict(n="Basilisco", e="🦎", atk=3, hp=3, spd=8, bio="agua", ab="first"),
-    "lapa":      dict(n="Lapa roja", e="🦜", atk=5, hp=6, spd=6, bio="bosque", ab="rage", leg=True),
-    "quetzaldorado": dict(n="Quetzal Dorado", e="🐦", atk=4, hp=9, spd=8, bio="montana", ab="heal", leg=True),
+    "perezoso":  dict(n="Perezoso", e="🦥", atk=1, hp=7, spd=1, hab=0, bio="bosque", ab="heal"),
+    "monocara":  dict(n="Mono carablanca", e="🐒", atk=2, hp=3, spd=8, hab=6, bio="bosque", ab="first"),
+    "tucan":     dict(n="Tucán", e="🦜", atk=2, hp=3, spd=8, hab=5, bio="bosque", ab="first"),
+    "ranadardo": dict(n="Rana dardo", e="🐸", atk=4, hp=1, spd=4, hab=4, bio="bosque", ab="poison"),
+    "serpiente": dict(n="Terciopelo", e="🐍", atk=5, hp=2, spd=6, hab=3, bio="bosque", ab="poison"),
+    "jaguar":    dict(n="Jaguar", e="🐆", atk=5, hp=4, spd=7, hab=4, bio="bosque", ab="rage"),
+    "manigordo": dict(n="Manigordo", e="🐈", atk=3, hp=3, spd=8, hab=6, bio="bosque", ab="first"),
+    "pizote":    dict(n="Pizote", e="🦝", atk=3, hp=4, spd=5, hab=3, bio="bosque", ab="first"),
+    "murcielago":dict(n="Murciélago", e="🦇", atk=3, hp=2, spd=8, hab=7, bio="bosque", ab="poison"),
+    "mariposa":  dict(n="Morfo azul", e="🦋", atk=2, hp=2, spd=7, hab=7, bio="bosque", ab="first"),
+    "abeja":     dict(n="Abeja", e="🐝", atk=3, hp=1, spd=7, hab=6, bio="bosque", ab="poison"),
+    "quetzal":   dict(n="Quetzal", e="🐦", atk=2, hp=4, spd=7, hab=5, bio="montana", ab="heal"),
+    "puma":      dict(n="Puma", e="🐆", atk=5, hp=5, spd=7, hab=4, bio="montana", ab="rage"),
+    "coyote":    dict(n="Coyote", e="🐺", atk=4, hp=3, spd=7, hab=4, bio="montana", ab="first"),
+    "venado":    dict(n="Venado", e="🦌", atk=2, hp=6, spd=7, hab=5, bio="sabana", ab="shield"),
+    "saino":     dict(n="Saíno", e="🐗", atk=4, hp=5, spd=4, hab=2, bio="sabana", ab="rage"),
+    "iguana":    dict(n="Iguana", e="🦎", atk=2, hp=5, spd=4, hab=2, bio="sabana", ab="thorns"),
+    "garza":     dict(n="Garza", e="🐦", atk=2, hp=3, spd=6, hab=4, bio="sabana", ab="first"),
+    "cocodrilo": dict(n="Cocodrilo", e="🐊", atk=5, hp=6, spd=3, hab=1, bio="agua", ab="first"),
+    "tortuga":   dict(n="Tortuga verde", e="🐢", atk=1, hp=8, spd=1, hab=0, bio="agua", ab="shield"),
+    "ballena":   dict(n="Ballena jorobada", e="🐋", atk=6, hp=8, spd=3, hab=1, bio="agua", ab="rage"),
+    "delfin":    dict(n="Delfín", e="🐬", atk=3, hp=3, spd=8, hab=6, bio="agua", ab="first"),
+    "tiburon":   dict(n="Tiburón", e="🦈", atk=6, hp=4, spd=6, hab=3, bio="agua", ab="rage"),
+    "cangrejo":  dict(n="Cangrejo", e="🦀", atk=2, hp=5, spd=3, hab=1, bio="agua", ab="thorns"),
+    "basilisco": dict(n="Basilisco", e="🦎", atk=3, hp=3, spd=8, hab=6, bio="agua", ab="first"),
+    "lapa":      dict(n="Lapa roja", e="🦜", atk=5, hp=6, spd=6, hab=4, bio="bosque", ab="rage", leg=True),
+    "quetzaldorado": dict(n="Quetzal Dorado", e="🐦", atk=4, hp=9, spd=8, hab=6, bio="montana", ab="heal", leg=True),
 }
 
 # ---- 2) Bioma por especie nueva (las del bestiario que no están arriba) ----
@@ -109,12 +109,13 @@ PRED    = {"caucel", "tigrillo", "leon_brenero", "tolomuco", "grison", "aguila_h
            "tiburon_martillo", "marlin", "pez_vela", "boa", "matabuey", "cascabel", "mica", "caiman",
            "mono_congo", "chancho_monte", "pavon"}
 
+# (atk, hp, spd, hab) — los ágiles (fast) tienen poco atk/hp pero mucha habilidad
 ROLE_BASE = {
-    "tank":     (2, 8, 2),
-    "glass":    (5, 1, 5),
-    "fast":     (2, 3, 8),
-    "predator": (5, 5, 6),
-    "balanced": (3, 4, 5),
+    "tank":     (2, 8, 2, 1),
+    "glass":    (5, 1, 5, 4),
+    "fast":     (2, 3, 8, 7),
+    "predator": (5, 5, 6, 3),
+    "balanced": (3, 4, 5, 2),
 }
 
 
@@ -140,13 +141,14 @@ def ability_of(slug):
 
 
 def stats_of(slug):
-    a, h, s = ROLE_BASE[role_of(slug)]
+    a, h, s, hb = ROLE_BASE[role_of(slug)]
     # jitter suave (±1) para variedad, sin romper el arquetipo
     j = jitter(slug, 0, 2) - 1
     a = max(1, min(6, a + j))
     h = max(1, min(9, h + (jitter(slug + "h", 0, 2) - 1)))
     s = max(1, min(8, s + (jitter(slug + "s", 0, 2) - 1)))
-    return a, h, s
+    hb = max(0, min(8, hb + (jitter(slug + "b", 0, 2) - 1)))
+    return a, h, s, hb
 
 
 # ---- 4) Construir SP ----
@@ -155,9 +157,9 @@ for e in BESTIARIO:
     slug = e["slug"]
     if slug in EXISTING:
         SP[slug] = dict(EXISTING[slug]); continue
-    a, h, s = stats_of(slug)
+    a, h, s, hb = stats_of(slug)
     rec = dict(n=e["name"], e=EMOJI.get(e["cat"], "🐾"),
-               atk=a, hp=h, spd=s, bio=BIOME.get(slug, "bosque"), ab=ability_of(slug))
+               atk=a, hp=h, spd=s, hab=hb, bio=BIOME.get(slug, "bosque"), ab=ability_of(slug))
     if e.get("ext"): rec["ext"] = True
     SP[slug] = rec
 # extras que no están en el bestiario pero sí en el juego (con art propio)
