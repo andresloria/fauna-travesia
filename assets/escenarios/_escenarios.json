@@ -1,0 +1,191 @@
+[
+  {
+    "slug": "lugar_sanjose",
+    "kind": "lugar",
+    "scene": true,
+    "prov": "San José",
+    "status": "ok"
+  },
+  {
+    "slug": "lugar_alajuela",
+    "kind": "lugar",
+    "scene": true,
+    "prov": "Alajuela",
+    "status": "ok"
+  },
+  {
+    "slug": "lugar_cartago",
+    "kind": "lugar",
+    "scene": true,
+    "prov": "Cartago",
+    "status": "ok"
+  },
+  {
+    "slug": "lugar_cartago_irazu",
+    "kind": "lugar",
+    "scene": true,
+    "prov": "Cartago",
+    "status": "ok"
+  },
+  {
+    "slug": "lugar_heredia",
+    "kind": "lugar",
+    "scene": true,
+    "prov": "Heredia",
+    "status": "ok"
+  },
+  {
+    "slug": "lugar_guanacaste",
+    "kind": "lugar",
+    "scene": true,
+    "prov": "Guanacaste",
+    "status": "ok"
+  },
+  {
+    "slug": "lugar_puntarenas",
+    "kind": "lugar",
+    "scene": true,
+    "prov": "Puntarenas",
+    "status": "ok"
+  },
+  {
+    "slug": "lugar_limon",
+    "kind": "lugar",
+    "scene": true,
+    "prov": "Limón",
+    "status": "ok"
+  },
+  {
+    "slug": "lugar_monteverde",
+    "kind": "lugar",
+    "scene": true,
+    "prov": "Monteverde",
+    "status": "ok"
+  },
+  {
+    "slug": "bioma_bosque",
+    "kind": "bioma",
+    "scene": true,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "bioma_montana",
+    "kind": "bioma",
+    "scene": true,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "bioma_sabana",
+    "kind": "bioma",
+    "scene": true,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "bioma_agua",
+    "kind": "bioma",
+    "scene": true,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "casilla_salvaje",
+    "kind": "casilla",
+    "scene": true,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "tesoro_mochila",
+    "kind": "tesoro",
+    "scene": false,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "tesoro_carreta",
+    "kind": "tesoro",
+    "scene": false,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "item_pejibaye",
+    "kind": "item",
+    "scene": false,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "item_mango",
+    "kind": "item",
+    "scene": false,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "item_banano",
+    "kind": "item",
+    "scene": false,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "item_pina",
+    "kind": "item",
+    "scene": false,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "item_cacao",
+    "kind": "item",
+    "scene": false,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "item_cafe",
+    "kind": "item",
+    "scene": false,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "item_chonete",
+    "kind": "item",
+    "scene": false,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "item_guaria",
+    "kind": "item",
+    "scene": false,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "cazador",
+    "kind": "enemigo",
+    "scene": false,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "cabecilla",
+    "kind": "enemigo",
+    "scene": false,
+    "prov": "",
+    "status": "ok"
+  },
+  {
+    "slug": "mapa_cr",
+    "kind": "mapa",
+    "scene": true,
+    "prov": "",
+    "status": "ok"
+  }
+]

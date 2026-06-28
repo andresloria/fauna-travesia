@@ -122,9 +122,12 @@ Como el motor ya está aislado y no depende del DOM, ese paso es sobre todo
 
 ## 🎨 Créditos de assets
 
-- **Arte de animales:** [OpenMoji](https://openmoji.org/) — CC BY-SA 4.0.
+- **Arte de animales (vectorial, fallback):** [OpenMoji](https://openmoji.org/) — CC BY-SA 4.0.
+- **Sprites pixel de fauna y escenarios:** generados con [PixelLab](https://www.pixellab.ai/) (API, cuenta de Andrés) vía `gen_pixel.py`. `assets/animales/*.png` (126 especies del bestiario) y `assets/escenarios/*.png` (lugares, biomas, frutas, cazadores, mapa).
 - **Siluetas de país:** [mapsicon](https://github.com/djaiss/mapsicon) — MIT.
 - **Ambiente de selva:** “Peruvian Amazon birds frogs daytime” de *nonamethefish* ([Freesound](https://freesound.org/people/nonamethefish/sounds/653743/)) — CC0.
+- **Música de exploración:** “8-bit Forest Theme” de *Wolfgang_* ([OpenGameArt](https://opengameart.org/content/8-bit-forest-theme)) — CC0. (`assets/audio/naturaleza.mp3`)
+- **Música de combate:** “8-Bit Battle Loop” de *Wolfgang_* ([OpenGameArt](https://opengameart.org/content/8-bit-battle-loop)) — CC0. (`assets/audio/pelea.ogg`)
 
 ## 💡 Ideas para mejorar (cuando querás)
 
