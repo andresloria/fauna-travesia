@@ -31,7 +31,8 @@ export function createUI(game) {
     const badge = (x) => `<span class="abil ${x.cls}">${x.sym} ${x.n}</span>`;
     const abil = (ab ? badge(ab) : '') + (ab2 ? badge(ab2) : '');
     const rar = RARITY[a.rarity];
-    const rarTag = (rar && a.rarity !== 'comun') ? `<span class="rar ${rar.cls}">${rar.n}</span>` : '';
+    // la etiqueta de rareza solo para raro/ultrararo: legendario/extinto ya lo dicen en la etiqueta de nivel + el brillo
+    const rarTag = (rar && (a.rarity === 'raro' || a.rarity === 'ultrararo')) ? `<span class="rar ${rar.cls}">${rar.n}</span>` : '';
     const downTag = a.down ? `<span class="downtag">💤 Debilitado</span>` : '';
     const lead = opts.lead ? `<span class="leadtag">PELEA 1°</span>` : '';
     const ord = opts.order ? `<span class="ord">${opts.order}</span>` : '';
@@ -314,7 +315,7 @@ export function createUI(game) {
     const badge = (x) => `<span class="abil ${x.cls}">${x.sym} ${x.n}</span>`;
     const bio = BIOMES[a.bio] ? BIOMES[a.bio].e : '';
     return `<div class="acard ${tcls} rc-${a.rarity} battlecard" id="bc-${a.uid}">
-      <span class="stage">${stageLabel} · Nv${a.level}</span><span class="bio">${bio}</span>
+      <span class="stage">Nv${a.level}</span><span class="bio">${bio}</span>
       <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
       <div class="an">${a.n}</div>
       <div class="hpbar"><div class="hpfill"></div></div>
