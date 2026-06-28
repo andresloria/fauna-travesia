@@ -6,15 +6,9 @@
 
 import { BIOMES, ABILITIES, RULES, PLAYER_FLAGS } from './data.js';
 
-// Especies con arte pixel propio (PNG). El resto usa el vector OpenMoji (.svg).
-// Al sumar especies nuevas al roster (SP), agregá su key acá (ya tienen PNG en assets/animales).
-const PNG_ART = new Set([
-  'perezoso', 'monocara', 'tucan', 'ranadardo', 'serpiente', 'jaguar', 'manigordo',
-  'pizote', 'murcielago', 'mariposa', 'abeja', 'quetzal', 'puma', 'coyote', 'venado',
-  'saino', 'iguana', 'garza', 'cocodrilo', 'tortuga', 'ballena', 'delfin', 'tiburon',
-  'cangrejo', 'basilisco', 'lapa', 'quetzaldorado',
-]);
-const ART = (key) => `assets/animales/${key}.${PNG_ART.has(key) ? 'png' : 'svg'}`;
+// Arte pixel por especie. Todo el roster (SP) tiene su PNG en assets/animales/
+// (generado con gen_pixel.py). Si algún día agregás una especie sin PNG, generala.
+const ART = (key) => `assets/animales/${key}.png`;
 const STAGE = ['HERIDO', 'RECUPERA', 'PLENO'];   // etapas de rehabilitación
 
 export function createUI(game) {
