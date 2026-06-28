@@ -309,6 +309,14 @@ details.how p{margin-top:8px;color:#d8cdb2;line-height:1.5}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
+/* ===== intro de historia ===== */
+.introbox{max-width:570px;margin:6px auto;text-align:center;border:1px solid rgba(196,160,78,.28);
+  border-radius:16px;padding:22px 24px;background:rgba(0,0,0,.18)}
+.introbox .big{font-size:44px;margin-bottom:2px}
+.introbox .introt{font-family:'Fraunces',serif;font-weight:900;font-size:24px;margin:2px 0 14px;color:var(--gold)}
+.introbox p{color:#d8cdb2;font-size:13.5px;line-height:1.55;margin:0 0 10px;text-align:left}
+.introbox .center{margin-top:16px}
+
 /* ===== meta: botones, colección, logros, toast, modo ===== */
 .soundbtn.meta1{right:108px}
 .soundbtn.meta2{right:60px}

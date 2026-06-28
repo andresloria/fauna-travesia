@@ -17,10 +17,13 @@ export class Game {
   // ---------- arranque ----------
   newRun() {
     const avatar = this.loadAvatar();
-    let mode = 'normal';
+    let mode = 'normal', seenIntro = false;
     try { mode = localStorage.getItem('fauna_mode') || 'normal'; } catch {}
+    try { seenIntro = localStorage.getItem('fauna_intro') === '1'; } catch {}
+    // 1ª vez de todas: pantalla de HISTORIA; si ya tenés avatar, directo a starter
+    const phase = !seenIntro ? 'intro' : (avatar ? 'starter' : 'avatar');
     this.s = {
-      phase: avatar ? 'starter' : 'avatar',   // si ya tenés avatar, vas directo a elegir compañero
+      phase,
       avatar, mode,                            // 'normal' | 'furtivo' (si te derrotan un animal, se lo roban)
       team: [], hearts: RULES.MAX_HEARTS, cleared: 0, released: 0,
       country: null, countryBag: null, lastCountryIdx: null,
@@ -46,6 +49,21 @@ export class Game {
     this.render();
   }
   editAvatar() { this.s.phase = 'avatar'; this.render(); }
+  // termina la intro de historia → avatar (o starter si ya existe). Se recuerda.
+  startFromIntro() {
+    try { localStorage.setItem('fauna_intro', '1'); } catch {}
+    this.s.phase = this.s.avatar ? 'starter' : 'avatar';
+    this.render();
+  }
+  replayIntro() { this.s.phase = 'intro'; this.render(); }
+  // hitos de la HISTORIA según cuántas provincias llevás
+  storyBeat(depth) {
+    if (depth === 0) return '🌿 Tu sueño es ver a TODOS los animales de Costa Rica… pero algo anda mal con la fauna.';
+    if (depth === 1) return '🔍 Los animales que te atacaron estaban <b>drogados</b>. Alguien los está usando.';
+    if (depth === 3) return '🕸️ Lo confirmás: hay una <b>RED de cazadores furtivos</b> operando en todo el país.';
+    if (depth === 5) return '🔥 Los cazadores ya te temen: saben que vas a sacarlos del país.';
+    return null;
+  }
   // modo de juego (normal / furtivo); se recuerda como preferencia
   setMode(mode) {
     this.s.mode = (mode === 'furtivo') ? 'furtivo' : 'normal';
@@ -99,6 +117,8 @@ export class Game {
     this.current().visited = true;
     s.phase = 'map';
     this.log(`🧭 Llegás a la provincia de ${s.country.flag} <b>${s.country.n}</b> (${this.depth() + 1}/${RULES.RUN_LENGTH})`);
+    const beat = this.storyBeat(this.depth());
+    if (beat) this.log(beat);
     this.render();
   }
 
@@ -194,7 +214,7 @@ export class Game {
     s.currentId = s.map.startId;
     this.current().visited = true;
     s.phase = 'map';
-    this.log(`☁️ Subís al bosque nuboso de <b>${SECRET.n}</b>… acá se esconde el cabecilla.`);
+    this.log(`☁️ El rastro lleva a <b>${SECRET.n}</b>. Acá se esconde el <b>CABECILLA</b> de toda la red — vencelo y sacás a los cazadores del país.`);
     this.render();
   }
 

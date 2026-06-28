@@ -89,6 +89,21 @@ export function createUI(game) {
   }
 
   // ---------- pantallas ----------
+  // ---------- intro de HISTORIA ----------
+  function renderIntro() {
+    phaseArea.innerHTML = `
+      <div class="introbox">
+        <div class="big">🌿🇨🇷</div>
+        <h2 class="introt">Guardianes de Costa Rica</h2>
+        <p>Soñás con ser <b>guía de naturaleza</b> y ver, con tus propios ojos, a <b>todos los animales de Costa Rica</b>.</p>
+        <p>Pero apenas arrancás descubrís algo terrible: una <b>red de cazadores furtivos</b> recorre el país. A los animales les dan una <b>droga</b> que los domina… y los hace <b>atacar</b> a quien se les acerca.</p>
+        <p>Por eso, en cada bioma y lugar, la fauna arremete contra vos. No son malos: están <b>drogados y asustados</b>. Tu trabajo es frenarlos, <b>rescatarlos</b> y devolverles la libertad. 🩹🌿</p>
+        <p>Y los animales lo sienten. Notan lo que hacés por ellos… y empiezan a <b>ayudarte</b>.</p>
+        <p>Tu misión: cruzar las <b>7 provincias</b>, desbaratar a los cazadores y <b>sacarlos del país</b>. 🇨🇷</p>
+        <div class="center"><button class="btn" data-act="intro-go">Empezar mi travesía 🧭</button></div>
+      </div>`;
+  }
+
   function renderAvatar(s) {
     const cur = s.avatar || {};
     const sel = cur.flag || PLAYER_FLAGS[0];
@@ -406,7 +421,8 @@ export function createUI(game) {
     window.faunaMusic?.set('map');   // cualquier fase fuera de combate = tema de exploración
     renderRunbar(s);
     renderLog(s);
-    if (s.phase === 'avatar') renderAvatar(s);
+    if (s.phase === 'intro') renderIntro(s);
+    else if (s.phase === 'avatar') renderAvatar(s);
     else if (s.phase === 'starter') renderStarter(s);
     else if (s.phase === 'map') renderMap(s);
     else if (s.phase === 'wild') renderWild(s);
@@ -426,6 +442,7 @@ export function createUI(game) {
         if (act === 'starter') game.chooseStarter(+elm.dataset.i);
         else if (act === 'mode') game.setMode(elm.dataset.mode);
         else if (act === 'flag') { phaseArea.querySelectorAll('.flagopt').forEach(f => f.classList.remove('sel')); elm.classList.add('sel'); }
+        else if (act === 'intro-go') game.startFromIntro();
         else if (act === 'avatar-go') { const sel = phaseArea.querySelector('.flagopt.sel'); game.chooseAvatar(phaseArea.querySelector('#avName').value, sel ? sel.dataset.flag : '🌎'); }
         else if (act === 'edit-avatar') game.editAvatar();
         else if (act === 'node') game.goNode(+elm.dataset.id);
