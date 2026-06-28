@@ -73,7 +73,8 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .acard.clickable{cursor:pointer}
 .acard.clickable:hover{transform:translateY(-4px)}
 .acard .art{width:86px;height:86px;border-radius:9px;display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;background:radial-gradient(circle at 50% 38%,#fffaf0,#e7d9b6)}
+  position:relative;overflow:hidden;background:radial-gradient(circle at 50% 38%,#fffaf0,#e7d9b6);
+  margin-top:11px}   /* baja la imagen para que las etiquetas (nivel/rareza/bioma) no tapen al animal */
 .acard .art img{width:90%;height:90%;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.22))}
 .acard .an{font-family:'Fraunces',serif;font-weight:600;font-size:12px;text-align:center;line-height:1.05;margin-top:6px;min-height:26px;display:flex;align-items:center}
 .acard .stats{display:flex;gap:7px;margin-top:2px}
@@ -176,7 +177,7 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 /* filas de equipo en el combate simultáneo (cartas compactas) */
 .teamrow{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;width:100%;min-height:44px;margin:2px 0}
 .teamrow .battlecard{width:96px;margin:0;transition:transform .18s ease}
-.teamrow .battlecard .art{height:48px}
+.teamrow .battlecard .art{height:48px;margin-top:7px}
 .teamrow .battlecard .an{font-size:10px;line-height:1.12}
 .teamrow .battlecard .stage{font-size:7.5px}
 .teamrow .battlecard .bio{font-size:11px}
