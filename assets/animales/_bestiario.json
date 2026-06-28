@@ -1,0 +1,1010 @@
+[
+  {
+    "slug": "perezoso",
+    "cat": "Mamíferos",
+    "name": "Perezoso de tres dedos",
+    "sci": "Bradypus variegatus",
+    "ext": false,
+    "status": "skip"
+  },
+  {
+    "slug": "perezoso_dos",
+    "cat": "Mamíferos",
+    "name": "Perezoso de dos dedos",
+    "sci": "Choloepus hoffmanni",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "mono_congo",
+    "cat": "Mamíferos",
+    "name": "Mono congo (aullador)",
+    "sci": "Alouatta palliata",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "monocara",
+    "cat": "Mamíferos",
+    "name": "Mono carablanca",
+    "sci": "Cebus imitator",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "mono_arana",
+    "cat": "Mamíferos",
+    "name": "Mono araña",
+    "sci": "Ateles geoffroyi",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "mono_titi",
+    "cat": "Mamíferos",
+    "name": "Mono tití",
+    "sci": "Saimiri oerstedii",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "jaguar",
+    "cat": "Mamíferos",
+    "name": "Jaguar",
+    "sci": "Panthera onca",
+    "ext": false,
+    "status": "skip"
+  },
+  {
+    "slug": "puma",
+    "cat": "Mamíferos",
+    "name": "Puma",
+    "sci": "Puma concolor",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "manigordo",
+    "cat": "Mamíferos",
+    "name": "Manigordo (ocelote)",
+    "sci": "Leopardus pardalis",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "caucel",
+    "cat": "Mamíferos",
+    "name": "Caucel (margay)",
+    "sci": "Leopardus wiedii",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "leon_brenero",
+    "cat": "Mamíferos",
+    "name": "León breñero (jaguarundi)",
+    "sci": "Herpailurus yagouaroundi",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tigrillo",
+    "cat": "Mamíferos",
+    "name": "Tigrillo (oncilla)",
+    "sci": "Leopardus tigrinus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "danta",
+    "cat": "Mamíferos",
+    "name": "Danta (tapir)",
+    "sci": "Tapirus bairdii",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "saino",
+    "cat": "Mamíferos",
+    "name": "Saíno",
+    "sci": "Dicotyles tajacu",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "chancho_monte",
+    "cat": "Mamíferos",
+    "name": "Chancho de monte",
+    "sci": "Tayassu pecari",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "venado",
+    "cat": "Mamíferos",
+    "name": "Venado cola blanca",
+    "sci": "Odocoileus virginianus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "cabro_monte",
+    "cat": "Mamíferos",
+    "name": "Cabro de monte",
+    "sci": "Mazama temama",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "pizote",
+    "cat": "Mamíferos",
+    "name": "Pizote (coatí)",
+    "sci": "Nasua narica",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "mapache",
+    "cat": "Mamíferos",
+    "name": "Mapache",
+    "sci": "Procyon lotor",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "mapache_cangrejero",
+    "cat": "Mamíferos",
+    "name": "Mapache cangrejero",
+    "sci": "Procyon cancrivorus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "martilla",
+    "cat": "Mamíferos",
+    "name": "Martilla (kinkajú)",
+    "sci": "Potos flavus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "olingo",
+    "cat": "Mamíferos",
+    "name": "Olingo",
+    "sci": "Bassaricyon gabbii",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tolomuco",
+    "cat": "Mamíferos",
+    "name": "Tolomuco",
+    "sci": "Eira barbara",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "grison",
+    "cat": "Mamíferos",
+    "name": "Grisón",
+    "sci": "Galictis vittata",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "nutria",
+    "cat": "Mamíferos",
+    "name": "Nutria de río",
+    "sci": "Lontra longicaudis",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "comadreja",
+    "cat": "Mamíferos",
+    "name": "Comadreja",
+    "sci": "Mustela frenata",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "zorro_pelon",
+    "cat": "Mamíferos",
+    "name": "Zorro pelón (zarigüeya)",
+    "sci": "Didelphis marsupialis",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "oso_hormiguero",
+    "cat": "Mamíferos",
+    "name": "Oso hormiguero (tamandúa)",
+    "sci": "Tamandua mexicana",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "serafin",
+    "cat": "Mamíferos",
+    "name": "Serafín de platanar",
+    "sci": "Cyclopes didactylus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "armadillo",
+    "cat": "Mamíferos",
+    "name": "Armadillo (cusuco)",
+    "sci": "Dasypus novemcinctus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tepezcuintle",
+    "cat": "Mamíferos",
+    "name": "Tepezcuintle",
+    "sci": "Cuniculus paca",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "guatusa",
+    "cat": "Mamíferos",
+    "name": "Guatusa",
+    "sci": "Dasyprocta punctata",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "ardilla",
+    "cat": "Mamíferos",
+    "name": "Ardilla",
+    "sci": "Sciurus variegatoides",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "puercoespin",
+    "cat": "Mamíferos",
+    "name": "Puercoespín",
+    "sci": "Coendou mexicanus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "murcielago",
+    "cat": "Mamíferos",
+    "name": "Murciélago pescador",
+    "sci": "Noctilio leporinus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "coyote",
+    "cat": "Mamíferos",
+    "name": "Coyote",
+    "sci": "Canis latrans",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "zorro_gris",
+    "cat": "Mamíferos",
+    "name": "Zorro gris",
+    "sci": "Urocyon cinereoargenteus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "manati",
+    "cat": "Mamíferos",
+    "name": "Manatí del Caribe",
+    "sci": "Trichechus manatus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "delfin",
+    "cat": "Mamíferos",
+    "name": "Delfín nariz de botella",
+    "sci": "Tursiops truncatus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "ballena",
+    "cat": "Mamíferos",
+    "name": "Ballena jorobada",
+    "sci": "Megaptera novaeangliae",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "yiguirro",
+    "cat": "Aves",
+    "name": "Yigüirro (ave nacional)",
+    "sci": "Turdus grayi",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "quetzal",
+    "cat": "Aves",
+    "name": "Quetzal resplandeciente",
+    "sci": "Pharomachrus mocinno",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "lapa",
+    "cat": "Aves",
+    "name": "Lapa roja",
+    "sci": "Ara macao",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "lapa_verde",
+    "cat": "Aves",
+    "name": "Lapa verde",
+    "sci": "Ara ambiguus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tucan",
+    "cat": "Aves",
+    "name": "Tucán pico iris",
+    "sci": "Ramphastos sulfuratus",
+    "ext": false,
+    "status": "skip"
+  },
+  {
+    "slug": "tucan_castano",
+    "cat": "Aves",
+    "name": "Tucán pico castaño",
+    "sci": "Ramphastos ambiguus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "cusingo",
+    "cat": "Aves",
+    "name": "Cusingo (arasarí)",
+    "sci": "Pteroglossus frantzii",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tucancillo",
+    "cat": "Aves",
+    "name": "Tucancillo collarejo",
+    "sci": "Pteroglossus torquatus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "pajaro_campana",
+    "cat": "Aves",
+    "name": "Pájaro campana",
+    "sci": "Procnias tricarunculatus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "oropendola",
+    "cat": "Aves",
+    "name": "Oropéndola de Moctezuma",
+    "sci": "Psarocolius montezuma",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "colibri_fuego",
+    "cat": "Aves",
+    "name": "Colibrí garganta de fuego",
+    "sci": "Panterpe insignis",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "colibri_talamanca",
+    "cat": "Aves",
+    "name": "Colibrí de Talamanca",
+    "sci": "Eugenes spectabilis",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "ermitano",
+    "cat": "Aves",
+    "name": "Ermitaño verde",
+    "sci": "Phaethornis guy",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "jacamar",
+    "cat": "Aves",
+    "name": "Jacamar coliroja",
+    "sci": "Galbula ruficauda",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "momoto",
+    "cat": "Aves",
+    "name": "Momoto cejiceleste",
+    "sci": "Eumomota superciliosa",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tangara_azul",
+    "cat": "Aves",
+    "name": "Tangara azuleja (viudita)",
+    "sci": "Thraupis episcopus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tangara_dorada",
+    "cat": "Aves",
+    "name": "Tangara dorada",
+    "sci": "Tangara icterocephala",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "bienteveo",
+    "cat": "Aves",
+    "name": "Bienteveo (mosquero)",
+    "sci": "Pitangus sulphuratus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "garza",
+    "cat": "Aves",
+    "name": "Garza real",
+    "sci": "Ardea alba",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "espatula",
+    "cat": "Aves",
+    "name": "Espátula rosada",
+    "sci": "Platalea ajaja",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "jabiru",
+    "cat": "Aves",
+    "name": "Jabirú",
+    "sci": "Jabiru mycteria",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tantalo",
+    "cat": "Aves",
+    "name": "Tántalo americano (garzón)",
+    "sci": "Mycteria americana",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "ibis",
+    "cat": "Aves",
+    "name": "Ibis blanco",
+    "sci": "Eudocimus albus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "pelicano",
+    "cat": "Aves",
+    "name": "Pelícano pardo",
+    "sci": "Pelecanus occidentalis",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "fragata",
+    "cat": "Aves",
+    "name": "Rabihorcado (fragata)",
+    "sci": "Fregata magnificens",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "aguila_harpia",
+    "cat": "Aves",
+    "name": "Águila harpía",
+    "sci": "Harpia harpyja",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "caracara",
+    "cat": "Aves",
+    "name": "Caracara",
+    "sci": "Caracara plancus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "zopilote_negro",
+    "cat": "Aves",
+    "name": "Zopilote negro",
+    "sci": "Coragyps atratus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "zopilote_rojo",
+    "cat": "Aves",
+    "name": "Zopilote cabecirrojo",
+    "sci": "Cathartes aura",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "lechuza",
+    "cat": "Aves",
+    "name": "Lechuza de campanario",
+    "sci": "Tyto alba",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "carpintero",
+    "cat": "Aves",
+    "name": "Pájaro carpintero",
+    "sci": "Melanerpes hoffmannii",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "saltarin",
+    "cat": "Aves",
+    "name": "Saltarín toledo",
+    "sci": "Chiroxiphia linearis",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "trogon",
+    "cat": "Aves",
+    "name": "Trogón",
+    "sci": "Trogon collaris",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "martin_pescador",
+    "cat": "Aves",
+    "name": "Martín pescador",
+    "sci": "Megaceryle torquata",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "anhinga",
+    "cat": "Aves",
+    "name": "Pato aguja (anhinga)",
+    "sci": "Anhinga anhinga",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tinamu",
+    "cat": "Aves",
+    "name": "Tinamú grande",
+    "sci": "Tinamus major",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "pavon",
+    "cat": "Aves",
+    "name": "Pavón grande",
+    "sci": "Crax rubra",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "chachalaca",
+    "cat": "Aves",
+    "name": "Chachalaca",
+    "sci": "Ortalis cinereiceps",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "loro",
+    "cat": "Aves",
+    "name": "Loro frentirrojo",
+    "sci": "Amazona autumnalis",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "rana_ojos_rojos",
+    "cat": "Anfibios",
+    "name": "Rana de ojos rojos",
+    "sci": "Agalychnis callidryas",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "ranadardo",
+    "cat": "Anfibios",
+    "name": "Rana venenosa roja (blue-jeans)",
+    "sci": "Oophaga pumilio",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "rana_verdinegra",
+    "cat": "Anfibios",
+    "name": "Rana dardo verdinegra",
+    "sci": "Dendrobates auratus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "rana_granular",
+    "cat": "Anfibios",
+    "name": "Rana dardo granular",
+    "sci": "Oophaga granulifera",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "rana_cristal",
+    "cat": "Anfibios",
+    "name": "Rana de cristal",
+    "sci": "Hyalinobatrachium valerioi",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "rana_lechera",
+    "cat": "Anfibios",
+    "name": "Rana lechera",
+    "sci": "Leptodactylus savagei",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "rana_tungara",
+    "cat": "Anfibios",
+    "name": "Rana túngara",
+    "sci": "Engystomops pustulosus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "rana_gladiadora",
+    "cat": "Anfibios",
+    "name": "Rana arbórea gladiadora",
+    "sci": "Boana rufitela",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "rana_payaso",
+    "cat": "Anfibios",
+    "name": "Rana payaso",
+    "sci": "Dendropsophus ebraccatus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "sapo_marino",
+    "cat": "Anfibios",
+    "name": "Sapo marino",
+    "sci": "Rhinella marina",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "sapo_dorado",
+    "cat": "Anfibios",
+    "name": "Sapo dorado (extinto)",
+    "sci": "Incilius periglenes",
+    "ext": true,
+    "status": "ok"
+  },
+  {
+    "slug": "salamandra",
+    "cat": "Anfibios",
+    "name": "Salamandra sin pulmones",
+    "sci": "Bolitoglossa",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "cecilia",
+    "cat": "Anfibios",
+    "name": "Cecilia",
+    "sci": "Gymnopis multiplicata",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "iguana",
+    "cat": "Reptiles",
+    "name": "Iguana verde",
+    "sci": "Iguana iguana",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "garrobo",
+    "cat": "Reptiles",
+    "name": "Garrobo",
+    "sci": "Ctenosaura similis",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "basilisco",
+    "cat": "Reptiles",
+    "name": "Basilisco verde (Jesucristo)",
+    "sci": "Basiliscus plumifrons",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "basilisco_comun",
+    "cat": "Reptiles",
+    "name": "Basilisco común",
+    "sci": "Basiliscus basiliscus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "anolis",
+    "cat": "Reptiles",
+    "name": "Anolis (lagartija)",
+    "sci": "Anolis",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "geco",
+    "cat": "Reptiles",
+    "name": "Salamanqueja (geco)",
+    "sci": "Hemidactylus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "cocodrilo",
+    "cat": "Reptiles",
+    "name": "Cocodrilo americano",
+    "sci": "Crocodylus acutus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "caiman",
+    "cat": "Reptiles",
+    "name": "Caimán (guajipal)",
+    "sci": "Caiman crocodilus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "boa",
+    "cat": "Reptiles",
+    "name": "Boa (béquer)",
+    "sci": "Boa imperator",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "serpiente",
+    "cat": "Reptiles",
+    "name": "Terciopelo",
+    "sci": "Bothrops asper",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "bocaraca",
+    "cat": "Reptiles",
+    "name": "Bocaracá",
+    "sci": "Bothriechis schlegelii",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "lora",
+    "cat": "Reptiles",
+    "name": "Lora (víbora verde)",
+    "sci": "Bothriechis lateralis",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "cascabel",
+    "cat": "Reptiles",
+    "name": "Cascabel",
+    "sci": "Crotalus simus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "matabuey",
+    "cat": "Reptiles",
+    "name": "Matabuey (bushmaster)",
+    "sci": "Lachesis stenophrys",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "coral",
+    "cat": "Reptiles",
+    "name": "Coral",
+    "sci": "Micrurus nigrocinctus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "serpiente_mar",
+    "cat": "Reptiles",
+    "name": "Serpiente de mar",
+    "sci": "Hydrophis platurus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "mica",
+    "cat": "Reptiles",
+    "name": "Mica (zopilota)",
+    "sci": "Spilotes pullatus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "bejuquilla",
+    "cat": "Reptiles",
+    "name": "Bejuquilla",
+    "sci": "Oxybelis aeneus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tortuga_baula",
+    "cat": "Reptiles",
+    "name": "Tortuga baula",
+    "sci": "Dermochelys coriacea",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tortuga",
+    "cat": "Reptiles",
+    "name": "Tortuga verde",
+    "sci": "Chelonia mydas",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tortuga_carey",
+    "cat": "Reptiles",
+    "name": "Tortuga carey",
+    "sci": "Eretmochelys imbricata",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tortuga_lora",
+    "cat": "Reptiles",
+    "name": "Tortuga lora (golfina)",
+    "sci": "Lepidochelys olivacea",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tortuga_cabezona",
+    "cat": "Reptiles",
+    "name": "Tortuga cabezona",
+    "sci": "Caretta caretta",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "jicotea",
+    "cat": "Reptiles",
+    "name": "Jicotea",
+    "sci": "Trachemys venusta",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tiburon_martillo",
+    "cat": "Marinos e insectos",
+    "name": "Tiburón martillo",
+    "sci": "Sphyrna lewini",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "tiburon_ballena",
+    "cat": "Marinos e insectos",
+    "name": "Tiburón ballena",
+    "sci": "Rhincodon typus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "pez_vela",
+    "cat": "Marinos e insectos",
+    "name": "Pez vela",
+    "sci": "Istiophorus platypterus",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "marlin",
+    "cat": "Marinos e insectos",
+    "name": "Marlin azul",
+    "sci": "Makaira nigricans",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "mantarraya",
+    "cat": "Marinos e insectos",
+    "name": "Mantarraya",
+    "sci": "Mobula birostris",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "mariposa",
+    "cat": "Marinos e insectos",
+    "name": "Mariposa morfo azul",
+    "sci": "Morpho helenor",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "mariposa_buho",
+    "cat": "Marinos e insectos",
+    "name": "Mariposa búho",
+    "sci": "Caligo memnon",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "mariposa_julia",
+    "cat": "Marinos e insectos",
+    "name": "Mariposa Julia",
+    "sci": "Dryas iulia",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "hormiga_bala",
+    "cat": "Marinos e insectos",
+    "name": "Hormiga bala",
+    "sci": "Paraponera clavata",
+    "ext": false,
+    "status": "ok"
+  },
+  {
+    "slug": "escarabajo",
+    "cat": "Marinos e insectos",
+    "name": "Escarabajo Hércules",
+    "sci": "Dynastes hercules",
+    "ext": false,
+    "status": "ok"
+  }
+]
