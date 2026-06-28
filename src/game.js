@@ -96,6 +96,7 @@ export class Game {
   current() { return this.node(this.s.currentId); }
   animal(uid) { return this.s.team.find(a => a.uid === uid); }
   depth() { return this.s.cleared; }   // dificultad = países ya cruzados
+  fighters() { return this.s.team.filter(a => !a.down); }   // los que NO están debilitados
 
   // ---------- inicial ----------
   chooseStarter(i) {
@@ -160,16 +161,22 @@ export class Game {
       }
       case 'salvaje': {
         // animal(es) salvaje(s) a un nivel PARECIDO al tuyo (un toque por debajo) — pelea justa
-        const avg = Math.round(s.team.reduce((m, a) => m + a.level, 0) / s.team.length);
+        const f = this.fighters(), n = f.length || 1;
+        const avg = Math.round(f.reduce((m, a) => m + a.level, 0) / n);
         const lvl = Math.max(1, avg - 1);
-        const size = Math.min(RULES.MAX_TEAM, s.team.length);
-        return this.startBattle(E.genEnemy(s.country, size, lvl), 'Animal salvaje', '🐾', 'salvaje');
+        return this.startBattle(E.genEnemy(s.country, Math.min(RULES.MAX_TEAM, n), lvl), 'Animal salvaje', '🐾', 'salvaje');
       }
-      case 'descanso':
+      case 'descanso': {
         s.hearts = Math.min(RULES.MAX_HEARTS, s.hearts + 1);
+        const revived = s.team.filter(a => a.down);
+        revived.forEach(a => { a.down = false; });
+        const rmsg = revived.length
+          ? ` Tus animales debilitados se <b>recuperan</b>: ${revived.map(a => a.e + ' ' + a.n).join(', ')} vuelven a la pelea. 🌿`
+          : '';
         return this.showEvent('🏕️', 'Refugio',
-          `Descansás en el refugio y recuperás un corazón ❤️ (${s.hearts}/${RULES.MAX_HEARTS}).`,
+          `Descansás y recuperás un corazón ❤️ (${s.hearts}/${RULES.MAX_HEARTS}).${rmsg}`,
           [{ label: 'Continuar', action: () => this.backToMap() }]);
+      }
       case 'sorpresa': return this.resolveSorpresa(n);
     }
   }
@@ -191,8 +198,9 @@ export class Game {
     if (late && r < 74) return this.startBattle(                        // furtivo al acecho
       E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false)), 'Furtivo al acecho', '🪤', 'retador');
     // por defecto: un animal drogado y alterado te ataca
-    const avg = Math.round(s.team.reduce((m, a) => m + a.level, 0) / s.team.length);
-    return this.startBattle(E.genEnemy(s.country, Math.min(RULES.MAX_TEAM, s.team.length), Math.max(1, avg)),
+    const f = this.fighters(), nf = f.length || 1;
+    const avg = Math.round(f.reduce((m, a) => m + a.level, 0) / nf);
+    return this.startBattle(E.genEnemy(s.country, Math.min(RULES.MAX_TEAM, nf), Math.max(1, avg)),
       'Animal alterado', '🐾', 'salvaje');
   }
   zoneBoss() {
@@ -261,20 +269,32 @@ export class Game {
   // ---------- combate ----------
   startBattle(enemy, oppName, oppEmoji, kind) {
     const s = this.s;
-    const { result, steps, fallenAUids } = E.fight(s.team, enemy);  // el motor decide; la UI solo anima
+    const fighters = this.fighters();        // los debilitados NO pelean
+    if (!fighters.length) {                   // equipo agotado: no podés combatir
+      this.log('💤 Tu equipo está <b>agotado</b>. Buscá un refugio 🏕️ para recuperar a tus animales.');
+      return this.hurt();
+    }
+    const { result, steps, fallenAUids } = E.fight(fighters, enemy);  // el motor decide; la UI solo anima
     s.phase = 'battle';
-    s.battle = { enemy, oppName, oppEmoji, steps, result, kind, fallenAUids };
+    s.battle = { enemy, fighters, oppName, oppEmoji, steps, result, kind, fallenAUids };
     this.ui.playBattle(s, () => this.onBattleEnd());
   }
   onBattleEnd() {
     const s = this.s, b = s.battle, won = b.result === 'W';
     if (won && !(b.fallenAUids && b.fallenAUids.length)) this.award('impecable');
-    // MODO FURTIVO: a los animales que cayeron en combate se los roban (desaparecen)
-    if (s.mode === 'furtivo' && b.fallenAUids && b.fallenAUids.length) {
-      const stolen = [];
-      b.fallenAUids.forEach(uid => { const i = s.team.findIndex(a => a.uid === uid); if (i >= 0) stolen.push(s.team.splice(i, 1)[0]); });
-      if (stolen.length) this.log(`🪤 <b>Modo Furtivo</b>: los cazadores se llevaron ${stolen.map(a => a.e + ' ' + a.n).join(', ')} 😱`);
-      if (s.team.length === 0) return this.gameOver();
+    if (b.fallenAUids && b.fallenAUids.length) {
+      if (s.mode === 'furtivo') {
+        // MODO FURTIVO: a los que cayeron en combate se los roban (desaparecen)
+        const stolen = [];
+        b.fallenAUids.forEach(uid => { const i = s.team.findIndex(a => a.uid === uid); if (i >= 0) stolen.push(s.team.splice(i, 1)[0]); });
+        if (stolen.length) this.log(`🪤 <b>Modo Furtivo</b>: los cazadores se llevaron ${stolen.map(a => a.e + ' ' + a.n).join(', ')} 😱`);
+        if (s.team.length === 0) return this.gameOver();
+      } else {
+        // MODO NORMAL: quedan DEBILITADOS hasta llegar a un refugio
+        const down = [];
+        b.fallenAUids.forEach(uid => { const a = s.team.find(x => x.uid === uid); if (a && !a.down) { a.down = true; down.push(a); } });
+        if (down.length) this.log(`💤 ${down.map(a => a.e + ' ' + a.n).join(', ')} ${down.length === 1 ? 'quedó debilitado' : 'quedaron debilitados'} — llevalos a un refugio 🏕️.`);
+      }
     }
     if (b.kind === 'jefe') {
       if (won) {

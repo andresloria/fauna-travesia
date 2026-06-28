@@ -159,6 +159,10 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .rar.r-legend{background:#6e4d12;color:#ffe08a}
 .rar.r-ext{background:#5a241a;color:#ffc0ab}
 .teamrow .battlecard .rar{font-size:7px;padding:0 3px}
+/* animal DEBILITADO (modo normal): fuera de combate hasta un refugio */
+.acard .downtag{position:absolute;top:4px;right:4px;z-index:3;font-family:'DM Mono',monospace;font-size:8px;
+  font-weight:700;letter-spacing:.03em;padding:1px 5px;border-radius:5px;background:#3a3340;color:#cdbbe0;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.acard.down{filter:grayscale(.6) brightness(.82)}
 /* colección teñida por rareza */
 .dexcell.got.r-raro{border-color:#5ea8c4}
 .dexcell.got.r-ultra{border-color:#b07ad0}

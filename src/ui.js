@@ -24,7 +24,7 @@ export function createUI(game) {
     const ab = ABILITIES[a.ab], ab2 = a.ab2 ? ABILITIES[a.ab2] : null;
     const act = opts.trade ? 'trade' : opts.edit ? 'edit' : null;
     const cls = 'acard ' + tcls
-      + (opts.fainted ? ' fainted' : '') + (opts.cls ? ' ' + opts.cls : '')
+      + (opts.fainted || a.down ? ' fainted' : '') + (a.down ? ' down' : '') + (opts.cls ? ' ' + opts.cls : '')
       + (act ? ' clickable' : '') + (opts.lead ? ' lead' : '');
     const bio = BIOMES[a.bio] ? BIOMES[a.bio].e : '';
     const data = act ? `data-act="${act}" data-uid="${a.uid}"` : '';
@@ -32,10 +32,11 @@ export function createUI(game) {
     const abil = (ab ? badge(ab) : '') + (ab2 ? badge(ab2) : '');
     const rar = RARITY[a.rarity];
     const rarTag = (rar && a.rarity !== 'comun') ? `<span class="rar ${rar.cls}">${rar.n}</span>` : '';
+    const downTag = a.down ? `<span class="downtag">💤 Debilitado</span>` : '';
     const lead = opts.lead ? `<span class="leadtag">PELEA 1°</span>` : '';
     const ord = opts.order ? `<span class="ord">${opts.order}</span>` : '';
     return `<div class="${cls}" ${data}>
-      ${lead}${rarTag}
+      ${lead}${rarTag}${downTag}
       <span class="stage">${stageLabel} · Nv${a.level}</span>
       <span class="bio">${bio}</span>
       <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
@@ -326,9 +327,10 @@ export function createUI(game) {
   function playBattle(s, done) {
     window.faunaMusic?.set('battle');
     const b = s.battle;
+    const allies = b.fighters || s.team;             // solo los NO debilitados pelean
     const max = {}, hp = {};
-    const sideA = new Set(s.team.map(a => a.uid));   // tu equipo (arriba)
-    [...s.team, ...b.enemy].forEach(a => { max[a.uid] = a.hp; hp[a.uid] = a.hp; });
+    const sideA = new Set(allies.map(a => a.uid));   // tu equipo (arriba)
+    [...allies, ...b.enemy].forEach(a => { max[a.uid] = a.hp; hp[a.uid] = a.hp; });
 
     renderRunbar(s);
     phaseArea.innerHTML = `
@@ -336,7 +338,7 @@ export function createUI(game) {
       <div class="arena">
         <div class="arenabg" style="background-image:url('${sceneFor(s.country)}')"></div>
         <div class="side-label">🏕️ Tu refugio</div>
-        <div class="teamrow" id="rowA">${s.team.map(a => battleCard(a, max[a.uid])).join('')}</div>
+        <div class="teamrow" id="rowA">${allies.map(a => battleCard(a, max[a.uid])).join('')}</div>
         <div class="vs-badge">VS</div>
         <div class="teamrow" id="rowB">${b.enemy.map(a => battleCard(a, max[a.uid])).join('')}</div>
         <div class="side-label enemy-label">${enemyEmblem(b.kind) || b.oppEmoji} ${b.oppName}</div>
@@ -376,7 +378,7 @@ export function createUI(game) {
     };
     Object.keys(max).forEach(setHp);
     const msg = document.getElementById('bmsg'), turnb = document.getElementById('turnbadge');
-    const nameOf = (uid) => { const a = [...s.team, ...b.enemy].find(x => x.uid === uid); return a ? a.n : ''; };
+    const nameOf = (uid) => { const a = [...allies, ...b.enemy].find(x => x.uid === uid); return a ? a.n : ''; };
     const fxLabel = (keys) => [...new Set(keys)].map(k => FX[k] + ' ' + (ABILITIES[k] ? ABILITIES[k].n : (FXN[k] || ''))).join('  ');
 
     let i = 0;
