@@ -264,24 +264,43 @@ test('final Monteverde: se abre tras las 7 provincias con el Quetzal Dorado', ()
   assert.ok(Object.values(m.nodesById).some(n => n.type === 'airport'), 'Monteverde tiene jefe final');
 });
 
-test('los atacantes (combate/cazador) solo en las últimas casillas (filas 3-4)', () => {
-  for (let t = 0; t < 200; t++) {
-    const m = E.generateMap(COUNTRIES[0], 5);   // depth alto: permite cazador
-    for (const n of Object.values(m.nodesById))
-      if (n.type === 'combate' || n.type === 'cazador')
-        assert.ok(n.r >= 3, `atacante en fila ${n.r}, debería ser >= 3`);
+test('mapa lineal: 15 casillas de encuentro + inicio + cabecilla', () => {
+  for (let t = 0; t < 50; t++) {
+    const m = E.generateMap(COUNTRIES[0], 2);
+    assert.equal(m.seq.length, E.MAP_LEN + 2, '17 nodos: inicio + 15 + cabecilla');
+    assert.equal(m.seq[0].type, 'start');
+    assert.equal(m.seq[m.seq.length - 1].type, 'airport', 'el último es el cabecilla');
+    for (const n of m.seq) assert.ok(n.children.length <= 1, 'sendero lineal (0-1 hijo)');
   }
 });
 
-test('hay casillas de animal salvaje, solo en las primeras filas (1-2)', () => {
-  let found = false;
-  for (let t = 0; t < 300; t++) {
-    const m = E.generateMap(COUNTRIES[0], 0);
-    for (const n of Object.values(m.nodesById)) {
-      if (n.type === 'salvaje') { found = true; assert.ok(n.r < 3, `salvaje en fila ${n.r}, debería ser < 3`); }
+test('los atacantes (combate/cazador) solo DESPUÉS de la casilla 6', () => {
+  for (let t = 0; t < 200; t++) {
+    const m = E.generateMap(COUNTRIES[0], 5);   // depth alto: permite cazador
+    for (const n of m.seq)
+      if (n.type === 'combate' || n.type === 'cazador')
+        assert.ok(n.idx > E.SAFE_TILES, `atacante en casilla ${n.idx}, debería ser > ${E.SAFE_TILES}`);
+  }
+});
+
+test('aparecen casillas SORPRESA y de animal salvaje', () => {
+  let surp = false, salv = false;
+  for (let t = 0; t < 300 && !(surp && salv); t++) {
+    for (const n of E.generateMap(COUNTRIES[0], 0).seq) {
+      if (n.type === 'sorpresa') surp = true;
+      if (n.type === 'salvaje') salv = true;
     }
   }
-  assert.ok(found, 'debería generarse alguna casilla de animal salvaje');
+  assert.ok(surp, 'debería haber casillas sorpresa');
+  assert.ok(salv, 'debería haber casillas de animal salvaje');
+});
+
+test('jefe de zona: un animal muy fuerte y de nivel alto', () => {
+  for (let d = 0; d < 5; d++) {
+    const [boss] = E.genZoneBoss(COUNTRIES[5], d);
+    assert.ok(boss.boss, 'marcado como jefe');
+    assert.ok(boss.level > E.enemyLevel(d, true), 'más nivel que un cabecilla normal');
+  }
 });
 
 test('genWildChoices ofrece 3 animales válidos y DISTINTOS', () => {

@@ -128,37 +128,37 @@ export function createUI(game) {
       <div class="map-hint">Cada animal trae un <b>efecto</b> distinto. Con él arrancás tu refugio; a los demás los rescatás en el camino.</div>`;
   }
 
+  const NODE_IC = { combate: '🪤', cazador: '🏹', salvaje: '🐾', intercambio: '🔄', tesoro: '🎁', descanso: '🏕️', sorpresa: '❓', airport: '🚨', start: '🧭' };
+  const NODE_LAB = { combate: 'Furtivo', cazador: 'Traficantes', salvaje: 'Salvaje', intercambio: 'Traslado', tesoro: 'Hallazgo', descanso: 'Refugio', sorpresa: 'Sorpresa', airport: 'Cabecilla', start: 'Inicio' };
   function renderMap(s) {
-    const X = [20, 50, 80], yFor = (r) => 90 - r * 15.5;
     const current = s.map.nodesById[s.currentId];
-    const all = Object.values(s.map.nodesById);
+    const all = s.map.seq;
+    // sendero lineal: cada nodo se une al siguiente
     let lines = '';
-    s.map.rows.slice(0, 5).forEach(row => row.forEach(n => n.children.forEach(c => {
+    all.forEach(n => n.children.forEach(c => {
       const avail = n === current && current.children.includes(c);
-      lines += `<line x1="${X[n.c]}" y1="${yFor(n.r)}" x2="${X[c.c]}" y2="${yFor(c.r)}"
-        stroke="${avail ? 'var(--gold)' : 'rgba(196,160,78,.25)'}" stroke-width="${avail ? '0.8' : '0.4'}"/>`;
-    })));
+      lines += `<line x1="${n.x}" y1="${n.y}" x2="${c.x}" y2="${c.y}"
+        stroke="${avail ? 'var(--gold)' : 'rgba(196,160,78,.3)'}" stroke-width="${avail ? '0.9' : '0.5'}"/>`;
+    }));
     const nodes = all.map(n => {
       const avail = current.children.includes(n);
       const cls = ['mnode', n.type === 'bioma' ? ('bioma-' + n.bio) : n.type,
         n === current ? 'current' : '', avail ? 'available' : '',
         (n.visited && n !== current) ? 'visited' : '',
         (!avail && !n.visited && n !== current) ? 'locked' : ''].join(' ');
-      const ic = n.type === 'bioma' ? BIOMES[n.bio].e : n.type === 'combate' ? '🪤' : n.type === 'cazador' ? '🏹'
-        : n.type === 'salvaje' ? '🐾' : n.type === 'intercambio' ? '🔄' : n.type === 'tesoro' ? '🎁' : n.type === 'descanso' ? '🏕️' : n.type === 'airport' ? '🚨' : '🧭';
-      const lab = n.type === 'bioma' ? BIOMES[n.bio].n : n.type === 'combate' ? 'Furtivo' : n.type === 'cazador' ? 'Traficantes'
-        : n.type === 'salvaje' ? 'Salvaje' : n.type === 'intercambio' ? 'Traslado' : n.type === 'tesoro' ? 'Hallazgo' : n.type === 'descanso' ? 'Refugio' : n.type === 'airport' ? 'Cabecilla' : 'Inicio';
+      const ic = n.type === 'bioma' ? BIOMES[n.bio].e : (NODE_IC[n.type] || '•');
+      const lab = n.type === 'bioma' ? BIOMES[n.bio].n : (NODE_LAB[n.type] || '');
       const data = avail ? `data-act="node" data-id="${n.id}"` : '';
-      return `<div class="${cls}" style="left:${X[n.c]}%;top:${yFor(n.r)}%" ${data}>
+      return `<div class="${cls}" style="left:${n.x}%;top:${n.y}%" ${data}>
         <div class="disc">${ic}</div><div class="ml">${lab}</div></div>`;
     }).join('');
-    const meta = s.country.secret ? 'enfrentá al Cabecilla 🚨' : 'cruzá la provincia y frená a los furtivos 🚨';
+    const meta = s.country.secret ? 'enfrentá al Cabecilla 🚨' : 'cruzá las 15 casillas hasta el Cabecilla 🚨';
     phaseArea.innerHTML = `
       <div class="section-h">${s.country.flag} ${s.country.n} · ${meta}</div>
-      <div class="mapwrap">${countryBg(s)}
+      <div class="mapwrap linear">${countryBg(s)}
         <div class="maptag">${s.country.flag} <b>${s.country.n}</b> · ${s.country.secret ? 'final ☁️' : 'provincia ' + (s.cleared + 1) + '/' + RULES.RUN_LENGTH}</div>
         <svg viewBox="0 0 100 100" preserveAspectRatio="none">${lines}</svg>${nodes}</div>
-      <div class="map-hint">Tocá un nodo iluminado para avanzar. Sabés el bioma, pero el animal a rescatar sale al azar.</div>
+      <div class="map-hint">Seguí el sendero, casilla por casilla. Las primeras 6 son tranquilas; pasadas esas, los cazadores acechan. ❓ = sorpresa.</div>
       ${teamHTML(s.team, { editable: true, panel: true, order: true })}`;
   }
 

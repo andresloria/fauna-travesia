@@ -40,6 +40,7 @@ export const ACHIEVEMENTS = [
   { id: 'conserva5',    e: '🌿', n: 'Conservacionista',    d: 'Devolvé 5 animales a la naturaleza.' },
   { id: 'conserva15',   e: '🌳', n: 'Restaurador',         d: 'Devolvé 15 animales a la naturaleza.' },
   { id: 'impecable',    e: '💪', n: 'Impecable',           d: 'Ganá un combate sin que caiga ningún animal tuyo.' },
+  { id: 'jefezona',     e: '👑', n: 'Domador de titanes',  d: 'Vencé y rescatá a un jefe de zona.' },
   { id: 'furtivo',      e: '💀', n: 'A puro pulso',        d: 'Liberá una provincia en Modo Furtivo.' },
   { id: 'prov7',        e: '🇨🇷', n: 'Héroe nacional',      d: 'Liberá las 7 provincias.' },
   { id: 'cabecilla',    e: '👑', n: 'El Cabecilla cae',    d: 'Vencé al jefe final en Monteverde.' },

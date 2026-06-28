@@ -150,7 +150,35 @@ export class Game {
         return this.showEvent('🏕️', 'Refugio',
           `Descansás en el refugio y recuperás un corazón ❤️ (${s.hearts}/${RULES.MAX_HEARTS}).`,
           [{ label: 'Continuar', action: () => this.backToMap() }]);
+      case 'sorpresa': return this.resolveSorpresa(n);
     }
+  }
+
+  // Casilla SORPRESA: puede dar un objeto, una pelea, una emboscada de cazadores
+  // o (raro) un JEFE DE ZONA — un animal muy fuerte que, si lo vencés, rescatás.
+  resolveSorpresa(n) {
+    const s = this.s, d = this.depth(), r = E.rnd(100), late = n.idx > E.SAFE_TILES;
+    if (n.idx >= 4 && r < 8) return this.zoneBoss();                    // jefe de zona (raro, difícil)
+    if (r < 40) {                                                       // hallazgo
+      const it = E.rnd(100) < 22 ? E.pick(RARE_ITEMS) : E.pick(ITEMS);
+      s.bag.push(it);
+      return this.showEvent('❓', '¡Sorpresa! Un hallazgo',
+        `Entre la maleza aparece ${it.e} <b>${it.n}</b> (+${it.atk}⚔ +${it.hp}❤). A la mochila.`,
+        [{ label: 'Seguir 🧭', action: () => this.backToMap() }]);
+    }
+    if (late && d >= 3 && r < 60) return this.startBattle(              // emboscada de traficantes
+      E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d)), 'Emboscada de traficantes', '🏹', 'cazador');
+    if (late && r < 74) return this.startBattle(                        // furtivo al acecho
+      E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false)), 'Furtivo al acecho', '🪤', 'retador');
+    // por defecto: un animal drogado y alterado te ataca
+    const avg = Math.round(s.team.reduce((m, a) => m + a.level, 0) / s.team.length);
+    return this.startBattle(E.genEnemy(s.country, Math.min(RULES.MAX_TEAM, s.team.length), Math.max(1, avg)),
+      'Animal alterado', '🐾', 'salvaje');
+  }
+  zoneBoss() {
+    const s = this.s;
+    this.log('👑 ¡Un <b>jefe de zona</b> aparece! Un animal poderoso, drogado por los cazadores…');
+    return this.startBattle(E.genZoneBoss(s.country, this.depth()), 'Jefe de zona', '👑', 'jefezona');
   }
 
   backToMap() { this.s.phase = 'map'; this.s.editId = null; this.render(); }
@@ -264,6 +292,25 @@ export class Game {
           [{ label: 'Continuar', action: () => this.backToMap() }]);
       }
       return this.poachLoss();
+    }
+    if (b.kind === 'jefezona') {
+      if (won) {
+        const boss = b.enemy[0];                       // lo RESCATÁS: se une a tu refugio
+        boss.items = boss.items || [];
+        if (s.team.length >= RULES.MAX_TEAM) {
+          let wi = 0; s.team.forEach((x, i) => { if ((x.atk + x.hp) < (s.team[wi].atk + s.team[wi].hp)) wi = i; });
+          const old = s.team[wi]; s.team[wi] = boss;
+          this.log(`👑 Rescataste al JEFE DE ZONA ${boss.e} <b>${boss.n}</b> (Nv ${boss.level}); soltaste a ${old.e} ${old.n}`);
+        } else {
+          s.team.push(boss);
+          this.log(`👑 ¡Rescataste al JEFE DE ZONA ${boss.e} <b>${boss.n}</b> (Nv ${boss.level})!`);
+        }
+        this.registerDex(boss); this.award('jefezona');
+        return this.showEvent('👑', '¡Jefe de zona rescatado!',
+          `Tras una pelea durísima liberaste a ${boss.e} <b>${boss.n}</b> de la droga de los cazadores. Ahora es el animal más fuerte de tu refugio (Nv ${boss.level}).`,
+          [{ label: 'Increíble 🌿', action: () => this.backToMap() }]);
+      }
+      return this.hurt();
     }
     if (won) {
       s.team.forEach(a => { if (E.levelUp(a)) this.log(`🌿 ${a.e} <b>${a.n}</b> se recuperó hasta nivel ${a.level}!`); });

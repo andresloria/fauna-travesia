@@ -96,57 +96,67 @@ export function drawCountry(bag, avoid = null) {
   return { country: COUNTRIES[idx], idx, bag: b };
 }
 
-// ---------- mapa ramificado (estilo Slay the Spire / Pokelike) ----------
+// ---------- mapa LINEAL (sendero de la provincia) ----------
+// Cada provincia = INICIO + MAP_LEN casillas de encuentro + CABECILLA. El sendero
+// serpentea por la silueta de CR. Los ATACANTES (furtivos/traficantes) solo
+// aparecen DESPUÉS de las primeras SAFE_TILES casillas; las primeras son tranquilas.
+export const MAP_LEN = 15;       // casillas de encuentro por provincia
+export const SAFE_TILES = 6;     // las primeras N son zona tranquila (sin atacantes)
 export function generateMap(country, depth = 0) {
   const nodesById = {};
-  const node = (r, c, type, bio = null) => {
-    const o = { id: ++UID, r, c, type, bio, visited: false, children: [] };
-    nodesById[o.id] = o; return o;
+  const biomes = biomesOf(country);
+  const COLS = 4, xs = [16, 39, 61, 84];
+  const total = MAP_LEN + 2;       // + inicio + cabecilla
+  const seq = [];
+  const node = (idx, type, bio = null) => {
+    const row = Math.floor(idx / COLS);
+    const col = (row % 2 === 0) ? (idx % COLS) : (COLS - 1 - idx % COLS);
+    const o = {
+      id: ++UID, idx, type, bio, visited: false, children: [],
+      x: (idx === total - 1) ? 50 : xs[col], y: 9 + row * 18,
+    };
+    nodesById[o.id] = o; seq.push(o); return o;
   };
-  const rows = [];
-  rows[0] = [node(0, 1, 'start')];
-  const biomes = [...new Set(country.pool.map(k => SP[k].bio))];
-  for (let r = 1; r <= 4; r++) {
-    const cols = shuffle([0, 1, 2]).slice(0, 2 + rnd(2)).sort((a, b) => a - b);
-    rows[r] = cols.map(c => {
-      const t = pickType(depth, r);
-      return node(r, c, t, t === 'bioma' ? pick(biomes) : null);
-    });
+  node(0, 'start');
+  for (let i = 1; i <= MAP_LEN; i++) {
+    const t = pickType(depth, i);
+    node(i, t, t === 'bioma' ? pick(biomes) : null);
   }
-  rows[5] = [node(5, 1, 'airport')];
-
-  for (let r = 0; r < 5; r++) {
-    rows[r].forEach(n => {
-      let kids = rows[r + 1].filter(x => Math.abs(x.c - n.c) <= 1);
-      if (!kids.length) kids = [nearest(rows[r + 1], n.c)];
-      n.children = kids;
-    });
-    rows[r + 1].forEach(x => {
-      if (!rows[r].some(n => n.children.includes(x))) nearest(rows[r], x.c).children.push(x);
-    });
-  }
-  return { rows, nodesById, startId: rows[0][0].id };
+  node(total - 1, 'airport');
+  for (let i = 0; i < seq.length - 1; i++) seq[i].children = [seq[i + 1]];   // sendero lineal
+  return { seq, nodesById, startId: seq[0].id };
 }
-function nearest(row, c) { return row.reduce((b, x) => Math.abs(x.c - c) < Math.abs(b.c - c) ? x : b); }
-// El mapa tiene filas 1-4 (luego el aeropuerto en la 5). Los ATACANTES (furtivos/
-// traficantes) solo aparecen en las ÚLTIMAS casillas (filas 3-4): primero explorás
-// y rescatás, y peleás cerca del jefe. Las primeras casillas son pacíficas.
-function pickType(depth = 0, row = 4) {
+// `pos` = número de casilla (1..MAP_LEN). Atacantes solo si pos > SAFE_TILES.
+// 'sorpresa' puede salir en cualquier mitad (sorprende con objeto/pelea/jefe).
+function pickType(depth = 0, pos = 1) {
   const r = rnd(100);
-  if (row < 3) {
-    // primeras casillas: rescate / animal salvaje (pelea justa para subir de nivel) / hallazgo / traslado / refugio.
-    if (r < 44) return 'bioma';
-    if (r < 64) return 'salvaje';   // ~20%: pelea contra un animal salvaje a tu nivel
-    if (r < 78) return 'tesoro';
-    if (r < 88) return 'intercambio';
+  if (pos <= SAFE_TILES) {
+    // zona tranquila: rescate / animal alterado / hallazgo / traslado / sorpresa / refugio.
+    if (r < 32) return 'bioma';
+    if (r < 52) return 'salvaje';
+    if (r < 68) return 'tesoro';
+    if (r < 80) return 'intercambio';
+    if (r < 91) return 'sorpresa';
     return 'descanso';
   }
-  // últimas casillas: aparecen los atacantes
-  if (r < 30) return 'bioma';
-  if (r < 68) return 'combate';
-  if (r < 78) return depth >= 3 ? 'cazador' : 'combate';   // traficantes solo de la provincia 4 en adelante
-  if (r < 90) return 'tesoro';
+  // zona caliente: aparecen los cazadores.
+  if (r < 22) return 'bioma';
+  if (r < 40) return 'salvaje';
+  if (r < 58) return 'combate';
+  if (r < 70) return depth >= 3 ? 'cazador' : 'combate';   // traficantes desde la provincia 4
+  if (r < 84) return 'sorpresa';
+  if (r < 93) return 'tesoro';
   return 'descanso';
+}
+
+// Jefe de zona: UN animal MUY fuerte (raro). Si lo vencés, lo rescatás.
+export function genZoneBoss(country, depth) {
+  const strong = country.pool.filter(k => SP[k].rarity === 'ultrararo' || SP[k].rarity === 'legendario');
+  const key = strong.length ? weightedKey(strong) : weightedKey(country.pool);
+  const a = mkAnimal(key);
+  setLevel(a, enemyLevel(depth, true) + 3);   // muy por encima de un jefe normal
+  a.atk += 2; a.hp += 4; a.boss = true;        // boost de jefe de zona
+  return [a];
 }
 
 // Tres animales DIFERENTES para elegir a cuál rescatar. Prioriza el bioma y
