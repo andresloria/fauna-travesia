@@ -177,8 +177,8 @@ export class Game {
   // Casilla SORPRESA: puede dar un objeto, una pelea, una emboscada de cazadores
   // o (raro) un JEFE DE ZONA — un animal muy fuerte que, si lo vencés, rescatás.
   resolveSorpresa(n) {
-    const s = this.s, d = this.depth(), r = E.rnd(100), late = n.idx > E.SAFE_TILES;
-    if (n.idx >= 4 && r < 8) return this.zoneBoss();                    // jefe de zona (raro, difícil)
+    const s = this.s, d = this.depth(), r = E.rnd(100), late = n.r > E.SAFE_ROWS;
+    if (n.r >= 2 && r < 8) return this.zoneBoss();                      // jefe de zona (raro, difícil)
     if (r < 40) {                                                       // hallazgo
       const it = E.rnd(100) < 22 ? E.pick(RARE_ITEMS) : E.pick(ITEMS);
       s.bag.push(it);

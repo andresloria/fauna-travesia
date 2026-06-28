@@ -96,47 +96,59 @@ export function drawCountry(bag, avoid = null) {
   return { country: COUNTRIES[idx], idx, bag: b };
 }
 
-// ---------- mapa LINEAL (sendero de la provincia) ----------
-// Cada provincia = INICIO + MAP_LEN casillas de encuentro + CABECILLA. El sendero
-// serpentea por la silueta de CR. Los ATACANTES (furtivos/traficantes) solo
-// aparecen DESPUÉS de las primeras SAFE_TILES casillas; las primeras son tranquilas.
-export const MAP_LEN = 15;       // casillas de encuentro por provincia
-export const SAFE_TILES = 6;     // las primeras N son zona tranquila (sin atacantes)
+// ---------- mapa RAMIFICADO (elegís tu ruta, estilo Slay the Spire) ----------
+// Inicio → MAP_ROWS filas de 3 opciones (elegís 1 por fila) → Cabecilla.
+// Las primeras 2 filas (6 casillas) son tranquilas; de la 3 en adelante aparecen
+// los cazadores. La ÚLTIMA fila SIEMPRE es: descanso + cazador + una al azar.
+export const MAP_ROWS = 5;       // filas de 3 opciones por provincia
+export const SAFE_ROWS = 2;      // las primeras N filas son zona tranquila
+const MX = [22, 50, 78];         // 3 columnas
 export function generateMap(country, depth = 0) {
   const nodesById = {};
   const biomes = biomesOf(country);
-  const COLS = 4, xs = [16, 39, 61, 84];
-  const total = MAP_LEN + 2;       // + inicio + cabecilla
   const seq = [];
-  const node = (idx, type, bio = null) => {
-    const row = Math.floor(idx / COLS);
-    const col = (row % 2 === 0) ? (idx % COLS) : (COLS - 1 - idx % COLS);
-    const o = {
-      id: ++UID, idx, type, bio, visited: false, children: [],
-      x: (idx === total - 1) ? 50 : xs[col], y: 9 + row * 18,
-    };
+  const yFor = (r) => 88 - r * (78 / (MAP_ROWS + 1));   // r0 abajo (inicio), última arriba (cabecilla)
+  const mk = (r, c, type, bio = null) => {
+    const o = { id: ++UID, r, c, type, bio, x: MX[c] ?? 50, y: yFor(r), visited: false, children: [] };
     nodesById[o.id] = o; seq.push(o); return o;
   };
-  node(0, 'start');
-  for (let i = 1; i <= MAP_LEN; i++) {
-    const t = pickType(depth, i);
-    node(i, t, t === 'bioma' ? pick(biomes) : null);
+  const rows = [];
+  rows[0] = [mk(0, 1, 'start')];
+  for (let r = 1; r <= MAP_ROWS; r++) {
+    let types;
+    if (r === MAP_ROWS) {
+      // última fila SIEMPRE: descanso + un cazador + una al azar. El cazador es
+      // furtivo temprano y traficante desde la provincia 4 (gate de dificultad).
+      const hunter = depth >= 3 ? 'cazador' : 'combate';
+      types = shuffle(['descanso', hunter, pickType(depth, r)]);
+    } else types = [0, 1, 2].map(() => pickType(depth, r));
+    rows[r] = [0, 1, 2].map(c => mk(r, c, types[c], types[c] === 'bioma' ? pick(biomes) : null));
   }
-  node(total - 1, 'airport');
-  for (let i = 0; i < seq.length - 1; i++) seq[i].children = [seq[i + 1]];   // sendero lineal
-  return { seq, nodesById, startId: seq[0].id };
+  rows[MAP_ROWS + 1] = [mk(MAP_ROWS + 1, 1, 'airport')];
+  // conexiones ramificadas: cada nodo → los de la fila siguiente con |Δcolumna| ≤ 1
+  for (let r = 0; r <= MAP_ROWS; r++) {
+    rows[r].forEach(n => {
+      let kids = rows[r + 1].filter(x => Math.abs(x.c - n.c) <= 1);
+      if (!kids.length) kids = [rows[r + 1][0]];
+      n.children = kids;
+    });
+    rows[r + 1].forEach(x => {                 // todo nodo siguiente debe ser alcanzable
+      if (!rows[r].some(n => n.children.includes(x)))
+        rows[r].reduce((b, n) => Math.abs(n.c - x.c) < Math.abs(b.c - x.c) ? n : b).children.push(x);
+    });
+  }
+  return { rows, nodesById, startId: rows[0][0].id, seq };
 }
-// `pos` = número de casilla (1..MAP_LEN). Atacantes solo si pos > SAFE_TILES.
-// 'sorpresa' puede salir en cualquier mitad (sorprende con objeto/pelea/jefe).
-function pickType(depth = 0, pos = 1) {
+// `row` = fila (1..MAP_ROWS). Atacantes solo de la fila SAFE_ROWS+1 en adelante.
+function pickType(depth = 0, row = 1) {
   const r = rnd(100);
-  if (pos <= SAFE_TILES) {
+  if (row <= SAFE_ROWS) {
     // zona tranquila: rescate / animal alterado / hallazgo / traslado / sorpresa / refugio.
-    if (r < 32) return 'bioma';
-    if (r < 52) return 'salvaje';
-    if (r < 68) return 'tesoro';
-    if (r < 80) return 'intercambio';
-    if (r < 91) return 'sorpresa';
+    if (r < 34) return 'bioma';
+    if (r < 54) return 'salvaje';
+    if (r < 70) return 'tesoro';
+    if (r < 82) return 'intercambio';
+    if (r < 93) return 'sorpresa';
     return 'descanso';
   }
   // zona caliente: aparecen los cazadores.

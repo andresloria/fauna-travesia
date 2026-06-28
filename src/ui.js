@@ -167,13 +167,13 @@ export function createUI(game) {
       return `<div class="${cls}" style="left:${n.x}%;top:${n.y}%" ${data}>
         <div class="disc">${ic}</div><div class="ml">${lab}</div></div>`;
     }).join('');
-    const meta = s.country.secret ? 'enfrentá al Cabecilla 🚨' : 'cruzá las 15 casillas hasta el Cabecilla 🚨';
+    const meta = s.country.secret ? 'enfrentá al Cabecilla 🚨' : 'elegí tu ruta hasta el Cabecilla 🚨';
     phaseArea.innerHTML = `
       <div class="section-h">${s.country.flag} ${s.country.n} · ${meta}</div>
       <div class="mapwrap linear">${countryBg(s)}
         <div class="maptag">${s.country.flag} <b>${s.country.n}</b> · ${s.country.secret ? 'final ☁️' : 'provincia ' + (s.cleared + 1) + '/' + RULES.RUN_LENGTH}</div>
         <svg viewBox="0 0 100 100" preserveAspectRatio="none">${lines}</svg>${nodes}</div>
-      <div class="map-hint">Seguí el sendero, casilla por casilla. Las primeras 6 son tranquilas; pasadas esas, los cazadores acechan. ❓ = sorpresa.</div>
+      <div class="map-hint">Elegí tu ruta: tocá un nodo iluminado. Las primeras 2 filas son tranquilas; después acechan los cazadores. ❓ = sorpresa.</div>
       ${teamHTML(s.team, { editable: true, panel: true, order: true })}`;
   }
 

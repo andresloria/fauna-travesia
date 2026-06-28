@@ -264,22 +264,27 @@ test('final Monteverde: se abre tras las 7 provincias con el Quetzal Dorado', ()
   assert.ok(Object.values(m.nodesById).some(n => n.type === 'airport'), 'Monteverde tiene jefe final');
 });
 
-test('mapa lineal: 15 casillas de encuentro + inicio + cabecilla', () => {
-  for (let t = 0; t < 50; t++) {
+test('mapa ramificado: inicio + 5 filas de 3 + cabecilla; última fila fija', () => {
+  for (let t = 0; t < 80; t++) {
     const m = E.generateMap(COUNTRIES[0], 2);
-    assert.equal(m.seq.length, E.MAP_LEN + 2, '17 nodos: inicio + 15 + cabecilla');
-    assert.equal(m.seq[0].type, 'start');
-    assert.equal(m.seq[m.seq.length - 1].type, 'airport', 'el último es el cabecilla');
-    for (const n of m.seq) assert.ok(n.children.length <= 1, 'sendero lineal (0-1 hijo)');
+    assert.equal(m.rows.length, E.MAP_ROWS + 2, 'inicio + 5 filas + cabecilla');
+    assert.equal(m.rows[0][0].type, 'start');
+    assert.equal(m.rows[E.MAP_ROWS + 1][0].type, 'airport', 'el último es el cabecilla');
+    for (let r = 1; r <= E.MAP_ROWS; r++) assert.equal(m.rows[r].length, 3, `fila ${r} con 3 opciones`);
+    const lastTypes = m.rows[E.MAP_ROWS].map(n => n.type);
+    assert.ok(lastTypes.includes('descanso'), 'última fila incluye descanso');
+    assert.ok(lastTypes.includes('cazador') || lastTypes.includes('combate'), 'última fila incluye un cazador/furtivo');
+    // el inicio ofrece 3 rutas
+    assert.equal(m.rows[0][0].children.length, 3, 'desde el inicio elegís entre 3');
   }
 });
 
-test('los atacantes (combate/cazador) solo DESPUÉS de la casilla 6', () => {
+test('los atacantes (combate/cazador) solo de la fila 3 en adelante', () => {
   for (let t = 0; t < 200; t++) {
     const m = E.generateMap(COUNTRIES[0], 5);   // depth alto: permite cazador
     for (const n of m.seq)
       if (n.type === 'combate' || n.type === 'cazador')
-        assert.ok(n.idx > E.SAFE_TILES, `atacante en casilla ${n.idx}, debería ser > ${E.SAFE_TILES}`);
+        assert.ok(n.r > E.SAFE_ROWS, `atacante en fila ${n.r}, debería ser > ${E.SAFE_ROWS}`);
   }
 });
 
