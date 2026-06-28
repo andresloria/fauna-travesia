@@ -6,7 +6,7 @@
 
 import * as E from './engine.js';
 import * as M from './meta.js';
-import { ITEMS, RARE_ITEMS, SECRET, RULES } from './data.js';
+import { ITEMS, RARE_ITEMS, SECRET, RULES, itemBonus } from './data.js';
 
 export class Game {
   constructor(ui = null) {
@@ -156,7 +156,7 @@ export class Game {
         const it = E.pick(ITEMS);
         s.bag.push(it);
         return this.showEvent('🎁', 'Hallazgo',
-          `Encontraste ${it.e} <b>${it.n}</b> (+${it.atk}⚔ +${it.hp}❤). Lo guardás en la mochila — equipalo a un animal desde su ficha.`,
+          `Encontraste ${it.e} <b>${it.n}</b> (${itemBonus(it)}). Lo guardás en la mochila — equipalo a un animal desde su ficha.`,
           [{ label: 'Continuar', action: () => this.backToMap() }]);
       }
       case 'salvaje': {
@@ -190,7 +190,7 @@ export class Game {
       const it = E.rnd(100) < 22 ? E.pick(RARE_ITEMS) : E.pick(ITEMS);
       s.bag.push(it);
       return this.showEvent('❓', '¡Sorpresa! Un hallazgo',
-        `Entre la maleza aparece ${it.e} <b>${it.n}</b> (+${it.atk}⚔ +${it.hp}❤). A la mochila.`,
+        `Entre la maleza aparece ${it.e} <b>${it.n}</b> (${itemBonus(it)}). A la mochila.`,
         [{ label: 'Seguir 🧭', action: () => this.backToMap() }]);
     }
     if (late && d >= 3 && r < 60) return this.startBattle(              // emboscada de traficantes
@@ -328,7 +328,7 @@ export class Game {
         this.award('traficantes'); this.checkConserva();
         this.log(`🏆 Frenaste a los traficantes: doble recuperación + ${it.e} <b>${it.n}</b> (conservación +1)`);
         return this.showEvent('🏆', '¡Traficantes frenados!',
-          `Liberaste a los animales que llevaban 🌿 (conservación +1). Tu refugio sube <b>DOBLE</b> y te llevás un objeto raro: ${it.e} <b>${it.n}</b> (+${it.atk}⚔ +${it.hp}❤).`,
+          `Liberaste a los animales que llevaban 🌿 (conservación +1). Tu refugio sube <b>DOBLE</b> y te llevás un objeto raro: ${it.e} <b>${it.n}</b> (${itemBonus(it)}).`,
           [{ label: 'Continuar', action: () => this.backToMap() }]);
       }
       return this.poachLoss();
@@ -396,8 +396,9 @@ export class Game {
     if (!a || a.items.length >= RULES.MAX_ITEMS) return;
     const it = s.bag[bagIndex]; if (!it) return;
     s.bag.splice(bagIndex, 1);
-    a.items.push(it); a.atk += it.atk; a.hp += it.hp;
-    this.log(`${it.e} <b>${it.n}</b> equipado a ${a.e} ${a.n}`);
+    a.items.push(it);
+    a.atk += it.atk || 0; a.hp += it.hp || 0; a.spd += it.spd || 0; a.hab += it.hab || 0;
+    this.log(`${it.e} <b>${it.n}</b> (${itemBonus(it)}) equipado a ${a.e} ${a.n}`);
     this.render();
   }
   moveAnimal(uid, dir) {

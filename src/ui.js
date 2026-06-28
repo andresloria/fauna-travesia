@@ -4,7 +4,7 @@
 // Si algún día cambiás el look, es acá.
 // ============================================================
 
-import { SP, BIOMES, ABILITIES, RARITY, RULES, PLAYER_FLAGS } from './data.js';
+import { SP, BIOMES, ABILITIES, RARITY, RULES, PLAYER_FLAGS, itemBonus } from './data.js';
 import * as M from './meta.js';
 
 // Arte pixel por especie. Todo el roster (SP) tiene su PNG en assets/animales/
@@ -36,7 +36,7 @@ export function createUI(game) {
     const lead = opts.lead ? `<span class="leadtag">PELEA 1°</span>` : '';
     const ord = opts.order ? `<span class="ord">${opts.order}</span>` : '';
     const items = (a.items && a.items.length)
-      ? `<div class="cititems">${a.items.map(it => `<span title="${it.n} (+${it.atk}⚔ +${it.hp}❤)">${it.e}</span>`).join('')}</div>` : '';
+      ? `<div class="cititems">${a.items.map(it => `<span title="${it.n} (${itemBonus(it)})">${it.e}</span>`).join('')}</div>` : '';
     return `<div class="${cls}" ${data}>
       ${lead}${rarTag}${downTag}
       <span class="stage">${stageLabel} · Nv${a.level}</span>
@@ -248,7 +248,7 @@ export function createUI(game) {
     const bag = s.bag.length
       ? s.bag.map((it, i) =>
           `<button class="bagitem" data-act="equip" data-bag="${i}" ${a.items.length >= RULES.MAX_ITEMS ? 'disabled' : ''}>
-             ${it.e} ${it.n} <span class="plus">+${it.atk}⚔ +${it.hp}❤</span></button>`).join('')
+             ${it.e} ${it.n} <span class="plus">${itemBonus(it)}</span></button>`).join('')
       : `<div class="map-hint" style="margin:0;text-align:left">Sin objetos. Conseguís tesoros 🎁 en el mapa.</div>`;
     phaseArea.innerHTML = `
       <div class="section-h">Editar compañero <span style="flex:0 0 auto"><button class="btn ghost" data-act="edit-close">◀ Volver al mapa</button></span></div>

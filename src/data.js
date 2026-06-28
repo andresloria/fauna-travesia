@@ -40,24 +40,35 @@ export const RARITY = {
   extinto:   { n:'Extinto',    w:0.5,  cls:'r-ext',    color:'#d8643f' },
 };
 
-// Objetos TICOS — tesoros 🎁 del mapa. Dan un buen empujón de ⚔/❤ al equiparlos.
+// Objetos TICOS — tesoros 🎁 del mapa. Suman ⚔/❤/💨(velocidad)/🌀(habilidad) al equiparlos.
 export const ITEMS = [
-  { n:'Chonete',        e:'👒', atk:1, hp:5 },   // el sombrero tico: aguante
-  { n:'Salsa Lizano',   e:'🥫', atk:4, hp:1 },   // el sabor que da garra
-  { n:'Gallo pinto',    e:'🫘', atk:2, hp:4 },   // desayuno tico, puro aguante
-  { n:'Café chorreado', e:'☕', atk:4, hp:2 },   // energía pura
-  { n:'Casado',         e:'🍛', atk:3, hp:4 },   // plato completo, balanceado
-  { n:'Agua dulce',     e:'🍯', atk:2, hp:3 },   // tapa de dulce, dulzura tica
+  { n:'Chonete',        e:'👒', atk:1, hp:5 },                 // el sombrero tico: aguante
+  { n:'Salsa Lizano',   e:'🥫', atk:4, hp:1 },                 // el sabor que da garra
+  { n:'Gallo pinto',    e:'🫘', atk:2, hp:4 },                 // desayuno tico, puro aguante
+  { n:'Café chorreado', e:'☕', atk:3, hp:1, spd:2 },          // energía: pega y corre
+  { n:'Casado',         e:'🍛', atk:3, hp:4 },                 // plato completo, balanceado
+  { n:'Agua dulce',     e:'🍯', atk:2, hp:3 },                 // tapa de dulce
+  { n:'Chanclas',       e:'🩴', hp:1, spd:2, hab:1 },          // livianas: agilidad
+  { n:'Fresco natural', e:'🥤', atk:1, hp:1, spd:3 },          // cas/tamarindo: chispa de velocidad
+  { n:'Granizado',      e:'🍧', hp:2, spd:1, hab:2 },          // refresca: reflejos
 ];
 
 // Objetos RAROS y ticos — recompensa por vencer a traficantes/cazadores. Más fuertes.
 export const RARE_ITEMS = [
-  { n:'Carreta típica',    e:'🛞', atk:6, hp:5 },   // patrimonio: empuje
-  { n:'Esfera del Diquís', e:'🪨', atk:4, hp:8 },   // poder ancestral
-  { n:'Marimba',           e:'🪇', atk:8, hp:3 },   // el ritmo que envalentona
-  { n:'Guaria morada',     e:'🌸', atk:3, hp:9 },   // la flor nacional
-  { n:'Bandera tica',      e:'🇨🇷', atk:6, hp:6 },   // orgullo patrio
+  { n:'Carreta típica',    e:'🛞', atk:6, hp:5 },              // patrimonio: empuje
+  { n:'Esfera del Diquís', e:'🪨', atk:4, hp:8 },              // poder ancestral
+  { n:'Marimba',           e:'🪇', atk:8, hp:3 },              // el ritmo que envalentona
+  { n:'Guaria morada',     e:'🌸', atk:3, hp:9 },              // la flor nacional
+  { n:'Bandera tica',      e:'🇨🇷', atk:6, hp:6 },              // orgullo patrio
+  { n:'Cimarrona',         e:'🎺', atk:3, hp:4, spd:4, hab:2 },// la banda que enardece: ágil
+  { n:'Guaro Cacique',     e:'🥃', atk:5, hp:1, spd:6 },       // puro vértigo
 ];
+
+// Texto de bonus de un objeto (solo las stats que aporta).
+export const itemBonus = (it) => [
+  it.atk ? `+${it.atk}⚔` : '', it.hp ? `+${it.hp}❤` : '',
+  it.spd ? `+${it.spd}💨` : '', it.hab ? `+${it.hab}🌀` : '',
+].filter(Boolean).join(' ');
 
 // Banderas para el avatar del jugador (identidad, sin efecto en el juego).
 export const PLAYER_FLAGS = ['🇨🇷','🇲🇽','🇪🇸','🇦🇷','🇨🇴','🇧🇷','🇺🇸','🇨🇦','🇫🇷','🇩🇪','🇯🇵','🇬🇧'];
