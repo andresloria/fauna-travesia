@@ -34,7 +34,7 @@ RARO = {"venado", "saino", "chancho_monte", "mono_congo", "mono_titi", "tepezcui
         "chachalaca", "loro", "rana_cristal", "rana_verdinegra", "rana_granular",
         "rana_gladiadora", "salamandra", "cecilia", "garrobo", "bocaraca", "lora", "cascabel",
         "serpiente_mar", "mica", "bejuquilla", "tortuga_baula", "tortuga_carey", "tortuga_lora",
-        "tortuga_cabezona", "mariposa_buho", "escarabajo", "fragata", "ibis", "pelicano"}
+        "tortuga_cabezona", "mariposa_buho", "escarabajo", "fragata", "ibis", "pelicano", "tarantula"}
 # segunda habilidad de cada legendario (los únicos con 2); debe diferir de su `ab`.
 LEGEND_AB2 = {
     "jaguar": "first", "puma": "first", "danta": "thorns", "aguila_harpia": "first",
@@ -78,6 +78,7 @@ EXISTING = {
     "basilisco": dict(n="Basilisco", e="🦎", atk=3, hp=3, spd=8, hab=6, bio="agua", ab="first"),
     "lapa":      dict(n="Lapa roja", e="🦜", atk=5, hp=6, spd=6, hab=4, bio="bosque", ab="rage", leg=True),
     "quetzaldorado": dict(n="Quetzal Dorado", e="🐦", atk=4, hp=9, spd=8, hab=6, bio="montana", ab="heal", leg=True),
+    "tarantula":     dict(n="Tarántula", e="🕷️", atk=4, hp=3, spd=5, hab=4, bio="bosque", ab="poison"),
 }
 
 # ---- 2) Bioma por especie nueva (las del bestiario que no están arriba) ----
@@ -198,7 +199,7 @@ for e in BESTIARIO:
     if e.get("ext"): rec["ext"] = True
     SP[slug] = rec
 # extras que no están en el bestiario pero sí en el juego (con art propio)
-for slug in ("abeja", "cangrejo", "tiburon", "quetzaldorado"):
+for slug in ("abeja", "cangrejo", "tiburon", "quetzaldorado", "tarantula"):
     if slug not in SP:
         SP[slug] = dict(EXISTING[slug])
 # starters básicos (perro/gato/comemaíz)

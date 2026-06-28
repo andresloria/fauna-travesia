@@ -88,7 +88,6 @@ BESTIARIO = [
     {"slug": "martin_pescador", "cat": "Aves", "name": "Martín pescador",             "sci": "Megaceryle torquata",   "prompt": "a ringed kingfisher, blue-grey back, rufous belly, shaggy crest, heavy bill"},
     {"slug": "anhinga",         "cat": "Aves", "name": "Pato aguja (anhinga)",        "sci": "Anhinga anhinga",       "prompt": "an anhinga, black body, silvery wing streaks, long snake-like neck, sharp bill"},
     {"slug": "tinamu",          "cat": "Aves", "name": "Tinamú grande",               "sci": "Tinamus major",         "prompt": "a great tinamou, plump brown ground bird, small head, short tail"},
-    {"slug": "pavon",           "cat": "Aves", "name": "Pavón grande",                "sci": "Crax rubra",            "prompt": "a great curassow, glossy black body, curly crest, yellow bill knob"},
     {"slug": "chachalaca",      "cat": "Aves", "name": "Chachalaca",                  "sci": "Ortalis cinereiceps",   "prompt": "a grey-headed chachalaca, brown body, grey head, long tail"},
     {"slug": "loro",            "cat": "Aves", "name": "Loro frentirrojo",            "sci": "Amazona autumnalis",    "prompt": "a red-lored parrot, green body, red forehead, lilac crown touch"},
 
@@ -96,7 +95,6 @@ BESTIARIO = [
     {"slug": "rana_ojos_rojos", "cat": "Anfibios", "name": "Rana de ojos rojos",      "sci": "Agalychnis callidryas", "prompt": "a red-eyed tree frog, leaf-green body, big red eyes, blue flanks, orange feet"},
     {"slug": "ranadardo",       "cat": "Anfibios", "name": "Rana venenosa roja (blue-jeans)", "sci": "Oophaga pumilio", "prompt": "a strawberry poison dart frog, bright red body, blue jeans legs"},
     {"slug": "rana_verdinegra", "cat": "Anfibios", "name": "Rana dardo verdinegra",   "sci": "Dendrobates auratus",   "prompt": "a green and black poison dart frog, marbled pattern"},
-    {"slug": "rana_granular",   "cat": "Anfibios", "name": "Rana dardo granular",     "sci": "Oophaga granulifera",   "prompt": "a granular poison dart frog, orange-red body, green-blue legs"},
     {"slug": "rana_cristal",    "cat": "Anfibios", "name": "Rana de cristal",         "sci": "Hyalinobatrachium valerioi","prompt": "a glass frog, translucent lime-green body, visible heart, on a leaf"},
     {"slug": "rana_lechera",    "cat": "Anfibios", "name": "Rana lechera",            "sci": "Leptodactylus savagei", "prompt": "a smoky jungle frog, large robust brown frog, folds on sides"},
     {"slug": "rana_tungara",    "cat": "Anfibios", "name": "Rana túngara",            "sci": "Engystomops pustulosus", "prompt": "a tungara frog, small warty greyish-brown frog"},
@@ -105,13 +103,11 @@ BESTIARIO = [
     {"slug": "sapo_marino",     "cat": "Anfibios", "name": "Sapo marino",             "sci": "Rhinella marina",       "prompt": "a cane toad, large warty olive-brown toad, big parotoid glands"},
     {"slug": "sapo_dorado",     "cat": "Anfibios", "name": "Sapo dorado (extinto)",   "sci": "Incilius periglenes",   "prompt": "a golden toad, bright glowing orange smooth toad", "ext": True},
     {"slug": "salamandra",      "cat": "Anfibios", "name": "Salamandra sin pulmones", "sci": "Bolitoglossa",          "prompt": "a lungless salamander, slender moist dark-brown body, tiny legs"},
-    {"slug": "cecilia",         "cat": "Anfibios", "name": "Cecilia",                 "sci": "Gymnopis multiplicata", "prompt": "a caecilian, legless purple-grey worm-like amphibian, ringed body"},
 
     # ---------------- Reptiles ----------------
     {"slug": "iguana",          "cat": "Reptiles", "name": "Iguana verde",            "sci": "Iguana iguana",         "prompt": "a green iguana on a branch, spiky dorsal crest, dewlap, long striped tail"},
     {"slug": "garrobo",         "cat": "Reptiles", "name": "Garrobo",                 "sci": "Ctenosaura similis",    "prompt": "a black spiny-tailed iguana, grey body with dark bands, spiky tail"},
     {"slug": "basilisco",       "cat": "Reptiles", "name": "Basilisco verde (Jesucristo)","sci": "Basiliscus plumifrons","prompt": "a green plumed basilisk, vivid green, tall head and back crest, on hind legs"},
-    {"slug": "basilisco_comun", "cat": "Reptiles", "name": "Basilisco común",         "sci": "Basiliscus basiliscus", "prompt": "a common brown basilisk lizard, head crest, long whip tail"},
     {"slug": "anolis",          "cat": "Reptiles", "name": "Anolis (lagartija)",      "sci": "Anolis",                "prompt": "a small anole lizard, slender green-brown body, extended orange throat fan"},
     {"slug": "geco",            "cat": "Reptiles", "name": "Salamanqueja (geco)",     "sci": "Hemidactylus",          "prompt": "a house gecko, pale tan translucent skin, big eyes, sticky toes"},
     {"slug": "cocodrilo",       "cat": "Reptiles", "name": "Cocodrilo americano",     "sci": "Crocodylus acutus",     "prompt": "an American crocodile, olive-green armored body, long toothy snout"},

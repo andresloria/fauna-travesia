@@ -7,6 +7,8 @@
 # ============================================================
 
 import os, re, shutil
+from PIL import Image
+import gen_pixel   # para strip_bg
 
 SRC = r"C:\Users\Andres\Claude\Projects\Fauna\pixelart"
 DST = os.path.join(os.path.dirname(__file__), "assets", "animales")
@@ -63,6 +65,11 @@ MAP = {
     "yiguirro.png": "yiguirro", "zarigueya.png": "zorro_pelon",
     "zopilote cabecirrojo.png": "zopilote_rojo", "zopilotenegro.png": "zopilote_negro",
     "zorrogris.png": "zorro_gris",
+    # agregadas después: faltantes + tarántula nueva
+    "abeja.png": "abeja", "cabro de monte.png": "cabro_monte", "cangrejo.png": "cangrejo",
+    "ermitaño.png": "ermitano", "mapache cangrejero.png": "mapache_cangrejero",
+    "quetzal dorado.png": "quetzaldorado", "tiburon.png": "tiburon",
+    "tucan pico castaño.png": "tucan_castano", "tarantula.png": "tarantula",
     # "manati.png" se ignora: duplicado de manaticaribe.png
 }
 
@@ -79,7 +86,11 @@ def main():
     for fn, slug in MAP.items():
         if fn not in files:
             missing_files.append(fn); continue
-        shutil.copyfile(os.path.join(SRC, fn), os.path.join(DST, slug + ".png"))
+        dst = os.path.join(DST, slug + ".png")
+        shutil.copyfile(os.path.join(SRC, fn), dst)
+        # si llega con fondo (esquina no transparente), recortarlo
+        if Image.open(dst).convert("RGBA").getpixel((0, 0))[3] > 10:
+            gen_pixel.strip_bg(dst); print(f"  recortado fondo de {slug}")
         used_slugs.add(slug); copied += 1
     print(f"Copiadas {copied} imágenes del usuario.")
     if missing_files:

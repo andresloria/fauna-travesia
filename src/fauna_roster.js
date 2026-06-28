@@ -5,7 +5,7 @@
 // legendarios van con sus valores curados. Re-generar: python make_fauna_data.py
 // ============================================================
 
-// 133 especies (con rareza; legendarios con 2 habilidades; + starters)
+// 130 especies (con rareza; legendarios con 2 habilidades; + starters)
 export const SP = {
   perezoso: { n:"Perezoso", e:"🦥", atk:1, hp:7, spd:1, hab:0, bio:"bosque", ab:"shield", rarity:"comun" },
   perezoso_dos: { n:"Perezoso de dos dedos", e:"🐾", atk:2, hp:5, spd:5, hab:3, bio:"bosque", ab:"shield", rarity:"comun" },
@@ -83,13 +83,11 @@ export const SP = {
   martin_pescador: { n:"Martín pescador", e:"🐦", atk:4, hp:4, spd:4, hab:2, bio:"agua", ab:"first", rarity:"raro" },
   anhinga: { n:"Pato aguja (anhinga)", e:"🐦", atk:2, hp:5, spd:5, hab:3, bio:"agua", ab:"first", rarity:"raro" },
   tinamu: { n:"Tinamú grande", e:"🐦", atk:2, hp:5, spd:5, hab:3, bio:"bosque", ab:"first", rarity:"ultrararo" },
-  pavon: { n:"Pavón grande", e:"🐦", atk:6, hp:5, spd:5, hab:3, bio:"bosque", ab:"rage", rarity:"ultrararo" },
   chachalaca: { n:"Chachalaca", e:"🐦", atk:4, hp:4, spd:4, hab:2, bio:"bosque", ab:"first", rarity:"raro" },
   loro: { n:"Loro frentirrojo", e:"🐦", atk:1, hp:4, spd:8, hab:8, bio:"bosque", ab:"first", rarity:"raro" },
   rana_ojos_rojos: { n:"Rana de ojos rojos", e:"🐸", atk:4, hp:2, spd:5, hab:5, bio:"bosque", ab:"poison", rarity:"comun" },
   ranadardo: { n:"Rana dardo", e:"🐸", atk:4, hp:1, spd:4, hab:4, bio:"bosque", ab:"poison", rarity:"comun" },
   rana_verdinegra: { n:"Rana dardo verdinegra", e:"🐸", atk:5, hp:1, spd:6, hab:3, bio:"bosque", ab:"poison", rarity:"raro" },
-  rana_granular: { n:"Rana dardo granular", e:"🐸", atk:6, hp:1, spd:4, hab:4, bio:"bosque", ab:"poison", rarity:"raro" },
   rana_cristal: { n:"Rana de cristal", e:"🐸", atk:3, hp:3, spd:6, hab:1, bio:"bosque", ab:"first", rarity:"raro" },
   rana_lechera: { n:"Rana lechera", e:"🐸", atk:3, hp:3, spd:6, hab:1, bio:"bosque", ab:"first", rarity:"comun" },
   rana_tungara: { n:"Rana túngara", e:"🐸", atk:3, hp:3, spd:6, hab:1, bio:"sabana", ab:"first", rarity:"comun" },
@@ -98,11 +96,9 @@ export const SP = {
   sapo_marino: { n:"Sapo marino", e:"🐸", atk:2, hp:5, spd:5, hab:3, bio:"sabana", ab:"poison", rarity:"comun" },
   sapo_dorado: { n:"Sapo dorado (extinto)", e:"🐸", atk:8, hp:4, spd:4, hab:5, bio:"montana", ab:"poison", ext:true, rarity:"extinto" },
   salamandra: { n:"Salamandra sin pulmones", e:"🐸", atk:2, hp:5, spd:5, hab:3, bio:"montana", ab:"heal", rarity:"raro" },
-  cecilia: { n:"Cecilia", e:"🐸", atk:4, hp:2, spd:5, hab:5, bio:"bosque", ab:"poison", rarity:"raro" },
   iguana: { n:"Iguana", e:"🦎", atk:2, hp:5, spd:4, hab:2, bio:"sabana", ab:"thorns", rarity:"comun" },
   garrobo: { n:"Garrobo", e:"🦎", atk:3, hp:3, spd:6, hab:1, bio:"sabana", ab:"thorns", rarity:"raro" },
   basilisco: { n:"Basilisco", e:"🦎", atk:3, hp:3, spd:8, hab:6, bio:"agua", ab:"first", rarity:"comun" },
-  basilisco_comun: { n:"Basilisco común", e:"🦎", atk:3, hp:3, spd:6, hab:1, bio:"agua", ab:"thorns", rarity:"comun" },
   anolis: { n:"Anolis (lagartija)", e:"🦎", atk:2, hp:2, spd:8, hab:6, bio:"bosque", ab:"thorns", rarity:"comun" },
   geco: { n:"Salamanqueja (geco)", e:"🦎", atk:1, hp:4, spd:8, hab:8, bio:"bosque", ab:"first", rarity:"comun" },
   cocodrilo: { n:"Cocodrilo", e:"🐊", atk:5, hp:6, spd:3, hab:1, bio:"agua", ab:"first", rarity:"ultrararo" },
@@ -137,19 +133,20 @@ export const SP = {
   cangrejo: { n:"Cangrejo", e:"🦀", atk:2, hp:5, spd:3, hab:1, bio:"agua", ab:"thorns", rarity:"comun" },
   tiburon: { n:"Tiburón", e:"🦈", atk:6, hp:4, spd:6, hab:3, bio:"agua", ab:"rage", rarity:"comun" },
   quetzaldorado: { n:"Quetzal Dorado", e:"🐦", atk:5, hp:11, spd:8, hab:7, bio:"montana", ab:"heal", leg:true, rarity:"legendario", ab2:"shield" },
+  tarantula: { n:"Tarántula", e:"🕷️", atk:4, hp:3, spd:5, hab:4, bio:"bosque", ab:"poison", rarity:"raro" },
   perro: { n:"Perro", e:"🐕", atk:3, hp:4, spd:4, hab:3, bio:"bosque", ab:"shield", starter:true, rarity:"comun" },
   gato: { n:"Gato", e:"🐈", atk:3, hp:3, spd:5, hab:4, bio:"bosque", ab:"first", starter:true, rarity:"comun" },
   comemaiz: { n:"Comemaíz", e:"🐦", atk:3, hp:4, spd:4, hab:3, bio:"sabana", ab:"heal", starter:true, rarity:"comun" },
 };
 
 export const COUNTRIES = [
-  { flag:"🏙️", n:"San José", map:"costa-rica", pool:["abeja", "bejuquilla", "cabro_monte", "colibri_fuego", "coyote", "geco", "jacamar", "leon_brenero", "mapache", "martilla", "mono_titi", "pajaro_campana", "puercoespin", "rana_lechera", "salamandra", "tangara_dorada", "tinamu", "tucan", "jaguar"] },
-  { flag:"🌋", n:"Alajuela", map:"costa-rica", pool:["aguila_harpia", "basilisco_comun", "carpintero", "cocodrilo", "danta", "fragata", "jaguar", "lora", "mapache_cangrejero", "martin_pescador", "monocara", "pavon", "puma", "rana_ojos_rojos", "sapo_dorado", "tantalo", "tiburon_martillo", "tortuga_carey", "perezoso"] },
-  { flag:"⛰️", n:"Cartago", map:"costa-rica", pool:["anolis", "boa", "caucel", "colibri_talamanca", "ermitano", "guatusa", "lapa", "loro", "mariposa", "matabuey", "murcielago", "perezoso", "quetzal", "rana_payaso", "serafin", "tepezcuintle", "tolomuco", "tucan_castano", "tucan"] },
-  { flag:"🌿", n:"Heredia", map:"costa-rica", pool:["ardilla", "bocaraca", "cecilia", "comadreja", "escarabajo", "hormiga_bala", "lapa_verde", "manigordo", "mariposa_buho", "mica", "olingo", "perezoso_dos", "quetzaldorado", "rana_verdinegra", "serpiente", "tigrillo", "trogon", "tucancillo", "quetzal"] },
-  { flag:"🌾", n:"Guanacaste", map:"costa-rica", pool:["anhinga", "armadillo", "bienteveo", "caracara", "cascabel", "garrobo", "garza", "grison", "iguana", "momoto", "nutria", "pelicano", "rana_cristal", "rana_tungara", "saino", "sapo_marino", "tortuga", "tortuga_lora", "venado", "zopilote_negro", "zopilote_rojo", "zorro_gris"] },
-  { flag:"🌊", n:"Puntarenas", map:"costa-rica", pool:["ballena", "caiman", "chachalaca", "coral", "delfin", "ibis", "jicotea", "manati", "mariposa_julia", "mono_arana", "oropendola", "pez_vela", "rana_gladiadora", "ranadardo", "serpiente_mar", "tiburon", "tortuga_baula", "yiguirro", "tortuga"] },
-  { flag:"🏝️", n:"Limón", map:"costa-rica", pool:["basilisco", "cangrejo", "chancho_monte", "cusingo", "espatula", "jabiru", "lechuza", "mantarraya", "marlin", "mono_congo", "oso_hormiguero", "pizote", "rana_granular", "saltarin", "tangara_azul", "tiburon_ballena", "tortuga_cabezona", "zorro_pelon", "cocodrilo"] },
+  { flag:"🏙️", n:"San José", map:"costa-rica", pool:["abeja", "bejuquilla", "carpintero", "colibri_fuego", "ermitano", "guatusa", "lapa", "lora", "mariposa", "matabuey", "murcielago", "pajaro_campana", "puma", "ranadardo", "tangara_azul", "tigrillo", "trogon", "tucancillo", "perezoso"] },
+  { flag:"🌋", n:"Alajuela", map:"costa-rica", pool:["aguila_harpia", "boa", "caucel", "colibri_talamanca", "delfin", "hormiga_bala", "jicotea", "manati", "mariposa_buho", "mica", "nutria", "perezoso_dos", "quetzal", "salamandra", "serpiente_mar", "tiburon", "tortuga", "tortuga_lora", "cocodrilo"] },
+  { flag:"⛰️", n:"Cartago", map:"costa-rica", pool:["anolis", "bocaraca", "chachalaca", "comadreja", "escarabajo", "jacamar", "lapa_verde", "manigordo", "mariposa_julia", "mono_arana", "olingo", "pizote", "quetzaldorado", "saltarin", "tangara_dorada", "tinamu", "tucan", "yiguirro", "quetzal"] },
+  { flag:"🌿", n:"Heredia", map:"costa-rica", pool:["ardilla", "cabro_monte", "chancho_monte", "coyote", "geco", "jaguar", "lechuza", "mapache", "martilla", "mono_congo", "oropendola", "puercoespin", "rana_lechera", "sapo_dorado", "tarantula", "tolomuco", "tucan_castano", "zorro_pelon", "tucan"] },
+  { flag:"🌾", n:"Guanacaste", map:"costa-rica", pool:["anhinga", "armadillo", "bienteveo", "caracara", "cascabel", "garrobo", "garza", "grison", "iguana", "momoto", "oso_hormiguero", "pez_vela", "rana_ojos_rojos", "rana_tungara", "saino", "sapo_marino", "tortuga_baula", "venado", "zopilote_negro", "zopilote_rojo", "zorro_gris"] },
+  { flag:"🌊", n:"Puntarenas", map:"costa-rica", pool:["ballena", "caiman", "cocodrilo", "cusingo", "espatula", "ibis", "leon_brenero", "mantarraya", "marlin", "mono_titi", "pelicano", "rana_cristal", "rana_payaso", "serafin", "tantalo", "tiburon_ballena", "tortuga_cabezona", "jaguar"] },
+  { flag:"🏝️", n:"Limón", map:"costa-rica", pool:["basilisco", "cangrejo", "coral", "danta", "fragata", "jabiru", "loro", "mapache_cangrejero", "martin_pescador", "monocara", "perezoso", "rana_gladiadora", "rana_verdinegra", "serpiente", "tepezcuintle", "tiburon_martillo", "tortuga_carey", "tortuga"] },
 ];
 
 export const SECRET = {
