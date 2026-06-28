@@ -40,17 +40,22 @@ export const RARITY = {
   extinto:   { n:'Extinto',    w:0.5,  cls:'r-ext',    color:'#d8643f' },
 };
 
-// Objetos TICOS — tesoros 🎁 del mapa. Suman ⚔/❤/💨(velocidad)/🌀(habilidad) al equiparlos.
+// Objetos TICOS — tesoros 🎁 del mapa. Pueden sumar ⚔/❤/💨(velocidad)/🌀(habilidad),
+// OTORGAR una habilidad (`ab`), CURAR/revivir (`cure`), o ser un trade-off (stats
+// negativas: más ataque a cambio de menos defensa). Se equipan (máx 3 por animal).
 export const ITEMS = [
   { n:'Chonete',        e:'👒', atk:1, hp:5 },                 // el sombrero tico: aguante
   { n:'Salsa Lizano',   e:'🥫', atk:4, hp:1 },                 // el sabor que da garra
   { n:'Gallo pinto',    e:'🫘', atk:2, hp:4 },                 // desayuno tico, puro aguante
   { n:'Café chorreado', e:'☕', atk:3, hp:1, spd:2 },          // energía: pega y corre
   { n:'Casado',         e:'🍛', atk:3, hp:4 },                 // plato completo, balanceado
-  { n:'Agua dulce',     e:'🍯', atk:2, hp:3 },                 // tapa de dulce
   { n:'Chanclas',       e:'🩴', hp:1, spd:2, hab:1 },          // livianas: agilidad
-  { n:'Fresco natural', e:'🥤', atk:1, hp:1, spd:3 },          // cas/tamarindo: chispa de velocidad
+  { n:'Fresco natural', e:'🥤', atk:1, hp:1, spd:3 },          // cas/tamarindo: velocidad
   { n:'Granizado',      e:'🍧', hp:2, spd:1, hab:2 },          // refresca: reflejos
+  { n:'Chile picante',  e:'🌶️', atk:4, hp:-2 },               // trade-off: pega más, aguanta menos
+  { n:'Sábila',         e:'🌿', hp:2, ab:'heal' },             // otorga Regenera
+  { n:'Penca',          e:'🌵', atk:1, hp:2, ab:'thorns' },    // otorga Púas
+  { n:'Agua de sapo',   e:'🍵', hp:3, cure:true },             // remedio tico: revive a un debilitado
 ];
 
 // Objetos RAROS y ticos — recompensa por vencer a traficantes/cazadores. Más fuertes.
@@ -59,16 +64,23 @@ export const RARE_ITEMS = [
   { n:'Esfera del Diquís', e:'🪨', atk:4, hp:8 },              // poder ancestral
   { n:'Marimba',           e:'🪇', atk:8, hp:3 },              // el ritmo que envalentona
   { n:'Guaria morada',     e:'🌸', atk:3, hp:9 },              // la flor nacional
-  { n:'Bandera tica',      e:'🇨🇷', atk:6, hp:6 },              // orgullo patrio
   { n:'Cimarrona',         e:'🎺', atk:3, hp:4, spd:4, hab:2 },// la banda que enardece: ágil
-  { n:'Guaro Cacique',     e:'🥃', atk:5, hp:1, spd:6 },       // puro vértigo
+  { n:'Guaro Cacique',     e:'🥃', atk:6, hp:-1, spd:6 },      // puro vértigo (trade-off veloz)
+  { n:'Cuma',              e:'🔪', atk:7, hp:-2, spd:2 },      // machete: filo brutal, te expone
+  { n:'Caparazón',         e:'🐚', hp:5, ab:'shield' },        // otorga Escudo
 ];
 
-// Texto de bonus de un objeto (solo las stats que aporta).
-export const itemBonus = (it) => [
-  it.atk ? `+${it.atk}⚔` : '', it.hp ? `+${it.hp}❤` : '',
-  it.spd ? `+${it.spd}💨` : '', it.hab ? `+${it.hab}🌀` : '',
-].filter(Boolean).join(' ');
+// Texto de bonus de un objeto: stats que aporta (con signo) + habilidad/cura.
+export const itemBonus = (it) => {
+  const p = [];
+  if (it.atk) p.push(`${it.atk > 0 ? '+' : ''}${it.atk}⚔`);
+  if (it.hp)  p.push(`${it.hp > 0 ? '+' : ''}${it.hp}❤`);
+  if (it.spd) p.push(`${it.spd > 0 ? '+' : ''}${it.spd}💨`);
+  if (it.hab) p.push(`${it.hab > 0 ? '+' : ''}${it.hab}🌀`);
+  if (it.ab && ABILITIES[it.ab]) p.push(`${ABILITIES[it.ab].sym} da ${ABILITIES[it.ab].n}`);
+  if (it.cure) p.push('💚 revive');
+  return p.join(' ');
+};
 
 // Banderas para el avatar del jugador (identidad, sin efecto en el juego).
 export const PLAYER_FLAGS = ['🇨🇷','🇲🇽','🇪🇸','🇦🇷','🇨🇴','🇧🇷','🇺🇸','🇨🇦','🇫🇷','🇩🇪','🇯🇵','🇬🇧'];

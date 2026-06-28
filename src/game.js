@@ -6,7 +6,7 @@
 
 import * as E from './engine.js';
 import * as M from './meta.js';
-import { ITEMS, RARE_ITEMS, SECRET, RULES, itemBonus } from './data.js';
+import { ITEMS, RARE_ITEMS, SECRET, RULES, ABILITIES, itemBonus } from './data.js';
 
 export class Game {
   constructor(ui = null) {
@@ -397,8 +397,16 @@ export class Game {
     const it = s.bag[bagIndex]; if (!it) return;
     s.bag.splice(bagIndex, 1);
     a.items.push(it);
-    a.atk += it.atk || 0; a.hp += it.hp || 0; a.spd += it.spd || 0; a.hab += it.hab || 0;
-    this.log(`${it.e} <b>${it.n}</b> (${itemBonus(it)}) equipado a ${a.e} ${a.n}`);
+    a.atk = Math.max(1, a.atk + (it.atk || 0));   // trade-off: nunca baja de 1/0
+    a.hp = Math.max(1, a.hp + (it.hp || 0));
+    a.spd = Math.max(0, a.spd + (it.spd || 0));
+    a.hab = Math.max(0, a.hab + (it.hab || 0));
+    let extra = '';
+    if (it.ab && !a.ab2 && it.ab !== a.ab && ABILITIES[it.ab]) {   // otorga una 2ª habilidad
+      a.ab2 = it.ab; extra = ` — ahora también tiene ${ABILITIES[it.ab].sym} ${ABILITIES[it.ab].n}`;
+    }
+    if (it.cure && a.down) { a.down = false; extra += ' — ¡revivido! 💚'; }
+    this.log(`${it.e} <b>${it.n}</b> (${itemBonus(it)}) equipado a ${a.e} ${a.n}${extra}`);
     this.render();
   }
   moveAnimal(uid, dir) {
