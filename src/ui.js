@@ -23,7 +23,7 @@ export function createUI(game) {
     const stageLabel = a.ext ? 'EXTINTO' : a.leg ? 'LEGENDARIO' : STAGE[stage];
     const ab = ABILITIES[a.ab], ab2 = a.ab2 ? ABILITIES[a.ab2] : null;
     const act = opts.trade ? 'trade' : opts.edit ? 'edit' : null;
-    const cls = 'acard ' + tcls
+    const cls = 'acard ' + tcls + ' rc-' + a.rarity
       + (opts.fainted || a.down ? ' fainted' : '') + (a.down ? ' down' : '') + (opts.cls ? ' ' + opts.cls : '')
       + (act ? ' clickable' : '') + (opts.lead ? ' lead' : '');
     const bio = BIOMES[a.bio] ? BIOMES[a.bio].e : '';
@@ -311,7 +311,7 @@ export function createUI(game) {
     const ab = ABILITIES[a.ab], ab2 = a.ab2 ? ABILITIES[a.ab2] : null;
     const badge = (x) => `<span class="abil ${x.cls}">${x.sym} ${x.n}</span>`;
     const bio = BIOMES[a.bio] ? BIOMES[a.bio].e : '';
-    return `<div class="acard ${tcls} battlecard" id="bc-${a.uid}">
+    return `<div class="acard ${tcls} rc-${a.rarity} battlecard" id="bc-${a.uid}">
       <span class="stage">${stageLabel} · Nv${a.level}</span><span class="bio">${bio}</span>
       <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
       <div class="an">${a.n}</div>

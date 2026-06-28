@@ -51,7 +51,7 @@ STARTERS = {
 
 # ---- 1) Los 27 actuales, PRESERVADOS exactos (incluye legendarios) ----
 EXISTING = {
-    "perezoso":  dict(n="Perezoso", e="🦥", atk=1, hp=7, spd=1, hab=0, bio="bosque", ab="heal"),
+    "perezoso":  dict(n="Perezoso", e="🦥", atk=1, hp=7, spd=1, hab=0, bio="bosque", ab="shield"),
     "monocara":  dict(n="Mono carablanca", e="🐒", atk=2, hp=3, spd=8, hab=6, bio="bosque", ab="first"),
     "tucan":     dict(n="Tucán", e="🦜", atk=2, hp=3, spd=8, hab=5, bio="bosque", ab="first"),
     "ranadardo": dict(n="Rana dardo", e="🐸", atk=4, hp=1, spd=4, hab=4, bio="bosque", ab="poison"),
@@ -59,7 +59,7 @@ EXISTING = {
     "jaguar":    dict(n="Jaguar", e="🐆", atk=5, hp=4, spd=7, hab=4, bio="bosque", ab="rage"),
     "manigordo": dict(n="Manigordo", e="🐈", atk=3, hp=3, spd=8, hab=6, bio="bosque", ab="first"),
     "pizote":    dict(n="Pizote", e="🦝", atk=3, hp=4, spd=5, hab=3, bio="bosque", ab="first"),
-    "murcielago":dict(n="Murciélago", e="🦇", atk=3, hp=2, spd=8, hab=7, bio="bosque", ab="poison"),
+    "murcielago":dict(n="Murciélago", e="🦇", atk=3, hp=2, spd=8, hab=7, bio="bosque", ab="first"),
     "mariposa":  dict(n="Morfo azul", e="🦋", atk=2, hp=2, spd=7, hab=7, bio="bosque", ab="first"),
     "abeja":     dict(n="Abeja", e="🐝", atk=3, hp=1, spd=7, hab=6, bio="bosque", ab="poison"),
     "quetzal":   dict(n="Quetzal", e="🐦", atk=2, hp=4, spd=7, hab=5, bio="montana", ab="heal"),
@@ -122,9 +122,11 @@ VENENO = {"bocaraca", "lora", "cascabel", "matabuey", "coral", "serpiente_mar", 
           "rana_ojos_rojos", "rana_verdinegra", "rana_granular", "rana_payaso",
           "sapo_marino", "sapo_dorado", "hormiga_bala", "cecilia", "mica", "bejuquilla"}
 ESCUDO = {"tortuga_baula", "tortuga_carey", "tortuga_lora", "tortuga_cabezona", "jicotea",
-          "armadillo", "danta", "manati", "tiburon_ballena", "tepezcuintle"}
+          "armadillo", "danta", "manati", "tiburon_ballena", "tepezcuintle", "perezoso_dos"}
 PUAS   = {"garrobo", "puercoespin", "escarabajo", "anolis", "basilisco_comun"}
-REGEN  = {"perezoso_dos", "yiguirro", "martilla", "serafin", "loro", "salamandra"}
+# Regenerar (cura aliados): solo los temáticos — la salamandra regenera de verdad;
+# el kinkajú (martilla) como apoyo social. El resto pasa a su habilidad por defecto.
+REGEN  = {"salamandra", "martilla"}
 FURIA  = {"mono_congo", "leon_brenero", "tolomuco", "caiman", "aguila_harpia", "caracara",
           "tiburon_martillo", "marlin", "pez_vela", "chancho_monte", "pavon", "danta"}
 # el resto: 'first' (rápidos/ágiles por defecto)

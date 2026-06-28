@@ -266,25 +266,32 @@ details.how p{margin-top:8px;color:#d8cdb2;line-height:1.5}
 .leadtag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--gold);color:#3a2c0a;font-family:'DM Mono',monospace;font-size:8px;font-weight:600;letter-spacing:.08em;padding:2px 8px;border-radius:10px;white-space:nowrap;z-index:4}
 
 /* ---------- legendarios ---------- */
-.acard.legendary{border:none;background:linear-gradient(180deg,#f7eede,#e6d6b0)}
-.acard.legendary::before{content:"";position:absolute;inset:-3px;border-radius:15px;z-index:-1;
-  background:conic-gradient(from 0deg,#e8c558,#cc6b4a,#9a5bd6,#4f9fd8,#5aa86b,#e8c558);animation:legspin 6s linear infinite}
-@keyframes legspin{to{transform:rotate(360deg)}}
-.acard.legendary .stage{background:linear-gradient(90deg,#9a5bd6,#e8c558);color:#fff}
-.acard.legendary .art{background:radial-gradient(circle at 50% 35%,#fff7ff,#efe2c4)}
+/* LEGENDARIO: la carta BRILLA en dorado (sin arcoíris giratorio) */
+.acard.legendary{border:2px solid var(--gold);background:linear-gradient(180deg,#fff7e4,#efdaa6);animation:legendGlow 2s ease-in-out infinite}
+.acard.legendary::before{content:none}
+@keyframes legendGlow{
+  0%,100%{box-shadow:0 0 6px 1px rgba(232,197,88,.55),0 6px 14px rgba(0,0,0,.35)}
+  50%{box-shadow:0 0 20px 5px rgba(232,197,88,.95),0 6px 14px rgba(0,0,0,.35)}}
+.acard.legendary .stage{background:linear-gradient(90deg,#b0822e,#e8c558);color:#3a2c0a}
+.acard.legendary .art{background:radial-gradient(circle at 50% 35%,#fffbe9,#efe2c4)}
 .acard.legendary .art img{width:96%;height:96%}
+/* RARO = azul · ULTRA RARO = naranja (los comunes quedan como están) */
+.acard.rc-raro{border:2px solid #5ea8c4;box-shadow:0 0 9px rgba(94,168,196,.5),0 6px 12px rgba(0,0,0,.3)}
+.acard.rc-ultrararo{border:2px solid #e2873a;box-shadow:0 0 10px rgba(226,135,58,.55),0 6px 12px rgba(0,0,0,.3)}
 .section-h.legend-h{color:#e8c558}
 .legend-box{border-color:rgba(154,91,214,.5);box-shadow:0 0 26px rgba(154,91,214,.18)}
 .legbanner{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#3a2c0a;
   background:linear-gradient(90deg,#e8c558,#f3d98a);display:inline-block;padding:4px 12px;border-radius:20px;margin-bottom:6px}
 .legtag{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;color:#3a2c0a;background:linear-gradient(90deg,#e8c558,#f3d98a);padding:2px 8px;border-radius:20px}
-/* tier EXTINTO (nivel secreto) — marco helado/ancestral */
-.acard.extinct{border:none;background:linear-gradient(180deg,#eef5f9,#cfe0ea)}
-.acard.extinct::before{content:"";position:absolute;inset:-3px;border-radius:15px;z-index:-1;
-  background:linear-gradient(135deg,#9fd8ec,#e9f3f8,#6f9fc0,#bfe6f2);box-shadow:0 0 18px rgba(143,208,232,.5)}
-.acard.extinct .stage{background:linear-gradient(90deg,#3f6f8c,#8fd0e8);color:#0b2230}
-.acard.extinct .art{background:radial-gradient(circle at 50% 35%,#ffffff,#dbe9f1)}
-.acard.extinct .an{color:#244a5c}
+/* EXTINTO: verde brillante con resplandor */
+.acard.extinct{border:2px solid #3fe06a;background:linear-gradient(180deg,#eafff1,#cdf3da);animation:extGlow 2s ease-in-out infinite}
+.acard.extinct::before{content:none}
+@keyframes extGlow{
+  0%,100%{box-shadow:0 0 7px 1px rgba(63,224,106,.55),0 6px 14px rgba(0,0,0,.35)}
+  50%{box-shadow:0 0 22px 6px rgba(63,224,106,.95),0 6px 14px rgba(0,0,0,.35)}}
+.acard.extinct .stage{background:linear-gradient(90deg,#1f9c4a,#5fe089);color:#06240f}
+.acard.extinct .art{background:radial-gradient(circle at 50% 35%,#f3fff7,#d6f3df)}
+.acard.extinct .an{color:#176235}
 .editname{font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:var(--paper);padding:6px 0}
 
 /* ---------- botón de sonido ---------- */
