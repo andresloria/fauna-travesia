@@ -22,7 +22,7 @@ export const BIOMES = {
 // Efectos roguelike. `sym` es el símbolo de la insignia; `cls` la clase de color.
 export const ABILITIES = {
   poison:{ n:'Veneno',       sym:'☣', cls:'poison', desc:'El enemigo del frente pierde 1 ❤ cada turno aunque no lo golpeen.' },
-  shield:{ n:'Escudo',       sym:'🛡', cls:'shield', desc:'Aguanta el primer golpe que recibiría sin perder vida.' },
+  shield:{ n:'Escudo',       sym:'🛡', cls:'shield', desc:'El primer golpe que recibe le hace solo la mitad de daño; después, daño normal.' },
   heal:  { n:'Regenera',     sym:'✚', cls:'heal',   desc:'Al atacar, cura un poco de ❤ a un aliado herido al azar (según su nivel).' },
   first: { n:'Primer golpe', sym:'⚡', cls:'first',  desc:'Ataca con prioridad la primera vez del combate; después manda la velocidad.' },
   rage:  { n:'Furia',        sym:'🔥', cls:'rage',   desc:'Gana +1 ⚔ cada vez que ataca (se acumula durante el combate).' },

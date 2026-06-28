@@ -160,11 +160,13 @@ test('mkAnimal trae velocidad (spd)', () => {
   assert.ok(typeof E.mkAnimal('jaguar').spd === 'number', 'el animal tiene spd numérico');
 });
 
-test('efecto Escudo: absorbe el primer golpe', () => {
-  const A = [{ uid: 1, atk: 2, hp: 5, spd: 1, ab: 'shield' }];
+test('efecto Escudo: el primer golpe le hace solo la MITAD', () => {
+  const A = [{ uid: 1, atk: 2, hp: 8, spd: 1, ab: 'shield' }];
   const B = [{ uid: 2, atk: 10, hp: 1, spd: 9, ab: null }];   // más rápido: pega primero
-  const { result } = E.fight(A, B);
-  assert.equal(result, 'W', 'el escudo absorbe el golpe letal y después gana');
+  const { result, steps } = E.fight(A, B);
+  const hitOnA = steps.find(s => s.kind === 'strike' && s.attacks[0].to === 1);
+  assert.equal(hitOnA.hp[1], 3, 'el escudo redujo 10 a la mitad (5): 8 - 5 = 3');
+  assert.equal(result, 'W', 'sobrevive el golpe a medias y después gana');
 });
 
 test('efecto Veneno: rompe el empate a favor del portador', () => {

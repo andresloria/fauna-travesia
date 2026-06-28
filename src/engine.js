@@ -263,8 +263,9 @@ export function fight(teamA, teamB) {
       if (tgt.hab > 0 && Math.random() < Math.min(DODGE_MAX, tgt.hab * DODGE_PER)) {
         dealt = 0; fx.push('dodge');
       } else {
-        if (tgt.shieldAbsorb && dealt > 0) { tgt.shieldAbsorb = false; dealt = 0; fx.push('shield'); }
-        else if (dealt > 0) { tgt.hp -= dealt; }
+        // ESCUDO: el PRIMER golpe que recibe le hace solo la mitad (luego, normal)
+        if (tgt.shieldAbsorb && dealt > 0) { tgt.shieldAbsorb = false; dealt = Math.ceil(dealt / 2); fx.push('shield'); }
+        if (dealt > 0) tgt.hp -= dealt;
         if (tgt.abs.includes('thorns') && dealt > 0) { at.hp -= 1; fx.push('thorns'); }
       }
       const atk = { from: at.uid, to: tgt.uid, dmg: dealt, fx };
