@@ -143,6 +143,20 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
   filter:drop-shadow(0 1px 2px rgba(0,0,0,.6));margin-right:3px}
 .st.hab{color:#56c6bf}                 /* habilidad / esquiva */
 .stats,.bstats{flex-wrap:wrap}
+/* etiqueta de RAREZA (esquina de la carta) */
+.acard .rar{position:absolute;top:4px;left:4px;z-index:3;font-family:'DM Mono',monospace;font-size:8px;
+  letter-spacing:.04em;text-transform:uppercase;font-weight:700;padding:1px 5px;border-radius:5px;
+  background:rgba(0,0,0,.5);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.rar.r-raro{background:#235863;color:#c5ecf4}
+.rar.r-ultra{background:#46295e;color:#e9cdf7}
+.rar.r-legend{background:#6e4d12;color:#ffe08a}
+.rar.r-ext{background:#5a241a;color:#ffc0ab}
+.teamrow .battlecard .rar{font-size:7px;padding:0 3px}
+/* colección teñida por rareza */
+.dexcell.got.r-raro{border-color:#5ea8c4}
+.dexcell.got.r-ultra{border-color:#b07ad0}
+.dexcell.got.r-legend{background:linear-gradient(180deg,#fff3c4,#ffe08a);border-color:var(--gold)}
+.dexcell.got.r-ext{background:linear-gradient(180deg,#ffd9cc,#ffb59a);border-color:#d8643f}
 /* filas de equipo en el combate simultáneo (cartas compactas) */
 .teamrow{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;width:100%;min-height:44px;margin:2px 0}
 .teamrow .battlecard{width:96px;margin:0;transition:transform .18s ease}

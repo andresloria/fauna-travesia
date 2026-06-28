@@ -28,6 +28,10 @@ STYLE = ("full body, centered, facing slightly left, cute detailed pixel art, "
 
 # Prompt por especie (fauna 100% tica). key -> descripcion del animal.
 PROMPTS = {
+    # --- starters básicos (no son fauna silvestre; siempre se eligen al inicio) ---
+    "perro":    "a friendly brown street dog sitting, wagging tail, happy face",
+    "gato":     "a cute house cat sitting, orange tabby, alert ears",
+    "comemaiz": "a small variable seedeater bird (grassquit), black and white plumage, tiny seed-eating beak",
     # --- bosque ---
     "perezoso":   "a three-toed sloth hanging, brown fuzzy fur, sleepy smile",
     "monocara":   "a white-faced capuchin monkey sitting, black body, white face and chest",

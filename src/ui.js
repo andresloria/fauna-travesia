@@ -4,7 +4,7 @@
 // Si algún día cambiás el look, es acá.
 // ============================================================
 
-import { SP, BIOMES, ABILITIES, RULES, PLAYER_FLAGS } from './data.js';
+import { SP, BIOMES, ABILITIES, RARITY, RULES, PLAYER_FLAGS } from './data.js';
 import * as M from './meta.js';
 
 // Arte pixel por especie. Todo el roster (SP) tiene su PNG en assets/animales/
@@ -21,18 +21,21 @@ export function createUI(game) {
     const stage = Math.min(2, a.evo || 0);
     const tcls = a.ext ? 'extinct' : a.leg ? 'legendary' : ['t-base', 't-evo1', 't-evo2'][stage];
     const stageLabel = a.ext ? 'EXTINTO' : a.leg ? 'LEGENDARIO' : STAGE[stage];
-    const ab = ABILITIES[a.ab];
+    const ab = ABILITIES[a.ab], ab2 = a.ab2 ? ABILITIES[a.ab2] : null;
     const act = opts.trade ? 'trade' : opts.edit ? 'edit' : null;
     const cls = 'acard ' + tcls
       + (opts.fainted ? ' fainted' : '') + (opts.cls ? ' ' + opts.cls : '')
       + (act ? ' clickable' : '') + (opts.lead ? ' lead' : '');
     const bio = BIOMES[a.bio] ? BIOMES[a.bio].e : '';
     const data = act ? `data-act="${act}" data-uid="${a.uid}"` : '';
-    const abil = ab ? `<span class="abil ${ab.cls}">${ab.sym} ${ab.n}</span>` : '';
+    const badge = (x) => `<span class="abil ${x.cls}">${x.sym} ${x.n}</span>`;
+    const abil = (ab ? badge(ab) : '') + (ab2 ? badge(ab2) : '');
+    const rar = RARITY[a.rarity];
+    const rarTag = (rar && a.rarity !== 'comun') ? `<span class="rar ${rar.cls}">${rar.n}</span>` : '';
     const lead = opts.lead ? `<span class="leadtag">PELEA 1°</span>` : '';
     const ord = opts.order ? `<span class="ord">${opts.order}</span>` : '';
     return `<div class="${cls}" ${data}>
-      ${lead}
+      ${lead}${rarTag}
       <span class="stage">${stageLabel} · Nv${a.level}</span>
       <span class="bio">${bio}</span>
       <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
@@ -289,7 +292,8 @@ export function createUI(game) {
     const stage = Math.min(2, a.evo || 0);
     const tcls = a.ext ? 'extinct' : a.leg ? 'legendary' : ['t-base', 't-evo1', 't-evo2'][stage];
     const stageLabel = a.ext ? 'EXTINTO' : a.leg ? 'LEGENDARIO' : STAGE[stage];
-    const ab = ABILITIES[a.ab];
+    const ab = ABILITIES[a.ab], ab2 = a.ab2 ? ABILITIES[a.ab2] : null;
+    const badge = (x) => `<span class="abil ${x.cls}">${x.sym} ${x.n}</span>`;
     const bio = BIOMES[a.bio] ? BIOMES[a.bio].e : '';
     return `<div class="acard ${tcls} battlecard" id="bc-${a.uid}">
       <span class="stage">${stageLabel} · Nv${a.level}</span><span class="bio">${bio}</span>
@@ -297,7 +301,7 @@ export function createUI(game) {
       <div class="an">${a.n}</div>
       <div class="hpbar"><div class="hpfill"></div></div>
       <div class="bstats"><span class="st atk">⚔${a.atk}</span><span class="st spd">💨${a.spd}</span><span class="st hab">🌀${a.hab || 0}</span><span class="hpnum">❤<span class="hpcur">${a.hp}</span>/${max}</span></div>
-      ${ab ? `<span class="abil ${ab.cls}">${ab.sym} ${ab.n}</span>` : ''}
+      ${ab ? badge(ab) : ''}${ab2 ? badge(ab2) : ''}
       <div class="hitlayer"></div></div>`;
   }
 
@@ -458,7 +462,7 @@ export function createUI(game) {
     const got = keys.filter(k => dex.has(k)).length;
     const cell = (k) => {
       const has = dex.has(k), sp = SP[k];
-      return `<div class="dexcell ${has ? 'got' : 'locked'} ${sp.leg ? 'leg' : ''}">
+      return `<div class="dexcell ${has ? 'got' : 'locked'} r-${sp.rarity}">
         <div class="dexart">${has ? `<img src="${ART(k)}" alt="${sp.n}">` : '<span class="qm">?</span>'}</div>
         <div class="dexn">${has ? sp.n : '? ? ?'}</div></div>`;
     };

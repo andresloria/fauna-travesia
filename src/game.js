@@ -17,7 +17,6 @@ export class Game {
   // ---------- arranque ----------
   newRun() {
     const avatar = this.loadAvatar();
-    const noLeg = Object.keys(E.SP).filter(k => !E.SP[k].leg);   // los starters no son legendarios
     let mode = 'normal';
     try { mode = localStorage.getItem('fauna_mode') || 'normal'; } catch {}
     this.s = {
@@ -26,7 +25,7 @@ export class Game {
       team: [], hearts: RULES.MAX_HEARTS, cleared: 0, released: 0,
       country: null, countryBag: null, lastCountryIdx: null,
       map: null, currentId: null,
-      starters: E.shuffle(noLeg).slice(0, 3).map(k => E.mkAnimal(k)),
+      starters: ['perro', 'gato', 'comemaiz'].map(k => E.mkAnimal(k)),   // básicos fijos
       bag: [],                 // objetos (tesoros) sin equipar
       wilds: null, wildLeg: false, offer: null, event: null, battle: null, editId: null, log: [],
     };
@@ -173,15 +172,13 @@ export class Game {
 
   // ---------- encuentro salvaje ----------
   wildEncounter(bio) {
-    const s = this.s, d = this.depth();
-    // muy rara vez, encuentro legendario (uno solo); si no, 3 animales para elegir
-    if (s.country.legend && E.rnd(100) < RULES.LEG_CHANCE * 100) {
-      const a = E.mkAnimal(s.country.legend); E.setLevel(a, E.wildLevel(d));
-      s.wilds = [a]; s.wildLeg = true;
-      this.log(`✦ ¡Un LEGENDARIO necesita ayuda: ${a.e} <b>${a.n}</b>!`);
-    } else {
-      s.wilds = E.genWildChoices(s.country, bio, d, 3); s.wildLeg = false;
-    }
+    const s = this.s;
+    // 3 animales para elegir, ponderados por rareza (común sale mucho; legendario/
+    // extinto casi nunca). Si cae uno raro entre los 3, se avisa: es un hallazgo.
+    s.wilds = E.genWildChoices(s.country, bio, this.depth(), 3);
+    s.wildLeg = false;
+    const rare = s.wilds.find(a => a.rarity === 'legendario' || a.rarity === 'extinto');
+    if (rare) this.log(`✦ ¡AVISTAMIENTO ${rare.rarity.toUpperCase()}! Apareció ${rare.e} <b>${rare.n}</b>.`);
     s.phase = 'wild';
     this.render();
   }

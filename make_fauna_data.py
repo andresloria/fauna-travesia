@@ -16,6 +16,39 @@ ROOT = pathlib.Path(__file__).parent
 EMOJI = {"Mamíferos": "🐾", "Aves": "🐦", "Anfibios": "🐸",
          "Reptiles": "🦎", "Marinos e insectos": "🐟"}
 
+# ---- RAREZA por especie (basado en qué tan común es VERLA en CR) ----
+# legendario = súper difíciles + 2 habilidades + mejores stats; extinto = aún más
+# raro y más fuerte; el resto baja: ultra raro / raro / común (default).
+LEGENDARIO = {"jaguar", "puma", "danta", "aguila_harpia", "manati", "quetzal",
+              "lapa", "quetzaldorado", "tiburon_ballena"}
+EXTINTO = {"sapo_dorado"}
+ULTRARARO = {"manigordo", "caucel", "tigrillo", "leon_brenero", "tolomuco", "grison",
+             "oso_hormiguero", "serafin", "nutria", "cabro_monte", "mono_arana",
+             "tiburon_martillo", "pez_vela", "marlin", "mantarraya", "cocodrilo", "caiman",
+             "boa", "matabuey", "coral", "lapa_verde", "pajaro_campana", "espatula",
+             "jabiru", "tantalo", "pavon", "tinamu", "momoto", "trogon", "colibri_talamanca"}
+RARO = {"venado", "saino", "chancho_monte", "mono_congo", "mono_titi", "tepezcuintle",
+        "guatusa", "armadillo", "puercoespin", "zorro_gris", "coyote", "comadreja",
+        "tucan_castano", "cusingo", "tucancillo", "oropendola", "colibri_fuego", "ermitano",
+        "jacamar", "tangara_dorada", "carpintero", "saltarin", "martin_pescador", "anhinga",
+        "chachalaca", "loro", "rana_cristal", "rana_verdinegra", "rana_granular",
+        "rana_gladiadora", "salamandra", "cecilia", "garrobo", "bocaraca", "lora", "cascabel",
+        "serpiente_mar", "mica", "bejuquilla", "tortuga_baula", "tortuga_carey", "tortuga_lora",
+        "tortuga_cabezona", "mariposa_buho", "escarabajo", "fragata", "ibis", "pelicano"}
+# segunda habilidad de cada legendario (los únicos con 2); debe diferir de su `ab`.
+LEGEND_AB2 = {
+    "jaguar": "first", "puma": "first", "danta": "thorns", "aguila_harpia": "first",
+    "manati": "heal", "quetzal": "first", "lapa": "first", "quetzaldorado": "shield",
+    "tiburon_ballena": "heal",
+}
+
+# ---- STARTERS básicos (siempre se eligen al inicio; NO son fauna silvestre) ----
+STARTERS = {
+    "perro":    dict(n="Perro", e="🐕", atk=3, hp=4, spd=4, hab=3, bio="bosque", ab="shield", starter=True),
+    "gato":     dict(n="Gato", e="🐈", atk=3, hp=3, spd=5, hab=4, bio="bosque", ab="first", starter=True),
+    "comemaiz": dict(n="Comemaíz", e="🐦", atk=3, hp=4, spd=4, hab=3, bio="sabana", ab="heal", starter=True),
+}
+
 # ---- 1) Los 27 actuales, PRESERVADOS exactos (incluye legendarios) ----
 EXISTING = {
     "perezoso":  dict(n="Perezoso", e="🦥", atk=1, hp=7, spd=1, hab=0, bio="bosque", ab="heal"),
@@ -166,6 +199,28 @@ for e in BESTIARIO:
 for slug in ("abeja", "cangrejo", "tiburon", "quetzaldorado"):
     if slug not in SP:
         SP[slug] = dict(EXISTING[slug])
+# starters básicos (perro/gato/comemaíz)
+for slug, rec in STARTERS.items():
+    SP[slug] = dict(rec)
+
+# ---- post-proceso: RAREZA, legendarios (2 habilidades + boost) y extintos ----
+for slug, rec in SP.items():
+    if rec.get("starter"):
+        rec["rarity"] = "comun"; continue
+    if slug in EXTINTO:
+        rec["rarity"] = "extinto"; rec["ext"] = True; rec.pop("leg", None)
+        rec["atk"] = min(9, rec["atk"] + 2); rec["hp"] = min(12, rec["hp"] + 3)
+        rec["hab"] = min(9, rec.get("hab", 0) + 1)
+    elif slug in LEGENDARIO:
+        rec["rarity"] = "legendario"; rec["leg"] = True
+        rec["atk"] = min(9, rec["atk"] + 1); rec["hp"] = min(12, rec["hp"] + 2)
+        rec["hab"] = min(9, rec.get("hab", 0) + 1)
+        ab2 = LEGEND_AB2.get(slug)
+        if ab2 and ab2 != rec["ab"]:
+            rec["ab2"] = ab2
+    else:
+        rec["rarity"] = ("ultrararo" if slug in ULTRARARO else "raro" if slug in RARO else "comun")
+        rec.pop("leg", None)
 
 # ---- 5) Pools por provincia (por bioma + región), cubriendo TODO el roster ----
 PROV = [
@@ -177,25 +232,28 @@ PROV = [
     ("🌊", "Puntarenas", ["agua", "bosque"]),
     ("🏝️", "Limón",      ["agua", "bosque"]),
 ]
-non_leg = [k for k, v in SP.items() if not v.get("leg")]
+# Pools = TODA la fauna silvestre (incluye legendarios y extintos, que ahora son
+# ENCONTRABLES en el bioma pero con tasa bajísima — el peso por rareza lo decide
+# el motor). Se excluyen solo los STARTERS (perro/gato/comemaíz).
+wild = [k for k, v in SP.items() if not v.get("starter")]
 by_biome = {}
-for k in non_leg:
+for k in wild:
     by_biome.setdefault(SP[k]["bio"], []).append(k)
 for b in by_biome:
     by_biome[b].sort()
 
 # Reparto BALANCEADO: cada especie va a la provincia elegible (por bioma) que
-# esté menos llena → pools parejos (~18 c/u) y cobertura total garantizada.
+# esté menos llena → pools parejos y cobertura total garantizada.
 prov_biomes = [biomes for (_, _, biomes) in PROV]
 pools = [[] for _ in PROV]
-for k in sorted(non_leg):
+for k in sorted(wild):
     bio = SP[k]["bio"]
     eligible = [i for i, bs in enumerate(prov_biomes) if bio in bs] or list(range(len(PROV)))
     i = min(eligible, key=lambda i: (len(pools[i]), i))
     pools[i].append(k)
-# unos íconos repetidos en 1 provincia extra, para que aparezcan en más de un lado
-for k in ("jaguar", "perezoso", "tortuga", "cocodrilo", "tucan", "quetzal"):
-    if k in non_leg:
+# íconos repetidos en 1 provincia extra, para que aparezcan en más de un lado
+for k in ("jaguar", "perezoso", "tortuga", "cocodrilo", "tucan", "quetzal", "iguana"):
+    if k in wild:
         bio = SP[k]["bio"]
         elig = [i for i, bs in enumerate(prov_biomes) if bio in bs and k not in pools[i]]
         if elig:
@@ -203,15 +261,13 @@ for k in ("jaguar", "perezoso", "tortuga", "cocodrilo", "tucan", "quetzal"):
 
 COUNTRIES = []
 for i, (flag, name, biomes) in enumerate(PROV):
-    c = {"flag": flag, "n": name, "map": "costa-rica"}
-    if name in ("Guanacaste", "Puntarenas"):
-        c["legend"] = "lapa"
-    c["pool"] = pools[i]
-    COUNTRIES.append(c)
+    COUNTRIES.append({"flag": flag, "n": name, "map": "costa-rica", "pool": pools[i]})
 
-SECRET = {"flag": "☁️", "n": "Monteverde", "map": "costa-rica", "secret": True,
-          "legend": "quetzaldorado",
-          "pool": [k for k in by_biome.get("montana", []) + by_biome.get("bosque", [])][:14]}
+# Monteverde (final): bosque nuboso. Asegurá el Quetzal Dorado en su pool.
+mv = [k for k in by_biome.get("montana", []) + by_biome.get("bosque", [])][:16]
+if "quetzaldorado" not in mv:
+    mv.append("quetzaldorado")
+SECRET = {"flag": "☁️", "n": "Monteverde", "map": "costa-rica", "secret": True, "pool": mv}
 
 
 # ---- 6) Emitir JS ----
@@ -241,7 +297,7 @@ out.append("// Stats/bioma/efecto auto-asignados por arquetipo; los 27 base y lo
 out.append("// legendarios van con sus valores curados. Re-generar: python make_fauna_data.py")
 out.append("// ============================================================")
 out.append("")
-out.append(f"// {len(SP)} especies ({len(non_leg)} jugables en pools + legendarios)")
+out.append(f"// {len(SP)} especies (con rareza; legendarios con 2 habilidades; + starters)")
 out.append("export const SP = {")
 out.append(js_obj(SP))
 out.append("};")
@@ -253,16 +309,19 @@ out.append("];")
 out.append("")
 out.append("export const SECRET = {")
 out.append(f"  flag:{json.dumps(SECRET['flag'], ensure_ascii=False)}, n:{json.dumps(SECRET['n'], ensure_ascii=False)}, "
-           f"map:{json.dumps(SECRET['map'])}, secret:true, legend:{json.dumps(SECRET['legend'])},")
+           f"map:{json.dumps(SECRET['map'])}, secret:true,")
 out.append(f"  pool:[{', '.join(json.dumps(k) for k in SECRET['pool'])}],")
 out.append("};")
 out.append("")
 
 (ROOT / "src" / "fauna_roster.js").write_text("\n".join(out), encoding="utf-8")
-print(f"OK src/fauna_roster.js  SP={len(SP)}  jugables={len(non_leg)}")
-for c in COUNTRIES:
-    print(f"  {c['n']:11} ({len(c['pool'])}): {', '.join(c['pool'][:6])}…")
-print(f"  Monteverde ({len(SECRET['pool'])})")
-# chequeo: toda especie no-legendaria está en algún pool
-miss = [k for k in non_leg if k not in set(x for c in COUNTRIES for x in c['pool'])]
+import collections
+rar = collections.Counter(v.get("rarity") for v in SP.values())
+print(f"OK src/fauna_roster.js  SP={len(SP)}  rarezas={dict(rar)}")
+legs = [k for k, v in SP.items() if v.get("rarity") == "legendario"]
+print("legendarios:", legs)
+print("con 2 habilidades:", [k for k, v in SP.items() if v.get("ab2")])
+print("starters:", [k for k, v in SP.items() if v.get("starter")])
+# chequeo: toda especie silvestre está en algún pool
+miss = [k for k in wild if k not in set(x for c in COUNTRIES for x in c['pool'])]
 print("sin pool:", miss)

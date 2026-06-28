@@ -25,8 +25,19 @@ export const ABILITIES = {
   shield:{ n:'Escudo',       sym:'🛡', cls:'shield', desc:'Aguanta el primer golpe que recibiría sin perder vida.' },
   heal:  { n:'Regenera',     sym:'✚', cls:'heal',   desc:'Al atacar, cura un poco de ❤ a un aliado herido al azar (según su nivel).' },
   first: { n:'Primer golpe', sym:'⚡', cls:'first',  desc:'Ataca con prioridad la primera vez del combate; después manda la velocidad.' },
-  rage:  { n:'Furia',        sym:'🔥', cls:'rage',   desc:'+2 ⚔ por cada compañero ya caído en este combate.' },
+  rage:  { n:'Furia',        sym:'🔥', cls:'rage',   desc:'Gana +1 ⚔ cada vez que ataca (se acumula durante el combate).' },
   thorns:{ n:'Púas',         sym:'🌵', cls:'thorns', desc:'Devuelve 1 de daño a quien lo ataque.' },
+};
+
+// RAREZA (qué tan común es ver la especie). El peso `w` decide cuánto aparece en
+// las zonas de rescate: común sale muchísimo; legendario/extinto casi nunca.
+// Los LEGENDARIOS son los únicos con 2 habilidades; los EXTINTOS, los más raros.
+export const RARITY = {
+  comun:     { n:'Común',      w:100,  cls:'r-comun',  color:'#9bab8a' },
+  raro:      { n:'Raro',       w:34,   cls:'r-raro',   color:'#5ea8c4' },
+  ultrararo: { n:'Ultra raro', w:9,    cls:'r-ultra',  color:'#b07ad0' },
+  legendario:{ n:'Legendario', w:1.8,  cls:'r-legend', color:'#e8b04b' },
+  extinto:   { n:'Extinto',    w:0.5,  cls:'r-ext',    color:'#d8643f' },
 };
 
 export const ITEMS = [

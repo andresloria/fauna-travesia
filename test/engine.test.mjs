@@ -177,27 +177,32 @@ test('todas las especies tienen un efecto válido', () => {
   for (const k in E.SP) assert.ok(E.ABILITIES[E.SP[k].ab], `especie ${k} sin efecto válido`);
 });
 
-test('los legendarios son leg:true y NO están en ningún pool', () => {
-  for (const c of COUNTRIES) {
-    if (!c.legend) continue;
-    assert.ok(E.SP[c.legend] && E.SP[c.legend].leg, `legendario ${c.legend} de ${c.n} inválido`);
+test('rareza: cada especie tiene rareza válida; legendarios = leg:true + 2 habilidades', () => {
+  const RAR = new Set(['comun', 'raro', 'ultrararo', 'legendario', 'extinto']);
+  for (const k in E.SP) {
+    const v = E.SP[k];
+    assert.ok(RAR.has(v.rarity), `especie ${k} sin rareza válida (${v.rarity})`);
+    if (v.rarity === 'legendario') { assert.ok(v.leg && v.ab2, `legendario ${k} debe ser leg + tener ab2`); }
+    else if (k !== 'sapo_dorado') { assert.ok(!v.ab2, `solo los legendarios tienen 2 habilidades (${k})`); }
   }
-  for (const c of COUNTRIES)
-    for (const k of c.pool)
-      assert.ok(!E.SP[k].leg, `un legendario (${k}) no debe estar en el pool de ${c.n}`);
 });
 
-test('rollWild nunca da legendario en un país sin legendario', () => {
-  const noLeg = COUNTRIES.find(c => !c.legend);
-  for (let i = 0; i < 3000; i++)
-    assert.ok(!E.rollWild(noLeg, 'agua', 2).leg, 'país sin legendario no debe soltar legendarios');
+test('rareza: los comunes aparecen MUCHO más que los legendarios en el rescate', () => {
+  const c = COUNTRIES.find(x => x.pool.some(k => E.SP[k].rarity === 'legendario')) || COUNTRIES[0];
+  let comun = 0, legend = 0;
+  for (let i = 0; i < 4000; i++) {
+    for (const a of E.genWildChoices(c, 'bosque', 3, 3)) {
+      if (a.rarity === 'comun') comun++; else if (a.rarity === 'legendario') legend++;
+    }
+  }
+  assert.ok(comun > legend * 10, `comunes (${comun}) deben superar por mucho a legendarios (${legend})`);
 });
 
-test('rollWild puede dar el legendario del país (raro pero posible)', () => {
-  const c = COUNTRIES.find(x => x.legend);
-  let seen = false;
-  for (let i = 0; i < 20000 && !seen; i++) if (E.rollWild(c, 'sabana', 2).leg) seen = true;
-  assert.ok(seen, 'con suficientes intentos debe aparecer el legendario del país');
+test('starters: perro/gato/comemaíz existen, son básicos y NO están en pools', () => {
+  for (const k of ['perro', 'gato', 'comemaiz']) {
+    assert.ok(E.SP[k] && E.SP[k].starter, `falta el starter ${k}`);
+    for (const c of COUNTRIES) assert.ok(!c.pool.includes(k), `el starter ${k} no debe estar en pools`);
+  }
 });
 
 test('traficantes: NO aparecen al inicio (prov.1-3), sí más adelante (prov.4+)', () => {
@@ -253,8 +258,8 @@ test('Costa Rica: 7 provincias y fauna tica', () => {
 
 test('final Monteverde: se abre tras las 7 provincias con el Quetzal Dorado', () => {
   assert.ok(SECRET && SECRET.secret, 'existe el final');
-  assert.equal(SECRET.legend, 'quetzaldorado', 'su legendario es el Quetzal Dorado');
-  assert.ok(E.SP[SECRET.legend] && E.SP[SECRET.legend].leg, 'el Quetzal Dorado es legendario');
+  assert.ok(SECRET.pool.includes('quetzaldorado'), 'el Quetzal Dorado aparece en Monteverde');
+  assert.ok(E.SP.quetzaldorado && E.SP.quetzaldorado.leg, 'el Quetzal Dorado es legendario');
   const m = E.generateMap(SECRET);
   assert.ok(Object.values(m.nodesById).some(n => n.type === 'airport'), 'Monteverde tiene jefe final');
 });
@@ -284,8 +289,29 @@ test('genWildChoices ofrece 3 animales válidos y DISTINTOS', () => {
     const ch = E.genWildChoices(c, bio, 2, 3);
     assert.equal(ch.length, 3, '3 opciones');
     assert.equal(new Set(ch.map(a => a.key)).size, 3, `3 especies distintas (${c.n}/${bio})`);
-    assert.ok(ch.every(a => a.level >= 1 && a.atk > 0 && !a.leg), 'válidos y no legendarios');
+    assert.ok(ch.every(a => a.level >= 1 && a.atk > 0 && !a.starter), 'válidos y no starters');
   }
+});
+
+test('Furia: gana +1 ⚔ por cada ataque (se acumula en la pelea)', () => {
+  const A = [{ uid: 1, atk: 1, hp: 99, spd: 5, ab: 'rage' }];   // 1 de ataque base, con furia
+  const B = [{ uid: 2, atk: 1, hp: 99, spd: 1, ab: null }];
+  const dmgs = E.fight(A, B).steps
+    .filter(s => s.kind === 'strike' && s.attacks[0].from === 1)
+    .map(s => s.attacks[0].dmg);
+  assert.equal(dmgs[0], 2, 'primer ataque: 1 base + 1 de furia');
+  assert.equal(dmgs[1], 3, 'segundo: acumula otro +1');
+  assert.ok(dmgs[2] > dmgs[1], 'sigue creciendo');
+});
+
+test('legendario: aplica sus DOS habilidades (jaguar = furia + primer golpe)', () => {
+  const lento = [{ uid: 9, atk: 9, hp: 8, spd: 9, ab: null }];   // más rápido y fuerte
+  const jaguar = E.mkAnimal('jaguar');                            // ab rage + ab2 first
+  assert.equal(jaguar.ab2, 'first', 'el jaguar trae 2ª habilidad');
+  jaguar.uid = 1; jaguar.atk = 3; jaguar.hp = 8; jaguar.spd = 1; jaguar.hab = 0;
+  // con 'primer golpe' el jaguar (lento) abre el combate pese a su baja velocidad
+  const strikes = E.fight([jaguar], lento).steps.filter(s => s.kind === 'strike');
+  assert.equal(strikes[0].attacks[0].from, 1, 'abre el jaguar por su 2ª habilidad (primer golpe)');
 });
 
 console.log(`\n${passed} pruebas OK\n`);

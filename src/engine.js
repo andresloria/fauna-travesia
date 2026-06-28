@@ -5,7 +5,7 @@
 // multiplayer (el cliente solo dibuja; el servidor decide).
 // ============================================================
 
-import { SP, BIOMES, COUNTRIES, ITEMS, RARE_ITEMS, ABILITIES, RULES } from './data.js';
+import { SP, BIOMES, COUNTRIES, ITEMS, RARE_ITEMS, ABILITIES, RARITY, RULES } from './data.js';
 
 // ---------- utilidades de azar ----------
 export const rnd  = (n) => Math.floor(Math.random() * n);
@@ -20,8 +20,25 @@ export function shuffle(a) {
 let UID = 0;
 export function mkAnimal(key) {
   const s = SP[key];
-  return { uid: ++UID, key, n: s.n, e: s.e, bio: s.bio, ab: s.ab, leg: !!s.leg, ext: !!s.ext,
+  return { uid: ++UID, key, n: s.n, e: s.e, bio: s.bio, ab: s.ab, ab2: s.ab2 || null,
+           leg: !!s.leg, ext: !!s.ext, rarity: s.rarity || 'comun',
            atk: s.atk, hp: s.hp, spd: s.spd || 3, hab: s.hab || 0, level: 1, evo: 0, items: [] };
+}
+
+// ---------- rareza: peso de aparición (común aparece mucho; legendario/extinto casi nunca) ----------
+export const rarW = (key) => (RARITY[SP[key].rarity] || RARITY.comun).w;
+function weightedKey(keys) {
+  let tot = 0; for (const k of keys) tot += rarW(k);
+  let r = Math.random() * tot;
+  for (const k of keys) { r -= rarW(k); if (r <= 0) return k; }
+  return keys[keys.length - 1];
+}
+function weightedDistinct(keys, count) {
+  const pool = keys.slice(), out = [];
+  while (out.length < count && pool.length) {
+    const k = weightedKey(pool); out.push(k); pool.splice(pool.indexOf(k), 1);
+  }
+  return out;
 }
 // Sube un nivel. Devuelve true si en este nivel EVOLUCIONÓ (creció extra).
 export function levelUp(a) {
@@ -50,23 +67,22 @@ export function enemyLevel(depth, isBoss) { return (isBoss ? 2 : 1) + accel(dept
 export function wildLevel(depth) { return 1 + depth; }
 export function poacherLevel(depth) { return enemyLevel(depth, false); }   // traficantes: nivel de furtivo normal (su gracia es el robo + recompensa, no la fuerza)
 
+// Equipo enemigo (furtivos/traficantes): NO usan legendarios ni extintos —
+// son la fauna común-rara que tienen cautiva. Ponderado por rareza.
 export function genEnemy(country, size, lvl) {
+  const catchable = country.pool.filter(k => SP[k].rarity !== 'legendario' && SP[k].rarity !== 'extinto');
+  const pool = catchable.length ? catchable : country.pool;
   const team = [];
-  for (let i = 0; i < size; i++) { const a = mkAnimal(pick(country.pool)); setLevel(a, lvl); team.push(a); }
+  for (let i = 0; i < size; i++) { const a = mkAnimal(weightedKey(pool)); setLevel(a, lvl); team.push(a); }
   return team;
 }
 
-// Animal salvaje de un nodo de bioma. Muy rara vez (LEG_CHANCE) sale el
-// legendario del país en vez de uno del pool normal.
+// Animal salvaje de un nodo de bioma. Ponderado por RAREZA: los comunes salen
+// mucho; legendarios/extintos casi nunca (pero pueden — un jaguar es un hallazgo).
 export function rollWild(country, bio, depth) {
-  let key;
-  if (country.legend && rnd(100) < RULES.LEG_CHANCE * 100) {
-    key = country.legend;
-  } else {
-    const inBio = country.pool.filter(k => SP[k].bio === bio);
-    key = pick(inBio.length ? inBio : country.pool);
-  }
-  const a = mkAnimal(key);
+  let inBio = country.pool.filter(k => SP[k].bio === bio);
+  if (!inBio.length) inBio = country.pool;
+  const a = mkAnimal(weightedKey(inBio));
   setLevel(a, wildLevel(depth));
   return a;
 }
@@ -133,22 +149,23 @@ function pickType(depth = 0, row = 4) {
   return 'descanso';
 }
 
-// Tres animales DIFERENTES para que el jugador elija a cuál rescatar.
-// Prioriza los del bioma; si no alcanzan, completa con otras especies del país
-// (siempre distintas). Solo repite como último recurso si el país tiene < count.
+// Tres animales DIFERENTES para elegir a cuál rescatar. Prioriza el bioma y
+// completa con otras especies del país; SIEMPRE distintas. Ponderado por RAREZA:
+// casi siempre comunes/raros; muy de vez en cuando cae un legendario (¡un jaguar!).
 export function genWildChoices(country, bio, depth, count = 3) {
-  const nonLeg = country.pool.filter(k => !SP[k].leg);
-  let keys = shuffle(nonLeg.filter(k => SP[k].bio === bio));
-  if (keys.length < count) keys = keys.concat(shuffle(nonLeg.filter(k => !keys.includes(k))));
-  keys = keys.slice(0, count);
-  while (keys.length < count) keys.push(pick(nonLeg));
+  let cand = country.pool.filter(k => SP[k].bio === bio);
+  if (cand.length < count) cand = cand.concat(country.pool.filter(k => !cand.includes(k)));
+  const keys = weightedDistinct(cand, Math.min(count, cand.length));
+  while (keys.length < count) keys.push(pick(country.pool));
   return keys.map(k => { const a = mkAnimal(k); setLevel(a, wildLevel(depth)); return a; });
 }
 
-// Oferta de intercambio: un animal al azar 2-3 niveles arriba del nivel dado.
+// Oferta de intercambio: un animal 2-3 niveles arriba (no legendario/extinto/starter).
 export function genTrade(maxLevel) {
-  const keys = Object.keys(SP).filter(k => !SP[k].leg);
-  const a = mkAnimal(pick(keys));
+  const keys = Object.keys(SP).filter(k => {
+    const v = SP[k]; return !v.starter && v.rarity !== 'legendario' && v.rarity !== 'extinto';
+  });
+  const a = mkAnimal(weightedKey(keys));
   setLevel(a, maxLevel + 2 + rnd(2));   // +2 o +3
   return a;
 }
@@ -171,13 +188,17 @@ const DODGE_PER = 0.05, DODGE_MAX = 0.5;
 const healAmount = (level) => 1 + Math.floor((level || 1) / 4);   // poco, escala con nivel
 
 export function fight(teamA, teamB) {
-  const mk = (c, side) => ({
-    uid: c.uid, side, atk: c.atk, hp: c.hp, max: c.hp, spd: c.spd || 0, hab: c.hab || 0,
-    level: c.level || 1, ab: c.ab,
-    shieldAbsorb: c.ab === 'shield',   // absorbe el primer golpe (una vez)
-    firstReady: c.ab === 'first',      // prioridad sobre la velocidad (una vez)
-    alive: true,
-  });
+  const mk = (c, side) => {
+    const abs = [c.ab, c.ab2].filter(Boolean);   // legendarios = 2 habilidades
+    return {
+      uid: c.uid, side, atk: c.atk, hp: c.hp, max: c.hp, spd: c.spd || 0, hab: c.hab || 0,
+      level: c.level || 1, abs,
+      shieldAbsorb: abs.includes('shield'),   // absorbe el primer golpe (una vez)
+      firstReady: abs.includes('first'),      // prioridad sobre la velocidad (una vez)
+      rageStacks: 0,                           // furia: +1 ⚔ por cada ataque que hace
+      alive: true,
+    };
+  };
   const A = teamA.map(c => mk(c, 'A')), B = teamB.map(c => mk(c, 'B'));
   const ALL = [...A, ...B];
   const fallen = { A: 0, B: 0 };
@@ -190,7 +211,7 @@ export function fight(teamA, teamB) {
   const pickTarget = (attacker) => {
     const foes = foesOf(attacker.side);
     if (!foes.length) return null;
-    const shields = foes.filter(f => f.ab === 'shield');   // taunt
+    const shields = foes.filter(f => f.abs.includes('shield'));   // taunt
     const poolT = shields.length ? shields : foes;
     return poolT[rnd(poolT.length)];
   };
@@ -213,18 +234,20 @@ export function fight(teamA, teamB) {
       if (!tgt) continue;
 
       const fx = [];
-      let dealt = at.atk + (at.ab === 'rage' ? 2 * fallen[at.side] : 0);
+      // FURIA: gana +1 ⚔ cada vez que ataca (acumula durante la pelea)
+      if (at.abs.includes('rage')) { at.rageStacks++; fx.push('rage'); }
+      let dealt = at.atk + at.rageStacks;
       // ESQUIVA por habilidad del defensor
       if (tgt.hab > 0 && Math.random() < Math.min(DODGE_MAX, tgt.hab * DODGE_PER)) {
         dealt = 0; fx.push('dodge');
       } else {
         if (tgt.shieldAbsorb && dealt > 0) { tgt.shieldAbsorb = false; dealt = 0; fx.push('shield'); }
         else if (dealt > 0) { tgt.hp -= dealt; }
-        if (tgt.ab === 'thorns' && dealt > 0) { at.hp -= 1; fx.push('thorns'); }
+        if (tgt.abs.includes('thorns') && dealt > 0) { at.hp -= 1; fx.push('thorns'); }
       }
       const atk = { from: at.uid, to: tgt.uid, dmg: dealt, fx };
       // REGENERA: al atacar, cura a un aliado herido al azar (poco)
-      if (at.ab === 'heal') {
+      if (at.abs.includes('heal')) {
         const hurt = alliesOf(at.side).filter(a => a.hp > 0 && a.hp < a.max);
         if (hurt.length) {
           const al = hurt[rnd(hurt.length)];
@@ -237,7 +260,7 @@ export function fight(teamA, teamB) {
     // ----- fin de ronda: veneno (DoT) -----
     const effects = [];
     for (const x of aliveIn(ALL)) {
-      if (x.ab === 'poison') {
+      if (x.abs.includes('poison')) {
         const foes = foesOf(x.side);
         if (foes.length) { const t = foes[rnd(foes.length)]; t.hp -= 1; effects.push({ uid: x.uid, to: t.uid, type: 'poison' }); }
       }
