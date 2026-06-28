@@ -54,16 +54,16 @@ export function setLevel(a, L) { while (a.level < L) levelUp(a); return a; }
 // SENCILLO) y se dispara al final. Tu poder crece rápido (cada victoria sube de
 // nivel a TODO el equipo + capturás + evolucionás), así que el enemigo tiene que
 // acelerar para seguir siendo un reto. Bajá RAMP = más difícil; subilo = más fácil.
-const RAMP = 10;
+const RAMP = 8;
 const accel = (depth) => depth + Math.floor(depth * depth / RAMP);
 // TAMAÑO del equipo enemigo (cuántos animales): rampa lineal y DETERMINISTA.
-// Furtivos/traficantes = nº de provincia (depth+1); el Cabecilla siempre uno más.
-// Prov.1 (depth0): furtivos 1, jefe 2 · Prov.2: 2 y 3 · … · Prov.5+ (depth4): todos 5.
-export function retSize(depth)     { return Math.min(5, depth + 1); }
-export function poacherSize(depth) { return Math.min(5, depth + 1); }
-export function bossSize(depth)    { return Math.min(5, depth + 2); }
+// Furtivos/traficantes = nº de provincia + 1 (tope 5); el Cabecilla, uno más.
+// Prov.1 (depth0): furtivos 2, jefe 3 · Prov.2: 3 y 4 · Prov.3: 4 y 5 · Prov.4+: 5 y 5.
+export function retSize(depth)     { return Math.min(5, depth + 2); }
+export function poacherSize(depth) { return Math.min(5, depth + 2); }
+export function bossSize(depth)    { return Math.min(5, depth + 3); }
 // NIVEL de los enemigos (su fuerza): sube con la curva acelerada (no el tamaño).
-export function enemyLevel(depth, isBoss) { return (isBoss ? 2 : 1) + accel(depth); }
+export function enemyLevel(depth, isBoss) { return (isBoss ? 3 : 2) + accel(depth); }
 export function wildLevel(depth) { return 1 + depth; }
 export function poacherLevel(depth) { return enemyLevel(depth, false); }   // traficantes: nivel de furtivo normal (su gracia es el robo + recompensa, no la fuerza)
 

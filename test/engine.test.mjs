@@ -225,8 +225,8 @@ test('traficantes: nivel de furtivo normal (no más fuertes) y dan objeto raro',
   assert.ok(E.RARE_ITEMS && E.RARE_ITEMS.length > 0, 'hay objetos raros');
 });
 
-test('tamaño de equipo: rampa por provincia (furtivos depth+1, jefe depth+2, tope 5)', () => {
-  const exp = [[1, 2], [2, 3], [3, 4], [4, 5], [5, 5], [5, 5], [5, 5]];
+test('tamaño de equipo: rampa por provincia (furtivos depth+2, jefe depth+3, tope 5)', () => {
+  const exp = [[2, 3], [3, 4], [4, 5], [5, 5], [5, 5], [5, 5], [5, 5]];
   for (let d = 0; d < 7; d++) {
     assert.equal(E.retSize(d), exp[d][0], `furtivos provincia ${d + 1}`);
     assert.equal(E.poacherSize(d), exp[d][0], `traficantes provincia ${d + 1}`);
