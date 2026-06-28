@@ -281,6 +281,7 @@ export function createUI(game) {
   }
 
   function playBattle(s, done) {
+    window.faunaMusic?.set('battle');   // entra el tema de combate
     const b = s.battle;
     const max = {}, abOf = {};
     s.team.forEach(a => { max[a.uid] = a.hp; abOf[a.uid] = a.ab; });
@@ -386,6 +387,7 @@ export function createUI(game) {
 
   // ---------- dispatcher + wiring ----------
   function render(s) {
+    window.faunaMusic?.set('map');   // cualquier fase fuera de combate = tema de exploración
     renderRunbar(s);
     renderLog(s);
     if (s.phase === 'avatar') renderAvatar(s);
