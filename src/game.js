@@ -41,11 +41,11 @@ export class Game {
     catch { return null; }
   }
   saveAvatar(a) { try { localStorage.setItem('fauna_avatar', JSON.stringify(a)); } catch {} }
-  chooseAvatar(name, flag) {
-    const a = { name: (name || '').trim().slice(0, 18) || 'Viajero', flag: flag || '🌎' };
+  chooseAvatar(name, guide) {
+    const a = { name: (name || '').trim().slice(0, 18) || 'Guardaparques', guide: guide === 'mujer' ? 'mujer' : 'hombre' };
     this.s.avatar = a; this.saveAvatar(a);
     this.s.phase = 'starter';
-    this.log(`🧭 Sos <b>${a.name}</b> ${a.flag}`);
+    this.log(`🧭 Sos <b>${a.name}</b>, guía de naturaleza 🌿`);
     this.render();
   }
   editAvatar() { this.s.phase = 'avatar'; this.render(); }
@@ -399,6 +399,7 @@ export class Game {
     a.items.push(it);
     a.atk = Math.max(1, a.atk + (it.atk || 0));   // trade-off: nunca baja de 1/0
     a.hp = Math.max(1, a.hp + (it.hp || 0));
+    a.def = Math.max(0, (a.def || 0) + (it.def || 0));
     a.spd = Math.max(0, a.spd + (it.spd || 0));
     a.hab = Math.max(0, a.hab + (it.hab || 0));
     let extra = '';

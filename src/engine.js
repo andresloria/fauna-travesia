@@ -22,7 +22,8 @@ export function mkAnimal(key) {
   const s = SP[key];
   return { uid: ++UID, key, n: s.n, e: s.e, bio: s.bio, ab: s.ab, ab2: s.ab2 || null,
            leg: !!s.leg, ext: !!s.ext, rarity: s.rarity || 'comun',
-           atk: s.atk, hp: s.hp, spd: s.spd || 3, hab: s.hab || 0, level: 1, evo: 0, items: [] };
+           atk: s.atk, hp: s.hp, spd: s.spd || 3, hab: s.hab || 0, def: s.def || 0,
+           level: 1, evo: 0, items: [] };
 }
 
 // ---------- rareza: peso de aparición (común aparece mucho; legendario/extinto casi nunca) ----------
@@ -43,7 +44,8 @@ function weightedDistinct(keys, count) {
 // Sube un nivel. Devuelve true si en este nivel EVOLUCIONÓ (creció extra).
 export function levelUp(a) {
   a.level++; a.atk += 1; a.hp += 2;
-  if (RULES.EVO_LEVELS.includes(a.level)) { a.atk += 2; a.hp += 3; a.evo++; return true; }
+  // al RECUPERARSE (etapa de rehabilitación) también gana aguante: +1 defensa
+  if (RULES.EVO_LEVELS.includes(a.level)) { a.atk += 2; a.hp += 3; a.def = (a.def || 0) + 1; a.evo++; return true; }
   return false;
 }
 export function setLevel(a, L) { while (a.level < L) levelUp(a); return a; }
@@ -167,7 +169,7 @@ export function genZoneBoss(country, depth) {
   const key = strong.length ? weightedKey(strong) : weightedKey(country.pool);
   const a = mkAnimal(key);
   setLevel(a, enemyLevel(depth, true) + 3);   // muy por encima de un jefe normal
-  a.atk += 2; a.hp += 4; a.boss = true;        // boost de jefe de zona
+  a.atk += 2; a.hp += 4; a.def = (a.def || 0) + 2; a.boss = true;   // boost de jefe de zona
   return [a];
 }
 
@@ -198,7 +200,9 @@ export function biomesOf(country) { return [...new Set(country.pool.map(k => SP[
 //   1) 'primer golpe' (prioridad, una sola vez por pelea), luego
 //   2) más VELOCIDAD primero; a igual velocidad, pega primero el de MENOS ATAQUE.
 // Objetivo: AL AZAR entre los enemigos, salvo que haya ESCUDO → taunt (50/50 si 2).
-// Defensa: el objetivo puede ESQUIVAR según su HABILIDAD (hab): prob = hab*5%, tope 50%.
+// DAÑO = (ataque + furia) − DEFENSA del objetivo, mínimo 1 (un nivel bajo ya no
+// puede reventar a uno alto: su golpe queda en 1). Encima de eso, la ESQUIVA
+// (hab*5%, tope 50%) puede anularlo del todo y el ESCUDO parte el 1er golpe a la mitad.
 // Efectos: escudo (taunt + absorbe el 1er golpe), púas (devuelve 1), rage (+2⚔ por
 // compañero caído), veneno (al final de ronda), regenera (al ATACAR cura a un aliado
 // herido al azar, poco según el nivel del que cura).
@@ -214,7 +218,7 @@ export function fight(teamA, teamB) {
     const abs = [c.ab, c.ab2].filter(Boolean);   // legendarios = 2 habilidades
     return {
       uid: c.uid, side, atk: c.atk, hp: c.hp, max: c.hp, spd: c.spd || 0, hab: c.hab || 0,
-      level: c.level || 1, abs,
+      def: c.def || 0, level: c.level || 1, abs,
       shieldAbsorb: abs.includes('shield'),   // absorbe el primer golpe (una vez)
       firstReady: abs.includes('first'),      // prioridad sobre la velocidad (una vez)
       rageStacks: 0,                           // furia: +1 ⚔ por cada ataque que hace
@@ -245,6 +249,11 @@ export function fight(teamA, teamB) {
 
   let guard = 0;
   while (aliveIn(A).length && aliveIn(B).length && guard++ < 500) {
+    // FATIGA DE COMBATE: si dos animales muy defensivos casi no se hacen daño, la
+    // pelea no se puede estancar — desde la ronda 12, cada golpe que conecta pega
+    // +1 extra por ronda (atraviesa defensa/escudo). En peleas normales (≤~10 rondas)
+    // nunca se activa; solo corta los casos degenerados de muro contra muro.
+    const fatigue = Math.max(0, guard - 12);
     // orden de la ronda: prioridad 'first' → velocidad desc → ATAQUE asc → uid (estable)
     const order = aliveIn(ALL).slice().sort((x, y) =>
       ((y.firstReady ? 1 : 0) - (x.firstReady ? 1 : 0)) || (y.spd - x.spd) || (x.atk - y.atk) || (x.uid - y.uid));
@@ -263,8 +272,11 @@ export function fight(teamA, teamB) {
       if (tgt.hab > 0 && Math.random() < Math.min(DODGE_MAX, tgt.hab * DODGE_PER)) {
         dealt = 0; fx.push('dodge');
       } else {
+        // DEFENSA: resta daño a CADA golpe, pero nunca menos de 1 (siempre raspa algo)
+        if (dealt > 0) dealt = Math.max(1, dealt - tgt.def);
         // ESCUDO: el PRIMER golpe que recibe le hace solo la mitad (luego, normal)
         if (tgt.shieldAbsorb && dealt > 0) { tgt.shieldAbsorb = false; dealt = Math.ceil(dealt / 2); fx.push('shield'); }
+        if (dealt > 0) dealt += fatigue;   // fatiga: rompe los empates de muro contra muro
         if (dealt > 0) tgt.hp -= dealt;
         if (tgt.abs.includes('thorns') && dealt > 0) { at.hp -= 1; fx.push('thorns'); }
       }

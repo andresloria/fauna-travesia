@@ -340,4 +340,34 @@ test('legendario: aplica sus DOS habilidades (jaguar = furia + primer golpe)', (
   assert.equal(strikes[0].attacks[0].from, 1, 'abre el jaguar por su 2ª habilidad (primer golpe)');
 });
 
+test('DEFENSA: resta daño a cada golpe (mínimo 1)', () => {
+  const A = [{ uid: 1, atk: 4, hp: 20, spd: 5 }];          // pega 4
+  const B = [{ uid: 2, atk: 1, hp: 20, spd: 1, def: 3 }];  // def 3 → recibe 1
+  const golpeA = E.fight(A, B).steps.find(s => s.kind === 'strike' && s.attacks[0].from === 1);
+  assert.equal(golpeA.attacks[0].dmg, 1, '4 de ataque − 3 def = 1');
+});
+
+test('DEFENSA: un nivel bajo no revienta a uno alto (su golpe queda en 1)', () => {
+  const fuerte = E.mkAnimal('tortuga'); E.setLevel(fuerte, 14);   // tanque, def alta
+  const debil  = E.mkAnimal('ranadardo');                          // Nv1, poco ataque
+  const dmgs = E.fight([debil], [fuerte]).steps
+    .filter(s => s.kind === 'strike' && s.attacks[0].from === debil.uid)
+    .map(s => s.attacks[0].dmg).filter(d => d > 0);
+  assert.ok(dmgs.length && dmgs.every(d => d <= 2), 'el débil apenas raspa 1-2 por golpe');
+});
+
+test('DEFENSA + ESCUDO se combinan en el primer golpe', () => {
+  const A = [{ uid: 1, atk: 7, hp: 20, spd: 5 }];                       // pega 7
+  const B = [{ uid: 2, atk: 1, hp: 30, spd: 1, def: 3, ab: 'shield' }]; // (7−3)=4 → mitad = 2
+  const first = E.fight(A, B).steps.find(s => s.kind === 'strike' && s.attacks[0].from === 1);
+  assert.equal(first.attacks[0].dmg, 2, '7 − 3 def = 4; escudo lo parte a la mitad = 2');
+});
+
+test('def crece al recuperarse (evoluciona) y mkAnimal lo trae', () => {
+  const a = E.mkAnimal('tortuga');
+  assert.ok(typeof a.def === 'number', 'el animal tiene def numérica');
+  const d0 = a.def; E.setLevel(a, 6);
+  assert.ok(a.def >= d0 + 2, 'gana +1 def por cada etapa de recuperación (Nv3 y Nv6)');
+});
+
 console.log(`\n${passed} pruebas OK\n`);

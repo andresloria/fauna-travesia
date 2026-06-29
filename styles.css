@@ -79,7 +79,7 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .acard .an{font-family:'Fraunces',serif;font-weight:600;font-size:12px;text-align:center;line-height:1.05;margin-top:6px;min-height:26px;display:flex;align-items:center}
 .acard .stats{display:flex;gap:7px;margin-top:2px}
 .acard .st{font-family:'DM Mono',monospace;font-weight:600;font-size:13px}
-.acard .st.atk{color:var(--atk)} .acard .st.hp{color:var(--hp)}
+.acard .st.atk{color:var(--atk)} .acard .st.hp{color:var(--hp)} .acard .st.def{color:#cba24a}
 .acard .stage{position:absolute;top:6px;left:6px;font-family:'DM Mono',monospace;font-size:8px;font-weight:600;color:#fff;border-radius:7px;padding:1px 6px;letter-spacing:.04em;z-index:3;white-space:nowrap}
 .acard .bio{position:absolute;top:6px;right:6px;font-size:12px;z-index:3}
 .acard .abil{margin-top:6px;font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.03em;text-transform:uppercase;
@@ -380,3 +380,39 @@ details.how p{margin-top:8px;color:#d8cdb2;line-height:1.5}
 .ms-opt.on{background:#9cc454;color:#14210f;border-color:#9cc454;font-weight:700}
 .ms-opt.on.danger{background:#c0492f;border-color:#c0492f;color:#fff}
 .ms-d{display:block;font-size:11px;color:#bcae90;max-width:48ch;margin:0 auto;line-height:1.45}
+
+/* ---------- defensa: 5 stats por carta entran en una línea ---------- */
+.acard .stats{gap:5px}
+.acard .st{font-size:12px}
+.battlecard .bstats .st.def{color:#cba24a}
+
+/* ---------- íconos PIXEL de las casillas del mapa ---------- */
+.mnode .disc.img{background:rgba(8,18,15,.55);padding:3px;overflow:hidden}
+.mnode .disc.img img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated;display:block;
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
+.mnode.airport .disc.img{padding:2px}
+
+/* ---------- avatar GUÍA en la barra superior ---------- */
+.chip.avatar{display:flex;align-items:center;gap:9px;text-align:left;padding:4px 13px 4px 6px}
+.chip.avatar .guideav{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:50% 10%;
+  background:rgba(0,0,0,.3);border:1px solid var(--gold);image-rendering:pixelated;flex:0 0 auto}
+.chip.avatar .avtx{display:flex;flex-direction:column;line-height:1.05}
+
+/* ---------- selección de guía (hombre / mujer) ---------- */
+.guidegrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.guideopt{position:relative;border:1px solid rgba(196,160,78,.3);background:rgba(0,0,0,.22);border-radius:14px;
+  padding:10px 10px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:transform .1s}
+.guideopt img{width:100%;max-width:150px;height:160px;object-fit:contain;object-position:bottom;image-rendering:pixelated}
+.guideopt .pick{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#cbbd9c}
+.guideopt:hover{transform:translateY(-2px)}
+.guideopt.sel{border-color:var(--gold);background:rgba(232,197,88,.14);box-shadow:0 0 0 2px rgba(232,197,88,.3)}
+.guideopt.sel .pick{color:var(--gold)} .guideopt.sel .pick::before{content:'✓ '}
+.guidemini{width:18px;height:18px;border-radius:50%;object-fit:cover;object-position:50% 10%;vertical-align:middle;
+  border:1px solid var(--gold);image-rendering:pixelated;display:inline-block}
+.guideline{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap}
+
+/* ---------- mapa de Costa Rica como fondo SUAVE de toda la página ---------- */
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:url('assets/escenarios/mapa_cr_topo.png') center 16% no-repeat;
+  background-size:min(880px,118%) auto;opacity:.07;image-rendering:pixelated}
+@media(max-width:520px){ body::before{background-size:150% auto;opacity:.06} }

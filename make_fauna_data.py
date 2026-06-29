@@ -43,10 +43,11 @@ LEGEND_AB2 = {
 }
 
 # ---- STARTERS básicos (siempre se eligen al inicio; NO son fauna silvestre) ----
+# def (defensa) neutral/baja: son equilibrados, sin destacar en aguante.
 STARTERS = {
-    "perro":    dict(n="Perro", e="🐕", atk=3, hp=4, spd=4, hab=3, bio="bosque", ab="shield", starter=True),
-    "gato":     dict(n="Gato", e="🐈", atk=3, hp=3, spd=5, hab=4, bio="bosque", ab="first", starter=True),
-    "comemaiz": dict(n="Comemaíz", e="🐦", atk=3, hp=4, spd=4, hab=3, bio="sabana", ab="heal", starter=True),
+    "perro":    {"n": "Perro", "e": "🐕", "atk": 3, "hp": 4, "spd": 4, "hab": 3, "def": 2, "bio": "bosque", "ab": "shield", "starter": True},
+    "gato":     {"n": "Gato", "e": "🐈", "atk": 3, "hp": 3, "spd": 5, "hab": 4, "def": 1, "bio": "bosque", "ab": "first", "starter": True},
+    "comemaiz": {"n": "Comemaíz", "e": "🐦", "atk": 3, "hp": 4, "spd": 4, "hab": 3, "def": 2, "bio": "sabana", "ab": "heal", "starter": True},
 }
 
 # ---- 1) Los 27 actuales, PRESERVADOS exactos (incluye legendarios) ----
@@ -145,13 +146,16 @@ PRED    = {"caucel", "tigrillo", "leon_brenero", "tolomuco", "grison", "aguila_h
            "tiburon_martillo", "marlin", "pez_vela", "boa", "matabuey", "cascabel", "mica", "caiman",
            "mono_congo", "chancho_monte", "pavon"}
 
-# (atk, hp, spd, hab) — los ágiles (fast) tienen poco atk/hp pero mucha habilidad
+# (atk, hp, spd, hab, def) — los ágiles (fast) tienen poco atk/hp pero mucha
+# habilidad; los TANK aguantan (mucha def) y los GLASS pegan pero no resisten (def 0).
+# def (DEFENSA): resta daño a cada golpe que reciben (mínimo 1) — los tanques/escudo
+# se vuelven duros de verdad, los frágiles caen rápido.
 ROLE_BASE = {
-    "tank":     (2, 8, 2, 1),
-    "glass":    (5, 1, 5, 4),
-    "fast":     (2, 3, 8, 7),
-    "predator": (5, 5, 6, 3),
-    "balanced": (3, 4, 5, 2),
+    "tank":     (2, 8, 2, 1, 4),
+    "glass":    (5, 1, 5, 4, 0),
+    "fast":     (2, 3, 8, 7, 1),
+    "predator": (5, 5, 6, 3, 2),
+    "balanced": (3, 4, 5, 2, 2),
 }
 
 
@@ -177,14 +181,27 @@ def ability_of(slug):
 
 
 def stats_of(slug):
-    a, h, s, hb = ROLE_BASE[role_of(slug)]
+    a, h, s, hb, df = ROLE_BASE[role_of(slug)]
     # jitter suave (±1) para variedad, sin romper el arquetipo
     j = jitter(slug, 0, 2) - 1
     a = max(1, min(6, a + j))
     h = max(1, min(9, h + (jitter(slug + "h", 0, 2) - 1)))
     s = max(1, min(8, s + (jitter(slug + "s", 0, 2) - 1)))
     hb = max(0, min(8, hb + (jitter(slug + "b", 0, 2) - 1)))
-    return a, h, s, hb
+    df = max(0, min(6, df + jitter(slug + "d", 0, 1)))   # +0/+1 (no baja del arquetipo)
+    return a, h, s, hb, df
+
+
+# DEFENSA por defecto para especies que NO pasan por stats_of (las 28 curadas a
+# mano + starters). Parte del rol; ESCUDO/PÚAS suben (encajan en defensa) y los
+# muy panzudos (hp alto) aguantan un poco más.
+def base_def(slug, rec):
+    base = {"tank": 4, "glass": 0, "fast": 1, "predator": 2, "balanced": 2}[role_of(slug)]
+    ab = rec.get("ab")
+    if ab == "shield": base += 2
+    elif ab == "thorns": base += 1
+    if rec.get("hp", 0) >= 8: base += 1
+    return max(0, min(6, base))
 
 
 # ---- 4) Construir SP ----
@@ -193,9 +210,10 @@ for e in BESTIARIO:
     slug = e["slug"]
     if slug in EXISTING:
         SP[slug] = dict(EXISTING[slug]); continue
-    a, h, s, hb = stats_of(slug)
+    a, h, s, hb, df = stats_of(slug)
     rec = dict(n=e["name"], e=EMOJI.get(e["cat"], "🐾"),
                atk=a, hp=h, spd=s, hab=hb, bio=BIOME.get(slug, "bosque"), ab=ability_of(slug))
+    rec["def"] = df
     if e.get("ext"): rec["ext"] = True
     SP[slug] = rec
 # extras que no están en el bestiario pero sí en el juego (con art propio)
@@ -206,6 +224,11 @@ for slug in ("abeja", "cangrejo", "tiburon", "quetzaldorado", "tarantula"):
 for slug, rec in STARTERS.items():
     SP[slug] = dict(rec)
 
+# DEFENSA para todo el que no la tenga (las 28 curadas + extras) — por rol/ability.
+for slug, rec in SP.items():
+    if "def" not in rec:
+        rec["def"] = base_def(slug, rec)
+
 # ---- post-proceso: RAREZA, legendarios (2 habilidades + boost) y extintos ----
 for slug, rec in SP.items():
     if rec.get("starter"):
@@ -213,11 +236,11 @@ for slug, rec in SP.items():
     if slug in EXTINTO:
         rec["rarity"] = "extinto"; rec["ext"] = True; rec.pop("leg", None)
         rec["atk"] = min(9, rec["atk"] + 2); rec["hp"] = min(12, rec["hp"] + 3)
-        rec["hab"] = min(9, rec.get("hab", 0) + 1)
+        rec["hab"] = min(9, rec.get("hab", 0) + 1); rec["def"] = min(7, rec.get("def", 0) + 1)
     elif slug in LEGENDARIO:
         rec["rarity"] = "legendario"; rec["leg"] = True
         rec["atk"] = min(9, rec["atk"] + 1); rec["hp"] = min(12, rec["hp"] + 2)
-        rec["hab"] = min(9, rec.get("hab", 0) + 1)
+        rec["hab"] = min(9, rec.get("hab", 0) + 1); rec["def"] = min(7, rec.get("def", 0) + 1)
         ab2 = LEGEND_AB2.get(slug)
         if ab2 and ab2 != rec["ab"]:
             rec["ab2"] = ab2

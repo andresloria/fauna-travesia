@@ -44,10 +44,6 @@ ESCENARIOS = [
     {"slug": "bioma_agua",    "kind": "bioma", "scene": True,
      "prompt": "a calm tropical river mouth meeting turquoise sea, sandy bank, mangroves and a palm"},
 
-    # ---------------- Casilla salvaje (ESCENA) ----------------
-    {"slug": "casilla_salvaje", "kind": "casilla", "scene": True,
-     "prompt": "a wild jungle clearing with tall grass and ferns, animal tracks on the ground, untamed nature"},
-
     # ---------------- Tesoros / hallazgos (OBJETOS) ----------------
     {"slug": "tesoro_mochila", "kind": "tesoro", "scene": False,
      "prompt": "a worn explorer leather satchel backpack, open with a warm golden glow inside, adventure loot"},
@@ -81,4 +77,22 @@ ESCENARIOS = [
     # ---------------- Mapa de Costa Rica (ESCENA, fondo del juego) ----------------
     {"slug": "mapa_cr", "kind": "mapa", "scene": True,
      "prompt": "a pixel art map of Costa Rica country, green land shape with mountains, blue Pacific and Caribbean seas on the sides, simple clean game map"},
+
+    # ---------------- Íconos de CASILLA del mapa (OBJETOS, van en los nodos) ----------------
+    {"slug": "casilla_bosque",   "kind": "casilla_ic", "scene": False,
+     "prompt": "a single lush green rainforest tree with a rounded leafy canopy, simple icon, game map tile emblem"},
+    {"slug": "casilla_montana",  "kind": "casilla_ic", "scene": False,
+     "prompt": "a green volcanic mountain peak with a small white cloud at the top, simple icon, game map tile emblem"},
+    {"slug": "casilla_mar",      "kind": "casilla_ic", "scene": False,
+     "prompt": "a single curling ocean wave, turquoise water with white foam crest, simple icon, game map tile emblem"},
+    {"slug": "casilla_sabana",   "kind": "casilla_ic", "scene": False,
+     "prompt": "a lone flat-topped savanna acacia tree on a tuft of golden grass, warm tones, simple icon, game map tile emblem"},
+    {"slug": "casilla_traslado", "kind": "casilla_ic", "scene": False,
+     "prompt": "two curved arrows forming a circle, a swap and transfer symbol, green and gold, simple icon, game map tile emblem"},
+    {"slug": "casilla_hallazgo", "kind": "casilla_ic", "scene": False,
+     "prompt": "an open explorer leather satchel with a warm golden glow and a sparkle inside, treasure find, simple icon, game map tile emblem"},
+    {"slug": "casilla_refugio",  "kind": "casilla_ic", "scene": False,
+     "prompt": "a cozy little ranger refuge: a small wooden cabin with a green leaf flag and a warm campfire glow beside it, safe rest stop, simple icon, game map tile emblem"},
+    {"slug": "casilla_salvaje",  "kind": "casilla_ic", "scene": False,
+     "prompt": "a single big green animal paw print footprint icon, four toes and a pad, wildlife track emblem, one centered object on a plain empty background"},
 ]

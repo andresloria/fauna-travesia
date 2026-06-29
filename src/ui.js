@@ -10,6 +10,8 @@ import * as M from './meta.js';
 // Arte pixel por especie. Todo el roster (SP) tiene su PNG en assets/animales/
 // (generado con gen_pixel.py). Si algún día agregás una especie sin PNG, generala.
 const ART = (key) => `assets/animales/${key}.png`;
+// retrato del guía (avatar del jugador): hombre o mujer
+const GUIDE = (g) => `assets/personajes/guia_${g === 'mujer' ? 'mujer' : 'hombre'}.png`;
 const STAGE = ['HERIDO', 'RECUPERA', 'PLENO'];   // etapas de rehabilitación
 
 export function createUI(game) {
@@ -44,7 +46,7 @@ export function createUI(game) {
       <span class="bio">${bio}</span>
       <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
       <div class="an">${a.n}</div>
-      <div class="stats"><span class="st atk">⚔${a.atk}</span><span class="st hp">❤${Math.max(0, a.hp)}</span><span class="st spd">💨${a.spd}</span><span class="st hab">🌀${a.hab || 0}</span></div>
+      <div class="stats"><span class="st atk">⚔${a.atk}</span><span class="st hp">❤${Math.max(0, a.hp)}</span><span class="st def">🛡${a.def || 0}</span><span class="st spd">💨${a.spd}</span><span class="st hab">🌀${a.hab || 0}</span></div>
       ${abil}${items}${ord}</div>`;
   }
   function teamHTML(team, o = {}) {
@@ -61,12 +63,12 @@ export function createUI(game) {
   // ---------- barras fijas ----------
   function renderRunbar(s) {
     const av = s.avatar
-      ? `<div class="chip avatar"><div class="k">Jugador</div><div class="v">${s.avatar.flag} ${s.avatar.name}</div></div>` : '';
+      ? `<div class="chip avatar"><img class="guideav" src="${GUIDE(s.avatar.guide)}" alt="" draggable="false"><div class="avtx"><div class="k">Guía</div><div class="v">${s.avatar.name}</div></div></div>` : '';
     runbar.innerHTML = `${av}
       <div class="chip country"><div class="k">Provincia</div><div class="v">${s.country ? s.country.flag + ' ' + s.country.n : '—'}</div></div>
       <div class="chip"><div class="k">Corazones</div><div class="hearts">${'❤'.repeat(s.hearts) || '—'}</div></div>
       <div class="chip"><div class="k">Provincias</div><div class="v">${s.cleared}/${RULES.RUN_LENGTH}</div></div>
-      <div class="chip"><div class="k">Refugio</div><div class="v">${s.team.length}/${RULES.MAX_TEAM}</div></div>
+      <div class="chip"><div class="k">Equipo</div><div class="v">${s.team.length}/${RULES.MAX_TEAM}</div></div>
       <div class="chip"><div class="k">Liberados</div><div class="v" style="color:var(--hp)">🌿 ${s.released || 0}</div></div>
       <div class="chip"><div class="k">Mochila</div><div class="v">${s.bag.length ? s.bag.map(i => i.e).join('') : '—'}</div></div>`;
   }
@@ -110,15 +112,16 @@ export function createUI(game) {
 
   function renderAvatar(s) {
     const cur = s.avatar || {};
-    const sel = cur.flag || PLAYER_FLAGS[0];
+    const guide = cur.guide || 'hombre';
+    const opt = (g) => `<div class="guideopt ${g === guide ? 'sel' : ''}" data-act="guide" data-guide="${g}">
+        <img src="${GUIDE(g)}" alt="Guía" draggable="false"><span class="pick">Elegir</span></div>`;
     phaseArea.innerHTML = `
       <div class="avatarbox">
         <div class="big">🧭</div><h3>¿Quién protege la fauna?</h3>
         <label>Tu nombre de guardaparques</label>
         <input type="text" id="avName" maxlength="18" placeholder="Tu nombre" value="${cur.name || ''}">
-        <label>Tu país</label>
-        <div class="flaggrid">${PLAYER_FLAGS.map(f =>
-          `<div class="flagopt ${f === sel ? 'sel' : ''}" data-act="flag" data-flag="${f}">${f}</div>`).join('')}</div>
+        <label>Elegí tu guía</label>
+        <div class="guidegrid">${opt('hombre')}${opt('mujer')}</div>
         <div class="center"><button class="btn" data-act="avatar-go">Empezar la misión 🌿</button></div>
         <div class="map-hint" style="margin-top:12px">Es tu identidad (sale en tu barra y al final). Lo podés cambiar luego.</div>
       </div>`;
@@ -126,7 +129,7 @@ export function createUI(game) {
 
   function renderStarter(s) {
     const who = s.avatar
-      ? `<div class="map-hint" style="margin-bottom:10px">Guardaparques ${s.avatar.flag} <b>${s.avatar.name}</b> · <button class="linklike" data-act="edit-avatar">cambiar</button></div>` : '';
+      ? `<div class="map-hint guideline" style="margin-bottom:10px">Guardaparques <img class="guidemini" src="${GUIDE(s.avatar.guide)}" alt=""> <b>${s.avatar.name}</b> · <button class="linklike" data-act="edit-avatar">cambiar</button></div>` : '';
     const furtivo = s.mode === 'furtivo';
     const modeSel = `<div class="modesel">
       <span class="ms-k">Modo de juego</span>
@@ -149,6 +152,15 @@ export function createUI(game) {
 
   const NODE_IC = { combate: '🪤', cazador: '🏹', salvaje: '🐾', intercambio: '🔄', tesoro: '🎁', descanso: '🏕️', sorpresa: '❓', airport: '🚨', start: '🧭' };
   const NODE_LAB = { combate: 'Furtivo', cazador: 'Traficantes', salvaje: 'Salvaje', intercambio: 'Traslado', tesoro: 'Hallazgo', descanso: 'Refugio', sorpresa: 'Sorpresa', airport: 'Cabecilla', start: 'Inicio' };
+  // ícono PIXEL de cada casilla (sobre el disco). El resto sigue con emoji.
+  const BIO_TILE = { bosque: 'casilla_bosque', montana: 'casilla_montana', agua: 'casilla_mar', sabana: 'casilla_sabana' };
+  const tileImgFor = (n) => n.type === 'bioma' ? BIO_TILE[n.bio]
+    : n.type === 'intercambio' ? 'casilla_traslado'
+    : n.type === 'tesoro' ? 'casilla_hallazgo'
+    : n.type === 'descanso' ? 'casilla_refugio'
+    : n.type === 'salvaje' ? 'casilla_salvaje'
+    : (n.type === 'cazador' || n.type === 'combate') ? 'cazador'
+    : n.type === 'airport' ? 'cabecilla' : null;
   function renderMap(s) {
     const current = s.map.nodesById[s.currentId];
     const all = s.map.seq;
@@ -167,9 +179,11 @@ export function createUI(game) {
         (!avail && !n.visited && n !== current) ? 'locked' : ''].join(' ');
       const ic = n.type === 'bioma' ? BIOMES[n.bio].e : (NODE_IC[n.type] || '•');
       const lab = n.type === 'bioma' ? BIOMES[n.bio].n : (NODE_LAB[n.type] || '');
+      const timg = tileImgFor(n);
+      const disc = timg ? `<img src="${SCN(timg)}" alt="" draggable="false">` : ic;
       const data = avail ? `data-act="node" data-id="${n.id}"` : '';
       return `<div class="${cls}" style="left:${n.x}%;top:${n.y}%" ${data}>
-        <div class="disc">${ic}</div><div class="ml">${lab}</div></div>`;
+        <div class="disc${timg ? ' img' : ''}">${disc}</div><div class="ml">${lab}</div></div>`;
     }).join('');
     const meta = s.country.secret ? 'enfrentá al Cabecilla 🚨' : 'elegí tu ruta hasta el Cabecilla 🚨';
     phaseArea.innerHTML = `
@@ -262,6 +276,7 @@ export function createUI(game) {
             <div class="statline">
               <div class="statbox"><div class="k">Ataque</div><div class="v" style="color:var(--atk)">${a.atk}</div></div>
               <div class="statbox"><div class="k">Vida</div><div class="v" style="color:var(--hp)">${a.hp}</div></div>
+              <div class="statbox"><div class="k">Defensa</div><div class="v" style="color:#c9a24a">🛡 ${a.def || 0}</div></div>
               <div class="statbox"><div class="k">Velocidad</div><div class="v" style="color:#7fb0e0">${a.spd}</div></div>
               <div class="statbox"><div class="k">Nivel</div><div class="v">${a.level}</div></div>
               <div class="statbox"><div class="k">Efecto</div><div class="v abil-v">${ab ? ab.sym + ' ' + ab.n : '—'}</div></div>
@@ -285,7 +300,7 @@ export function createUI(game) {
   }
 
   function renderWin(s) {
-    const who = s.avatar ? `${s.avatar.flag} <b>${s.avatar.name}</b> ` : '';
+    const who = s.avatar ? `<b>${s.avatar.name}</b> ` : '';
     $('modal').innerHTML = `
       <div class="crest">🦋</div><h2>¡Costa Rica a salvo!</h2>
       <p>${who}protegió las <b>7 provincias</b> 🇨🇷, venció al Cabecilla en <b style="color:var(--gold)">Monteverde</b> ☁️
@@ -319,7 +334,7 @@ export function createUI(game) {
       <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
       <div class="an">${a.n}</div>
       <div class="hpbar"><div class="hpfill"></div></div>
-      <div class="bstats"><span class="st atk">⚔${a.atk}</span><span class="st spd">💨${a.spd}</span><span class="st hab">🌀${a.hab || 0}</span><span class="hpnum">❤<span class="hpcur">${a.hp}</span>/${max}</span></div>
+      <div class="bstats"><span class="st atk">⚔${a.atk}</span><span class="st def">🛡${a.def || 0}</span><span class="st spd">💨${a.spd}</span><span class="st hab">🌀${a.hab || 0}</span><span class="hpnum">❤<span class="hpcur">${a.hp}</span>/${max}</span></div>
       ${ab ? badge(ab) : ''}${ab2 ? badge(ab2) : ''}
       <div class="hitlayer"></div></div>`;
   }
@@ -446,9 +461,9 @@ export function createUI(game) {
       elm.addEventListener('click', () => {
         if (act === 'starter') game.chooseStarter(+elm.dataset.i);
         else if (act === 'mode') game.setMode(elm.dataset.mode);
-        else if (act === 'flag') { phaseArea.querySelectorAll('.flagopt').forEach(f => f.classList.remove('sel')); elm.classList.add('sel'); }
+        else if (act === 'guide') { phaseArea.querySelectorAll('.guideopt').forEach(f => f.classList.remove('sel')); elm.classList.add('sel'); }
         else if (act === 'intro-go') game.startFromIntro();
-        else if (act === 'avatar-go') { const sel = phaseArea.querySelector('.flagopt.sel'); game.chooseAvatar(phaseArea.querySelector('#avName').value, sel ? sel.dataset.flag : '🌎'); }
+        else if (act === 'avatar-go') { const sel = phaseArea.querySelector('.guideopt.sel'); game.chooseAvatar(phaseArea.querySelector('#avName').value, sel ? sel.dataset.guide : 'hombre'); }
         else if (act === 'edit-avatar') game.editAvatar();
         else if (act === 'node') game.goNode(+elm.dataset.id);
         else if (act === 'edit') game.openEdit(+elm.dataset.uid);

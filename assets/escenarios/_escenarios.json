@@ -4,187 +4,236 @@
     "kind": "lugar",
     "scene": true,
     "prov": "San José",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "lugar_alajuela",
     "kind": "lugar",
     "scene": true,
     "prov": "Alajuela",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "lugar_cartago",
     "kind": "lugar",
     "scene": true,
     "prov": "Cartago",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "lugar_cartago_irazu",
     "kind": "lugar",
     "scene": true,
     "prov": "Cartago",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "lugar_heredia",
     "kind": "lugar",
     "scene": true,
     "prov": "Heredia",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "lugar_guanacaste",
     "kind": "lugar",
     "scene": true,
     "prov": "Guanacaste",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "lugar_puntarenas",
     "kind": "lugar",
     "scene": true,
     "prov": "Puntarenas",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "lugar_limon",
     "kind": "lugar",
     "scene": true,
     "prov": "Limón",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "lugar_monteverde",
     "kind": "lugar",
     "scene": true,
     "prov": "Monteverde",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "bioma_bosque",
     "kind": "bioma",
     "scene": true,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "bioma_montana",
     "kind": "bioma",
     "scene": true,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "bioma_sabana",
     "kind": "bioma",
     "scene": true,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "bioma_agua",
     "kind": "bioma",
     "scene": true,
     "prov": "",
-    "status": "ok"
-  },
-  {
-    "slug": "casilla_salvaje",
-    "kind": "casilla",
-    "scene": true,
-    "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "tesoro_mochila",
     "kind": "tesoro",
     "scene": false,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "tesoro_carreta",
     "kind": "tesoro",
     "scene": false,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "item_pejibaye",
     "kind": "item",
     "scene": false,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "item_mango",
     "kind": "item",
     "scene": false,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "item_banano",
     "kind": "item",
     "scene": false,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "item_pina",
     "kind": "item",
     "scene": false,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "item_cacao",
     "kind": "item",
     "scene": false,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "item_cafe",
     "kind": "item",
     "scene": false,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "item_chonete",
     "kind": "item",
     "scene": false,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "item_guaria",
     "kind": "item",
     "scene": false,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "cazador",
     "kind": "enemigo",
     "scene": false,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "cabecilla",
     "kind": "enemigo",
     "scene": false,
     "prov": "",
-    "status": "ok"
+    "status": "skip"
   },
   {
     "slug": "mapa_cr",
     "kind": "mapa",
     "scene": true,
+    "prov": "",
+    "status": "skip"
+  },
+  {
+    "slug": "casilla_bosque",
+    "kind": "casilla_ic",
+    "scene": false,
+    "prov": "",
+    "status": "skip"
+  },
+  {
+    "slug": "casilla_montana",
+    "kind": "casilla_ic",
+    "scene": false,
+    "prov": "",
+    "status": "skip"
+  },
+  {
+    "slug": "casilla_mar",
+    "kind": "casilla_ic",
+    "scene": false,
+    "prov": "",
+    "status": "skip"
+  },
+  {
+    "slug": "casilla_sabana",
+    "kind": "casilla_ic",
+    "scene": false,
+    "prov": "",
+    "status": "skip"
+  },
+  {
+    "slug": "casilla_traslado",
+    "kind": "casilla_ic",
+    "scene": false,
+    "prov": "",
+    "status": "skip"
+  },
+  {
+    "slug": "casilla_hallazgo",
+    "kind": "casilla_ic",
+    "scene": false,
+    "prov": "",
+    "status": "skip"
+  },
+  {
+    "slug": "casilla_refugio",
+    "kind": "casilla_ic",
+    "scene": false,
+    "prov": "",
+    "status": "skip"
+  },
+  {
+    "slug": "casilla_salvaje",
+    "kind": "casilla_ic",
+    "scene": false,
     "prov": "",
     "status": "ok"
   }
