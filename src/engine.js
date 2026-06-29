@@ -97,13 +97,22 @@ export function enemyLevel(depth, isBoss) { return (isBoss ? 3 : 2) + accel(dept
 export function wildLevel(depth) { return 1 + depth; }
 export function poacherLevel(depth) { return enemyLevel(depth, false); }   // traficantes: nivel de furtivo normal (su gracia es el robo + recompensa, no la fuerza)
 
-// Equipo enemigo (furtivos/traficantes): NO usan legendarios ni extintos —
-// son la fauna común-rara que tienen cautiva. Ponderado por rareza.
-export function genEnemy(country, size, lvl) {
+// Equipo enemigo (furtivos/traficantes/cabecilla). Normalmente cargan fauna
+// común-rara que tienen cautiva. PERO con probabilidad `elite` POR ANIMAL pueden
+// traer un "trofeo": un raro/ultra raro/legendario robado (ponderado por rareza,
+// así el legendario sigue siendo poco común incluso en ese slot). El extinto nunca
+// lo cargan — ese hay que ganárselo en la naturaleza. `elite` lo sube el tipo de
+// enemigo (furtivo poco, cazador más, cabecilla el que más).
+export function genEnemy(country, size, lvl, elite = 0) {
   const catchable = country.pool.filter(k => SP[k].rarity !== 'legendario' && SP[k].rarity !== 'extinto');
   const pool = catchable.length ? catchable : country.pool;
+  const trophies = country.pool.filter(k => ['raro', 'ultrararo', 'legendario'].includes(SP[k].rarity));
   const team = [];
-  for (let i = 0; i < size; i++) { const a = mkAnimal(weightedKey(pool)); setLevel(a, lvl); team.push(a); }
+  for (let i = 0; i < size; i++) {
+    const useTrophy = elite > 0 && trophies.length && Math.random() < elite;
+    const a = mkAnimal(weightedKey(useTrophy ? trophies : pool));
+    setLevel(a, lvl); team.push(a);
+  }
   return team;
 }
 

@@ -398,6 +398,25 @@ test('def crece al recuperarse (evoluciona) y mkAnimal lo trae', () => {
   assert.ok(a.def >= d0 + 2, 'gana +1 def por cada etapa de recuperación (Nv3 y Nv6)');
 });
 
+test('CAZADORES/CABECILLA: con `elite` pueden cargar legendarios; sin él, nunca', () => {
+  const country = E.COUNTRIES.find(c => c.pool.some(k => E.SP[k].rarity === 'legendario'));
+  assert.ok(country, 'hay una provincia con legendarios para la prueba');
+  // sin elite: NUNCA legendario ni extinto (solo lo que ya tienen cautivo: común-ultra)
+  let legSin = 0, extSin = 0;
+  for (let i = 0; i < 4000; i++) for (const a of E.genEnemy(country, 5, 8, 0)) {
+    if (a.rarity === 'legendario') legSin++; if (a.rarity === 'extinto') extSin++;
+  }
+  assert.equal(legSin, 0, 'sin elite no aparecen legendarios');
+  assert.equal(extSin, 0, 'el extinto JAMÁS lo cargan los enemigos');
+  // con elite alto (cabecilla): aparecen legendarios, pero el extinto sigue sin salir
+  let legCon = 0, extCon = 0;
+  for (let i = 0; i < 4000; i++) for (const a of E.genEnemy(country, 5, 8, 0.4)) {
+    if (a.rarity === 'legendario') legCon++; if (a.rarity === 'extinto') extCon++;
+  }
+  assert.ok(legCon > 0, 'con elite el cabecilla sí trae algún legendario');
+  assert.equal(extCon, 0, 'ni con elite cargan extintos');
+});
+
 test('EASTER EGG: el mapa Tenebroso es lineal con los 6 seres en orden', () => {
   const m = E.generateNightMap();
   const folk = m.seq.filter(n => n.type === 'folclor');

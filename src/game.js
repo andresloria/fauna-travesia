@@ -172,10 +172,10 @@ export class Game {
     switch (n.type) {
       case 'bioma':    return this.wildEncounter(n.bio);
       case 'combate':  return this.startBattle(
-        E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false)),
+        E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false), 0.12),
         'Furtivo', '🪤', 'retador');
       case 'cazador':  return this.startBattle(
-        E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d)),
+        E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d), 0.25),
         'Banda de traficantes', '🏹', 'cazador');
       case 'intercambio': {
         const maxLv = s.team.reduce((m, a) => Math.max(m, a.level), 1);
@@ -185,7 +185,7 @@ export class Game {
         return this.render();
       }
       case 'airport':  return this.startBattle(
-        E.genEnemy(s.country, E.bossSize(d), E.enemyLevel(d, true)),
+        E.genEnemy(s.country, E.bossSize(d), E.enemyLevel(d, true), 0.4),
         s.country.secret ? 'El Cabecilla' : 'Cabecilla furtivo', '🚨', 'jefe');
       case 'tesoro': {
         const it = E.pick(ITEMS);
@@ -239,9 +239,9 @@ export class Game {
         [{ label: 'Seguir 🧭', action: () => this.backToMap() }]);
     }
     if (late && d >= 3 && r < 60) return this.startBattle(              // emboscada de traficantes
-      E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d)), 'Emboscada de traficantes', '🏹', 'cazador');
+      E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d), 0.25), 'Emboscada de traficantes', '🏹', 'cazador');
     if (late && r < 74) return this.startBattle(                        // furtivo al acecho
-      E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false)), 'Furtivo al acecho', '🪤', 'retador');
+      E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false), 0.12), 'Furtivo al acecho', '🪤', 'retador');
     // por defecto: un animal drogado y alterado te ataca
     const f = this.fighters(), nf = f.length || 1;
     const avg = Math.round(f.reduce((m, a) => m + a.level, 0) / nf);
