@@ -6,7 +6,7 @@
 
 import * as E from './engine.js';
 import * as M from './meta.js';
-import { ITEMS, RARE_ITEMS, SECRET, RULES, ABILITIES, itemBonus } from './data.js';
+import { ITEMS, RARE_ITEMS, SECRET, RULES, ABILITIES, RARITY, itemBonus } from './data.js';
 
 export class Game {
   constructor(ui = null) {
@@ -295,6 +295,8 @@ export class Game {
   captureWild(idx) {
     const s = this.s, a = s.wilds && s.wilds[idx];
     if (!a) return;
+    const dup = s.team.find(x => x.key === a.key);   // ¿ya tenés esta especie?
+    if (dup) return this.fuseDuplicate(dup, a);       // FUSIÓN: +3 niveles + sube de rareza
     if (s.team.length >= RULES.MAX_TEAM) {       // refugio lleno: VOS elegís a cuál liberar
       s.swapWild = a;
       s.phase = 'wildswap';
@@ -306,6 +308,31 @@ export class Game {
     this.backToMap();
   }
   leaveWild() { this.backToMap(); }
+
+  // sube la rareza un escalón (común→raro→…→extinto) y refuerza stats. Devuelve true si subió.
+  bumpRarity(a) {
+    const ladder = ['comun', 'raro', 'ultrararo', 'legendario', 'extinto'];
+    const i = ladder.indexOf(a.rarity);
+    if (i < 0 || i >= ladder.length - 1) return false;   // ya es extinto (tope) o rareza especial
+    a.rarity = ladder[i + 1];
+    a.leg = a.rarity === 'legendario';
+    a.ext = a.rarity === 'extinto';
+    a.atk += 2; a.hp += 3; a.def = (a.def || 0) + 1; a.hab = (a.hab || 0) + 1;   // más estadísticas
+    return true;
+  }
+  // FUSIÓN de duplicado: el animal que ya tenés sube +3 niveles y de rareza.
+  fuseDuplicate(target, wild) {
+    for (let i = 0; i < 3; i++) E.levelUp(target);       // +3 niveles automáticos
+    const up = this.bumpRarity(target);
+    this.registerDex(wild);                               // cuenta la especie de todos modos
+    const rarTxt = up ? ` y subió a <b>${RARITY[target.rarity] ? RARITY[target.rarity].n : target.rarity}</b> ✦` : '';
+    this.log(`✨ Otro ${target.e} <b>${target.n}</b> — lo fusionaste: +3 niveles (Nv ${target.level})${rarTxt}.`);
+    return this.showEvent('✨', '¡Fusión!',
+      `Ya tenías a ${target.e} <b>${target.n}</b>, así que el nuevo se <b>fusiona</b>: <b>+3 niveles</b> (ahora Nv ${target.level})${up
+        ? ` y <b>sube de rareza</b> a ${RARITY[target.rarity].n}, aumentando sus estadísticas 💪`
+        : ' (ya está en la rareza máxima)'}.`,
+      [{ label: '¡Más fuerte! 🌿', action: () => this.backToMap() }]);
+  }
   // refugio lleno: cambiás el rescatado por el que VOS elijas (no el más débil)
   swapWildFor(uid) {
     const s = this.s, a = s.swapWild;

@@ -210,27 +210,29 @@ export function createUI(game) {
   function renderWild(s) {
     const wilds = s.wilds, full = s.team.length >= RULES.MAX_TEAM;
     const bio = BIOMES[wilds[0].bio];
+    const owned = new Set(s.team.map(x => x.key));     // especies que ya tenés (para fusión)
     const rescBtn = full ? 'Rescatar (cambia al más débil)' : 'Rescatar 🩹';
     if (s.wildLeg) {
-      const a = wilds[0], ab = ABILITIES[a.ab];
+      const a = wilds[0], ab = ABILITIES[a.ab], dup = owned.has(a.key);
       phaseArea.innerHTML = `
         <div class="section-h legend-h">✦ ¡Un LEGENDARIO necesita rescate! · ${bio.e} ${bio.n}</div>
         <div class="event-box legend-box">
           <div class="legbanner">✦ Encuentro rarísimo — no aparece seguido</div>
           <div style="margin:0 auto;max-width:150px">${animalCard(a, {})}</div>
           <div class="desc">${ab ? `<b>${ab.sym} ${ab.n}</b> — ${ab.desc}` : ''}</div>
-          <div class="center"><button class="btn" data-act="wild" data-i="0">${rescBtn}</button>
+          <div class="center"><button class="btn" data-act="wild" data-i="0">${dup ? '✨ Fusionar (+3 Nv)' : rescBtn}</button>
             <button class="btn ghost" data-act="wild" data-i="-1">Dejarlo</button></div>
         </div>
         ${teamHTML(s.team, { panel: true, order: true })}`;
       return;
     }
     const cards = wilds.map((a, i) => {
-      const ab = ABILITIES[a.ab];
-      return `<div class="wildpick">
+      const ab = ABILITIES[a.ab], dup = owned.has(a.key);
+      return `<div class="wildpick${dup ? ' dup' : ''}">
+        ${dup ? '<div class="duptag">✨ Ya lo tenés · fusiona +3 Nv</div>' : ''}
         ${animalCard(a, {})}
         <div class="wilddesc">${ab ? `${ab.sym} ${ab.n}` : ''}</div>
-        <button class="btn" data-act="wild" data-i="${i}">${rescBtn}</button>
+        <button class="btn" data-act="wild" data-i="${i}">${dup ? '✨ Fusionar' : rescBtn}</button>
       </div>`;
     }).join('');
     phaseArea.innerHTML = `
