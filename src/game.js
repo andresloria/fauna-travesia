@@ -16,6 +16,7 @@ export class Game {
 
   // ---------- arranque ----------
   newRun() {
+    M.bump('runs');
     const avatar = this.loadAvatar();
     let mode = 'normal', seenIntro = false;
     try { mode = localStorage.getItem('fauna_mode') || 'normal'; } catch {}
@@ -26,6 +27,7 @@ export class Game {
       phase,
       avatar, mode,                            // 'normal' | 'furtivo' (si te derrotan un animal, se lo roban)
       team: [], hearts: RULES.MAX_HEARTS, cleared: 0, released: 0,
+      leftPath: true, night: false,            // easter egg: ¿fue SIEMPRE por la izquierda?
       country: null, countryBag: null, lastCountryIdx: null,
       map: null, currentId: null,
       starters: ['perro', 'gato', 'comemaiz'].map(k => E.mkAnimal(k)),   // básicos fijos
@@ -85,10 +87,28 @@ export class Game {
     if (c >= 25) this.award('dex25');
     if (c >= 50) this.award('dex50');
     if (this.s.team.length >= RULES.MAX_TEAM) this.award('refugio');
+    this.syncAch();   // dex, biomas, legendarios, especies específicas
   }
   checkConserva() {
     if (this.s.released >= 5) this.award('conserva5');
     if (this.s.released >= 15) this.award('conserva15');
+  }
+  // recalcula y desbloquea TODOS los logros por umbral (dex, biomas, niveles,
+  // combates, etc.) a partir de las estadísticas acumuladas + la colección.
+  syncAch() {
+    const dex = M.getDex(), keys = [...dex];
+    const bio = { bio_bosque: 0, bio_agua: 0, bio_montana: 0, bio_sabana: 0 };
+    keys.forEach(k => { const f = 'bio_' + (E.SP[k] && E.SP[k].bio); if (f in bio) bio[f]++; });
+    M.bumpMax('maxLevel', Math.max(0, ...this.s.team.map(a => a.level)));
+    const stats = Object.assign({}, M.getStats(), bio, {
+      dex: dex.size, dexSet: dex,
+      legendaries: keys.filter(k => E.SP[k] && E.SP[k].leg).length,
+      abilities: new Set(keys.map(k => E.SP[k] && E.SP[k].ab).filter(Boolean)).size,
+    });
+    M.evaluate(stats).forEach(a => {
+      this.log(`🏆 Logro: ${a.e} <b>${a.n}</b>`);
+      if (this.ui && this.ui.toast) this.ui.toast(a);
+    });
   }
 
   log(msg) { this.s.log.unshift(msg); if (this.s.log.length > 50) this.s.log.pop(); }
@@ -126,7 +146,12 @@ export class Game {
   goNode(id) {
     if (this.s.phase !== 'map') return;
     const n = this.node(id);
-    if (!this.current().children.includes(n)) return; // solo nodos conectados
+    const kids = this.current().children;
+    if (!kids.includes(n)) return; // solo nodos conectados
+    // EASTER EGG: ¿elegiste el nodo MÁS A LA IZQUIERDA disponible? Si alguna vez no,
+    // se pierde el rumbo al mapa Tenebroso (en filas de 1 opción siempre cuenta).
+    const leftmost = kids.reduce((a, b) => (b.c < a.c ? b : a));
+    if (n !== leftmost) this.s.leftPath = false;
     this.s.currentId = id;
     n.visited = true;
     this.resolveNode(n);
@@ -178,7 +203,17 @@ export class Game {
           [{ label: 'Continuar', action: () => this.backToMap() }]);
       }
       case 'sorpresa': return this.resolveSorpresa(n);
+      case 'folclor':  return this.folkBattle(n);
     }
+  }
+
+  // EASTER EGG: pelea contra un ser del folclor. Pelea ÉL mismo (no trae animales),
+  // 3 habilidades + mucha vida, nivelado a tu poder +3 = todo un reto.
+  folkBattle(n) {
+    const s = this.s, sp = E.SP[n.boss];
+    const maxLv = Math.max(1, ...s.team.map(a => a.level));
+    this.log(`🌑 De la niebla surge <b>${sp.n}</b>… no es un animal: es una leyenda.`);
+    return this.startBattle(E.genFolkBoss(n.boss, maxLv + 3), sp.n, sp.e, 'folclor');
   }
 
   // Casilla SORPRESA: puede dar un objeto, una pelea, una emboscada de cazadores
@@ -209,10 +244,27 @@ export class Game {
     return this.startBattle(E.genZoneBoss(s.country, this.depth()), 'Jefe de zona', '👑', 'jefezona');
   }
 
-  backToMap() { this.s.phase = 'map'; this.s.editId = null; this.render(); }
+  backToMap() { this.s.phase = 'map'; this.s.editId = null; this.syncAch(); this.render(); }
   nextCountry() {
-    if (this.s.cleared >= RULES.RUN_LENGTH) return this.enterSecret();
+    if (this.s.cleared >= RULES.RUN_LENGTH) {
+      // EASTER EGG: si fuiste SIEMPRE por la izquierda, en vez de Monteverde se abre
+      // el mapa Tenebroso (Costa Rica de noche) con los 6 seres del folclor.
+      return this.s.leftPath ? this.enterNightMap() : this.enterSecret();
+    }
     this.enterCountry();
+  }
+  // mapa secreto Tenebroso — solo se llega yendo siempre por la izquierda.
+  enterNightMap() {
+    const s = this.s;
+    s.night = true;
+    s.country = { flag: '🌑', n: 'Costa Rica de Noche', map: 'noche', secret: true, night: true, pool: [] };
+    s.map = E.generateNightMap();
+    s.currentId = s.map.startId;
+    this.current().visited = true;
+    s.phase = 'map';
+    this.award('tenebroso');
+    this.log('🌑 La luz se apaga. Un sendero prohibido se abre: <b>Costa Rica de noche</b>. Acá no hay cazadores… hay <b>leyendas</b>. Vencé a los seis seres o no saldrás jamás.');
+    this.render();
   }
   // final: el bosque nuboso de Monteverde. Vencer al Cabecilla = ganar.
   enterSecret() {
@@ -231,7 +283,9 @@ export class Game {
     const s = this.s;
     // 3 animales para elegir, ponderados por rareza (común sale mucho; legendario/
     // extinto casi nunca). Si cae uno raro entre los 3, se avisa: es un hallazgo.
-    s.wilds = E.genWildChoices(s.country, bio, this.depth(), 3);
+    // Nivel = el de TU ANIMAL MÁS ALTO (así sirven; antes salían siempre de Nv1).
+    const maxLv = Math.max(1, ...s.team.map(a => a.level));
+    s.wilds = E.genWildChoices(s.country, bio, maxLv, 3);
     s.wildLeg = false;
     const rare = s.wilds.find(a => a.rarity === 'legendario' || a.rarity === 'extinto');
     if (rare) this.log(`✦ ¡AVISTAMIENTO ${rare.rarity.toUpperCase()}! Apareció ${rare.e} <b>${rare.n}</b>.`);
@@ -281,7 +335,8 @@ export class Game {
   }
   onBattleEnd() {
     const s = this.s, b = s.battle, won = b.result === 'W';
-    if (won && !(b.fallenAUids && b.fallenAUids.length)) this.award('impecable');
+    if (won) M.bump('battlesWon');
+    if (won && !(b.fallenAUids && b.fallenAUids.length)) { this.award('impecable'); M.bump('impecables'); }
     if (b.fallenAUids && b.fallenAUids.length) {
       if (s.mode === 'furtivo') {
         // MODO FURTIVO: a los que cayeron en combate se los roban (desaparecen)
@@ -302,12 +357,14 @@ export class Game {
         s.cleared++;
         s.team.forEach(a => E.levelUp(a));
         s.hearts = Math.min(RULES.MAX_HEARTS, s.hearts + 1);
-        s.released += 2;                                // liberás a los animales que tenían cautivos
+        s.released += 2; M.bump('released', 2);        // liberás a los animales que tenían cautivos
         this.log(`🌿 Liberaste a los animales cautivos de ${s.country.n} (conservación +2)`);
         this.award('prov1'); this.checkConserva();
-        if (s.mode === 'furtivo') this.award('furtivo');
+        M.bumpMax('maxProv', s.cleared);
+        if (s.mode === 'furtivo') { this.award('furtivo'); M.bump('furtivoWins'); }
         const last = s.cleared >= RULES.RUN_LENGTH;
         if (last) this.award('prov7');
+        this.syncAch();
         return this.showEvent('🏆', last ? '¡Las 7 provincias a salvo!' : '¡Provincia liberada!',
           last
             ? `Recorriste las 7 provincias 🇨🇷 y desbarataste a los furtivos. Tu refugio se fortalece… y se abre el sendero al bosque nuboso de Monteverde. ☁️`
@@ -324,8 +381,8 @@ export class Game {
         });
         const it = E.pick(RARE_ITEMS);
         s.bag.push(it);
-        s.released += 1;
-        this.award('traficantes'); this.checkConserva();
+        s.released += 1; M.bump('released', 1); M.bump('trafficker');
+        this.award('traficantes'); this.checkConserva(); this.syncAch();
         this.log(`🏆 Frenaste a los traficantes: doble recuperación + ${it.e} <b>${it.n}</b> (conservación +1)`);
         return this.showEvent('🏆', '¡Traficantes frenados!',
           `Liberaste a los animales que llevaban 🌿 (conservación +1). Tu refugio sube <b>DOBLE</b> y te llevás un objeto raro: ${it.e} <b>${it.n}</b> (${itemBonus(it)}).`,
@@ -345,12 +402,25 @@ export class Game {
           s.team.push(boss);
           this.log(`👑 ¡Rescataste al JEFE DE ZONA ${boss.e} <b>${boss.n}</b> (Nv ${boss.level})!`);
         }
-        this.registerDex(boss); this.award('jefezona');
+        this.registerDex(boss); this.award('jefezona'); M.bump('zoneboss'); this.syncAch();
         return this.showEvent('👑', '¡Jefe de zona rescatado!',
           `Tras una pelea durísima liberaste a ${boss.e} <b>${boss.n}</b> de la droga de los cazadores. Ahora es el animal más fuerte de tu refugio (Nv ${boss.level}).`,
           [{ label: 'Increíble 🌿', action: () => this.backToMap() }]);
       }
       return this.hurt();
+    }
+    if (b.kind === 'folclor') {
+      const node = this.current(), sp = E.SP[node.boss];
+      if (won) {
+        s.team.forEach(a => E.levelUp(a));        // recompensa: tu equipo sube
+        this.award('folk_' + node.boss);          // logro por ese ser
+        M.markFolk(node.boss); this.syncAch();
+        if (node.boss === 'f_carreta') return this.nightVictory();   // último → ganaste el mapa Tenebroso
+        return this.showEvent(sp.e, `¡${sp.n} vencida!`,
+          `Doblegaste a <b>${sp.n}</b>. La oscuridad se espesa… el siguiente espanto acecha más adelante.`,
+          [{ label: 'Seguir 🌑', action: () => this.backToMap() }], node.boss);
+      }
+      return this.gameOver();                      // perder ante una leyenda = fin
     }
     if (won) {
       s.team.forEach(a => { if (E.levelUp(a)) this.log(`🌿 ${a.e} <b>${a.n}</b> se recuperó hasta nivel ${a.level}!`); });
@@ -408,6 +478,7 @@ export class Game {
     }
     if (it.cure && a.down) { a.down = false; extra += ' — ¡revivido! 💚'; }
     this.log(`${it.e} <b>${it.n}</b> (${itemBonus(it)}) equipado a ${a.e} ${a.n}${extra}`);
+    M.bump('items'); this.syncAch();
     this.render();
   }
   moveAnimal(uid, dir) {
@@ -431,8 +502,8 @@ export class Game {
     if (i < 0) return;
     const [a] = t.splice(i, 1);
     if ((a.evo || 0) >= RULES.PLENO_EVO) {
-      s.released++;
-      this.checkConserva();
+      s.released++; M.bump('released', 1);
+      this.checkConserva(); this.syncAch();
       this.log(`🌿 Liberaste a ${a.e} <b>${a.n}</b> PLENO a la naturaleza. ¡Conservación +1! (${s.released})`);
     } else {
       this.log(`🌿 Soltaste a ${a.e} ${a.n} (aún no estaba pleno).`);
@@ -449,13 +520,15 @@ export class Game {
   }
 
   // ---------- eventos / fin ----------
-  showEvent(emoji, title, desc, actions) {
+  showEvent(emoji, title, desc, actions, imgKey) {
     this.s.phase = 'event';
-    this.s.event = { emoji, title, desc, actions };
+    this.s.event = { emoji, title, desc, actions, imgKey };   // imgKey: muestra esa imagen grande en vez del emoji
     this.render();
   }
   gameOver() { this.s.phase = 'over'; this.render(); }
   victory()  { this.award('cabecilla'); this.award('prov7'); this.s.phase = 'win'; this.render(); }
+  // EASTER EGG: ganar el mapa Tenebroso (vencer a los 6 seres del folclor)
+  nightVictory() { this.award('folk_all'); this.award('prov7'); this.s.nightWin = true; this.s.phase = 'win'; this.render(); }
 
   render() { if (this.ui) this.ui.render(this.s); }
 }

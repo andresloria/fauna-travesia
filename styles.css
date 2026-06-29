@@ -416,3 +416,33 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:url('assets/escenarios/mapa_cr_topo.png') center 16% no-repeat;
   background-size:min(880px,118%) auto;opacity:.07;image-rendering:pixelated}
 @media(max-width:520px){ body::before{background-size:150% auto;opacity:.06} }
+
+/* ============ EASTER EGG: folclor tico / mapa Tenebroso ============ */
+/* carta MÍTICA (los 6 seres) — oscura con brillo violeta espectral */
+.acard.mitico{border:2px solid #7e57c2;background:linear-gradient(180deg,#2a2438,#191525);color:#e8def8;
+  animation:mitoGlow 2.2s ease-in-out infinite}
+.acard.mitico .an{color:#d8c8ff}
+.acard.mitico .stage{background:linear-gradient(90deg,#4a2d6e,#7e57c2);color:#f3ecff}
+.acard.mitico .art{background:radial-gradient(circle at 50% 34%,#3a3052,#17131f)}
+@keyframes mitoGlow{50%{box-shadow:0 0 0 2px #7e57c2,0 0 22px rgba(126,87,194,.6),0 8px 16px rgba(0,0,0,.55)}}
+
+/* nodos del mapa nocturno (los seres) */
+.mnode.folclor .disc{background:#241a30;border-color:#7e57c2}
+.mnode.folclor.available .disc{border-color:#c0a8e8;box-shadow:0 0 0 3px rgba(179,157,219,.45),0 3px 12px rgba(0,0,0,.6);animation:pulse 1.4s infinite}
+.mnode.folclor .ml{color:#cdbce8;font-weight:600}
+
+/* mapa Tenebroso: fondo oscuro, mapa de noche bien visible, discos un poco más grandes */
+.mapwrap.night{background:#0a0712;border-color:#3a2d52}
+.mapbg.cr.night{opacity:.62;filter:saturate(1.05)}
+.mapwrap.night.linear .mnode .disc{width:44px;height:44px}
+.mapwrap.night .mnode.descanso .disc,.mapwrap.night .mnode.start .disc{width:34px;height:34px}
+.mapwrap.night .mnode .ml{color:#b9a8d4}
+.mapwrap.night .maptag{color:#c9b6ec}
+.mapwrap.night svg line{stroke:rgba(160,130,210,.35) !important}
+
+/* imagen grande de la leyenda al vencerla (en vez de un emoji pobre) */
+.event-legend{width:130px;height:130px;object-fit:contain;image-rendering:pixelated;
+  filter:drop-shadow(0 4px 12px rgba(120,87,194,.55)) drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+.event-box.legend{border-color:#7e57c2;background:linear-gradient(180deg,rgba(42,36,56,.5),rgba(20,16,28,.5))}
+.event-box.legend .big{line-height:0;margin-bottom:4px}
+.modal .crest .event-legend{width:120px;height:120px}

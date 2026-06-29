@@ -50,6 +50,21 @@ STARTERS = {
     "comemaiz": {"n": "Comemaíz", "e": "🐦", "atk": 3, "hp": 4, "spd": 4, "hab": 3, "def": 2, "bio": "sabana", "ab": "heal", "starter": True},
 }
 
+# ---- FOLCLOR (EASTER EGG): los 6 seres de la leyenda tica. NO son fauna: pelean
+# ellos mismos como si fueran los animales. Tienen 3 HABILIDADES (ab/ab2/ab3) y
+# MUCHA vida — un reto real. Rareza "mítico", bioma "noche", excluidos de los pools
+# (solo aparecen en el mapa secreto Tenebroso). Arte en assets/folclor/<key>.png.
+# `acts` = ataques por ronda (clave para que UN ser sea un reto contra TUS 5): así
+# amenaza a todo el equipo. Escala con la dificultad (La Carreta, la final, pega 4 veces).
+FOLCLOR = {
+    "f_segua":     {"n": "La Segua", "e": "🐴", "atk": 6, "hp": 17, "spd": 8, "hab": 5, "def": 4, "acts": 2, "bio": "noche", "ab": "first",  "ab2": "rage",   "ab3": "poison", "rarity": "mitico", "folk": True},
+    "f_cadejos":   {"n": "El Cadejos", "e": "🐕", "atk": 8, "hp": 16, "spd": 7, "hab": 3, "def": 5, "acts": 2, "bio": "noche", "ab": "rage",   "ab2": "first",  "ab3": "thorns", "rarity": "mitico", "folk": True},
+    "f_llorona":   {"n": "La Llorona", "e": "😱", "atk": 5, "hp": 21, "spd": 5, "hab": 4, "def": 5, "acts": 2, "bio": "noche", "ab": "poison", "ab2": "heal",   "ab3": "shield", "rarity": "mitico", "folk": True},
+    "f_tulevieja": {"n": "La Tulevieja", "e": "🦇", "atk": 7, "hp": 17, "spd": 6, "hab": 6, "def": 4, "acts": 2, "bio": "noche", "ab": "poison", "ab2": "first",  "ab3": "thorns", "rarity": "mitico", "folk": True},
+    "f_padre":     {"n": "El Padre sin Cabeza", "e": "⛪", "atk": 6, "hp": 23, "spd": 3, "hab": 2, "def": 7, "acts": 2, "bio": "noche", "ab": "shield", "ab2": "rage",   "ab3": "heal",   "rarity": "mitico", "folk": True},
+    "f_carreta":   {"n": "La Carreta sin Bueyes", "e": "🛒", "atk": 7, "hp": 25, "spd": 2, "hab": 1, "def": 7, "acts": 3, "bio": "noche", "ab": "thorns", "ab2": "shield", "ab3": "rage",   "rarity": "mitico", "folk": True},
+}
+
 # ---- 1) Los 27 actuales, PRESERVADOS exactos (incluye legendarios) ----
 EXISTING = {
     "perezoso":  dict(n="Perezoso", e="🦥", atk=1, hp=7, spd=1, hab=0, bio="bosque", ab="shield"),
@@ -59,21 +74,21 @@ EXISTING = {
     "serpiente": dict(n="Terciopelo", e="🐍", atk=5, hp=2, spd=6, hab=3, bio="bosque", ab="poison"),
     "jaguar":    dict(n="Jaguar", e="🐆", atk=5, hp=4, spd=7, hab=4, bio="bosque", ab="rage"),
     "manigordo": dict(n="Manigordo", e="🐈", atk=3, hp=3, spd=8, hab=6, bio="bosque", ab="first"),
-    "pizote":    dict(n="Pizote", e="🦝", atk=3, hp=4, spd=5, hab=3, bio="bosque", ab="first"),
+    "pizote":    dict(n="Pizote", e="🦝", atk=3, hp=4, spd=5, hab=3, bio="bosque", ab="heal"),
     "murcielago":dict(n="Murciélago", e="🦇", atk=3, hp=2, spd=8, hab=7, bio="bosque", ab="first"),
     "mariposa":  dict(n="Morfo azul", e="🦋", atk=2, hp=2, spd=7, hab=7, bio="bosque", ab="first"),
     "abeja":     dict(n="Abeja", e="🐝", atk=3, hp=1, spd=7, hab=6, bio="bosque", ab="poison"),
     "quetzal":   dict(n="Quetzal", e="🐦", atk=2, hp=4, spd=7, hab=5, bio="montana", ab="heal"),
     "puma":      dict(n="Puma", e="🐆", atk=5, hp=5, spd=7, hab=4, bio="montana", ab="rage"),
-    "coyote":    dict(n="Coyote", e="🐺", atk=4, hp=3, spd=7, hab=4, bio="montana", ab="first"),
+    "coyote":    dict(n="Coyote", e="🐺", atk=4, hp=3, spd=7, hab=4, bio="montana", ab="rage"),
     "venado":    dict(n="Venado", e="🦌", atk=2, hp=6, spd=7, hab=5, bio="sabana", ab="shield"),
     "saino":     dict(n="Saíno", e="🐗", atk=4, hp=5, spd=4, hab=2, bio="sabana", ab="rage"),
     "iguana":    dict(n="Iguana", e="🦎", atk=2, hp=5, spd=4, hab=2, bio="sabana", ab="thorns"),
     "garza":     dict(n="Garza", e="🐦", atk=2, hp=3, spd=6, hab=4, bio="sabana", ab="first"),
-    "cocodrilo": dict(n="Cocodrilo", e="🐊", atk=5, hp=6, spd=3, hab=1, bio="agua", ab="first"),
+    "cocodrilo": dict(n="Cocodrilo", e="🐊", atk=5, hp=6, spd=3, hab=1, bio="agua", ab="rage"),
     "tortuga":   dict(n="Tortuga verde", e="🐢", atk=1, hp=8, spd=1, hab=0, bio="agua", ab="shield"),
     "ballena":   dict(n="Ballena jorobada", e="🐋", atk=6, hp=8, spd=3, hab=1, bio="agua", ab="rage"),
-    "delfin":    dict(n="Delfín", e="🐬", atk=3, hp=3, spd=8, hab=6, bio="agua", ab="first"),
+    "delfin":    dict(n="Delfín", e="🐬", atk=3, hp=3, spd=8, hab=6, bio="agua", ab="heal"),
     "tiburon":   dict(n="Tiburón", e="🦈", atk=6, hp=4, spd=6, hab=3, bio="agua", ab="rage"),
     "cangrejo":  dict(n="Cangrejo", e="🦀", atk=2, hp=5, spd=3, hab=1, bio="agua", ab="thorns"),
     "basilisco": dict(n="Basilisco", e="🦎", atk=3, hp=3, spd=8, hab=6, bio="agua", ab="first"),
@@ -172,12 +187,25 @@ def role_of(slug):
 
 
 def ability_of(slug):
+    # 1) overrides temáticos (mandan siempre)
     if slug in VENENO: return "poison"
     if slug in ESCUDO: return "shield"
     if slug in PUAS: return "thorns"
     if slug in REGEN: return "heal"
     if slug in FURIA: return "rage"
-    return "first"
+    # 2) por ROL — antes TODO caía en 'first' (53% del roster). Ahora cada
+    #    arquetipo tira a una habilidad coherente y los 'balanced' se reparten
+    #    parejo entre las 6, para que 'primer golpe' deje de dominar.
+    role = role_of(slug)
+    if role == "predator": return "rage"                       # depredadores: furia
+    if role == "tank":     return "shield"                     # pesados: escudo
+    if role == "glass":    return "poison"                     # frágiles tóxicos: ranas/insectos
+    # fast + balanced → SOLO se reparten entre first/furia/regenera, que le quedan
+    # bien a cualquier bicho (ágil / fiero / que apoya). NO repartimos veneno/púas/
+    # escudo al azar (quedan temáticos) para no ponerle 'veneno' a una nutria.
+    if role == "fast":                                         # ágiles: tiran a primer golpe
+        return ("first", "first", "heal")[jitter(slug + "fa", 0, 2)]
+    return ("first", "rage", "heal", "rage", "first")[jitter(slug + "ba", 0, 4)]
 
 
 def stats_of(slug):
@@ -223,6 +251,9 @@ for slug in ("abeja", "cangrejo", "tiburon", "quetzaldorado", "tarantula"):
 # starters básicos (perro/gato/comemaíz)
 for slug, rec in STARTERS.items():
     SP[slug] = dict(rec)
+# seres del folclor (easter egg) — combatientes especiales con 3 habilidades
+for slug, rec in FOLCLOR.items():
+    SP[slug] = dict(rec)
 
 # DEFENSA para todo el que no la tenga (las 28 curadas + extras) — por rol/ability.
 for slug, rec in SP.items():
@@ -233,6 +264,8 @@ for slug, rec in SP.items():
 for slug, rec in SP.items():
     if rec.get("starter"):
         rec["rarity"] = "comun"; continue
+    if rec.get("folk"):
+        rec["rarity"] = "mitico"; continue   # ya trae sus 3 habilidades y stats
     if slug in EXTINTO:
         rec["rarity"] = "extinto"; rec["ext"] = True; rec.pop("leg", None)
         rec["atk"] = min(9, rec["atk"] + 2); rec["hp"] = min(12, rec["hp"] + 3)
@@ -261,7 +294,7 @@ PROV = [
 # Pools = TODA la fauna silvestre (incluye legendarios y extintos, que ahora son
 # ENCONTRABLES en el bioma pero con tasa bajísima — el peso por rareza lo decide
 # el motor). Se excluyen solo los STARTERS (perro/gato/comemaíz).
-wild = [k for k, v in SP.items() if not v.get("starter")]
+wild = [k for k, v in SP.items() if not v.get("starter") and not v.get("folk")]
 by_biome = {}
 for k in wild:
     by_biome.setdefault(SP[k]["bio"], []).append(k)

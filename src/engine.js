@@ -20,9 +20,9 @@ export function shuffle(a) {
 let UID = 0;
 export function mkAnimal(key) {
   const s = SP[key];
-  return { uid: ++UID, key, n: s.n, e: s.e, bio: s.bio, ab: s.ab, ab2: s.ab2 || null,
-           leg: !!s.leg, ext: !!s.ext, rarity: s.rarity || 'comun',
-           atk: s.atk, hp: s.hp, spd: s.spd || 3, hab: s.hab || 0, def: s.def || 0,
+  return { uid: ++UID, key, n: s.n, e: s.e, bio: s.bio, ab: s.ab, ab2: s.ab2 || null, ab3: s.ab3 || null,
+           leg: !!s.leg, ext: !!s.ext, folk: !!s.folk, rarity: s.rarity || 'comun',
+           atk: s.atk, hp: s.hp, spd: s.spd || 3, hab: s.hab || 0, def: s.def || 0, acts: s.acts || 1,
            level: 1, evo: 0, items: [] };
 }
 
@@ -176,12 +176,57 @@ export function genZoneBoss(country, depth) {
 // Tres animales DIFERENTES para elegir a cuál rescatar. Prioriza el bioma y
 // completa con otras especies del país; SIEMPRE distintas. Ponderado por RAREZA:
 // casi siempre comunes/raros; muy de vez en cuando cae un legendario (¡un jaguar!).
-export function genWildChoices(country, bio, depth, count = 3) {
+// `level` = nivel objetivo (lo pasa el juego = el NIVEL DE TU ANIMAL MÁS ALTO),
+// para que los salvajes que rescatás sirvan y no salgan siempre de nivel 1.
+export function genWildChoices(country, bio, level, count = 3) {
   let cand = country.pool.filter(k => SP[k].bio === bio);
   if (cand.length < count) cand = cand.concat(country.pool.filter(k => !cand.includes(k)));
   const keys = weightedDistinct(cand, Math.min(count, cand.length));
   while (keys.length < count) keys.push(pick(country.pool));
-  return keys.map(k => { const a = mkAnimal(k); setLevel(a, wildLevel(depth)); return a; });
+  return keys.map(k => { const a = mkAnimal(k); setLevel(a, Math.max(1, level - rnd(2))); return a; });
+}
+
+// ---------- EASTER EGG: mapa Tenebroso (Costa Rica de noche) ----------
+// Solo se llega yendo SIEMPRE por la izquierda y ganando las 7 provincias. Mapa
+// LINEAL: hay que vencer a los 6 seres del folclor en orden (no se puede saltar
+// ninguno). Entre medio, refugios para recuperarse. Vencer a La Carreta = victoria.
+export const FOLK_ORDER = ['f_segua', 'f_cadejos', 'f_llorona', 'f_tulevieja', 'f_padre', 'f_carreta'];
+export function generateNightMap() {
+  const nodesById = {}, seq = [];
+  // secuencia: inicio, 2 seres, refugio, 2 seres, refugio, 2 seres (el último = final)
+  // un REFUGIO entre cada ser: cada duelo se pelea con el equipo recuperado (cada
+  // ser es un reto en sí; la atrición no te deja entrar mermado al siguiente).
+  const plan = [
+    { type: 'start' },
+    { type: 'folclor', boss: 'f_segua' }, { type: 'descanso' },
+    { type: 'folclor', boss: 'f_cadejos' }, { type: 'descanso' },
+    { type: 'folclor', boss: 'f_llorona' }, { type: 'descanso' },
+    { type: 'folclor', boss: 'f_tulevieja' }, { type: 'descanso' },
+    { type: 'folclor', boss: 'f_padre' }, { type: 'descanso' },
+    { type: 'folclor', boss: 'f_carreta' },
+  ];
+  const ROWS = plan.length - 1;
+  const yFor = (r) => 90 - r * (80 / (ROWS + 1));   // r0 abajo (inicio), arriba el final
+  const rows = plan.map((p, r) => {
+    const o = { id: ++UID, r, c: 1, type: p.type, boss: p.boss || null, bio: 'noche',
+                x: 50, y: yFor(r), visited: false, children: [] };
+    nodesById[o.id] = o; seq.push(o); return o;
+  });
+  for (let r = 0; r < rows.length - 1; r++) rows[r].children = [rows[r + 1]];   // lineal
+  return { rows, nodesById, startId: rows[0].id, seq };
+}
+// Un ser del folclor como combatiente: 3 habilidades + mucha vida, NIVELADO al
+// poder del jugador (+boost) para que sea todo un reto.
+export function genFolkBoss(key, level) {
+  const a = mkAnimal(key);
+  setLevel(a, level);
+  // Es UNO contra CINCO y ataca varias veces por ronda (acts): necesita MUCHA vida
+  // y pegada de jefe para ser un reto de verdad, no una víctima del fuego concentrado.
+  a.hp = Math.round(a.hp * 3) + 18;
+  a.atk += 2;
+  a.def += 1;
+  a.boss = true;
+  return [a];
 }
 
 // Oferta de intercambio: un animal 2-3 niveles arriba (no legendario/extinto/starter).
@@ -215,13 +260,14 @@ const healAmount = (level) => 1 + Math.floor((level || 1) / 4);   // poco, escal
 
 export function fight(teamA, teamB) {
   const mk = (c, side) => {
-    const abs = [c.ab, c.ab2].filter(Boolean);   // legendarios = 2 habilidades
+    const abs = [c.ab, c.ab2, c.ab3].filter(Boolean);   // legendarios = 2 habilidades; folclor = 3
     return {
       uid: c.uid, side, atk: c.atk, hp: c.hp, max: c.hp, spd: c.spd || 0, hab: c.hab || 0,
-      def: c.def || 0, level: c.level || 1, abs,
+      def: c.def || 0, acts: c.acts || 1, level: c.level || 1, abs,
       shieldAbsorb: abs.includes('shield'),   // absorbe el primer golpe (una vez)
       firstReady: abs.includes('first'),      // prioridad sobre la velocidad (una vez)
       rageStacks: 0,                           // furia: +1 ⚔ por cada ataque que hace
+      poisonStacks: 0,                         // veneno ACUMULADO encima (DoT que ignora defensa)
       alive: true,
     };
   };
@@ -259,6 +305,10 @@ export function fight(teamA, teamB) {
       ((y.firstReady ? 1 : 0) - (x.firstReady ? 1 : 0)) || (y.spd - x.spd) || (x.atk - y.atk) || (x.uid - y.uid));
     for (const at of order) {
       if (!at.alive) continue;
+      // ATAQUES MÚLTIPLES: un combatiente con `acts`>1 (los seres del folclor) ataca
+      // varias veces por ronda → así UN solo ser amenaza a TODO tu equipo de 5.
+      for (let act = 0; act < (at.acts || 1); act++) {
+      if (!at.alive) break;
       if (!aliveIn(A).length || !aliveIn(B).length) break;
       const tgt = pickTarget(at);
       if (at.firstReady) at.firstReady = false;   // gastó su prioridad aunque no haya a quién pegar
@@ -279,6 +329,10 @@ export function fight(teamA, teamB) {
         if (dealt > 0) dealt += fatigue;   // fatiga: rompe los empates de muro contra muro
         if (dealt > 0) tgt.hp -= dealt;
         if (tgt.abs.includes('thorns') && dealt > 0) { at.hp -= 1; fx.push('thorns'); }
+        // VENENO: cada mordida que conecta deja una pila de veneno encima del
+        // objetivo (se acumula). Al final de ronda pierde ❤ = pilas, IGNORANDO
+        // defensa → es la herramienta para derretir tanques.
+        if (at.abs.includes('poison') && dealt > 0) { tgt.poisonStacks = Math.min(6, tgt.poisonStacks + 1); fx.push('poison'); }
       }
       const atk = { from: at.uid, to: tgt.uid, dmg: dealt, fx };
       // REGENERA: al atacar, cura a un aliado herido al azar (poco)
@@ -291,14 +345,12 @@ export function fight(teamA, teamB) {
         }
       }
       steps.push({ kind: 'strike', attacks: [atk], faints: reapFaints(), hp: hpSnap() });
+      }
     }
-    // ----- fin de ronda: veneno (DoT) -----
+    // ----- fin de ronda: VENENO acumulado (DoT que ignora defensa) -----
     const effects = [];
     for (const x of aliveIn(ALL)) {
-      if (x.abs.includes('poison')) {
-        const foes = foesOf(x.side);
-        if (foes.length) { const t = foes[rnd(foes.length)]; t.hp -= 1; effects.push({ uid: x.uid, to: t.uid, type: 'poison' }); }
-      }
+      if (x.poisonStacks > 0) { x.hp -= x.poisonStacks; effects.push({ uid: x.uid, to: x.uid, type: 'poison' }); }
     }
     if (effects.length) steps.push({ kind: 'effect', effects, faints: reapFaints(), hp: hpSnap() });
   }

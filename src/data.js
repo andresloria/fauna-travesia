@@ -17,11 +17,12 @@ export const BIOMES = {
   sabana:  { n:'Sabana',  e:'🌾' },
   agua:    { n:'Agua',    e:'🌊' },
   montana: { n:'Montaña', e:'⛰️' },
+  noche:   { n:'Noche',   e:'🌑' },   // easter egg: bioma de los seres del folclor
 };
 
 // Efectos roguelike. `sym` es el símbolo de la insignia; `cls` la clase de color.
 export const ABILITIES = {
-  poison:{ n:'Veneno',       sym:'☣', cls:'poison', desc:'El enemigo del frente pierde 1 ❤ cada turno aunque no lo golpeen.' },
+  poison:{ n:'Veneno',       sym:'☣', cls:'poison', desc:'Cada mordida deja una pila de veneno en el enemigo (se acumula). Al final de la ronda pierde ❤ igual al veneno acumulado, IGNORANDO su defensa — derrite a los tanques.' },
   shield:{ n:'Escudo',       sym:'🛡', cls:'shield', desc:'El primer golpe que recibe le hace solo la mitad de daño; después, daño normal.' },
   heal:  { n:'Regenera',     sym:'✚', cls:'heal',   desc:'Al atacar, cura un poco de ❤ a un aliado herido al azar (según su nivel).' },
   first: { n:'Primer golpe', sym:'⚡', cls:'first',  desc:'Ataca con prioridad la primera vez del combate; después manda la velocidad.' },
@@ -38,6 +39,7 @@ export const RARITY = {
   ultrararo: { n:'Ultra raro', w:9,    cls:'r-ultra',  color:'#b07ad0' },
   legendario:{ n:'Legendario', w:1.8,  cls:'r-legend', color:'#e8b04b' },
   extinto:   { n:'Extinto',    w:0.5,  cls:'r-ext',    color:'#d8643f' },
+  mitico:    { n:'Mítico',     w:0,    cls:'r-mito',   color:'#9b6bd0' },   // easter egg: seres del folclor (no aparecen salvajes)
 };
 
 // Objetos TICOS — tesoros 🎁 del mapa. Pueden sumar ⚔/❤/🛡(defensa)/💨(velocidad)/
@@ -88,7 +90,7 @@ export const PLAYER_FLAGS = ['🇨🇷','🇲🇽','🇪🇸','🇦🇷','🇨�
 
 export const RULES = {
   MAX_TEAM: 5,
-  MAX_HEARTS: 3,
+  MAX_HEARTS: 1,        // UNA sola vida: perder un combate = fin de la travesía (roguelike duro)
   MAX_ITEMS: 3,        // objetos que se le pueden equipar a un animal
   STARTER_LEVEL: 2,    // nivel inicial de tu primer rescatado
   EVO_LEVELS: [3, 6],  // niveles en los que un animal se RECUPERA (etapa de rehabilitación)

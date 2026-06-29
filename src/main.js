@@ -24,6 +24,7 @@ window.game = game;
   const tracks = {
     map: mk('assets/audio/naturaleza.mp3', 0.30),   // exploración
     battle: mk('assets/audio/pelea.ogg', 0.40),     // combate
+    noche: mk('assets/audio/noche.mp3', 0.38),      // EASTER EGG: mapa Tenebroso
   };
   let on = (localStorage.getItem('fauna_sound') || 'on') !== 'off';
   let started = false, want = 'map';

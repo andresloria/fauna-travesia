@@ -9,7 +9,7 @@ import * as M from './meta.js';
 
 // Arte pixel por especie. Todo el roster (SP) tiene su PNG en assets/animales/
 // (generado con gen_pixel.py). Si algún día agregás una especie sin PNG, generala.
-const ART = (key) => `assets/animales/${key}.png`;
+const ART = (key) => (SP[key] && SP[key].folk) ? `assets/folclor/${key}.png` : `assets/animales/${key}.png`;
 // retrato del guía (avatar del jugador): hombre o mujer
 const GUIDE = (g) => `assets/personajes/guia_${g === 'mujer' ? 'mujer' : 'hombre'}.png`;
 const STAGE = ['HERIDO', 'RECUPERA', 'PLENO'];   // etapas de rehabilitación
@@ -21,9 +21,9 @@ export function createUI(game) {
   // ---------- tarjeta de animal ----------
   function animalCard(a, opts = {}) {
     const stage = Math.min(2, a.evo || 0);
-    const tcls = a.ext ? 'extinct' : a.leg ? 'legendary' : ['t-base', 't-evo1', 't-evo2'][stage];
-    const stageLabel = a.ext ? 'EXTINTO' : a.leg ? 'LEGENDARIO' : STAGE[stage];
-    const ab = ABILITIES[a.ab], ab2 = a.ab2 ? ABILITIES[a.ab2] : null;
+    const tcls = a.folk ? 'mitico' : a.ext ? 'extinct' : a.leg ? 'legendary' : ['t-base', 't-evo1', 't-evo2'][stage];
+    const stageLabel = a.folk ? 'MÍTICO' : a.ext ? 'EXTINTO' : a.leg ? 'LEGENDARIO' : STAGE[stage];
+    const ab = ABILITIES[a.ab], ab2 = a.ab2 ? ABILITIES[a.ab2] : null, ab3 = a.ab3 ? ABILITIES[a.ab3] : null;
     const act = opts.trade ? 'trade' : opts.edit ? 'edit' : null;
     const cls = 'acard ' + tcls + ' rc-' + a.rarity
       + (opts.fainted || a.down ? ' fainted' : '') + (a.down ? ' down' : '') + (opts.cls ? ' ' + opts.cls : '')
@@ -31,7 +31,7 @@ export function createUI(game) {
     const bio = BIOMES[a.bio] ? BIOMES[a.bio].e : '';
     const data = act ? `data-act="${act}" data-uid="${a.uid}"` : '';
     const badge = (x) => `<span class="abil ${x.cls}">${x.sym} ${x.n}</span>`;
-    const abil = (ab ? badge(ab) : '') + (ab2 ? badge(ab2) : '');
+    const abil = (ab ? badge(ab) : '') + (ab2 ? badge(ab2) : '') + (ab3 ? badge(ab3) : '');
     const rar = RARITY[a.rarity];
     // la etiqueta de rareza solo para raro/ultrararo: legendario/extinto ya lo dicen en la etiqueta de nivel + el brillo
     const rarTag = (rar && (a.rarity === 'raro' || a.rarity === 'ultrararo')) ? `<span class="rar ${rar.cls}">${rar.n}</span>` : '';
@@ -81,17 +81,19 @@ export function createUI(game) {
     'Limón': 'lugar_limon', 'Monteverde': 'lugar_monteverde',
   };
   const SCN = (slug) => `assets/escenarios/${slug}.png`;
-  // paisaje/lugar emblemático de la provincia (fondo de combate y descanso)
-  const sceneFor = (c) => SCN(c && PROV_SCENE[c.n] ? PROV_SCENE[c.n] : 'bioma_bosque');
+  // paisaje/lugar emblemático de la provincia (fondo de combate y descanso).
+  // En el mapa Tenebroso, el fondo es el Sanatorio Durán de noche.
+  const sceneFor = (c) => c && c.night ? SCN('bg_sanatorio') : SCN(c && PROV_SCENE[c.n] ? PROV_SCENE[c.n] : 'bioma_bosque');
   // emblema del bando enemigo (cazador o cabecilla en pixel); null si es animal salvaje
   function enemyEmblem(kind) {
     const slug = kind === 'jefe' ? 'cabecilla' : (kind === 'cazador' || kind === 'retador') ? 'cazador' : null;
     return slug ? `<img class="opp-emblem" src="${SCN(slug)}" alt="">` : '';
   }
 
-  // ---------- fondo del mapa: Costa Rica en pixel ----------
+  // ---------- fondo del mapa: Costa Rica en pixel (de día o Tenebroso de noche) ----------
   function countryBg(s) {
-    return `<div class="mapbg cr" style="background-image:url('${SCN('mapa_cr')}')"></div>`;
+    const night = s.country && s.country.night;
+    return `<div class="mapbg cr${night ? ' night' : ''}" style="background-image:url('${SCN(night ? 'mapa_noche' : 'mapa_cr')}')"></div>`;
   }
 
   // ---------- pantallas ----------
@@ -177,21 +179,31 @@ export function createUI(game) {
         n === current ? 'current' : '', avail ? 'available' : '',
         (n.visited && n !== current) ? 'visited' : '',
         (!avail && !n.visited && n !== current) ? 'locked' : ''].join(' ');
+      const folk = n.type === 'folclor';
       const ic = n.type === 'bioma' ? BIOMES[n.bio].e : (NODE_IC[n.type] || '•');
-      const lab = n.type === 'bioma' ? BIOMES[n.bio].n : (NODE_LAB[n.type] || '');
-      const timg = tileImgFor(n);
-      const disc = timg ? `<img src="${SCN(timg)}" alt="" draggable="false">` : ic;
+      const lab = folk ? (SP[n.boss] ? SP[n.boss].n : 'Leyenda')
+        : n.type === 'bioma' ? BIOMES[n.bio].n : (NODE_LAB[n.type] || '');
+      const timg = folk ? null : tileImgFor(n);
+      const disc = folk ? `<img src="${ART(n.boss)}" alt="" draggable="false">`
+        : timg ? `<img src="${SCN(timg)}" alt="" draggable="false">` : ic;
+      const isImg = folk || timg;
       const data = avail ? `data-act="node" data-id="${n.id}"` : '';
       return `<div class="${cls}" style="left:${n.x}%;top:${n.y}%" ${data}>
-        <div class="disc${timg ? ' img' : ''}">${disc}</div><div class="ml">${lab}</div></div>`;
+        <div class="disc${isImg ? ' img' : ''}">${disc}</div><div class="ml">${lab}</div></div>`;
     }).join('');
-    const meta = s.country.secret ? 'enfrentá al Cabecilla 🚨' : 'elegí tu ruta hasta el Cabecilla 🚨';
+    const night = s.country.night;
+    const meta = night ? 'vencé a los 6 seres del folclor 🌑'
+      : s.country.secret ? 'enfrentá al Cabecilla 🚨' : 'elegí tu ruta hasta el Cabecilla 🚨';
+    const tag = night ? 'noche tenebrosa 🌑' : s.country.secret ? 'final ☁️' : 'provincia ' + (s.cleared + 1) + '/' + RULES.RUN_LENGTH;
+    const hint = night
+      ? 'No hay vuelta atrás: vencé a cada leyenda para avanzar. Pelean ellas mismas — 3 poderes y muchísima vida. 🌑'
+      : 'Elegí tu ruta: tocá un nodo iluminado. Las primeras 2 filas son tranquilas; después acechan los cazadores. ❓ = sorpresa.';
     phaseArea.innerHTML = `
       <div class="section-h">${s.country.flag} ${s.country.n} · ${meta}</div>
-      <div class="mapwrap linear">${countryBg(s)}
-        <div class="maptag">${s.country.flag} <b>${s.country.n}</b> · ${s.country.secret ? 'final ☁️' : 'provincia ' + (s.cleared + 1) + '/' + RULES.RUN_LENGTH}</div>
+      <div class="mapwrap linear${night ? ' night' : ''}">${countryBg(s)}
+        <div class="maptag">${s.country.flag} <b>${s.country.n}</b> · ${tag}</div>
         <svg viewBox="0 0 100 100" preserveAspectRatio="none">${lines}</svg>${nodes}</div>
-      <div class="map-hint">Elegí tu ruta: tocá un nodo iluminado. Las primeras 2 filas son tranquilas; después acechan los cazadores. ❓ = sorpresa.</div>
+      <div class="map-hint">${hint}</div>
       ${teamHTML(s.team, { editable: true, panel: true, order: true })}`;
   }
 
@@ -243,8 +255,9 @@ export function createUI(game) {
 
   function renderEvent(s) {
     const ev = s.event;
+    const big = ev.imgKey ? `<img class="event-legend" src="${ART(ev.imgKey)}" alt="" draggable="false">` : ev.emoji;
     phaseArea.innerHTML = `
-      <div class="event-box"><div class="big">${ev.emoji}</div><div class="title">${ev.title}</div>
+      <div class="event-box${ev.imgKey ? ' legend' : ''}"><div class="big">${big}</div><div class="title">${ev.title}</div>
         <div class="desc">${ev.desc}</div>
         <div class="center">${ev.actions.map((a, i) => `<button class="btn" data-act="event" data-i="${i}">${a.label}</button>`).join('')}</div>
       </div>
@@ -301,6 +314,16 @@ export function createUI(game) {
 
   function renderWin(s) {
     const who = s.avatar ? `<b>${s.avatar.name}</b> ` : '';
+    if (s.nightWin) {
+      $('modal').innerHTML = `
+        <div class="crest"><img class="event-legend" src="${ART('f_carreta')}" alt="" draggable="false"></div><h2>Noche de espantos superada</h2>
+        <p>${who}tomó el <b>sendero prohibido</b> y, en la <b style="color:#b39ddb">Costa Rica de noche</b> 🌑, venció a
+           <b>La Segua</b>, <b>el Cadejos</b>, <b>la Llorona</b>, <b>la Tulevieja</b>, <b>el Padre sin Cabeza</b> y
+           <b>la Carreta sin Bueyes</b>. Pocos guías sobreviven para contarlo. 🕯️</p>
+        <button class="btn" data-act="restart">Nueva travesía</button>`;
+      $('overlay').classList.add('show');
+      return;
+    }
     $('modal').innerHTML = `
       <div class="crest">🦋</div><h2>¡Costa Rica a salvo!</h2>
       <p>${who}protegió las <b>7 provincias</b> 🇨🇷, venció al Cabecilla en <b style="color:var(--gold)">Monteverde</b> ☁️
@@ -324,18 +347,18 @@ export function createUI(game) {
   // carta de combate, con barra de vida y vida actual/máx
   function battleCard(a, max) {
     const stage = Math.min(2, a.evo || 0);
-    const tcls = a.ext ? 'extinct' : a.leg ? 'legendary' : ['t-base', 't-evo1', 't-evo2'][stage];
-    const stageLabel = a.ext ? 'EXTINTO' : a.leg ? 'LEGENDARIO' : STAGE[stage];
-    const ab = ABILITIES[a.ab], ab2 = a.ab2 ? ABILITIES[a.ab2] : null;
+    const tcls = a.folk ? 'mitico' : a.ext ? 'extinct' : a.leg ? 'legendary' : ['t-base', 't-evo1', 't-evo2'][stage];
+    const stageLabel = a.folk ? 'MÍTICO' : a.ext ? 'EXTINTO' : a.leg ? 'LEGENDARIO' : STAGE[stage];
+    const ab = ABILITIES[a.ab], ab2 = a.ab2 ? ABILITIES[a.ab2] : null, ab3 = a.ab3 ? ABILITIES[a.ab3] : null;
     const badge = (x) => `<span class="abil ${x.cls}">${x.sym} ${x.n}</span>`;
     const bio = BIOMES[a.bio] ? BIOMES[a.bio].e : '';
     return `<div class="acard ${tcls} rc-${a.rarity} battlecard" id="bc-${a.uid}">
-      <span class="stage">Nv${a.level}</span><span class="bio">${bio}</span>
+      <span class="stage">${a.folk ? '🌑 ' : ''}Nv${a.level}</span><span class="bio">${bio}</span>
       <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
       <div class="an">${a.n}</div>
       <div class="hpbar"><div class="hpfill"></div></div>
       <div class="bstats"><span class="st atk">⚔${a.atk}</span><span class="st def">🛡${a.def || 0}</span><span class="st spd">💨${a.spd}</span><span class="st hab">🌀${a.hab || 0}</span><span class="hpnum">❤<span class="hpcur">${a.hp}</span>/${max}</span></div>
-      ${ab ? badge(ab) : ''}${ab2 ? badge(ab2) : ''}
+      ${ab ? badge(ab) : ''}${ab2 ? badge(ab2) : ''}${ab3 ? badge(ab3) : ''}
       <div class="hitlayer"></div></div>`;
   }
 
@@ -343,7 +366,7 @@ export function createUI(game) {
   // motor es un "tier" (los de igual velocidad embisten a la vez) o un efecto de
   // fin de ronda. La UI solo anima los `steps` que ya calculó el motor.
   function playBattle(s, done) {
-    window.faunaMusic?.set('battle');
+    window.faunaMusic?.set(s.country && s.country.night ? 'noche' : 'battle');
     const b = s.battle;
     const allies = b.fighters || s.team;             // solo los NO debilitados pelean
     const max = {}, hp = {};
@@ -420,6 +443,7 @@ export function createUI(game) {
             if (fx.includes('dodge')) popup(a.to, FX.dodge, 'fx');       // esquivó: sin daño
             if (fx.includes('shield')) popup(a.to, FX.shield, 'fx');
             if (fx.includes('thorns')) popup(a.from, FX.thorns, 'fx');
+            if (fx.includes('poison')) popup(a.to, FX.poison, 'fx');     // dejó una pila de veneno
           });
           (st.faints || []).forEach(faint);
           froms.forEach(rest);
@@ -438,7 +462,8 @@ export function createUI(game) {
 
   // ---------- dispatcher + wiring ----------
   function render(s) {
-    window.faunaMusic?.set('map');   // cualquier fase fuera de combate = tema de exploración
+    // fuera de combate: exploración… o tema TENEBROSO si estás en el mapa de noche
+    window.faunaMusic?.set(s.country && s.country.night ? 'noche' : 'map');
     renderRunbar(s);
     renderLog(s);
     if (s.phase === 'intro') renderIntro(s);

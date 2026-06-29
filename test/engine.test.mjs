@@ -180,11 +180,12 @@ test('todas las especies tienen un efecto válido', () => {
 });
 
 test('rareza: cada especie tiene rareza válida; legendarios = leg:true + 2 habilidades', () => {
-  const RAR = new Set(['comun', 'raro', 'ultrararo', 'legendario', 'extinto']);
+  const RAR = new Set(['comun', 'raro', 'ultrararo', 'legendario', 'extinto', 'mitico']);
   for (const k in E.SP) {
     const v = E.SP[k];
     assert.ok(RAR.has(v.rarity), `especie ${k} sin rareza válida (${v.rarity})`);
     if (v.rarity === 'legendario') { assert.ok(v.leg && v.ab2, `legendario ${k} debe ser leg + tener ab2`); }
+    else if (v.folk) { assert.ok(v.ab2 && v.ab3, `ser del folclor ${k} debe tener 3 habilidades`); }
     else if (k !== 'sapo_dorado') { assert.ok(!v.ab2, `solo los legendarios tienen 2 habilidades (${k})`); }
   }
 });
@@ -363,11 +364,58 @@ test('DEFENSA + ESCUDO se combinan en el primer golpe', () => {
   assert.equal(first.attacks[0].dmg, 2, '7 − 3 def = 4; escudo lo parte a la mitad = 2');
 });
 
+test('VENENO acumula y derrite tanques (ignora defensa)', () => {
+  // un envenenador que pega flojo NO podría con un tanque por daño normal (def 8
+  // deja su golpe en 1), pero el veneno se acumula e ignora la defensa.
+  const ven  = [{ uid: 1, atk: 2, hp: 40, spd: 9, ab: 'poison', def: 0 }];
+  const tank = [{ uid: 2, atk: 3, hp: 22, spd: 1, def: 8 }];
+  const r = E.fight(ven, tank);
+  const ticks = r.steps.filter(s => s.kind === 'effect' && s.effects.some(e => e.type === 'poison'));
+  assert.ok(ticks.length >= 3, 'el veneno hace daño varias rondas');
+  assert.equal(r.result, 'W', 'el veneno acumulado tumba al tanque pese a su defensa');
+});
+
+test('VENENO crece: el daño por ronda sube al acumular pilas', () => {
+  const ven   = [{ uid: 1, atk: 1, hp: 200, spd: 9, ab: 'poison', def: 0 }];
+  const dummy = [{ uid: 2, atk: 1, hp: 200, spd: 1, def: 0 }];
+  let prev = null; const ticks = [];
+  for (const s of E.fight(ven, dummy).steps) {
+    if (s.kind === 'effect' && prev) {
+      const pe = s.effects.find(e => e.type === 'poison' && e.to === 2);
+      if (pe) ticks.push(prev[2] - s.hp[2]);
+    }
+    prev = s.hp;
+  }
+  assert.ok(ticks.length >= 3, 'hay varios ticks de veneno');
+  assert.ok(ticks[2] > ticks[0], `el veneno por ronda crece (vi ${ticks.slice(0,4)})`);
+});
+
 test('def crece al recuperarse (evoluciona) y mkAnimal lo trae', () => {
   const a = E.mkAnimal('tortuga');
   assert.ok(typeof a.def === 'number', 'el animal tiene def numérica');
   const d0 = a.def; E.setLevel(a, 6);
   assert.ok(a.def >= d0 + 2, 'gana +1 def por cada etapa de recuperación (Nv3 y Nv6)');
+});
+
+test('EASTER EGG: el mapa Tenebroso es lineal con los 6 seres en orden', () => {
+  const m = E.generateNightMap();
+  const folk = m.seq.filter(n => n.type === 'folclor');
+  assert.equal(folk.length, 6, 'hay 6 seres');
+  assert.deepEqual(folk.map(n => n.boss), E.FOLK_ORDER, 'en el orden esperado');
+  assert.equal(m.seq[m.seq.length - 1].boss, 'f_carreta', 'el último es La Carreta');
+  // lineal: cada nodo (menos el final) tiene exactamente 1 hijo
+  for (const n of m.seq.slice(0, -1)) assert.equal(n.children.length, 1, 'sendero lineal (1 sola opción)');
+});
+
+test('EASTER EGG: un ser del folclor pelea con sus 3 habilidades y mucha vida', () => {
+  const [segua] = E.genFolkBoss('f_segua', 10);
+  assert.equal(segua.ab, 'first'); assert.equal(segua.ab2, 'rage'); assert.equal(segua.ab3, 'poison');
+  assert.ok(segua.folk && segua.rarity === 'mitico');
+  assert.ok(segua.hp >= 30, 'mucha vida tras nivelar');
+  // en combate aplica veneno (3ª habilidad): contra un muñeco se ve el tick
+  const dummy = [{ uid: 99, atk: 1, hp: 50, spd: 1, def: 0 }];
+  const ven = E.fight([segua], dummy).steps.some(s => s.kind === 'effect' && s.effects.some(e => e.type === 'poison'));
+  assert.ok(ven, 'la 3ª habilidad (veneno) actúa en combate');
 });
 
 console.log(`\n${passed} pruebas OK\n`);
