@@ -198,7 +198,8 @@ test('rareza: los comunes aparecen MUCHO más que los legendarios en el rescate'
       if (a.rarity === 'comun') comun++; else if (a.rarity === 'legendario') legend++;
     }
   }
-  assert.ok(comun > legend * 10, `comunes (${comun}) deben superar por mucho a legendarios (${legend})`);
+  // objetivo: común 50% vs legendario 5% ≈ 10:1. Comprobamos que común gana por mucho.
+  assert.ok(comun > legend * 6, `comunes (${comun}) deben superar por mucho a legendarios (${legend})`);
 });
 
 test('starters: perro/gato/comemaíz existen, son básicos y NO están en pools', () => {

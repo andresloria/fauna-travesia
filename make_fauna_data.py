@@ -267,13 +267,15 @@ for slug, rec in SP.items():
     if rec.get("folk"):
         rec["rarity"] = "mitico"; continue   # ya trae sus 3 habilidades y stats
     if slug in EXTINTO:
+        # EXTINTO: el más raro y MUY superior — el premio gordo.
         rec["rarity"] = "extinto"; rec["ext"] = True; rec.pop("leg", None)
-        rec["atk"] = min(9, rec["atk"] + 2); rec["hp"] = min(12, rec["hp"] + 3)
-        rec["hab"] = min(9, rec.get("hab", 0) + 1); rec["def"] = min(7, rec.get("def", 0) + 1)
+        rec["atk"] = min(15, rec["atk"] + 6); rec["hp"] = min(24, rec["hp"] + 12)
+        rec["def"] = min(10, rec.get("def", 0) + 4); rec["hab"] = min(9, rec.get("hab", 0) + 2)
     elif slug in LEGENDARIO:
+        # LEGENDARIO: que se NOTE — stats bastante por encima + sus 2 habilidades.
         rec["rarity"] = "legendario"; rec["leg"] = True
-        rec["atk"] = min(9, rec["atk"] + 1); rec["hp"] = min(12, rec["hp"] + 2)
-        rec["hab"] = min(9, rec.get("hab", 0) + 1); rec["def"] = min(7, rec.get("def", 0) + 1)
+        rec["atk"] = min(12, rec["atk"] + 3); rec["hp"] = min(18, rec["hp"] + 7)
+        rec["def"] = min(9, rec.get("def", 0) + 2); rec["hab"] = min(9, rec.get("hab", 0) + 2)
         ab2 = LEGEND_AB2.get(slug)
         if ab2 and ab2 != rec["ab"]:
             rec["ab2"] = ab2

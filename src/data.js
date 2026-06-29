@@ -30,15 +30,16 @@ export const ABILITIES = {
   thorns:{ n:'Púas',         sym:'🌵', cls:'thorns', desc:'Devuelve 1 de daño a quien lo ataque.' },
 };
 
-// RAREZA (qué tan común es ver la especie). El peso `w` decide cuánto aparece en
-// las zonas de rescate: común sale muchísimo; legendario/extinto casi nunca.
-// Los LEGENDARIOS son los únicos con 2 habilidades; los EXTINTOS, los más raros.
+// RAREZA (qué tan común es ver la especie). El peso `w` decide la probabilidad de
+// que un encuentro sea de ESA rareza (la rareza manda, no el bioma): común 50% /
+// raro 30% / ultra raro 15% / legendario 5% / extinto 1%. Los LEGENDARIOS son los
+// únicos con 2 habilidades y stats muy superiores; el EXTINTO, el más fuerte de todos.
 export const RARITY = {
-  comun:     { n:'Común',      w:100,  cls:'r-comun',  color:'#9bab8a' },
-  raro:      { n:'Raro',       w:34,   cls:'r-raro',   color:'#5ea8c4' },
-  ultrararo: { n:'Ultra raro', w:9,    cls:'r-ultra',  color:'#b07ad0' },
-  legendario:{ n:'Legendario', w:1.8,  cls:'r-legend', color:'#e8b04b' },
-  extinto:   { n:'Extinto',    w:0.5,  cls:'r-ext',    color:'#d8643f' },
+  comun:     { n:'Común',      w:50,   cls:'r-comun',  color:'#9bab8a' },
+  raro:      { n:'Raro',       w:30,   cls:'r-raro',   color:'#5ea8c4' },
+  ultrararo: { n:'Ultra raro', w:15,   cls:'r-ultra',  color:'#b07ad0' },
+  legendario:{ n:'Legendario', w:5,    cls:'r-legend', color:'#e8b04b' },
+  extinto:   { n:'Extinto',    w:1,    cls:'r-ext',    color:'#d8643f' },
   mitico:    { n:'Mítico',     w:0,    cls:'r-mito',   color:'#9b6bd0' },   // easter egg: seres del folclor (no aparecen salvajes)
 };
 

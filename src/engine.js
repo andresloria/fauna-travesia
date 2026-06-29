@@ -26,13 +26,22 @@ export function mkAnimal(key) {
            level: 1, evo: 0, items: [] };
 }
 
-// ---------- rareza: peso de aparición (común aparece mucho; legendario/extinto casi nunca) ----------
+// ---------- rareza: la RAREZA manda (no el bioma) ----------
+// Selección en DOS pasos para que el % por rareza sea estable sin importar cuántos
+// animales tenga cada bioma: 1) se elige una RAREZA por su peso (común 50 / raro 30 /
+// ultra 15 / leg 5 / extinto 1), solo entre las presentes en el pool; 2) un animal
+// uniforme de esa rareza. Así un legendario de montaña ya NO sale más que un común.
 export const rarW = (key) => (RARITY[SP[key].rarity] || RARITY.comun).w;
 function weightedKey(keys) {
-  let tot = 0; for (const k of keys) tot += rarW(k);
-  let r = Math.random() * tot;
-  for (const k of keys) { r -= rarW(k); if (r <= 0) return k; }
-  return keys[keys.length - 1];
+  if (keys.length <= 1) return keys[0];
+  const byTier = {};
+  for (const k of keys) (byTier[SP[k].rarity] || (byTier[SP[k].rarity] = [])).push(k);
+  const tiers = Object.keys(byTier);
+  let tot = 0; for (const t of tiers) tot += (RARITY[t] ? RARITY[t].w : 1);
+  let r = Math.random() * tot, chosen = tiers[tiers.length - 1];
+  for (const t of tiers) { r -= (RARITY[t] ? RARITY[t].w : 1); if (r <= 0) { chosen = t; break; } }
+  const arr = byTier[chosen];
+  return arr[(Math.random() * arr.length) | 0];
 }
 function weightedDistinct(keys, count) {
   const pool = keys.slice(), out = [];
@@ -193,16 +202,36 @@ export function genZoneBoss(country, depth) {
   return [a];
 }
 
-// Tres animales DIFERENTES para elegir a cuál rescatar. Prioriza el bioma y
-// completa con otras especies del país; SIEMPRE distintas. Ponderado por RAREZA:
-// casi siempre comunes/raros; muy de vez en cuando cae un legendario (¡un jaguar!).
-// `level` = nivel objetivo (lo pasa el juego = el NIVEL DE TU ANIMAL MÁS ALTO),
-// para que los salvajes que rescatás sirvan y no salgan siempre de nivel 1.
+// todas las especies SILVESTRES del juego (para el fallback cuando una provincia
+// no tiene esa rareza — así el extinto y los legendarios pueden salir por suerte).
+const WILD_KEYS = Object.keys(SP).filter(k => !SP[k].starter && !SP[k].folk);
+// tira una RAREZA con los pesos COMPLETOS (50/30/15/5/1) — siempre, no depende del pool.
+function rollTier() {
+  const order = ['comun', 'raro', 'ultrararo', 'legendario', 'extinto'];
+  let tot = 0; for (const t of order) tot += RARITY[t].w;
+  let r = Math.random() * tot;
+  for (const t of order) { r -= RARITY[t].w; if (r <= 0) return t; }
+  return 'comun';
+}
+
+// Tres animales DIFERENTES para elegir a cuál rescatar. La RAREZA manda (no el bioma):
+// para cada uno se tira la rareza por peso (común 50 / raro 30 / ultra 15 / leg 5 /
+// extinto 1) y luego un animal de esa rareza prefiriendo el bioma del nodo → la
+// provincia → todo el juego. Así el % por rareza queda ~50/30/15/5/1 estés donde estés.
+// `level` = nivel objetivo (= el de tu animal más alto), para que sirvan.
 export function genWildChoices(country, bio, level, count = 3) {
-  let cand = country.pool.filter(k => SP[k].bio === bio);
-  if (cand.length < count) cand = cand.concat(country.pool.filter(k => !cand.includes(k)));
-  const keys = weightedDistinct(cand, Math.min(count, cand.length));
-  while (keys.length < count) keys.push(pick(country.pool));
+  const pool = country.pool, used = new Set(), keys = [];
+  const ofTier = (arr, tier) => arr.filter(k => SP[k].rarity === tier && !used.has(k));
+  let guard = 0;
+  while (keys.length < count && guard++ < 80) {
+    const tier = rollTier();
+    let cand = ofTier(pool, tier).filter(k => SP[k].bio === bio);   // 1) bioma del nodo
+    if (!cand.length) cand = ofTier(pool, tier);                    // 2) cualquier bioma de la provincia
+    if (!cand.length) cand = ofTier(WILD_KEYS, tier);               // 3) todo el juego (rareza no presente acá)
+    if (!cand.length) continue;                                     // (no hay de esa rareza en ningún lado)
+    const k = cand[rnd(cand.length)]; used.add(k); keys.push(k);
+  }
+  while (keys.length < count) { const k = pick(WILD_KEYS); if (!used.has(k)) { used.add(k); keys.push(k); } }
   return keys.map(k => { const a = mkAnimal(k); setLevel(a, Math.max(1, level - rnd(2))); return a; });
 }
 
