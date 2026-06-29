@@ -20,11 +20,21 @@ window.game = game;
 // La UI avisa la fase con window.faunaMusic.set('map' | 'battle').
 (function setupMusic() {
   const btn = document.getElementById('soundBtn');
-  const mk = (src, vol) => { const a = new Audio(src); a.loop = true; a.volume = 0; a._vol = vol; return a; };
+  // pre='none' = no se baja hasta que toca sonar (no cargamos 10 MP3 de golpe)
+  const mk = (src, vol, pre = 'auto') => { const a = new Audio(); a.preload = pre; a.src = src; a.loop = true; a.volume = 0; a._vol = vol; return a; };
   const tracks = {
-    map: mk('assets/audio/naturaleza.mp3', 0.30),   // exploración
+    map: mk('assets/audio/naturaleza.mp3', 0.30),   // intro / por defecto
     battle: mk('assets/audio/pelea.ogg', 0.40),     // combate
-    noche: mk('assets/audio/noche.mp3', 0.38),      // EASTER EGG: mapa Tenebroso
+    noche: mk('assets/audio/noche.mp3', 0.38, 'none'),   // EASTER EGG: mapa Tenebroso
+    // un tema por PROVINCIA (mismo hilo 8-bit, distinto color) — carga al llegar
+    prov_sanjose:    mk('assets/audio/prov_sanjose.mp3', 0.30, 'none'),
+    prov_alajuela:   mk('assets/audio/prov_alajuela.mp3', 0.30, 'none'),
+    prov_cartago:    mk('assets/audio/prov_cartago.mp3', 0.30, 'none'),
+    prov_heredia:    mk('assets/audio/prov_heredia.mp3', 0.30, 'none'),
+    prov_guanacaste: mk('assets/audio/prov_guanacaste.mp3', 0.30, 'none'),
+    prov_puntarenas: mk('assets/audio/prov_puntarenas.mp3', 0.30, 'none'),
+    prov_limon:      mk('assets/audio/prov_limon.mp3', 0.30, 'none'),
+    monteverde:      mk('assets/audio/monteverde.mp3', 0.32, 'none'),   // final secreto
   };
   let on = (localStorage.getItem('fauna_sound') || 'on') !== 'off';
   let started = false, want = 'map';

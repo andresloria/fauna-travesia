@@ -368,6 +368,10 @@ export class Game {
         s.cleared++;
         s.team.forEach(a => E.levelUp(a));
         s.hearts = Math.min(RULES.MAX_HEARTS, s.hearts + 1);
+        // vencer al CABECILLA cura a TODO tu equipo (revive a los debilitados)
+        const revived = s.team.filter(a => a.down);
+        s.team.forEach(a => { a.down = false; });
+        if (revived.length) this.log(`🌿 Al caer el cabecilla, tu equipo se recupera: ${revived.map(a => a.e + ' ' + a.n).join(', ')} vuelven en pie.`);
         s.released += 2; M.bump('released', 2);        // liberás a los animales que tenían cautivos
         this.log(`🌿 Liberaste a los animales cautivos de ${s.country.n} (conservación +2)`);
         this.award('prov1'); this.checkConserva();
@@ -378,8 +382,8 @@ export class Game {
         this.syncAch();
         return this.showEvent('🏆', last ? '¡Las 7 provincias a salvo!' : '¡Provincia liberada!',
           last
-            ? `Recorriste las 7 provincias 🇨🇷 y desbarataste a los furtivos. Tu refugio se fortalece… y se abre el sendero al bosque nuboso de Monteverde. ☁️`
-            : `Frenaste a los furtivos de ${s.country.n} y liberaste a sus animales. Tu refugio se fortalece y recuperás un corazón ❤️.`,
+            ? `Recorriste las 7 provincias 🇨🇷 y desbarataste a los furtivos. Tu equipo se cura por completo 🌿 y se abre el sendero al bosque nuboso de Monteverde. ☁️`
+            : `Frenaste a los furtivos de ${s.country.n} y liberaste a sus animales. <b>Todo tu equipo se cura</b> 🌿 y recuperás un corazón ❤️.`,
           [{ label: last ? 'Subir a Monteverde ☁️' : 'Seguir viaje 🧭', action: () => this.nextCountry() }]);
       }
       return this.gameOver();

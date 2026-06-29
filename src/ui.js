@@ -477,9 +477,16 @@ export function createUI(game) {
   }
 
   // ---------- dispatcher + wiring ----------
+  // un tema musical por provincia (Monteverde y la noche aparte)
+  const PROV_MUSIC = {
+    'San José': 'prov_sanjose', 'Alajuela': 'prov_alajuela', 'Cartago': 'prov_cartago',
+    'Heredia': 'prov_heredia', 'Guanacaste': 'prov_guanacaste', 'Puntarenas': 'prov_puntarenas',
+    'Limón': 'prov_limon', 'Monteverde': 'monteverde',
+  };
   function render(s) {
-    // fuera de combate: exploración… o tema TENEBROSO si estás en el mapa de noche
-    window.faunaMusic?.set(s.country && s.country.night ? 'noche' : 'map');
+    // fuera de combate: cada provincia su tema (mismo hilo) · noche = tenebroso · intro = por defecto
+    const music = !s.country ? 'map' : s.country.night ? 'noche' : (PROV_MUSIC[s.country.n] || 'map');
+    window.faunaMusic?.set(music);
     renderRunbar(s);
     renderLog(s);
     if (s.phase === 'intro') renderIntro(s);
