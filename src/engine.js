@@ -21,7 +21,7 @@ let UID = 0;
 export function mkAnimal(key) {
   const s = SP[key];
   return { uid: ++UID, key, n: s.n, e: s.e, bio: s.bio, ab: s.ab, ab2: s.ab2 || null, ab3: s.ab3 || null,
-           leg: !!s.leg, ext: !!s.ext, folk: !!s.folk, rarity: s.rarity || 'comun',
+           leg: !!s.leg, ext: !!s.ext, folk: !!s.folk, starter: !!s.starter, rarity: s.rarity || 'comun',
            atk: s.atk, hp: s.hp, spd: s.spd || 3, hab: s.hab || 0, def: s.def || 0, acts: s.acts || 1,
            level: 1, evo: 0, items: [] };
 }
@@ -42,11 +42,30 @@ function weightedDistinct(keys, count) {
   return out;
 }
 // Sube un nivel. Devuelve true si en este nivel EVOLUCIONÓ (creció extra).
+// Umbrales: un BÁSICO (perro/gato/comemaíz) sube de rareza al llegar a estos niveles.
+const RANK_ORDER = ['comun', 'raro', 'ultrararo', 'legendario', 'extinto'];
+function starterRankUp(a) {
+  let target = 'comun';
+  if (a.level >= 21) target = 'legendario';
+  else if (a.level >= 14) target = 'ultrararo';
+  else if (a.level >= 7) target = 'raro';
+  const cur = RANK_ORDER.indexOf(a.rarity);
+  if (cur < 0 || cur >= RANK_ORDER.indexOf(target)) return;   // ya está igual o más alto
+  a.rarity = RANK_ORDER[cur + 1];          // sube UN escalón hacia el objetivo
+  a.leg = a.rarity === 'legendario';
+  a.ext = a.rarity === 'extinto';
+  a.atk += 2; a.hp += 4; a.def = (a.def || 0) + 1; a.hab = (a.hab || 0) + 1;   // gana estadísticas
+  a.rankUp = a.rarity;                      // marca para que el juego lo anuncie
+}
+
 export function levelUp(a) {
   a.level++; a.atk += 1; a.hp += 2;
   // al RECUPERARSE (etapa de rehabilitación) también gana aguante: +1 defensa
-  if (RULES.EVO_LEVELS.includes(a.level)) { a.atk += 2; a.hp += 3; a.def = (a.def || 0) + 1; a.evo++; return true; }
-  return false;
+  const evoed = RULES.EVO_LEVELS.includes(a.level);
+  if (evoed) { a.atk += 2; a.hp += 3; a.def = (a.def || 0) + 1; a.evo++; }
+  // BÁSICOS: a ciertos niveles suben de rareza (común→raro→ultrararo→legendario) + stats
+  if (a.starter) starterRankUp(a);
+  return evoed;
 }
 export function setLevel(a, L) { while (a.level < L) levelUp(a); return a; }
 

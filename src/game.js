@@ -93,6 +93,16 @@ export class Game {
     if (this.s.released >= 5) this.award('conserva5');
     if (this.s.released >= 15) this.award('conserva15');
   }
+  // avisa cuando un BÁSICO subió de rareza por nivel (la marca la pone el motor)
+  announceRankUps() {
+    this.s.team.forEach(a => {
+      if (a.rankUp) {
+        const r = RARITY[a.rankUp] ? RARITY[a.rankUp].n : a.rankUp;
+        this.log(`🌟 ¡${a.e} <b>${a.n}</b> alcanzó el nivel ${a.level} y evolucionó a <b>${r}</b> — más fuerte!`);
+        a.rankUp = null;
+      }
+    });
+  }
   // recalcula y desbloquea TODOS los logros por umbral (dex, biomas, niveles,
   // combates, etc.) a partir de las estadísticas acumuladas + la colección.
   syncAch() {
@@ -393,7 +403,7 @@ export class Game {
       if (won) {
         if (s.country.secret) return this.victory();   // ¡venciste al Cabecilla en Monteverde!
         s.cleared++;
-        s.team.forEach(a => E.levelUp(a));
+        s.team.forEach(a => E.levelUp(a)); this.announceRankUps();
         s.hearts = Math.min(RULES.MAX_HEARTS, s.hearts + 1);
         // vencer al CABECILLA cura a TODO tu equipo (revive a los debilitados)
         const revived = s.team.filter(a => a.down);
@@ -421,6 +431,7 @@ export class Game {
           E.levelUp(a);
           if (E.levelUp(a)) this.log(`🌿 ${a.e} <b>${a.n}</b> se recuperó hasta nivel ${a.level}!`);
         });
+        this.announceRankUps();
         const it = E.pick(RARE_ITEMS);
         s.bag.push(it);
         s.released += 1; M.bump('released', 1); M.bump('trafficker');
@@ -454,7 +465,7 @@ export class Game {
     if (b.kind === 'folclor') {
       const node = this.current(), sp = E.SP[node.boss];
       if (won) {
-        s.team.forEach(a => E.levelUp(a));        // recompensa: tu equipo sube
+        s.team.forEach(a => E.levelUp(a)); this.announceRankUps();   // recompensa: tu equipo sube
         this.award('folk_' + node.boss);          // logro por ese ser
         M.markFolk(node.boss); this.syncAch();
         if (node.boss === 'f_llorona') return this.nightVictory();   // La Llorona (Limón) = el último → ganaste la noche
@@ -466,6 +477,7 @@ export class Game {
     }
     if (won) {
       s.team.forEach(a => { if (E.levelUp(a)) this.log(`🌿 ${a.e} <b>${a.n}</b> se recuperó hasta nivel ${a.level}!`); });
+      this.announceRankUps();
       this.log('Tu refugio sumó experiencia');
       return this.backToMap();
     }
