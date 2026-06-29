@@ -145,21 +145,22 @@ export function generateMap(country, depth = 0) {
 function pickType(depth = 0, row = 1) {
   const r = rnd(100);
   if (row <= SAFE_ROWS) {
-    // zona tranquila: rescate / animal alterado / hallazgo / traslado / sorpresa / refugio.
-    if (r < 34) return 'bioma';
-    if (r < 54) return 'salvaje';
-    if (r < 70) return 'tesoro';
-    if (r < 82) return 'intercambio';
+    // zona tranquila: el RESCATE (bioma) es lo más común — es el corazón del juego
+    // (coleccionar animales), así que casi siempre tenés a dónde ir a buscar.
+    if (r < 48) return 'bioma';
+    if (r < 60) return 'salvaje';
+    if (r < 74) return 'tesoro';
+    if (r < 83) return 'intercambio';
     if (r < 93) return 'sorpresa';
     return 'descanso';
   }
-  // zona caliente: aparecen los cazadores.
-  if (r < 22) return 'bioma';
-  if (r < 40) return 'salvaje';
-  if (r < 58) return 'combate';
-  if (r < 70) return depth >= 3 ? 'cazador' : 'combate';   // traficantes desde la provincia 4
-  if (r < 84) return 'sorpresa';
-  if (r < 93) return 'tesoro';
+  // zona caliente: aparecen los cazadores, pero el rescate sigue bien presente.
+  if (r < 38) return 'bioma';
+  if (r < 48) return 'salvaje';
+  if (r < 64) return 'combate';
+  if (r < 76) return depth >= 3 ? 'cazador' : 'combate';   // traficantes desde la provincia 4
+  if (r < 88) return 'sorpresa';
+  if (r < 95) return 'tesoro';
   return 'descanso';
 }
 
