@@ -402,7 +402,7 @@ test('EASTER EGG: el mapa Tenebroso es lineal con los 6 seres en orden', () => {
   const folk = m.seq.filter(n => n.type === 'folclor');
   assert.equal(folk.length, 6, 'hay 6 seres');
   assert.deepEqual(folk.map(n => n.boss), E.FOLK_ORDER, 'en el orden esperado');
-  assert.equal(m.seq[m.seq.length - 1].boss, 'f_carreta', 'el último es La Carreta');
+  assert.equal(m.seq[m.seq.length - 1].boss, 'f_llorona', 'el último (final) es La Llorona en Limón');
   // lineal: cada nodo (menos el final) tiene exactamente 1 hijo
   for (const n of m.seq.slice(0, -1)) assert.equal(n.children.length, 1, 'sendero lineal (1 sola opción)');
 });

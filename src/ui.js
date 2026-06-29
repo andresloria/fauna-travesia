@@ -24,7 +24,7 @@ export function createUI(game) {
     const tcls = a.folk ? 'mitico' : a.ext ? 'extinct' : a.leg ? 'legendary' : ['t-base', 't-evo1', 't-evo2'][stage];
     const stageLabel = a.folk ? 'MÍTICO' : a.ext ? 'EXTINTO' : a.leg ? 'LEGENDARIO' : STAGE[stage];
     const ab = ABILITIES[a.ab], ab2 = a.ab2 ? ABILITIES[a.ab2] : null, ab3 = a.ab3 ? ABILITIES[a.ab3] : null;
-    const act = opts.trade ? 'trade' : opts.edit ? 'edit' : null;
+    const act = opts.trade ? 'trade' : opts.swap ? 'swapwild' : opts.edit ? 'edit' : null;
     const cls = 'acard ' + tcls + ' rc-' + a.rarity
       + (opts.fainted || a.down ? ' fainted' : '') + (a.down ? ' down' : '') + (opts.cls ? ' ' + opts.cls : '')
       + (act ? ' clickable' : '') + (opts.lead ? ' lead' : '');
@@ -52,7 +52,7 @@ export function createUI(game) {
   function teamHTML(team, o = {}) {
     if (!team.length) return `<div class="team"><div class="empty-slot">🦴</div></div>`;
     const cards = team.map((a, i) =>
-      animalCard(a, { edit: o.editable, trade: o.trade, order: o.order ? i + 1 : null, lead: o.order && i === 0 })).join('');
+      animalCard(a, { edit: o.editable, trade: o.trade, swap: o.swap, order: o.order ? i + 1 : null, lead: o.order && i === 0 })).join('');
     const inner = `<div class="team">${cards}</div>`;
     if (!o.panel) return inner;
     return `<div class="teampanel">
@@ -253,6 +253,20 @@ export function createUI(game) {
       ${teamHTML(s.team, { panel: true, order: true, trade: true })}`;
   }
 
+  // refugio lleno al rescatar: ELEGÍS a cuál liberar (ya no se va el más débil solo)
+  function renderWildSwap(s) {
+    const a = s.swapWild, ab = ABILITIES[a.ab];
+    phaseArea.innerHTML = `
+      <div class="section-h trade-h">🩹 Tu refugio está lleno · ¿por cuál lo cambiás?</div>
+      <div class="event-box trade-box">
+        <div style="margin:0 auto;max-width:150px">${animalCard(a, {})}</div>
+        <div class="desc">Rescataste a <b>${a.n}</b> (Nv ${a.level})${ab ? ` — ${ab.sym} ${ab.n}` : ''}, pero ya tenés ${RULES.MAX_TEAM}. Elegí a cuál <b>liberar</b> para hacerle lugar, o dejá ir al nuevo.</div>
+        <div class="center"><button class="btn ghost" data-act="swap-skip">Dejar ir al nuevo 🌿</button></div>
+      </div>
+      <div class="section-h">👇 Tocá el animal que querés LIBERAR</div>
+      ${teamHTML(s.team, { panel: true, order: true, swap: true })}`;
+  }
+
   function renderEvent(s) {
     const ev = s.event;
     const big = ev.imgKey ? `<img class="event-legend" src="${ART(ev.imgKey)}" alt="" draggable="false">` : ev.emoji;
@@ -271,7 +285,9 @@ export function createUI(game) {
     const slots = [];
     for (let i = 0; i < RULES.MAX_ITEMS; i++) {
       const it = a.items[i];
-      slots.push(it ? `<div class="slot full" title="${it.n}">${it.e}</div>` : `<div class="slot">·</div>`);
+      slots.push(it
+        ? `<button class="slot full" data-act="unequip" data-i="${i}" title="${it.n} (${itemBonus(it)}) — tocá para quitar">${it.e}<span class="rm">✕</span></button>`
+        : `<div class="slot">·</div>`);
     }
     const bag = s.bag.length
       ? s.bag.map((it, i) =>
@@ -294,7 +310,7 @@ export function createUI(game) {
               <div class="statbox"><div class="k">Nivel</div><div class="v">${a.level}</div></div>
               <div class="statbox"><div class="k">Efecto</div><div class="v abil-v">${ab ? ab.sym + ' ' + ab.n : '—'}</div></div>
             </div></div>
-          <div class="field"><label>Objetos equipados (${a.items.length}/${RULES.MAX_ITEMS})</label>
+          <div class="field"><label>Objetos equipados (${a.items.length}/${RULES.MAX_ITEMS}) — tocá uno para quitarlo</label>
             <div class="slots">${slots.join('')}</div></div>
           <div class="field"><label>Mochila — tocá para equipar</label>
             <div class="bagrow">${bag}</div></div>
@@ -316,7 +332,7 @@ export function createUI(game) {
     const who = s.avatar ? `<b>${s.avatar.name}</b> ` : '';
     if (s.nightWin) {
       $('modal').innerHTML = `
-        <div class="crest"><img class="event-legend" src="${ART('f_carreta')}" alt="" draggable="false"></div><h2>Noche de espantos superada</h2>
+        <div class="crest"><img class="event-legend" src="${ART('f_llorona')}" alt="" draggable="false"></div><h2>Noche de espantos superada</h2>
         <p>${who}tomó el <b>sendero prohibido</b> y, en la <b style="color:#b39ddb">Costa Rica de noche</b> 🌑, venció a
            <b>La Segua</b>, <b>el Cadejos</b>, <b>la Llorona</b>, <b>la Tulevieja</b>, <b>el Padre sin Cabeza</b> y
            <b>la Carreta sin Bueyes</b>. Pocos guías sobreviven para contarlo. 🕯️</p>
@@ -471,6 +487,7 @@ export function createUI(game) {
     else if (s.phase === 'starter') renderStarter(s);
     else if (s.phase === 'map') renderMap(s);
     else if (s.phase === 'wild') renderWild(s);
+    else if (s.phase === 'wildswap') renderWildSwap(s);
     else if (s.phase === 'trade') renderTrade(s);
     else if (s.phase === 'event') renderEvent(s);
     else if (s.phase === 'edit') renderEdit(s);
@@ -494,11 +511,14 @@ export function createUI(game) {
         else if (act === 'edit') game.openEdit(+elm.dataset.uid);
         else if (act === 'trade') game.tradeFor(+elm.dataset.uid);
         else if (act === 'trade-skip') game.skipTrade();
+        else if (act === 'swapwild') game.swapWildFor(+elm.dataset.uid);
+        else if (act === 'swap-skip') game.cancelWildSwap();
         else if (act === 'edit-close') game.closeEdit();
         else if (act === 'edit-move') game.moveAnimal(s.editId, +elm.dataset.dir);
         else if (act === 'edit-front') game.frontAnimal(s.editId);
         else if (act === 'edit-release') game.releaseAnimal(s.editId);
         else if (act === 'equip') game.equipItem(s.editId, +elm.dataset.bag);
+        else if (act === 'unequip') game.unequipItem(s.editId, +elm.dataset.i);
         else if (act === 'wild') {
           const idx = +elm.dataset.i;
           if (idx >= 0) game.captureWild(idx); else game.leaveWild();

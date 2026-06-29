@@ -131,6 +131,9 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .slots{display:flex;gap:8px}
 .slot{width:42px;height:42px;border-radius:9px;border:1px dashed rgba(196,160,78,.35);display:flex;align-items:center;justify-content:center;font-size:18px;color:#9c8f72;background:rgba(0,0,0,.2)}
 .slot.full{border-style:solid;border-color:rgba(232,197,88,.5);background:rgba(232,197,88,.09)}
+button.slot.full{position:relative;cursor:pointer;color:inherit;transition:transform .1s}
+button.slot.full:hover{transform:scale(1.08);border-color:var(--atk)}
+button.slot.full .rm{position:absolute;top:-5px;right:-5px;width:15px;height:15px;border-radius:50%;background:#a63d2e;color:#fff;font-size:9px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace}
 .bagrow{display:flex;gap:8px;flex-wrap:wrap}
 .bagitem{font-family:'Spectral',serif;font-size:13px;color:var(--paper);background:rgba(232,197,88,.08);border:1px solid rgba(196,160,78,.35);border-radius:8px;padding:7px 11px;cursor:pointer}
 .bagitem:hover{background:rgba(232,197,88,.16)} .bagitem:disabled{opacity:.4;cursor:not-allowed}
@@ -432,7 +435,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 .mnode.folclor .ml{color:#cdbce8;font-weight:600}
 
 /* mapa Tenebroso: fondo oscuro, mapa de noche bien visible, discos un poco más grandes */
-.mapwrap.night{background:#0a0712;border-color:#3a2d52}
+.mapwrap.night{background:#0a0712;border-color:#3a2d52;height:clamp(440px,74vh,580px)}
 .mapbg.cr.night{opacity:.62;filter:saturate(1.05)}
 .mapwrap.night.linear .mnode .disc{width:44px;height:44px}
 .mapwrap.night .mnode.descanso .disc,.mapwrap.night .mnode.start .disc{width:34px;height:34px}

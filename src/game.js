@@ -295,18 +295,29 @@ export class Game {
   captureWild(idx) {
     const s = this.s, a = s.wilds && s.wilds[idx];
     if (!a) return;
-    if (s.team.length >= RULES.MAX_TEAM) {       // refugio lleno: reemplaza al más débil
-      let wi = 0; s.team.forEach((x, i) => { if ((x.atk + x.hp) < (s.team[wi].atk + s.team[wi].hp)) wi = i; });
-      const old = s.team[wi]; s.team[wi] = a;
-      this.log(`🩹 Rescataste a ${a.e} <b>${a.n}</b> (Nv ${a.level}); soltaste a ${old.e} ${old.n}`);
-    } else {
-      s.team.push(a);
-      this.log(`🩹 Rescataste a ${a.e} <b>${a.n}</b> (Nv ${a.level})`);
+    if (s.team.length >= RULES.MAX_TEAM) {       // refugio lleno: VOS elegís a cuál liberar
+      s.swapWild = a;
+      s.phase = 'wildswap';
+      return this.render();
     }
+    s.team.push(a);
+    this.log(`🩹 Rescataste a ${a.e} <b>${a.n}</b> (Nv ${a.level})`);
     this.registerDex(a);
     this.backToMap();
   }
   leaveWild() { this.backToMap(); }
+  // refugio lleno: cambiás el rescatado por el que VOS elijas (no el más débil)
+  swapWildFor(uid) {
+    const s = this.s, a = s.swapWild;
+    if (!a) return;
+    const i = s.team.findIndex(x => x.uid === uid);
+    if (i < 0) return;
+    const old = s.team[i]; s.team[i] = a; s.swapWild = null;
+    this.log(`🩹 Rescataste a ${a.e} <b>${a.n}</b> (Nv ${a.level}); liberaste a ${old.e} ${old.n} 🌿`);
+    this.registerDex(a);
+    this.backToMap();
+  }
+  cancelWildSwap() { this.s.swapWild = null; this.backToMap(); }
 
   // ---------- intercambio ----------
   tradeFor(uid) {
@@ -415,7 +426,7 @@ export class Game {
         s.team.forEach(a => E.levelUp(a));        // recompensa: tu equipo sube
         this.award('folk_' + node.boss);          // logro por ese ser
         M.markFolk(node.boss); this.syncAch();
-        if (node.boss === 'f_carreta') return this.nightVictory();   // último → ganaste el mapa Tenebroso
+        if (node.boss === 'f_llorona') return this.nightVictory();   // La Llorona (Limón) = el último → ganaste la noche
         return this.showEvent(sp.e, `¡${sp.n} vencida!`,
           `Doblegaste a <b>${sp.n}</b>. La oscuridad se espesa… el siguiente espanto acecha más adelante.`,
           [{ label: 'Seguir 🌑', action: () => this.backToMap() }], node.boss);
@@ -464,21 +475,43 @@ export class Game {
   equipItem(uid, bagIndex) {
     const s = this.s, a = this.animal(uid);
     if (!a || a.items.length >= RULES.MAX_ITEMS) return;
-    const it = s.bag[bagIndex]; if (!it) return;
+    const src = s.bag[bagIndex]; if (!src) return;
     s.bag.splice(bagIndex, 1);
-    a.items.push(it);
+    const it = { ...src };   // instancia propia: guarda los deltas reales para poder quitarlo
+    const b = { atk: a.atk, hp: a.hp, def: a.def || 0, spd: a.spd, hab: a.hab };
     a.atk = Math.max(1, a.atk + (it.atk || 0));   // trade-off: nunca baja de 1/0
     a.hp = Math.max(1, a.hp + (it.hp || 0));
     a.def = Math.max(0, (a.def || 0) + (it.def || 0));
     a.spd = Math.max(0, a.spd + (it.spd || 0));
     a.hab = Math.max(0, a.hab + (it.hab || 0));
+    it._d = { atk: a.atk - b.atk, hp: a.hp - b.hp, def: (a.def || 0) - b.def, spd: a.spd - b.spd, hab: a.hab - b.hab };
     let extra = '';
     if (it.ab && !a.ab2 && it.ab !== a.ab && ABILITIES[it.ab]) {   // otorga una 2ª habilidad
-      a.ab2 = it.ab; extra = ` — ahora también tiene ${ABILITIES[it.ab].sym} ${ABILITIES[it.ab].n}`;
+      a.ab2 = it.ab; it._gaveAb2 = true; extra = ` — ahora también tiene ${ABILITIES[it.ab].sym} ${ABILITIES[it.ab].n}`;
     }
     if (it.cure && a.down) { a.down = false; extra += ' — ¡revivido! 💚'; }
+    a.items.push(it);
     this.log(`${it.e} <b>${it.n}</b> (${itemBonus(it)}) equipado a ${a.e} ${a.n}${extra}`);
     M.bump('items'); this.syncAch();
+    this.render();
+  }
+  // QUITAR un objeto: revierte sus stats exactos y lo devuelve a la mochila (de ahí
+  // lo podés equipar a otro animal o dejarlo guardado).
+  unequipItem(uid, i) {
+    const s = this.s, a = this.animal(uid);
+    if (!a) return;
+    const it = a.items[i]; if (!it) return;
+    a.items.splice(i, 1);
+    const d = it._d || { atk: it.atk || 0, hp: it.hp || 0, def: it.def || 0, spd: it.spd || 0, hab: it.hab || 0 };
+    a.atk = Math.max(1, a.atk - (d.atk || 0));
+    a.hp = Math.max(1, a.hp - (d.hp || 0));
+    a.def = Math.max(0, (a.def || 0) - (d.def || 0));
+    a.spd = Math.max(0, a.spd - (d.spd || 0));
+    a.hab = Math.max(0, a.hab - (d.hab || 0));
+    if (it._gaveAb2) a.ab2 = null;   // si el objeto le había dado la 2ª habilidad, se va con él
+    const back = { ...it }; delete back._d; delete back._gaveAb2;
+    s.bag.push(back);
+    this.log(`↩️ Quitaste ${it.e} <b>${it.n}</b> de ${a.e} ${a.n} — vuelve a la mochila.`);
     this.render();
   }
   moveAnimal(uid, dir) {

@@ -189,28 +189,32 @@ export function genWildChoices(country, bio, level, count = 3) {
 
 // ---------- EASTER EGG: mapa Tenebroso (Costa Rica de noche) ----------
 // Solo se llega yendo SIEMPRE por la izquierda y ganando las 7 provincias. Mapa
-// LINEAL: hay que vencer a los 6 seres del folclor en orden (no se puede saltar
-// ninguno). Entre medio, refugios para recuperarse. Vencer a La Carreta = victoria.
-export const FOLK_ORDER = ['f_segua', 'f_cadejos', 'f_llorona', 'f_tulevieja', 'f_padre', 'f_carreta'];
+// LINEAL: hay que vencer a los 6 seres del folclor EN ORDEN (no se puede saltar
+// ninguno), con un refugio entre cada uno. Cada ser está ubicado en su PROVINCIA
+// sobre el mapa de CR. Vencer a La Llorona (Limón) = victoria.
+export const FOLK_ORDER = ['f_carreta', 'f_segua', 'f_cadejos', 'f_tulevieja', 'f_padre', 'f_llorona'];
 export function generateNightMap() {
   const nodesById = {}, seq = [];
-  // secuencia: inicio, 2 seres, refugio, 2 seres, refugio, 2 seres (el último = final)
-  // un REFUGIO entre cada ser: cada duelo se pelea con el equipo recuperado (cada
-  // ser es un reto en sí; la atrición no te deja entrar mermado al siguiente).
+  // Posiciones (x%,y% del recuadro) SOBRE la tierra de Costa Rica, por provincia.
+  // Ruta: inicio → Carreta (Guanacaste) → Segua (bajo Guanacaste) → Cadejos
+  // (Alajuela) → Tulevieja (Escazú) → Padre (Cartago) → Llorona (Limón = final).
   const plan = [
-    { type: 'start' },
-    { type: 'folclor', boss: 'f_segua' }, { type: 'descanso' },
-    { type: 'folclor', boss: 'f_cadejos' }, { type: 'descanso' },
-    { type: 'folclor', boss: 'f_llorona' }, { type: 'descanso' },
-    { type: 'folclor', boss: 'f_tulevieja' }, { type: 'descanso' },
-    { type: 'folclor', boss: 'f_padre' }, { type: 'descanso' },
-    { type: 'folclor', boss: 'f_carreta' },
+    { type: 'start',                        x: 39, y: 66 },   // llegada (Pacífico sur)
+    { type: 'folclor', boss: 'f_carreta',   x: 33, y: 26 },   // Guanacaste (noroeste)
+    { type: 'descanso',                     x: 35, y: 41 },
+    { type: 'folclor', boss: 'f_segua',     x: 39, y: 53 },   // un poco abajo de Guanacaste
+    { type: 'descanso',                     x: 44, y: 42 },
+    { type: 'folclor', boss: 'f_cadejos',   x: 48, y: 29 },   // Alajuela (norte-centro)
+    { type: 'descanso',                     x: 51, y: 39 },
+    { type: 'folclor', boss: 'f_tulevieja', x: 53, y: 47 },   // Escazú (San José)
+    { type: 'descanso',                     x: 57, y: 46 },
+    { type: 'folclor', boss: 'f_padre',     x: 61, y: 48 },   // Cartago (centro-este)
+    { type: 'descanso',                     x: 67, y: 44 },
+    { type: 'folclor', boss: 'f_llorona',   x: 73, y: 40 },   // Limón (Caribe) — FINAL
   ];
-  const ROWS = plan.length - 1;
-  const yFor = (r) => 90 - r * (80 / (ROWS + 1));   // r0 abajo (inicio), arriba el final
   const rows = plan.map((p, r) => {
     const o = { id: ++UID, r, c: 1, type: p.type, boss: p.boss || null, bio: 'noche',
-                x: 50, y: yFor(r), visited: false, children: [] };
+                x: p.x, y: p.y, visited: false, children: [] };
     nodesById[o.id] = o; seq.push(o); return o;
   });
   for (let r = 0; r < rows.length - 1; r++) rows[r].children = [rows[r + 1]];   // lineal
