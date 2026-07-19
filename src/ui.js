@@ -92,10 +92,54 @@ export function createUI(game) {
     return slug ? `<img class="opp-emblem" src="${SCN(slug)}" alt="">` : '';
   }
 
-  // ---------- fondo del mapa: Costa Rica en pixel (de día o Tenebroso de noche) ----------
+  // ---------- ESCENARIO del mapa: cada provincia con lo que la identifica ----------
+  // pasto propio, vista del lugar al fondo y props en primer plano (PixelLab).
+  const PROV_TIERRA = {
+    'San José':'valle','Alajuela':'valle','Cartago':'alto','Heredia':'lush',
+    'Guanacaste':'seco','Puntarenas':'costa','Limón':'lush','Monteverde':'lush',
+  };
+  // props: [clave, left%, top%, ancho px]  (el ancho se escala en celular por CSS)
+  const PROV_DECOR = {
+    'San José':   [['teatro',50,27,86],['building',14,33,54],['building',86,31,50],
+                   ['coffee',44,86,42],['coffee',20,66,36],['flowers',52,22,32]],
+    'Alajuela':   [['mango',15,33,96],['mango',83,57,104],['volcano',60,17,84],
+                   ['cane',30,70,56],['flowers',48,25,32],['coffee',22,62,34]],
+    'Cartago':    [['basilica',50,29,84],['ruins',18,58,74],['volcano',82,21,80],
+                   ['pine',86,61,66],['pine',30,80,54],['pine',12,41,50]],
+    'Heredia':    [['flowers',16,33,44],['flowers',82,41,46],['flowers',60,82,42],
+                   ['fern',30,59,42],['fern',72,67,40],['guaria',52,23,34],['bromeliad',22,48,32]],
+    'Guanacaste': [['guanacaste',14,31,108],['guanacaste',82,57,126],['guanacaste',60,17,86],
+                   ['bushdry',44,86,38],['bushdry',20,66,34],['rock',36,52,30]],
+    'Puntarenas': [['palm',15,33,84],['palm',84,57,94],['palm',62,79,76],
+                   ['lighthouse',40,21,70],['boat',68,84,62],['rock',28,66,28]],
+    'Limón':      [['palm',14,31,86],['banana',82,55,102],['banana',60,79,90],
+                   ['banana',34,65,80],['cacao',26,49,40],['flowers',50,88,30]],
+    'Monteverde': [['cloudtree',15,33,86],['cloudtree',85,57,92],['pine',48,19,74],
+                   ['fern',30,63,46],['fern',70,71,44],['bromeliad',22,47,34]],
+  };
+  // Tenebroso: árboles muertos, tumbas, cruces y la carreta
+  const NOCHE_DECOR = [['deadtree',13,30,80],['deadtree',86,50,88],['deadtree',60,18,66],
+                       ['deadtree',40,70,70],['tomb',28,60,34],['tomb',72,68,30],
+                       ['tomb',46,84,32],['cross',20,44,38],['cross',80,80,34]];
+  const PROP = (k) => `assets/escenarios/prop_${k}.png`;
+
+  function decorHTML(s) {
+    const list = s.country.night ? NOCHE_DECOR : (PROV_DECOR[s.country.n] || []);
+    return list.map(([k, l, t, w]) =>
+      `<img class="decor" src="${PROP(k)}" alt="" draggable="false" style="left:${l}%;top:${t}%;--dw:${w}px">`).join('');
+  }
+  // vista lejana = el lugar emblemático real de la provincia
+  function vistaHTML(s) {
+    const slug = s.country.night ? 'bg_sanatorio' : (PROV_SCENE[s.country.n] || null);
+    if (!slug) return '';
+    return `<img class="vista" src="${SCN(slug)}" alt="" draggable="false">`;
+  }
   function countryBg(s) {
     const night = s.country && s.country.night;
-    return `<div class="mapbg cr${night ? ' night' : ''}" style="background-image:url('${SCN(night ? 'mapa_noche' : 'mapa_cr')}')"></div>`;
+    const tierra = night ? 'noche' : (PROV_TIERRA[s.country.n] || 'valle');
+    return `<div class="mapsuelo" style="background-image:url('${SCN('tile_pasto_' + tierra)}')"></div>
+      ${vistaHTML(s)}${decorHTML(s)}
+      <div class="treeband top"></div><div class="treeband bot"></div>`;
   }
 
   // ---------- pantallas ----------

@@ -23,26 +23,49 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .section-h{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin:14px 0 8px;display:flex;align-items:center;gap:8px}
 .section-h::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--brass-deep),transparent)}
 
-/* ---------- mapa con fondo de país ---------- */
-.mapwrap{position:relative;width:100%;height:clamp(360px,62vh,480px);margin:0 auto;
-  background:rgba(0,0,0,.18);border:1px solid rgba(196,160,78,.2);border-radius:14px;overflow:hidden}
-.mapbg{position:absolute;inset:0;background:var(--brass);opacity:.17;pointer-events:none;
-  -webkit-mask-position:center;mask-position:center;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
-  -webkit-mask-size:76% auto;mask-size:76% auto}
-.mapbg.ocean{opacity:.13;background:
-  repeating-linear-gradient(0deg,transparent 0 26px,rgba(94,168,180,.6) 26px 28px,transparent 28px 54px);
-  -webkit-mask:none;mask:none}
-/* fondo: mapa de Costa Rica en pixel (sutil, detrás de los nodos) */
-.mapbg.cr{opacity:.20;background-size:cover;background-position:center;image-rendering:pixelated;
-  -webkit-mask:none;mask:none}
-.maptag{position:absolute;top:11px;left:13px;z-index:3;font-family:'DM Mono',monospace;font-size:10px;
-  letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:7px}
-.maptag b{font-family:'Fraunces',serif;font-weight:900;font-size:17px;letter-spacing:0;text-transform:none}
-.mapwrap svg{position:absolute;inset:0;width:100%;height:100%}
-.mnode{position:absolute;transform:translate(-50%,-50%);width:58px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:default;z-index:2}
-.mnode .disc{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;
-  border:2px solid rgba(236,225,200,.5);background:rgba(0,0,0,.4);box-shadow:0 3px 8px rgba(0,0,0,.4);transition:transform .12s}
-.mnode .ml{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.04em;text-transform:uppercase;color:#cbbd9c;text-align:center;line-height:1}
+/* ---------- MAPA: escenario propio de cada provincia ----------
+   Capas: pasto tileado (z0) → vista del lugar + props (z1) → senderos (z2)
+   → banda de árboles (z3) → nodos (z4). Los props salen de PixelLab.        */
+.mapwrap{position:relative;width:100%;height:clamp(400px,66vh,540px);margin:0 auto;
+  border:4px solid #2b2117;border-radius:5px;overflow:hidden;
+  box-shadow:inset 0 0 0 3px #6a9e5e,0 5px 0 rgba(0,0,0,.25)}
+.mapwrap.night{box-shadow:inset 0 0 0 3px #2a2340,0 5px 0 rgba(0,0,0,.32)}
+.mapsuelo{position:absolute;inset:0;z-index:0;background-size:44px 44px;background-repeat:repeat;
+  image-rendering:pixelated}
+.mapwrap::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+  box-shadow:inset 0 0 60px rgba(30,60,25,.30)}
+.mapwrap.night::after{box-shadow:inset 0 0 90px rgba(8,6,20,.72);
+  background:radial-gradient(120% 80% at 78% 12%,rgba(240,230,170,.13),transparent 55%)}
+/* lugar emblemático de la provincia, al fondo */
+.vista{position:absolute;left:50%;top:12%;transform:translateX(-50%);width:clamp(150px,42%,215px);
+  z-index:1;image-rendering:pixelated;opacity:.6;pointer-events:none;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+/* props (árbol de Guanacaste, Teatro Nacional, faro…): se PARAN en el piso */
+.decor{position:absolute;transform:translate(-50%,-92%);width:var(--dw);z-index:1;pointer-events:none;
+  image-rendering:pixelated;filter:drop-shadow(0 3px 2px rgba(20,40,15,.4))}
+/* borde de árboles arriba y abajo */
+.treeband{position:absolute;left:0;right:0;height:34px;z-index:3;pointer-events:none;opacity:.96;
+  background-image:url('assets/escenarios/tile_arboles_dia.png');background-size:34px 34px;background-repeat:repeat-x}
+.mapwrap.night .treeband{background-image:url('assets/escenarios/tile_arboles_noche.png')}
+.treeband.top{top:0}.treeband.bot{bottom:0;transform:scaleY(-1)}
+/* luna del Tenebroso */
+.mapwrap.night .maptag::after{content:"";position:absolute;right:-100vw;top:0;width:0}
+.maptag{position:absolute;top:9px;left:11px;z-index:4;font-family:'PressStart',monospace;font-size:8px;
+  letter-spacing:.5px;color:#f6e9cc;background:rgba(28,23,18,.85);border:2px solid #5a4a33;border-radius:3px;
+  padding:6px 9px;display:flex;align-items:center;gap:6px;max-width:calc(100% - 22px)}
+.maptag b{font-family:'PressStart',monospace;font-size:8px;letter-spacing:.5px;color:var(--gold);text-transform:none}
+.mapwrap svg{position:absolute;inset:0;width:100%;height:100%;z-index:2}
+.mnode{position:absolute;transform:translate(-50%,-50%);width:66px;display:flex;flex-direction:column;
+  align-items:center;gap:3px;cursor:default;z-index:4}
+/* disco estilo menú GBA: crema con borde grueso y bisel */
+.mnode .disc{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:21px;overflow:hidden;border:3px solid #2b2117;background:#ece2c6;
+  box-shadow:inset 0 0 0 2px #faf4e2,0 2px 0 rgba(0,0,0,.35);transition:transform .12s}
+.mnode.cazador .disc,.mnode.combate .disc,.mnode.tesoro .disc,.mnode.descanso .disc,.mnode.airport .disc{border-radius:8px}
+.mnode .ml{font-family:'PressStart',monospace;font-size:6px;letter-spacing:.2px;color:#22331c;text-align:center;
+  line-height:1;background:rgba(245,239,219,.92);border:1.5px solid #2b2117;border-radius:3px;padding:2px 4px;
+  white-space:nowrap;text-transform:uppercase}
+.mapwrap.night .mnode .ml{color:#efe0f6;background:rgba(30,22,45,.9);border-color:#4a3a5a}
 .mnode.bioma-bosque .disc{background:var(--bosque)} .mnode.bioma-sabana .disc{background:var(--sabana)}
 .mnode.bioma-agua .disc{background:var(--agua)} .mnode.bioma-montana .disc{background:var(--montana)}
 .mnode.combate .disc{background:var(--combate)} .mnode.tesoro .disc{background:var(--tesoro)}
@@ -58,7 +81,8 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 @media(max-width:520px){ .mapwrap.linear .mnode{width:38px} .mapwrap.linear .mnode .disc{width:32px;height:32px;font-size:15px} .mapwrap.linear .mnode .ml{font-size:6px} }
 .mnode.descanso .disc{background:var(--descanso)} .mnode.airport .disc{background:var(--airport);width:52px;height:52px;font-size:26px}
 .mnode.start .disc{background:#3a4a44}
-.mnode.available{cursor:pointer} .mnode.available .disc{border-color:var(--gold);box-shadow:0 0 0 3px rgba(232,197,88,.35),0 3px 10px rgba(0,0,0,.4);animation:pulse 1.4s infinite}
+.mnode.available{cursor:pointer} .mnode.available .disc{border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(232,197,88,.5),inset 0 0 0 2px #faf4e2,0 2px 0 rgba(0,0,0,.35);animation:pulse 1.4s infinite}
 @keyframes pulse{50%{box-shadow:0 0 0 6px rgba(232,197,88,.15),0 3px 10px rgba(0,0,0,.4)}}
 .mnode.available:hover .disc{transform:scale(1.12)}
 .mnode.current .disc{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.4)}
@@ -390,7 +414,8 @@ details.how p{margin-top:8px;color:#d8cdb2;line-height:1.5}
 .battlecard .bstats .st.def{color:#cba24a}
 
 /* ---------- íconos PIXEL de las casillas del mapa ---------- */
-.mnode .disc.img{background:rgba(8,18,15,.55);padding:3px;overflow:hidden}
+.mnode .disc.img{background:#ece2c6;padding:3px;overflow:hidden}
+.mapwrap.night .mnode .disc.img{background:#efe0f6}
 .mnode .disc.img img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated;display:block;
   filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
 .mnode.airport .disc.img{padding:2px}
@@ -519,4 +544,23 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 }
 @media(prefers-reduced-motion:reduce){
   .dlg-portrait{animation:none}.dlg-next{animation:none}
+}
+
+/* ---------- MAPA en celular: props y nodos más chicos, todo legible ---------- */
+@media(max-width:520px){
+  .mapwrap{height:clamp(360px,58vh,440px)}
+  .decor{width:calc(var(--dw) * .62)}          /* props proporcionalmente más chicos */
+  .vista{width:clamp(120px,44%,160px);top:13%}
+  .treeband{height:26px;background-size:26px 26px}
+  .mnode{width:52px}
+  .mnode .disc{width:38px;height:38px;font-size:17px;border-width:2px}
+  .mnode .ml{font-size:5px;padding:1px 3px;border-width:1px}
+  .maptag{font-size:6.5px;padding:5px 7px;top:7px;left:8px}
+  .maptag b{font-size:6.5px}
+}
+@media(max-width:380px){
+  .decor{width:calc(var(--dw) * .5)}
+  .mnode{width:44px}
+  .mnode .disc{width:33px;height:33px;font-size:15px}
+  .mnode .ml{font-size:4.5px}
 }
