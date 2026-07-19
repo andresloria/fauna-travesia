@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prueba de diálogo — Fauna</title>
+<link rel="stylesheet" href="./styles.css">
+<style>
+  body{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:12px}
+  .t{font-family:'PressStart',monospace;font-size:11px;color:#e8c558;text-align:center;line-height:2}
+</style>
+</head>
+<body>
+<div class="t">PRUEBA DE DIÁLOGO<br><span style="font-family:'VT323';font-size:20px;color:#cbbd9c">
+  clic para avanzar · elegí una opción cuando aparezcan</span></div>
+<div class="center">
+  <button class="btn" id="b1">Careo con Don Rufino (San José)</button>
+  <button class="btn ghost" id="b2">Llegada a Guanacaste</button>
+</div>
+<script type="module">
+import { playScene } from './src/dialogo.js';
+import { HISTORIA, bossOf } from './src/historia.js';
+
+const ctx = (prov) => {
+  const b = bossOf(prov);
+  return {
+    guia: 'assets/personajes/guia_mujer.png',
+    boss: `assets/personajes/${b.art}.png`,
+    bossName: b.n, bossTitle: b.t,
+    heroName: 'Andrés', provincia: prov,
+    bg: `assets/escenarios/lugar_${prov === 'San José' ? 'sanjose' : 'guanacaste'}.png`,
+  };
+};
+document.getElementById('b1').onclick = () => playScene(HISTORIA['San José'].jefe, ctx('San José'));
+document.getElementById('b2').onclick = () => playScene(HISTORIA['Guanacaste'].llegada, ctx('Guanacaste'));
+</script>
+</body>
+</html>

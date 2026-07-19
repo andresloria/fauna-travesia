@@ -85,7 +85,9 @@ export function createUI(game) {
   // En el mapa Tenebroso, el fondo es el Sanatorio Durán de noche.
   const sceneFor = (c) => c && c.night ? SCN('bg_sanatorio') : SCN(c && PROV_SCENE[c.n] ? PROV_SCENE[c.n] : 'bioma_bosque');
   // emblema del bando enemigo (cazador o cabecilla en pixel); null si es animal salvaje
-  function enemyEmblem(kind) {
+  function enemyEmblem(kind, art) {
+    // si el combate trae su propio retrato (cabecilla de la provincia), ese manda
+    if (art) return `<img class="opp-emblem" src="${art}" alt="">`;
     const slug = kind === 'jefe' ? 'cabecilla' : (kind === 'cazador' || kind === 'retador') ? 'cazador' : null;
     return slug ? `<img class="opp-emblem" src="${SCN(slug)}" alt="">` : '';
   }
@@ -400,7 +402,7 @@ export function createUI(game) {
         <div class="teamrow" id="rowA">${allies.map(a => battleCard(a, max[a.uid])).join('')}</div>
         <div class="vs-badge">VS</div>
         <div class="teamrow" id="rowB">${b.enemy.map(a => battleCard(a, max[a.uid])).join('')}</div>
-        <div class="side-label enemy-label">${enemyEmblem(b.kind) || b.oppEmoji} ${b.oppName}</div>
+        <div class="side-label enemy-label">${enemyEmblem(b.kind, b.oppArt) || b.oppEmoji} ${b.oppName}</div>
         <div class="battle-msg" id="bmsg">¡Empieza el combate!</div>
       </div>`;
 

@@ -456,3 +456,67 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 .duptag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.04em;text-transform:uppercase;
   color:#3a2c0a;background:linear-gradient(90deg,#e8c558,#f0d878);border-radius:10px;padding:2px 8px;
   margin-bottom:6px;display:inline-block;font-weight:700}
+
+/* ============================================================
+   DIÁLOGOS estilo novela visual pixel (dialogo.js + historia.js)
+   Retrato grande sobre el escenario, placa de nombre, caja de texto
+   con palabras resaltadas y hasta 4 opciones en 2x2.
+   ============================================================ */
+@font-face{font-family:'PressStart';src:url('assets/fonts/PressStart2P.woff2') format('woff2');font-display:swap}
+@font-face{font-family:'VT323';src:url('assets/fonts/VT323.woff2') format('woff2');font-display:swap}
+
+.dlg-ov{position:fixed;inset:0;z-index:9000;display:flex;align-items:flex-end;justify-content:center;
+  background:rgba(8,10,14,.72);opacity:0;transition:opacity .18s;cursor:pointer;outline:none;
+  padding:16px 12px}
+.dlg-ov.on{opacity:1}
+.dlg-ov::before{content:"";position:absolute;inset:0;background-image:var(--dlg-bg);background-size:cover;
+  background-position:center;image-rendering:pixelated;opacity:.34;filter:saturate(.85)}
+.dlg-stage{position:relative;width:100%;max-width:660px;display:flex;flex-direction:column;align-items:center}
+.dlg-portrait{width:min(200px,42vw);height:auto;image-rendering:pixelated;margin-bottom:-10px;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,.6));animation:dlgpop .22s ease-out}
+@keyframes dlgpop{from{transform:translateY(10px) scale(.96);opacity:0}}
+
+.dlg-box{position:relative;width:100%;background:#e9dfc2;color:#2a2016;border:3px solid #1e1810;
+  border-radius:3px;box-shadow:inset 0 0 0 2px #c6b68a,inset 0 0 0 4px #f7f1dd,0 6px 0 rgba(0,0,0,.35);
+  padding:16px 14px 12px;min-height:120px}
+.dlg-box.boss{background:#e6d6d0;box-shadow:inset 0 0 0 2px #bfa094,inset 0 0 0 4px #f6ece7,0 6px 0 rgba(0,0,0,.35)}
+.dlg-box.narra{background:#dfe0d4}
+.dlg-plate{position:absolute;top:-14px;left:14px;background:#1e1810;color:#f0e4c4;border:2px solid #4a3c26;
+  border-radius:3px;padding:4px 10px;font-family:'PressStart',monospace;font-size:9px;letter-spacing:.5px;
+  display:flex;align-items:baseline;gap:7px}
+.dlg-plate span{font-family:'VT323',monospace;font-size:14px;color:#bfae86;letter-spacing:0}
+.dlg-box.narra .dlg-plate{display:none}
+.dlg-text{font-family:'VT323',monospace;font-size:22px;line-height:1.12;letter-spacing:.2px;min-height:56px}
+.dlg-box.narra .dlg-text{font-style:italic;color:#4a4a3a}
+.dlg-text .hl{color:#b8641e;font-weight:400}
+.dlg-box.boss .dlg-text .hl{color:#a8291f}
+.dlg-next{position:absolute;right:12px;bottom:8px;font-family:'VT323',monospace;font-size:20px;color:#7a6a48;
+  animation:dlgblink 1s steps(2,end) infinite}
+@keyframes dlgblink{50%{opacity:.15}}
+
+/* botón SALTAR — siempre visible arriba a la derecha de la escena */
+.dlg-skip{position:absolute;top:-4px;right:0;z-index:5;font-family:'PressStart',monospace;font-size:8px;
+  background:rgba(28,23,18,.9);color:#d8c9a4;border:2px solid #5a4a33;border-radius:3px;padding:8px 10px;
+  cursor:pointer;letter-spacing:.5px;box-shadow:0 2px 0 rgba(0,0,0,.4)}
+.dlg-skip:hover{background:#3a2f22;color:#f0e4c4}
+.dlg-skip:active{transform:translateY(2px)}
+.dlg-skip:focus-visible{outline:3px solid #e2b23e;outline-offset:2px}
+
+.dlg-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.dlg-opt{font-family:'PressStart',monospace;font-size:8.5px;line-height:1.5;text-align:left;
+  background:#7a3f18;color:#f6e9cc;border:3px solid #1e1810;border-radius:3px;padding:10px 10px;
+  cursor:pointer;box-shadow:inset 0 0 0 2px #a9642f,0 3px 0 rgba(0,0,0,.35);transition:transform .08s,background .12s}
+.dlg-opt:hover{background:#96521f}
+.dlg-opt:active{transform:translateY(2px);box-shadow:inset 0 0 0 2px #a9642f,0 1px 0 rgba(0,0,0,.35)}
+.dlg-opt:focus-visible{outline:3px solid #e2b23e;outline-offset:2px}
+
+@media(max-width:520px){
+  .dlg-portrait{width:min(150px,40vw)}
+  .dlg-text{font-size:19px;min-height:48px}
+  .dlg-opt{font-size:7.5px;padding:9px 8px}
+  .dlg-opts{grid-template-columns:1fr}
+  .dlg-box{min-height:auto}
+}
+@media(prefers-reduced-motion:reduce){
+  .dlg-portrait{animation:none}.dlg-next{animation:none}
+}

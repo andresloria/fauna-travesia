@@ -7,6 +7,9 @@
 import * as E from './engine.js';
 import * as M from './meta.js';
 import { ITEMS, RARE_ITEMS, SECRET, RULES, ABILITIES, RARITY, itemBonus } from './data.js';
+import { playScene } from './dialogo.js';
+import { HISTORIA, TENEBROSO, bossOf, charlaDe } from './historia.js';
+import { fichaEscena } from './fichas.js';
 
 export class Game {
   constructor(ui = null) {
@@ -121,6 +124,44 @@ export class Game {
     });
   }
 
+  // ---------- DIÁLOGOS ----------
+  // Escenario de fondo del diálogo (el lugar de la provincia; de noche, el Sanatorio).
+  dlgBg() {
+    const c = this.s.country;
+    if (!c) return 'assets/escenarios/bioma_bosque.png';
+    if (c.night) return 'assets/escenarios/bg_sanatorio.png';
+    const SL = { 'San José':'sanjose','Alajuela':'alajuela','Cartago':'cartago','Heredia':'heredia',
+                 'Guanacaste':'guanacaste','Puntarenas':'puntarenas','Limón':'limon','Monteverde':'monteverde' };
+    return `assets/escenarios/lugar_${SL[c.n] || 'sanjose'}.png`;
+  }
+  // Reproduce una escena. `o.folk` = clave del ser del folclor (usa su arte y nombre).
+  // Devuelve una Promise SIEMPRE (aunque no haya escena) para poder encadenar.
+  escena(scene, o = {}) {
+    if (!scene || !scene.length) return Promise.resolve();
+    const s = this.s;
+    const guide = (s.avatar && s.avatar.guide) === 'mujer' ? 'retrato_mujer' : 'retrato_hombre';
+    let boss, bossName, bossTitle;
+    if (o.folk) {
+      const sp = E.SP[o.folk];
+      boss = `assets/folclor/${o.folk}.png`; bossName = sp ? sp.n : 'Leyenda'; bossTitle = 'leyenda de Costa Rica';
+    } else {
+      const b = bossOf(s.country ? s.country.n : 'Monteverde');
+      boss = `assets/personajes/${b.art}.png`; bossName = b.n; bossTitle = b.t;
+    }
+    return playScene(scene, {
+      guia: `assets/personajes/${guide}.png`, boss, bossName, bossTitle,
+      heroName: (s.avatar && s.avatar.name) || 'guía',
+      provincia: s.country ? s.country.n : '',
+      bg: o.bg || this.dlgBg(),
+    });
+  }
+  // Escena de historia de la provincia actual ('llegada' | 'jefe' | 'victoria')
+  escenaProv(tramo) {
+    const c = this.s.country; if (!c) return Promise.resolve();
+    const h = HISTORIA[c.n];
+    return this.escena(h && h[tramo]);
+  }
+
   log(msg) { this.s.log.unshift(msg); if (this.s.log.length > 50) this.s.log.pop(); }
   node(id) { return this.s.map.nodesById[id]; }
   current() { return this.node(this.s.currentId); }
@@ -151,6 +192,7 @@ export class Game {
     const beat = this.storyBeat(this.depth());
     if (beat) this.log(beat);
     this.render();
+    this.escenaProv('llegada');       // 💬 pedazo de historia al llegar
   }
 
   goNode(id) {
@@ -164,6 +206,9 @@ export class Game {
     if (n !== leftmost) this.s.leftPath = false;
     this.s.currentId = id;
     n.visited = true;
+    // 💬 a veces, una charla ambiental antes de resolver la casilla (no en el Tenebroso)
+    const ch = this.s.night ? null : charlaDe(n.type);
+    if (ch) return this.escena(ch).then(() => this.resolveNode(n));
     this.resolveNode(n);
   }
 
@@ -184,9 +229,13 @@ export class Game {
         this.log(`🔄 Te ofrecen ${s.offer.e} <b>${s.offer.n}</b> (Nv ${s.offer.level})`);
         return this.render();
       }
-      case 'airport':  return this.startBattle(
-        E.genEnemy(s.country, E.bossSize(d), E.enemyLevel(d, true), 0.4),
-        s.country.secret ? 'El Cabecilla' : 'Cabecilla furtivo', '🚨', 'jefe');
+      case 'airport': {
+        // 💬 careo con el cabecilla PROPIO de esta provincia, y luego la pelea
+        const b = bossOf(s.country.n);
+        return this.escenaProv('jefe').then(() => this.startBattle(
+          E.genEnemy(s.country, E.bossSize(d), E.enemyLevel(d, true), 0.4),
+          b.n, '🚨', 'jefe', `assets/personajes/${b.art}.png`));
+      }
       case 'tesoro': {
         const it = E.pick(ITEMS);
         s.bag.push(it);
@@ -223,7 +272,10 @@ export class Game {
     const s = this.s, sp = E.SP[n.boss];
     const maxLv = Math.max(1, ...s.team.map(a => a.level));
     this.log(`🌑 De la niebla surge <b>${sp.n}</b>… no es un animal: es una leyenda.`);
-    return this.startBattle(E.genFolkBoss(n.boss, maxLv + 3), sp.n, sp.e, 'folclor');
+    // 💬 careo con la leyenda (su arte y su voz), y después la pelea
+    return this.escena(TENEBROSO[n.boss], { folk: n.boss })
+      .then(() => this.startBattle(E.genFolkBoss(n.boss, maxLv + 3), sp.n, sp.e, 'folclor',
+                                   `assets/folclor/${n.boss}.png`));
   }
 
   // Casilla SORPRESA: puede dar un objeto, una pelea, una emboscada de cazadores
@@ -275,6 +327,7 @@ export class Game {
     this.award('tenebroso');
     this.log('🌑 La luz se apaga. Un sendero prohibido se abre: <b>Costa Rica de noche</b>. Acá no hay cazadores… hay <b>leyendas</b>. Vencé a los seis seres o no saldrás jamás.');
     this.render();
+    this.escena(TENEBROSO.entrada);   // 💬 la niebla se cierra
   }
   // final: el bosque nuboso de Monteverde. Vencer al Cabecilla = ganar.
   enterSecret() {
@@ -314,8 +367,11 @@ export class Game {
     }
     s.team.push(a);
     this.log(`🩹 Rescataste a ${a.e} <b>${a.n}</b> (Nv ${a.level})`);
+    const nueva = !M.getDex().has(a.key);   // ¿primera vez que rescatás esta especie?
     this.registerDex(a);
     this.backToMap();
+    // 📖 ficha oficial del animal, solo la PRIMERA vez (se puede saltar)
+    if (nueva) this.escena(fichaEscena(a));
   }
   leaveWild() { this.backToMap(); }
 
@@ -369,7 +425,7 @@ export class Game {
   skipTrade() { this.s.offer = null; this.backToMap(); }
 
   // ---------- combate ----------
-  startBattle(enemy, oppName, oppEmoji, kind) {
+  startBattle(enemy, oppName, oppEmoji, kind, oppArt = null) {
     const s = this.s;
     const fighters = this.fighters();        // los debilitados NO pelean
     if (!fighters.length) {                   // equipo agotado: no podés combatir
@@ -378,7 +434,7 @@ export class Game {
     }
     const { result, steps, fallenAUids } = E.fight(fighters, enemy);  // el motor decide; la UI solo anima
     s.phase = 'battle';
-    s.battle = { enemy, fighters, oppName, oppEmoji, steps, result, kind, fallenAUids };
+    s.battle = { enemy, fighters, oppName, oppEmoji, steps, result, kind, fallenAUids, oppArt };
     this.ui.playBattle(s, () => this.onBattleEnd());
   }
   onBattleEnd() {
@@ -417,6 +473,7 @@ export class Game {
         const last = s.cleared >= RULES.RUN_LENGTH;
         if (last) this.award('prov7');
         this.syncAch();
+        this.escenaProv('victoria');   // 💬 el cabecilla suelta la pista de la siguiente provincia
         return this.showEvent('🏆', last ? '¡Las 7 provincias a salvo!' : '¡Provincia liberada!',
           last
             ? `Recorriste las 7 provincias 🇨🇷 y desbarataste a los furtivos. Tu equipo se cura por completo 🌿 y se abre el sendero al bosque nuboso de Monteverde. ☁️`
@@ -604,7 +661,12 @@ export class Game {
   gameOver() { this.s.phase = 'over'; this.render(); }
   victory()  { this.award('cabecilla'); this.award('prov7'); this.s.phase = 'win'; this.render(); }
   // EASTER EGG: ganar el mapa Tenebroso (vencer a los 6 seres del folclor)
-  nightVictory() { this.award('folk_all'); this.award('prov7'); this.s.nightWin = true; this.s.phase = 'win'; this.render(); }
+  // 💬 el cierre: La Llorona calla y el río suena solo por primera vez en siglos
+  nightVictory() {
+    this.award('folk_all'); this.award('prov7'); this.s.nightWin = true;
+    return this.escena(TENEBROSO.final, { folk: 'f_llorona' })
+      .then(() => { this.s.phase = 'win'; this.render(); });
+  }
 
   render() { if (this.ui) this.ui.render(this.s); }
 }
