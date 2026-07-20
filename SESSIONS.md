@@ -83,18 +83,30 @@ tocar, refugio abajo, misiones visibles en los bloqueados). Falta implementarlas
 
 ---
 
+## DECISIÓN GRANDE (20-jul): REDISEÑO TOTAL DEL COMBATE
+Andrés: *"vamos a quitar el juego como estaba previsto antes; rediseño total; las mismas
+reglas de Naruto-Arena (The Basics)"*. El combate automático (`fight()`) se RETIRA.
+Reglas fieles: vida 100 parejo · energía 25% al azar por tipo · 1er turno 1 energía,
+después 1 por vivo · cola en orden · recargas · esquiva universal · clases
+instant/sostenido/control · toxina atraviesa invulnerabilidad.
+
+**✅ HECHO (20-jul): `src/arena.js` — el motor nuevo, lógica pura** con
+`test/arena.test.mjs` (20 pruebas): construcción, economía de energía (matar baja la
+economía del rival), cola en orden (exponer→pegar al invulnerable), recargas, toxina vs
+esquiva, defensa destructible (+ ignorarla), robar energía, pasivas (Caparazón, Madrugador,
+Púas…), IA `colaAuto` + `combateAuto`, y fuzz de 500 combates (52.8% el que abre, 0 cuelgues).
+Los 46 tests viejos siguen verdes (el motor viejo aún existe hasta el swap de UI).
+
 ## PRÓXIMOS PASOS (retomar por acá)
 
-1. **Motor de combate por turnos** — reemplaza `fight()` de `engine.js`. Reglas completas en
-   `ARENA.md` §1-§4. Ojo: `fight()` lo usan `game.js` y `test/engine.test.mjs` (46 tests).
-2. **Pantalla de combate** — cola de habilidades (el orden importa), objetivos que se iluminan,
-   botón **LISTO** y botón **AUTO** (juega el turno por vos).
-3. **Los 116 animales restantes** — hay 14 hechos a mano en `src/habilidades.js` cubriendo todos
-   los roles (daño, tanque, veneno, curación, robo de energía, contraataque, área). Plan: escalar
-   por arquetipo (bioma + rareza + stats) y dejar a mano los icónicos.
-4. **Enganchar misiones a `meta.js`** — el progreso (rachas, contadores) vive en localStorage.
-5. **Rebalancear después del combate nuevo** — el simulador está en el scratchpad de la sesión;
-   conviene commitearlo como herramienta (`sim.mjs` + `habs.mjs`) si se va a reusar.
+1. **Pantalla de combate** — mockups YA APROBADOS en artifacts (combate calcado del original
+   + selección de equipo). Conectarla a `src/arena.js`: tiles de habilidad, objetivos en
+   amarillo, cola con orden, LISTO + timer, AUTO (`colaAuto`), descripción abajo.
+2. **El swap** — `game.js`: reemplazar los combates de `fight()` por la pantalla ARENA
+   (elegir 3 del refugio antes de pelear). Retirar el auto-combate y adaptar los 46 tests.
+3. **Kits a mano para los 13 marcados TODO** en `movesets_gen.js` (legendarios + leyendas).
+4. **Enganchar misiones a `meta.js`** — rachas/contadores en localStorage.
+5. **Rebalancear con `combateAuto`** (ya sirve de simulador del combate NUEVO).
 
 ### Pendientes viejos que siguen abiertos
 - Paneles laterales EQUIPO / MOCHILA / PROGRESO (hoy los chips van en fila arriba).

@@ -106,10 +106,10 @@ invulnerable).
 | ⛰️ Montaña | morado | lo raro y poderoso |
 | ⚪ Comodín | gris | paga cualquier tipo |
 
-**Cambio propuesto sobre el original**: en Naruto-Arena cada tipo salía 25% al azar. Acá cada
-animal vivo da 1 energía con **50% de que sea la de SU bioma** y 50% al azar. Así **armar el
-equipo importa**: equipo puro de bosque = energía fiable pero rígida; mixto = versátil pero
-impredecible.
+**DECISIÓN (Andrés, 20-jul): reglas IDÉNTICAS al original.** Cada energía ganada es
+**25% cada tipo, al azar** (se descartó la adaptación del 50% bioma propio). Primer turno:
+1 energía; después, 1 por cada animal vivo al final de tu turno anterior. Si se acaba el
+tiempo del turno, la cola se cancela entera y pasa el turno.
 
 ### Estructura de cada animal
 - **1 pasiva** — siempre activa, lo distingue (no cuesta energía, no se elige).
