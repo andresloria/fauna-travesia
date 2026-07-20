@@ -11,115 +11,115 @@
 export const MOVESETS_GEN = {
   perezoso_dos: {
     habs:[
-      { n:'Mordida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acorazarse', desc:'Gana 30 de defensa destructible.', costo:['bosque'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
-      { n:'Muralla', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
+      { n:'Dentellada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Encogerse', desc:'Gana 30 de defensa destructible.', costo:['bosque'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
+      { n:'Escudo de manada', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
     ],
   },
   mono_congo: {
     habs:[
       { n:'Embestida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Mordida profunda', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['bosque', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
-      { n:'Rabia del monte', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['bosque', 'bosque'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Garra desgarradora', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['bosque', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Furia ciega', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['bosque', 'bosque'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
     ],
   },
   monocara: {
     habs:[
       { n:'Zarpazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Perseguir', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Torbellino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   mono_arana: {
     habs:[
-      { n:'Zarpazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Amparo', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Aliento vital', desc:'Todo el equipo gana 15 de defensa destructible y cura 15.', costo:['bosque', 'bosque'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:15, obj:'equipo' }, { t:'curar', v:15, obj:'equipo' }] },
+      { n:'Mordisco', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Companía', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Coro del monte', desc:'Todo el equipo gana 15 de defensa destructible y cura 15.', costo:['bosque', 'bosque'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:15, obj:'equipo' }, { t:'curar', v:15, obj:'equipo' }] },
     ],
   },
   mono_titi: {
     habs:[
-      { n:'Embestida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Garra rapida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Perseguir', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   manigordo: {
     habs:[
-      { n:'Zarpazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Velocidad cegadora', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Tarascada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Perseguir', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Reflejo puro', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   caucel: {
     habs:[
       { n:'Mordida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Mordida profunda', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Garra desgarradora', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Instinto depredador', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   leon_brenero: {
     habs:[
       { n:'Zarpazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Embestida brutal', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Golpe de lomo', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Sangre en el aire', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   tigrillo: {
     habs:[
-      { n:'Mordida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Embestida brutal', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Dentellada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Carga de peso', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
       { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   danta: {
   // TODO: kit unico a mano (legendario/mitico) — este es provisional
     habs:[
-      { n:'Zarpazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Atrincherarse', desc:'Gana 30 de defensa destructible.', costo:['bosque'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
+      { n:'Mordisco', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Hacerse bola', desc:'Gana 30 de defensa destructible.', costo:['bosque'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
       { n:'Piel de piedra', desc:'PERMANENTE: gana 40 de defensa destructible; se reaplica sola, no se acumula.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:40, obj:'self', permanente:true }] },
     ],
   },
   saino: {
     habs:[
       { n:'Manotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Mordida profunda', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['sabana', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
-      { n:'Frenesi', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['sabana', 'sabana'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Garra desgarradora', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['sabana', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Rabia del monte', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['sabana', 'sabana'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
     ],
   },
   chancho_monte: {
     habs:[
-      { n:'Embestida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Mordida profunda', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['bosque', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
-      { n:'Frenesi', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['bosque', 'bosque'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Garra rapida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Mordida al hueso', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['bosque', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Rabia del monte', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['bosque', 'bosque'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
     ],
   },
   cabro_monte: {
     habs:[
       { n:'Manotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Zarpazo doble', desc:'30 de dano. Durante su modo pega +15.', costo:['montana'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Instinto depredador', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['montana', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Garra desgarradora', desc:'30 de dano. Durante su modo pega +15.', costo:['montana'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Modo cazador', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['montana', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   pizote: {
     habs:[
-      { n:'Zarpazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Cuido de manada', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Refugio', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
+      { n:'Tarascada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Companía', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Querencia', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
   mapache: {
     habs:[
-      { n:'Zarpazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Tarascada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Perseguir', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Vuelta rapida', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   mapache_cangrejero: {
     habs:[
-      { n:'Mordida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['agua'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Empujon', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Acorralar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['agua'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Barrida', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   martilla: {
@@ -133,34 +133,34 @@ export const MOVESETS_GEN = {
     habs:[
       { n:'Embestida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
       { n:'Zarpazo doble', desc:'35 de dano a un enemigo.', costo:['bosque'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:35, obj:'enemigo' }] },
-      { n:'Carga salvaje', desc:'20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
+      { n:'Arremetida', desc:'20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
     ],
   },
   tolomuco: {
     habs:[
       { n:'Manotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Zarpazo doble', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Instinto depredador', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Mordida profunda', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Celo', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   grison: {
     habs:[
       { n:'Mordida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Mordida profunda', desc:'30 de dano. Durante su modo pega +15.', costo:['sabana'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Mordida al hueso', desc:'30 de dano. Durante su modo pega +15.', costo:['sabana'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
       { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['sabana', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   nutria: {
     habs:[
-      { n:'Manotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['agua'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Instinto agudo', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Golpe de hocico', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Delatar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['agua'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Velocidad cegadora', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   comadreja: {
     habs:[
-      { n:'Embestida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Cuido de manada', desc:'Cura 25 a un aliado.', costo:['montana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Garra rapida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Amparo', desc:'Cura 25 a un aliado.', costo:['montana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
       { n:'Refugio', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['montana', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
@@ -173,114 +173,114 @@ export const MOVESETS_GEN = {
   },
   oso_hormiguero: {
     habs:[
-      { n:'Mordida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Zarpazo doble', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Dentellada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Mordida al hueso', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Instinto depredador', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   serafin: {
     habs:[
-      { n:'Mordida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Instinto agudo', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Empujon', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Cercar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Ojo fino', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   armadillo: {
     habs:[
-      { n:'Zarpazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acorazarse', desc:'Gana 30 de defensa destructible.', costo:['sabana'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
-      { n:'Muralla', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['sabana', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
+      { n:'Tarascada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Encogerse', desc:'Gana 30 de defensa destructible.', costo:['sabana'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
+      { n:'Barrera viva', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['sabana', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
     ],
   },
   tepezcuintle: {
     habs:[
       { n:'Mordida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
       { n:'Plantarse', desc:'Gana 30 de defensa destructible.', costo:['bosque'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
-      { n:'Cerrar filas', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
+      { n:'Barrera viva', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
     ],
   },
   guatusa: {
     habs:[
-      { n:'Zarpazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Amparo', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Cuido constante', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
+      { n:'Mordisco', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Acicalar', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Querencia', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
   ardilla: {
     habs:[
-      { n:'Zarpazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acorralar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Mordisco', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Torbellino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   coyote: {
     habs:[
-      { n:'Zarpazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Embestida brutal', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['montana', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
-      { n:'Frenesi', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['montana', 'montana'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Tarascada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Tarascada feroz', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['montana', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Furia ciega', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['montana', 'montana'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
     ],
   },
   zorro_gris: {
     habs:[
-      { n:'Mordida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acorralar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['sabana'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Empujon', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Delatar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['sabana'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   manati: {
   // TODO: kit unico a mano (legendario/mitico) — este es provisional
     habs:[
       { n:'Zarpazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acorazarse', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
+      { n:'Encogerse', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
       { n:'Piel de piedra', desc:'PERMANENTE: gana 40 de defensa destructible; se reaplica sola, no se acumula.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:40, obj:'self', permanente:true }] },
     ],
   },
   delfin: {
     habs:[
       { n:'Embestida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Amparo', desc:'Cura 25 a un aliado.', costo:['agua'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Cuido constante', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
+      { n:'Acicalar', desc:'Cura 25 a un aliado.', costo:['agua'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Refugio', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
   ballena: {
     habs:[
-      { n:'Embestida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Embestida brutal', desc:'35 de dano a un enemigo.', costo:['agua'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:35, obj:'enemigo' }] },
-      { n:'Frenesi', desc:'20 de dano a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:3, clases:['fisico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
+      { n:'Arañazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Carga de peso', desc:'35 de dano a un enemigo.', costo:['agua'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:35, obj:'enemigo' }] },
+      { n:'Estampida', desc:'20 de dano a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:3, clases:['fisico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
     ],
   },
   yiguirro: {
     habs:[
       { n:'Picotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Rastrear', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   lapa: {
   // TODO: kit unico a mano (legendario/mitico) — este es provisional
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Garra certera', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Roce de plumas', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Picotazo perforante', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Sangre en el aire', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   lapa_verde: {
     habs:[
       { n:'Picotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Garra certera', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Instinto depredador', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Picada en picada', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   tucan: {
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Garra en picada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Delatar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Torbellino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   tucan_castano: {
     habs:[
-      { n:'Aletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Tijera de alas', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
       { n:'Acorralar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
       { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
@@ -288,295 +288,295 @@ export const MOVESETS_GEN = {
   cusingo: {
     habs:[
       { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acicalar', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Cuido constante', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
+      { n:'Arrimo', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Refugio', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
   tucancillo: {
     habs:[
-      { n:'Aletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Tijera de alas', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Perseguir', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Torbellino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   pajaro_campana: {
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Garra certera', desc:'30 de dano. Durante su modo pega +15.', costo:['montana'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['montana', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Roce de plumas', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Arrebato de altura', desc:'30 de dano. Durante su modo pega +15.', costo:['montana'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Celo', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['montana', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   oropendola: {
     habs:[
-      { n:'Aletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Golpe de ala', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
       { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Vuelta rapida', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   colibri_fuego: {
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Roce de plumas', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
       { n:'Acicalar', desc:'Cura 25 a un aliado.', costo:['montana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
       { n:'Refugio', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['montana', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
   colibri_talamanca: {
     habs:[
-      { n:'Picotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acicalar', desc:'Cura 25 a un aliado.', costo:['montana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Punzada de pico', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Companía', desc:'Cura 25 a un aliado.', costo:['montana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
       { n:'Aliento vital', desc:'Todo el equipo gana 15 de defensa destructible y cura 15.', costo:['montana', 'montana'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:15, obj:'equipo' }, { t:'curar', v:15, obj:'equipo' }] },
     ],
   },
   ermitano: {
     habs:[
-      { n:'Aletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Tijera de alas', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Cercar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Barrida', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   jacamar: {
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acorralar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Roce de plumas', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Cercar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Barrida', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   momoto: {
     habs:[
-      { n:'Picotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Cuido de manada', desc:'Cura 25 a un aliado.', costo:['sabana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Canto del bosque', desc:'Todo el equipo gana 15 de defensa destructible y cura 15.', costo:['sabana', 'sabana'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:15, obj:'equipo' }, { t:'curar', v:15, obj:'equipo' }] },
+      { n:'Punzada de pico', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Lamer heridas', desc:'Cura 25 a un aliado.', costo:['sabana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Coro del monte', desc:'Todo el equipo gana 15 de defensa destructible y cura 15.', costo:['sabana', 'sabana'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:15, obj:'equipo' }, { t:'curar', v:15, obj:'equipo' }] },
     ],
   },
   tangara_azul: {
     habs:[
       { n:'Picotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Amparo', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Acicalar', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
       { n:'Refugio', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
   tangara_dorada: {
     habs:[
       { n:'Aletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acorralar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['montana'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['montana', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Cercar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['montana'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Vuelta rapida', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['montana', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   bienteveo: {
     habs:[
       { n:'Aletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acicalar', desc:'Cura 25 a un aliado.', costo:['sabana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Refugio', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['sabana', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
+      { n:'Abrigo', desc:'Cura 25 a un aliado.', costo:['sabana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Querencia', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['sabana', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
   garza: {
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['sabana'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Garra en picada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Rastrear', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['sabana'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Vuelta rapida', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   espatula: {
     habs:[
-      { n:'Aletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Garra certera', desc:'30 de dano. Durante su modo pega +15.', costo:['agua'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Tijera de alas', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Torbellino de plumas', desc:'30 de dano. Durante su modo pega +15.', costo:['agua'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Celo', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   jabiru: {
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acicalar', desc:'Cura 25 a un aliado.', costo:['agua'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Aliento vital', desc:'Todo el equipo gana 15 de defensa destructible y cura 15.', costo:['agua', 'agua'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:15, obj:'equipo' }, { t:'curar', v:15, obj:'equipo' }] },
+      { n:'Garra en picada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Arrimo', desc:'Cura 25 a un aliado.', costo:['agua'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Coro del monte', desc:'Todo el equipo gana 15 de defensa destructible y cura 15.', costo:['agua', 'agua'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:15, obj:'equipo' }, { t:'curar', v:15, obj:'equipo' }] },
     ],
   },
   tantalo: {
     habs:[
       { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
       { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['agua'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Velocidad cegadora', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Reflejo puro', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   ibis: {
     habs:[
-      { n:'Picotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Picada en picada', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['agua', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
-      { n:'Frenesi', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['agua', 'agua'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Punzada de pico', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Espolon de garra', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['agua', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Descarga animal', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['agua', 'agua'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
     ],
   },
   pelicano: {
     habs:[
       { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Picotazo perforante', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['agua', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Espolon de garra', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['agua', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
       { n:'Frenesi', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['agua', 'agua'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
     ],
   },
   fragata: {
     habs:[
-      { n:'Picotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Garra certera', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['agua', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
-      { n:'Rabia del monte', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['agua', 'agua'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Picoteo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Picada en picada', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['agua', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Tromba', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['agua', 'agua'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
     ],
   },
   aguila_harpia: {
   // TODO: kit unico a mano (legendario/mitico) — este es provisional
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Picotazo perforante', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Roce de plumas', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Torbellino de plumas', desc:'30 de dano. Durante su modo pega +15.', costo:['bosque'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Sangre en el aire', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   caracara: {
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Garra en picada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
       { n:'Picada en picada', desc:'35 de dano a un enemigo.', costo:['sabana'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:35, obj:'enemigo' }] },
-      { n:'Frenesi', desc:'20 de dano a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['fisico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
+      { n:'Arremetida', desc:'20 de dano a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['fisico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
     ],
   },
   zopilote_negro: {
     habs:[
       { n:'Aletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
       { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['sabana'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   zopilote_rojo: {
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Picada en picada', desc:'35 de dano a un enemigo.', costo:['sabana'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:35, obj:'enemigo' }] },
-      { n:'Carga salvaje', desc:'20 de dano a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['fisico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
+      { n:'Roce de plumas', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Caida en flecha', desc:'35 de dano a un enemigo.', costo:['sabana'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:35, obj:'enemigo' }] },
+      { n:'Arremetida', desc:'20 de dano a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['fisico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
     ],
   },
   lechuza: {
     habs:[
-      { n:'Picotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Picada en picada', desc:'35 de dano a un enemigo.', costo:['bosque'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:35, obj:'enemigo' }] },
-      { n:'Rugido', desc:'20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
+      { n:'Picoteo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Caida en flecha', desc:'35 de dano a un enemigo.', costo:['bosque'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:35, obj:'enemigo' }] },
+      { n:'Bramido', desc:'20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
     ],
   },
   carpintero: {
     habs:[
-      { n:'Picotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acorralar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Picoteo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Delatar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
       { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   saltarin: {
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acicalar', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Refugio', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
+      { n:'Garra en picada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Abrigo', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Cuido constante', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
   trogon: {
     habs:[
-      { n:'Picotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Velocidad cegadora', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Picoteo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Delatar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Sentidos alerta', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   martin_pescador: {
     habs:[
-      { n:'Picotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['agua'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Picoteo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Acorralar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['agua'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Vuelta rapida', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   anhinga: {
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Picada en picada', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['agua', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
-      { n:'Frenesi', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['agua', 'agua'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Roce de plumas', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Garra certera', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['agua', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Rabia del monte', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['agua', 'agua'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
     ],
   },
   tinamu: {
     habs:[
-      { n:'Picotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Picoteo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
       { n:'Acorralar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Instinto agudo', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Reflejo puro', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['bosque', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   chachalaca: {
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Garra certera', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['bosque', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
-      { n:'Rabia del monte', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['bosque', 'bosque'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Garra en picada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Arrebato de altura', desc:'40 de dano y el enemigo pierde 1 energia al azar.', costo:['bosque', 'comodin'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:40, obj:'enemigo' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Furia ciega', desc:'20 de dano a TODOS los enemigos y quema 1 energia.', costo:['bosque', 'bosque'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }, { t:'quemarEnergia', n:1, obj:'enemigo' }] },
     ],
   },
   loro: {
     habs:[
       { n:'Aletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Delatar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Vuelta rapida', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   rana_verdinegra: {
     habs:[
-      { n:'Secrecion', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
+      { n:'Espina ponzoñosa', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
       { n:'Veneno espeso', desc:'25 de toxina por turno durante 2 turnos.', costo:['bosque'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
       { n:'Brote venenoso', desc:'20 de toxina a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
     ],
   },
   rana_cristal: {
     habs:[
-      { n:'Salto certero', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Amparo', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Refugio', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
+      { n:'Brinco corto', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Acicalar', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Nido seguro', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
   rana_lechera: {
     habs:[
-      { n:'Golpe de lengua', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Cuido de manada', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Cuido constante', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
+      { n:'Zarpa humeda', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Amparo', desc:'Cura 25 a un aliado.', costo:['bosque'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Madriguera', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
   rana_tungara: {
     habs:[
-      { n:'Embestida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Cuido de manada', desc:'Cura 25 a un aliado.', costo:['sabana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Refugio', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['sabana', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
+      { n:'Zarpa humeda', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Abrigo', desc:'Cura 25 a un aliado.', costo:['sabana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Cuido constante', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['sabana', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
   rana_gladiadora: {
     habs:[
-      { n:'Golpe de lengua', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Zarpa humeda', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Perseguir', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Torbellino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   rana_payaso: {
     habs:[
-      { n:'Toxina', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
-      { n:'Veneno espeso', desc:'25 de toxina por turno durante 2 turnos.', costo:['bosque'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
-      { n:'Brote venenoso', desc:'20 de toxina a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
+      { n:'Baba acida', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
+      { n:'Toxina densa', desc:'25 de toxina por turno durante 2 turnos.', costo:['bosque'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
+      { n:'Rocio negro', desc:'20 de toxina a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
     ],
   },
   sapo_marino: {
     habs:[
       { n:'Picadura toxica', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
       { n:'Veneno espeso', desc:'25 de toxina por turno durante 2 turnos.', costo:['sabana'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
-      { n:'Brote venenoso', desc:'20 de toxina a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
+      { n:'Bruma acida', desc:'20 de toxina a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
     ],
   },
   sapo_dorado: {
   // TODO: kit unico a mano (legendario/mitico) — este es provisional
     habs:[
-      { n:'Toxina', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
-      { n:'Sangria', desc:'25 de toxina y le ROBA 1 energia al enemigo.', costo:['montana'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:25, obj:'enemigo', toxina:true }, { t:'robarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Baba acida', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
+      { n:'Drenar', desc:'25 de toxina y le ROBA 1 energia al enemigo.', costo:['montana'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:25, obj:'enemigo', toxina:true }, { t:'robarEnergia', n:1, obj:'enemigo' }] },
       { n:'Toxina persistente', desc:'15 de dano y PERMANENTE: ese enemigo recibe +5 de dano el resto del combate. Acumulable.', costo:['montana', 'comodin'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'marcaPermanente', v:5, obj:'enemigo' }] },
     ],
   },
   salamandra: {
     habs:[
-      { n:'Embestida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acicalar', desc:'Cura 25 a un aliado.', costo:['montana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Refugio', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['montana', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
+      { n:'Zarpa humeda', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Companía', desc:'Cura 25 a un aliado.', costo:['montana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Nido seguro', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['montana', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
   garrobo: {
     habs:[
-      { n:'Mordida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Enroscada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
       { n:'Erizarse', desc:'CONTRAATAQUE: 2 turnos, quien lo ataque recibe 25 de dano.', costo:['sabana'], recarga:3, clases:['fisico', 'unico', 'control'], efectos:[{ t:'contraataque', v:25, obj:'self' }] },
       { n:'Represalia total', desc:'20 de dano a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:4, clases:['fisico', 'rango', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
     ],
@@ -585,270 +585,270 @@ export const MOVESETS_GEN = {
     habs:[
       { n:'Mordida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
       { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['agua'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Barrida', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   anolis: {
     habs:[
       { n:'Coletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Guardia con puas', desc:'CONTRAATAQUE: 2 turnos, quien lo ataque recibe 25 de dano.', costo:['bosque'], recarga:3, clases:['fisico', 'unico', 'control'], efectos:[{ t:'contraataque', v:25, obj:'self' }] },
-      { n:'Represalia total', desc:'20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:4, clases:['fisico', 'rango', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
+      { n:'Ponerse tieso', desc:'CONTRAATAQUE: 2 turnos, quien lo ataque recibe 25 de dano.', costo:['bosque'], recarga:3, clases:['fisico', 'unico', 'control'], efectos:[{ t:'contraataque', v:25, obj:'self' }] },
+      { n:'Devolver el golpe', desc:'20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:4, clases:['fisico', 'rango', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
     ],
   },
   geco: {
     habs:[
-      { n:'Tarascada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Mordisco seco', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Acorralar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Torbellino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   caiman: {
     habs:[
-      { n:'Coletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Mordida de presa', desc:'30 de dano. Durante su modo pega +15.', costo:['agua'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Latigazo de cola', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Fauces de acero', desc:'30 de dano. Durante su modo pega +15.', costo:['agua'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Celo', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   boa: {
     habs:[
       { n:'Toxina', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
-      { n:'Sangria', desc:'25 de toxina y le ROBA 1 energia al enemigo.', costo:['bosque'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:25, obj:'enemigo', toxina:true }, { t:'robarEnergia', n:1, obj:'enemigo' }] },
-      { n:'Toxina persistente', desc:'15 de dano y PERMANENTE: ese enemigo recibe +5 de dano el resto del combate. Acumulable.', costo:['bosque', 'comodin'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'marcaPermanente', v:5, obj:'enemigo' }] },
+      { n:'Chupar savia', desc:'25 de toxina y le ROBA 1 energia al enemigo.', costo:['bosque'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:25, obj:'enemigo', toxina:true }, { t:'robarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Sello ponzoñoso', desc:'15 de dano y PERMANENTE: ese enemigo recibe +5 de dano el resto del combate. Acumulable.', costo:['bosque', 'comodin'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'marcaPermanente', v:5, obj:'enemigo' }] },
     ],
   },
   bocaraca: {
     habs:[
-      { n:'Picadura toxica', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
-      { n:'Ponzona', desc:'25 de toxina por turno durante 2 turnos.', costo:['bosque'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
+      { n:'Roce toxico', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
+      { n:'Toxina densa', desc:'25 de toxina por turno durante 2 turnos.', costo:['bosque'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
       { n:'Brote venenoso', desc:'20 de toxina a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
     ],
   },
   lora: {
     habs:[
       { n:'Picadura toxica', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
-      { n:'Ponzona', desc:'25 de toxina por turno durante 2 turnos.', costo:['montana'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
-      { n:'Nube toxica', desc:'20 de toxina a TODOS los enemigos.', costo:['montana', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
+      { n:'Veneno espeso', desc:'25 de toxina por turno durante 2 turnos.', costo:['montana'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
+      { n:'Miasma', desc:'20 de toxina a TODOS los enemigos.', costo:['montana', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
     ],
   },
   cascabel: {
     habs:[
-      { n:'Picadura toxica', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
-      { n:'Ponzona', desc:'25 de toxina por turno durante 2 turnos.', costo:['sabana'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
-      { n:'Brote venenoso', desc:'20 de toxina a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
+      { n:'Roce toxico', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
+      { n:'Ponzoña', desc:'25 de toxina por turno durante 2 turnos.', costo:['sabana'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
+      { n:'Miasma', desc:'20 de toxina a TODOS los enemigos.', costo:['sabana', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
     ],
   },
   matabuey: {
     habs:[
       { n:'Toxina', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
-      { n:'Drenar', desc:'25 de toxina y le ROBA 1 energia al enemigo.', costo:['bosque'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:25, obj:'enemigo', toxina:true }, { t:'robarEnergia', n:1, obj:'enemigo' }] },
-      { n:'Toxina persistente', desc:'15 de dano y PERMANENTE: ese enemigo recibe +5 de dano el resto del combate. Acumulable.', costo:['bosque', 'comodin'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'marcaPermanente', v:5, obj:'enemigo' }] },
+      { n:'Succion', desc:'25 de toxina y le ROBA 1 energia al enemigo.', costo:['bosque'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:25, obj:'enemigo', toxina:true }, { t:'robarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Sello ponzoñoso', desc:'15 de dano y PERMANENTE: ese enemigo recibe +5 de dano el resto del combate. Acumulable.', costo:['bosque', 'comodin'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'marcaPermanente', v:5, obj:'enemigo' }] },
     ],
   },
   coral: {
     habs:[
       { n:'Picadura toxica', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
       { n:'Drenar', desc:'25 de toxina y le ROBA 1 energia al enemigo.', costo:['bosque'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:25, obj:'enemigo', toxina:true }, { t:'robarEnergia', n:1, obj:'enemigo' }] },
-      { n:'Marca letal', desc:'15 de dano y PERMANENTE: ese enemigo recibe +5 de dano el resto del combate. Acumulable.', costo:['bosque', 'comodin'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'marcaPermanente', v:5, obj:'enemigo' }] },
+      { n:'Herida abierta', desc:'15 de dano y PERMANENTE: ese enemigo recibe +5 de dano el resto del combate. Acumulable.', costo:['bosque', 'comodin'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'marcaPermanente', v:5, obj:'enemigo' }] },
     ],
   },
   serpiente_mar: {
     habs:[
       { n:'Toxina', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
-      { n:'Ponzona', desc:'25 de toxina por turno durante 2 turnos.', costo:['agua'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
-      { n:'Brote venenoso', desc:'20 de toxina a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
+      { n:'Ponzoña', desc:'25 de toxina por turno durante 2 turnos.', costo:['agua'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
+      { n:'Bruma acida', desc:'20 de toxina a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
     ],
   },
   mica: {
     habs:[
       { n:'Picadura toxica', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
-      { n:'Ponzona', desc:'25 de toxina por turno durante 2 turnos.', costo:['bosque'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
-      { n:'Brote venenoso', desc:'20 de toxina a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
+      { n:'Emponzoñar', desc:'25 de toxina por turno durante 2 turnos.', costo:['bosque'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
+      { n:'Miasma', desc:'20 de toxina a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
     ],
   },
   bejuquilla: {
-    habs:[
-      { n:'Picadura toxica', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
-      { n:'Ponzona', desc:'25 de toxina por turno durante 2 turnos.', costo:['bosque'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
-      { n:'Brote venenoso', desc:'20 de toxina a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
-    ],
-  },
-  tortuga_baula: {
-    habs:[
-      { n:'Tarascada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Plantarse', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
-      { n:'Muralla', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
-    ],
-  },
-  tortuga_carey: {
-    habs:[
-      { n:'Coletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Plantarse', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
-      { n:'Muralla', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
-    ],
-  },
-  tortuga_lora: {
-    habs:[
-      { n:'Coletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Plantarse', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
-      { n:'Muralla', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
-    ],
-  },
-  tortuga_cabezona: {
-    habs:[
-      { n:'Mordida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Plantarse', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
-      { n:'Muralla', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
-    ],
-  },
-  jicotea: {
-    habs:[
-      { n:'Coletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Atrincherarse', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
-      { n:'Muralla', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
-    ],
-  },
-  tiburon_martillo: {
-    habs:[
-      { n:'Tenaza', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Picadura profunda', desc:'30 de dano. Durante su modo pega +15.', costo:['agua'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
-    ],
-  },
-  tiburon_ballena: {
-  // TODO: kit unico a mano (legendario/mitico) — este es provisional
-    habs:[
-      { n:'Embate', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Atrincherarse', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
-      { n:'Coraza ancestral', desc:'PERMANENTE: gana 40 de defensa destructible; se reaplica sola, no se acumula.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:40, obj:'self', permanente:true }] },
-    ],
-  },
-  pez_vela: {
-    habs:[
-      { n:'Embate', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Embate de cardumen', desc:'30 de dano. Durante su modo pega +15.', costo:['agua'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Instinto depredador', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
-    ],
-  },
-  marlin: {
-    habs:[
-      { n:'Tenaza', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Tenaza aplastante', desc:'30 de dano. Durante su modo pega +15.', costo:['agua'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
-    ],
-  },
-  mantarraya: {
-    habs:[
-      { n:'Tenaza', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acicalar', desc:'Cura 25 a un aliado.', costo:['agua'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Canto del bosque', desc:'Todo el equipo gana 15 de defensa destructible y cura 15.', costo:['agua', 'agua'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:15, obj:'equipo' }, { t:'curar', v:15, obj:'equipo' }] },
-    ],
-  },
-  mariposa: {
-    habs:[
-      { n:'Picadura', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
-    ],
-  },
-  mariposa_buho: {
-    habs:[
-      { n:'Coletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
-    ],
-  },
-  mariposa_julia: {
-    habs:[
-      { n:'Embate', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
-    ],
-  },
-  hormiga_bala: {
-    habs:[
-      { n:'Secrecion', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
-      { n:'Ponzona', desc:'25 de toxina por turno durante 2 turnos.', costo:['bosque'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
-      { n:'Nube toxica', desc:'20 de toxina a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
-    ],
-  },
-  escarabajo: {
-    habs:[
-      { n:'Coletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Guardia con puas', desc:'CONTRAATAQUE: 2 turnos, quien lo ataque recibe 25 de dano.', costo:['bosque'], recarga:3, clases:['fisico', 'unico', 'control'], efectos:[{ t:'contraataque', v:25, obj:'self' }] },
-      { n:'Lluvia de puas', desc:'20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:4, clases:['fisico', 'rango', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
-    ],
-  },
-  cangrejo: {
-    habs:[
-      { n:'Tenaza', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Erizarse', desc:'CONTRAATAQUE: 2 turnos, quien lo ataque recibe 25 de dano.', costo:['agua'], recarga:3, clases:['fisico', 'unico', 'control'], efectos:[{ t:'contraataque', v:25, obj:'self' }] },
-      { n:'Represalia total', desc:'20 de dano a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:4, clases:['fisico', 'rango', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
-    ],
-  },
-  tiburon: {
-    habs:[
-      { n:'Coletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Tenaza aplastante', desc:'35 de dano a un enemigo.', costo:['agua'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:35, obj:'enemigo' }] },
-      { n:'Rugido', desc:'20 de dano a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:3, clases:['fisico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
-    ],
-  },
-  quetzaldorado: {
-  // TODO: kit unico a mano (legendario/mitico) — este es provisional
-    habs:[
-      { n:'Picotazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Cuido de manada', desc:'Cura 25 a un aliado.', costo:['montana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Aliento vital', desc:'Todo el equipo gana 15 de defensa destructible y cura 15.', costo:['montana', 'montana'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:15, obj:'equipo' }, { t:'curar', v:15, obj:'equipo' }] },
-    ],
-  },
-  tarantula: {
     habs:[
       { n:'Picadura toxica', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
       { n:'Veneno espeso', desc:'25 de toxina por turno durante 2 turnos.', costo:['bosque'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
       { n:'Brote venenoso', desc:'20 de toxina a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
     ],
   },
+  tortuga_baula: {
+    habs:[
+      { n:'Coletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Plantarse', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
+      { n:'Cerrar filas', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
+    ],
+  },
+  tortuga_carey: {
+    habs:[
+      { n:'Latigazo de cola', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Plantarse', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
+      { n:'Parapeto', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
+    ],
+  },
+  tortuga_lora: {
+    habs:[
+      { n:'Tarascada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Aguantar', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
+      { n:'Cerrar filas', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
+    ],
+  },
+  tortuga_cabezona: {
+    habs:[
+      { n:'Golpe de escamas', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Aguantar', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
+      { n:'Parapeto', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
+    ],
+  },
+  jicotea: {
+    habs:[
+      { n:'Tarascada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Atrincherarse', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
+      { n:'Muralla', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
+    ],
+  },
+  tiburon_martillo: {
+    habs:[
+      { n:'Pinza rapida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Remolino de agua', desc:'30 de dano. Durante su modo pega +15.', costo:['agua'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Instinto depredador', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+    ],
+  },
+  tiburon_ballena: {
+  // TODO: kit unico a mano (legendario/mitico) — este es provisional
+    habs:[
+      { n:'Embate', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Hacerse bola', desc:'Gana 30 de defensa destructible.', costo:['agua'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
+      { n:'Caparazon eterno', desc:'PERMANENTE: gana 40 de defensa destructible; se reaplica sola, no se acumula.', costo:['agua', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:40, obj:'self', permanente:true }] },
+    ],
+  },
+  pez_vela: {
+    habs:[
+      { n:'Cabezazo de agua', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Pinza trituradora', desc:'30 de dano. Durante su modo pega +15.', costo:['agua'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Celo', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+    ],
+  },
+  marlin: {
+    habs:[
+      { n:'Pinza rapida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Tenaza aplastante', desc:'30 de dano. Durante su modo pega +15.', costo:['agua'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Modo cazador', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['agua', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+    ],
+  },
+  mantarraya: {
+    habs:[
+      { n:'Pinza rapida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Amparo', desc:'Cura 25 a un aliado.', costo:['agua'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Aliento vital', desc:'Todo el equipo gana 15 de defensa destructible y cura 15.', costo:['agua', 'agua'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:15, obj:'equipo' }, { t:'curar', v:15, obj:'equipo' }] },
+    ],
+  },
+  mariposa: {
+    habs:[
+      { n:'Golpe de caparazon', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Acorralar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Torbellino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+    ],
+  },
+  mariposa_buho: {
+    habs:[
+      { n:'Coletazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Perseguir', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Torbellino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+    ],
+  },
+  mariposa_julia: {
+    habs:[
+      { n:'Cabezazo de agua', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+    ],
+  },
+  hormiga_bala: {
+    habs:[
+      { n:'Secrecion', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
+      { n:'Toxina densa', desc:'25 de toxina por turno durante 2 turnos.', costo:['bosque'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
+      { n:'Bruma acida', desc:'20 de toxina a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
+    ],
+  },
+  escarabajo: {
+    habs:[
+      { n:'Aguijonazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Ponerse tieso', desc:'CONTRAATAQUE: 2 turnos, quien lo ataque recibe 25 de dano.', costo:['bosque'], recarga:3, clases:['fisico', 'unico', 'control'], efectos:[{ t:'contraataque', v:25, obj:'self' }] },
+      { n:'Andanada de espinas', desc:'20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:4, clases:['fisico', 'rango', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
+    ],
+  },
+  cangrejo: {
+    habs:[
+      { n:'Tenaza', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Espinas al aire', desc:'CONTRAATAQUE: 2 turnos, quien lo ataque recibe 25 de dano.', costo:['agua'], recarga:3, clases:['fisico', 'unico', 'control'], efectos:[{ t:'contraataque', v:25, obj:'self' }] },
+      { n:'Represalia total', desc:'20 de dano a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:4, clases:['fisico', 'rango', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
+    ],
+  },
+  tiburon: {
+    habs:[
+      { n:'Aguijonazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Picadura profunda', desc:'35 de dano a un enemigo.', costo:['agua'], recarga:1, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:35, obj:'enemigo' }] },
+      { n:'Carga salvaje', desc:'20 de dano a TODOS los enemigos.', costo:['agua', 'comodin'], recarga:3, clases:['fisico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
+    ],
+  },
+  quetzaldorado: {
+  // TODO: kit unico a mano (legendario/mitico) — este es provisional
+    habs:[
+      { n:'Picoteo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Arrimo', desc:'Cura 25 a un aliado.', costo:['montana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Aliento vital', desc:'Todo el equipo gana 15 de defensa destructible y cura 15.', costo:['montana', 'montana'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:15, obj:'equipo' }, { t:'curar', v:15, obj:'equipo' }] },
+    ],
+  },
+  tarantula: {
+    habs:[
+      { n:'Roce toxico', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
+      { n:'Toxina densa', desc:'25 de toxina por turno durante 2 turnos.', costo:['bosque'], recarga:1, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:25, turnos:2, obj:'enemigo' }] },
+      { n:'Miasma', desc:'20 de toxina a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos', toxina:true }] },
+    ],
+  },
   perro: {
     habs:[
-      { n:'Mordida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Plantarse', desc:'Gana 30 de defensa destructible.', costo:['bosque'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
-      { n:'Cerrar filas', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
+      { n:'Dentellada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Aguantar', desc:'Gana 30 de defensa destructible.', costo:['bosque'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
+      { n:'Escudo de manada', desc:'Todo el equipo gana 20 de defensa destructible.', costo:['bosque', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:20, obj:'equipo' }] },
     ],
   },
   gato: {
     habs:[
-      { n:'Embestida', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Remolino', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
+      { n:'Arañazo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Hostigar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['bosque'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Giro defensivo', desc:'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.', costo:['bosque', 'comodin'], recarga:3, clases:['fisico', 'unico', 'instant'], efectos:[{ t:'invulnerable', turnos:1, obj:'self' }, { t:'dano', v:20, obj:'todos' }] },
     ],
   },
   comemaiz: {
     habs:[
-      { n:'Rasguño en vuelo', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acicalar', desc:'Cura 25 a un aliado.', costo:['sabana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
-      { n:'Cuido constante', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['sabana', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
+      { n:'Roce de plumas', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Amparo', desc:'Cura 25 a un aliado.', costo:['sabana'], recarga:1, clases:['natural', 'instant'], efectos:[{ t:'curar', v:25, obj:'aliado' }] },
+      { n:'Nido seguro', desc:'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.', costo:['sabana', 'comodin'], recarga:4, clases:['natural', 'sostenido'], efectos:[{ t:'curarTurnos', v:10, turnos:3, obj:'aliado' }, { t:'limpiar', obj:'aliado' }] },
     ],
   },
   f_segua: {
   // TODO: kit unico a mano (legendario/mitico) — este es provisional
     habs:[
-      { n:'Zarpazo espectral', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Acorralar', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['montana'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
-      { n:'Velocidad cegadora', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['montana', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Susurro', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Marcar presa', desc:'15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.', costo:['montana'], recarga:1, clases:['instinto', 'rango', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'exponer', turnos:3, obj:'enemigo' }] },
+      { n:'Reflejo puro', desc:'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.', costo:['montana', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   f_cadejos: {
   // TODO: kit unico a mano (legendario/mitico) — este es provisional
     habs:[
-      { n:'Zarpazo espectral', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Garra de la noche', desc:'30 de dano. Durante su modo pega +15.', costo:['montana'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
-      { n:'Instinto depredador', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['montana', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
+      { n:'Golpe de sombra', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Embate espectral', desc:'30 de dano. Durante su modo pega +15.', costo:['montana'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:30, obj:'enemigo' }] },
+      { n:'Furia ancestral', desc:'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.', costo:['montana', 'comodin'], recarga:4, clases:['instinto', 'unico', 'instant'], efectos:[{ t:'modo', turnos:4 }, { t:'reducir', v:15, turnos:4, obj:'self' }] },
     ],
   },
   f_llorona: {
   // TODO: kit unico a mano (legendario/mitico) — este es provisional
     habs:[
-      { n:'Toxina', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
-      { n:'Drenar', desc:'25 de toxina y le ROBA 1 energia al enemigo.', costo:['montana'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:25, obj:'enemigo', toxina:true }, { t:'robarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Baba acida', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
+      { n:'Succion', desc:'25 de toxina y le ROBA 1 energia al enemigo.', costo:['montana'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:25, obj:'enemigo', toxina:true }, { t:'robarEnergia', n:1, obj:'enemigo' }] },
       { n:'Marca letal', desc:'15 de dano y PERMANENTE: ese enemigo recibe +5 de dano el resto del combate. Acumulable.', costo:['montana', 'comodin'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'marcaPermanente', v:5, obj:'enemigo' }] },
     ],
   },
@@ -856,14 +856,14 @@ export const MOVESETS_GEN = {
   // TODO: kit unico a mano (legendario/mitico) — este es provisional
     habs:[
       { n:'Picadura toxica', desc:'15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.', costo:['comodin'], recarga:0, clases:['toxina', 'sostenido'], efectos:[{ t:'danoTurnos', v:15, turnos:2, obj:'enemigo' }] },
-      { n:'Sangria', desc:'25 de toxina y le ROBA 1 energia al enemigo.', costo:['montana'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:25, obj:'enemigo', toxina:true }, { t:'robarEnergia', n:1, obj:'enemigo' }] },
-      { n:'Marca letal', desc:'15 de dano y PERMANENTE: ese enemigo recibe +5 de dano el resto del combate. Acumulable.', costo:['montana', 'comodin'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'marcaPermanente', v:5, obj:'enemigo' }] },
+      { n:'Drenar', desc:'25 de toxina y le ROBA 1 energia al enemigo.', costo:['montana'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:25, obj:'enemigo', toxina:true }, { t:'robarEnergia', n:1, obj:'enemigo' }] },
+      { n:'Herida abierta', desc:'15 de dano y PERMANENTE: ese enemigo recibe +5 de dano el resto del combate. Acumulable.', costo:['montana', 'comodin'], recarga:1, clases:['toxina', 'unico', 'instant'], efectos:[{ t:'dano', v:15, obj:'enemigo' }, { t:'marcaPermanente', v:5, obj:'enemigo' }] },
     ],
   },
   f_padre: {
   // TODO: kit unico a mano (legendario/mitico) — este es provisional
     habs:[
-      { n:'Lamento', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Caricia helada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
       { n:'Plantarse', desc:'Gana 30 de defensa destructible.', costo:['montana'], recarga:3, clases:['natural', 'instant'], efectos:[{ t:'defensa', v:30, obj:'self' }] },
       { n:'Coraza ancestral', desc:'PERMANENTE: gana 40 de defensa destructible; se reaplica sola, no se acumula.', costo:['montana', 'comodin'], recarga:4, clases:['natural', 'unico', 'instant'], efectos:[{ t:'defensa', v:40, obj:'self', permanente:true }] },
     ],
@@ -871,9 +871,9 @@ export const MOVESETS_GEN = {
   f_carreta: {
   // TODO: kit unico a mano (legendario/mitico) — este es provisional
     habs:[
-      { n:'Lamento', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
-      { n:'Erizarse', desc:'CONTRAATAQUE: 2 turnos, quien lo ataque recibe 25 de dano.', costo:['montana'], recarga:3, clases:['fisico', 'unico', 'control'], efectos:[{ t:'contraataque', v:25, obj:'self' }] },
-      { n:'Lluvia de puas', desc:'20 de dano a TODOS los enemigos.', costo:['montana', 'comodin'], recarga:4, clases:['fisico', 'rango', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
+      { n:'Caricia helada', desc:'20 de dano a un enemigo.', costo:['comodin'], recarga:0, clases:['fisico', 'melee', 'instant'], efectos:[{ t:'dano', v:20, obj:'enemigo' }] },
+      { n:'Espinas al aire', desc:'CONTRAATAQUE: 2 turnos, quien lo ataque recibe 25 de dano.', costo:['montana'], recarga:3, clases:['fisico', 'unico', 'control'], efectos:[{ t:'contraataque', v:25, obj:'self' }] },
+      { n:'Andanada de espinas', desc:'20 de dano a TODOS los enemigos.', costo:['montana', 'comodin'], recarga:4, clases:['fisico', 'rango', 'instant'], efectos:[{ t:'dano', v:20, obj:'todos' }] },
     ],
   },
 };

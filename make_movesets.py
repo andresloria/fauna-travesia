@@ -67,24 +67,38 @@ def pick(key, salt, opciones):
     return opciones[h % len(opciones)]
 
 # ---------- vocabulario por categoria ----------
+# Listas largas a proposito: `pick()` es determinista por animal, asi que a mas
+# opciones, menos animales comparten el mismo nombre de habilidad.
 V = {
- 'mam': {'basico':['Zarpazo','Mordida','Embestida','Manotazo'],
-         'fuerte':['Mordida profunda','Embestida brutal','Zarpazo doble','Tarascada'],
+ 'mam': {'basico':['Zarpazo','Mordida','Embestida','Manotazo','Tarascada','Dentellada',
+                   'Garra rapida','Golpe de hocico','Mordisco','Empujon','Arañazo','Cabezazo'],
+         'fuerte':['Mordida profunda','Embestida brutal','Zarpazo doble','Tarascada feroz',
+                   'Mordida al hueso','Carga de peso','Garra desgarradora','Salto sobre la presa',
+                   'Sacudida mortal','Golpe de lomo'],
          'esquiva':'Se escabulle entre la maleza'},
- 'ave': {'basico':['Picotazo','Rasguño en vuelo','Aletazo'],
-         'fuerte':['Picada en picada','Garra certera','Picotazo perforante'],
+ 'ave': {'basico':['Picotazo','Rasguño en vuelo','Aletazo','Picoteo','Garra en picada',
+                   'Golpe de ala','Punzada de pico','Roce de plumas','Tijera de alas'],
+         'fuerte':['Picada en picada','Garra certera','Picotazo perforante','Caida en flecha',
+                   'Vuelo rasante','Espolon de garra','Torbellino de plumas','Arrebato de altura'],
          'esquiva':'Alza vuelo y esquiva'},
- 'rep': {'basico':['Mordida','Coletazo','Tarascada'],
-         'fuerte':['Mordida de presa','Constriccion','Coletazo brutal'],
+ 'rep': {'basico':['Mordida','Coletazo','Tarascada','Latigazo de cola','Mordisco seco',
+                   'Golpe de escamas','Enroscada','Chasquido de fauces'],
+         'fuerte':['Mordida de presa','Constriccion','Coletazo brutal','Fauces de acero',
+                   'Abrazo mortal','Giro de la muerte','Mordida trabada','Azote de cola'],
          'esquiva':'Se camufla y esquiva'},
- 'anf': {'basico':['Golpe de lengua','Salto certero','Embestida'],
-         'fuerte':['Salto aplastante','Lengua latigo','Golpe doble'],
+ 'anf': {'basico':['Golpe de lengua','Salto certero','Embestida','Lenguetazo','Brinco corto',
+                   'Zarpa humeda','Coletazo de renacuajo'],
+         'fuerte':['Salto aplastante','Lengua latigo','Golpe doble','Salto desde el dosel',
+                   'Lenguetazo veloz','Caida de peso'],
          'esquiva':'Salta fuera de alcance'},
- 'mar': {'basico':['Tenaza','Coletazo','Picadura','Embate'],
-         'fuerte':['Tenaza aplastante','Embate de cardumen','Picadura profunda'],
+ 'mar': {'basico':['Tenaza','Coletazo','Picadura','Embate','Pinza rapida','Aguijonazo',
+                   'Golpe de caparazon','Cabezazo de agua'],
+         'fuerte':['Tenaza aplastante','Embate de cardumen','Picadura profunda','Pinza trituradora',
+                   'Remolino de agua','Aguijon hundido','Golpe de marea'],
          'esquiva':'Se pierde en el agua'},
- 'folk': {'basico':['Zarpazo espectral','Lamento','Golpe de sombra'],
-          'fuerte':['Garra de la noche','Aullido desgarrador','Embate espectral'],
+ 'folk': {'basico':['Zarpazo espectral','Lamento','Golpe de sombra','Caricia helada','Susurro'],
+          'fuerte':['Garra de la noche','Aullido desgarrador','Embate espectral','Grito de ultratumba',
+                    'Abrazo de niebla'],
           'esquiva':'Se desvanece en la niebla'},
 }
 
@@ -127,14 +141,14 @@ def kit_rage(key, bio, cat, rareza):
     if rareza == 'comun':
         nv4 = {'n': f, 'desc': '35 de dano a un enemigo.',
                'costo': [bio], 'recarga': 1, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(35)]}
-        nv8 = {'n': pick(key,'u',['Rugido','Frenesi','Carga salvaje']),
+        nv8 = {'n': pick(key,'u',['Rugido','Frenesi','Carga salvaje','Estampida','Berrinche','Arremetida','Bramido']),
                'desc': '20 de dano a TODOS los enemigos.',
                'costo': [bio,'comodin'], 'recarga': 3, 'clases': ['fisico','instant'], 'efectos': [area(20)]}
     elif rareza == 'raro':
         nv4 = {'n': f, 'desc': '40 de dano y el enemigo pierde 1 energia al azar.',
                'costo': [bio,'comodin'], 'recarga': 1, 'clases': ['fisico','melee','instant'],
                'efectos': [dmg(40), quemar(1)]}
-        nv8 = {'n': pick(key,'u',['Frenesi','Rabia del monte']),
+        nv8 = {'n': pick(key,'u',['Frenesi','Rabia del monte','Furia ciega','Descarga animal','Tromba']),
                'desc': '20 de dano a TODOS los enemigos y quema 1 energia.',
                'costo': [bio,bio], 'recarga': 3, 'clases': ['fisico','unico','instant'],
                'efectos': [area(20), quemar(1)]}
@@ -142,7 +156,7 @@ def kit_rage(key, bio, cat, rareza):
         nv4 = {'n': f, 'desc': '30 de dano. Durante su modo pega +15.',
                'costo': [bio], 'recarga': 0, 'clases': ['fisico','melee','instant'],
                'efectos': [dmg(30)], 'enModo': [dmg(45)]}
-        nv8 = {'n': pick(key,'u',['Instinto depredador','Furia ancestral']),
+        nv8 = {'n': pick(key,'u',['Instinto depredador','Furia ancestral','Sangre en el aire','Modo cazador','Celo']),
                'desc': 'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.',
                'costo': [bio,'comodin'], 'recarga': 4, 'clases': ['instinto','unico','instant'],
                'efectos': [modo(4), reduc(15,4)]}
@@ -152,17 +166,17 @@ def kit_first(key, bio, cat, rareza):
     b = pick(key, 'b', V[cat]['basico'])
     nv1 = {'n': b, 'desc': '20 de dano a un enemigo.',
            'costo': ['comodin'], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(20)]}
-    nv4 = {'n': pick(key,'m',['Marcar presa','Acorralar','Hostigar']),
+    nv4 = {'n': pick(key,'m',['Marcar presa','Acorralar','Hostigar','Rastrear','Cercar','Delatar','Perseguir']),
            'desc': '15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.',
            'costo': [bio], 'recarga': 1, 'clases': ['instinto','rango','instant'],
            'efectos': [dmg(15), exponer(3)]}
     if rareza in ('comun','raro'):
-        nv8 = {'n': pick(key,'u',['Remolino','Giro defensivo']),
+        nv8 = {'n': pick(key,'u',['Remolino','Giro defensivo','Torbellino','Barrida','Vuelta rapida']),
                'desc': 'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.',
                'costo': [bio,'comodin'], 'recarga': 3, 'clases': ['fisico','unico','instant'],
                'efectos': [invul(1), area(20)]}
     else:
-        nv8 = {'n': pick(key,'u',['Velocidad cegadora','Instinto agudo']),
+        nv8 = {'n': pick(key,'u',['Velocidad cegadora','Instinto agudo','Sentidos alerta','Reflejo puro','Ojo fino']),
                'desc': 'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.',
                'costo': [bio,'comodin'], 'recarga': 4, 'clases': ['instinto','unico','instant'],
                'efectos': [modo(4), reduc(15,4)]}
@@ -172,39 +186,39 @@ def kit_heal(key, bio, cat, rareza):
     b = pick(key, 'b', V[cat]['basico'])
     nv1 = {'n': b, 'desc': '20 de dano a un enemigo.',
            'costo': ['comodin'], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(20)]}
-    nv4 = {'n': pick(key,'m',['Cuido de manada','Acicalar','Amparo']),
+    nv4 = {'n': pick(key,'m',['Cuido de manada','Acicalar','Amparo','Lamer heridas','Abrigo','Companía','Arrimo']),
            'desc': 'Cura 25 a un aliado.',
            'costo': [bio], 'recarga': 1, 'clases': ['natural','instant'], 'efectos': [cura(25)]}
     if rareza in ('comun','raro'):
-        nv8 = {'n': pick(key,'u',['Refugio','Cuido constante']),
+        nv8 = {'n': pick(key,'u',['Refugio','Cuido constante','Nido seguro','Querencia','Madriguera']),
                'desc': 'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.',
                'costo': [bio,'comodin'], 'recarga': 4, 'clases': ['natural','sostenido'],
                'efectos': [{'t':'curarTurnos','v':10,'turnos':3,'obj':'aliado'}, limpiar()]}
     else:
-        nv8 = {'n': pick(key,'u',['Canto del bosque','Aliento vital']),
+        nv8 = {'n': pick(key,'u',['Canto del bosque','Aliento vital','Savia nueva','Coro del monte','Brote']),
                'desc': 'Todo el equipo gana 15 de defensa destructible y cura 15.',
                'costo': [bio,bio], 'recarga': 4, 'clases': ['natural','unico','instant'],
                'efectos': [defen(15,'equipo'), cura(15,'equipo')]}
     return nv1, nv4, nv8
 
 def kit_poison(key, bio, cat, rareza):
-    nv1 = {'n': pick(key,'b',['Toxina','Secrecion','Picadura toxica']),
+    nv1 = {'n': pick(key,'b',['Toxina','Secrecion','Picadura toxica','Baba acida','Espina ponzoñosa','Roce toxico']),
            'desc': '15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.',
            'costo': ['comodin'], 'recarga': 0, 'clases': ['toxina','sostenido'], 'efectos': [dot(15,2)]}
     if rareza in ('comun','raro'):
-        nv4 = {'n': pick(key,'m',['Veneno espeso','Ponzona']),
+        nv4 = {'n': pick(key,'m',['Veneno espeso','Ponzoña','Toxina densa','Savia negra','Emponzoñar']),
                'desc': '25 de toxina por turno durante 2 turnos.',
                'costo': [bio], 'recarga': 1, 'clases': ['toxina','sostenido'], 'efectos': [dot(25,2)]}
-        nv8 = {'n': pick(key,'u',['Nube toxica','Brote venenoso']),
+        nv8 = {'n': pick(key,'u',['Nube toxica','Brote venenoso','Bruma acida','Miasma','Rocio negro']),
                'desc': '20 de toxina a TODOS los enemigos.',
                'costo': [bio,'comodin'], 'recarga': 3, 'clases': ['toxina','unico','instant'],
                'efectos': [{'t':'dano','v':20,'obj':'todos','toxina':True}]}
     else:
-        nv4 = {'n': pick(key,'m',['Drenar','Sangria']),
+        nv4 = {'n': pick(key,'m',['Drenar','Sangria','Chupar savia','Succion','Sorbo']),
                'desc': '25 de toxina y le ROBA 1 energia al enemigo.',
                'costo': [bio], 'recarga': 1, 'clases': ['toxina','unico','instant'],
                'efectos': [{'t':'dano','v':25,'obj':'enemigo','toxina':True}, robar(1)]}
-        nv8 = {'n': pick(key,'u',['Marca letal','Toxina persistente']),
+        nv8 = {'n': pick(key,'u',['Marca letal','Toxina persistente','Herida abierta','Sello ponzoñoso']),
                'desc': '15 de dano y PERMANENTE: ese enemigo recibe +5 de dano el resto del combate. Acumulable.',
                'costo': [bio,'comodin'], 'recarga': 1, 'clases': ['toxina','unico','instant'],
                'efectos': [dmg(15), {'t':'marcaPermanente','v':5,'obj':'enemigo'}]}
@@ -214,16 +228,16 @@ def kit_shield(key, bio, cat, rareza):
     b = pick(key, 'b', V[cat]['basico'])
     nv1 = {'n': b, 'desc': '20 de dano a un enemigo.',
            'costo': ['comodin'], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(20)]}
-    nv4 = {'n': pick(key,'m',['Acorazarse','Atrincherarse','Plantarse']),
+    nv4 = {'n': pick(key,'m',['Acorazarse','Atrincherarse','Plantarse','Encogerse','Hacerse bola','Aguantar']),
            'desc': 'Gana 30 de defensa destructible.',
            'costo': [bio], 'recarga': 3, 'clases': ['natural','instant'], 'efectos': [defen(30)]}
     if rareza in ('comun','raro'):
-        nv8 = {'n': pick(key,'u',['Muralla','Cerrar filas']),
+        nv8 = {'n': pick(key,'u',['Muralla','Cerrar filas','Barrera viva','Escudo de manada','Parapeto']),
                'desc': 'Todo el equipo gana 20 de defensa destructible.',
                'costo': [bio,'comodin'], 'recarga': 4, 'clases': ['natural','unico','instant'],
                'efectos': [defen(20,'equipo')]}
     else:
-        nv8 = {'n': pick(key,'u',['Coraza ancestral','Piel de piedra']),
+        nv8 = {'n': pick(key,'u',['Coraza ancestral','Piel de piedra','Caparazon eterno','Corteza dura']),
                'desc': 'PERMANENTE: gana 40 de defensa destructible; se reaplica sola, no se acumula.',
                'costo': [bio,'comodin'], 'recarga': 4, 'clases': ['natural','unico','instant'],
                'efectos': [{'t':'defensa','v':40,'obj':'self','permanente':True}]}
@@ -233,10 +247,10 @@ def kit_thorns(key, bio, cat, rareza):
     b = pick(key, 'b', V[cat]['basico'])
     nv1 = {'n': b, 'desc': '20 de dano a un enemigo.',
            'costo': ['comodin'], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(20)]}
-    nv4 = {'n': pick(key,'m',['Erizarse','Guardia con puas']),
+    nv4 = {'n': pick(key,'m',['Erizarse','Guardia con puas','Espinas al aire','Ponerse tieso']),
            'desc': 'CONTRAATAQUE: 2 turnos, quien lo ataque recibe 25 de dano.',
            'costo': [bio], 'recarga': 3, 'clases': ['fisico','unico','control'], 'efectos': [contra(25)]}
-    nv8 = {'n': pick(key,'u',['Lluvia de puas','Represalia total']),
+    nv8 = {'n': pick(key,'u',['Lluvia de puas','Represalia total','Andanada de espinas','Devolver el golpe']),
            'desc': '20 de dano a TODOS los enemigos.',
            'costo': [bio,'comodin'], 'recarga': 4, 'clases': ['fisico','rango','instant'], 'efectos': [area(20)]}
     return nv1, nv4, nv8

@@ -10,6 +10,7 @@ import * as L from './liga.js';
 import { SP } from './fauna_roster.js';
 import { habsDe, ESQUIVA } from './habilidades.js';
 import { rangoDe, RANGOS } from './misiones.js';
+import { iconoIMG } from './iconos.js';
 import { abrirArena } from './arenaUI.js';
 import { playScene } from './dialogo.js';
 import { HISTORIA, TENEBROSO, bossOf } from './historia.js';
@@ -69,12 +70,12 @@ export function crearSeleccion(root) {
     const rango = rangoDe(sp.rarity);
     const habs = kit.habs.map(h => `
       <div class="sl-ht">
-        <div class="sl-htn">${h.n}</div>
+        <div class="sl-htn">${iconoIMG(h, key)}${h.n}</div>
         <div class="sl-htd">${h.desc}</div>
         <div class="sl-htf">${orbes(h.costo)}<em>↻ ${h.recarga || 0}</em></div>
       </div>`).join('') + `
       <div class="sl-ht esq">
-        <div class="sl-htn">🛡 Esquivar</div>
+        <div class="sl-htn">${iconoIMG(ESQUIVA, key)}Esquivar</div>
         <div class="sl-htd">${ESQUIVA.desc}</div>
         <div class="sl-htf">${orbes(ESQUIVA.costo)}<em>↻ ${ESQUIVA.recarga}</em></div>
       </div>`;

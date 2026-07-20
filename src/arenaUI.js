@@ -7,6 +7,7 @@
 
 import * as A from './arena.js';
 import { SP } from './fauna_roster.js';
+import { iconoIMG } from './iconos.js';
 
 const ART = (key) => (SP[key] && SP[key].folk) ? `assets/folclor/${key}.png` : `assets/animales/${key}.png`;
 const ORBC = { bosque: '#3f8f4a', sabana: '#c8923f', agua: '#2f6f8f', montana: '#8a6f9a', comodin: '#e8e0cc' };
@@ -25,7 +26,8 @@ const orbes = (costo) => !costo || !costo.length
       ? '<b class="ar-todo">TODA</b>'
       : `<i class="ar-orb" style="background:${ORBC[c]}"></i>`).join('');
 
-const icoDe = (h) => h.esEsquiva ? '🛡' : (ICO[(h.efectos || [])[0]?.t] || '✳️');
+// el dibujo de la habilidad (assets/iconos, ver src/iconos.js)
+const icoDe = (h, key) => iconoIMG(h, key);
 
 // ---------- abrirArena: game.js llama esto y se olvida ----------
 // opts: { miEquipo:[{key,ref}], rivalEquipo:[{key}], titulo, sub,
@@ -128,7 +130,7 @@ export function abrirArena(opts) {
     const orden = esta ? cola.indexOf(acc) + 1 : null;
     return `<button class="ar-sk ${off} ${sel ? 'sel' : ''} ${h.esEsquiva ? 'esq' : ''}"
       data-uid="${u.uid}" data-hab="${i}" title="${h.n}">
-      <span class="ar-ico">${icoDe(h)}</span>
+      <span class="ar-ico">${icoDe(h, u.key)}</span>
       <span class="ar-skn">${h.n}</span>
       <span class="ar-cost">${orbes(h.costo)}</span>
       ${why ? `<b class="ar-why">${why}</b>` : ''}
@@ -170,7 +172,7 @@ export function abrirArena(opts) {
     const { u, h } = par;
     const clases = (h.clases || []).map(c => CLASE_N[c] || c).join(' · ');
     return `
-      <div class="ar-dico">${icoDe(h)}</div>
+      <div class="ar-dico">${icoDe(h, u.key)}</div>
       <div class="ar-dtx">
         <div class="ar-dn">${h.n.toUpperCase()} · ${u.n.toUpperCase()}</div>
         <div class="ar-dd">${h.desc || ''}</div>

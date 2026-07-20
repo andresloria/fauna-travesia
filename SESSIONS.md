@@ -165,7 +165,36 @@ depende del costo de energía de bioma; eliminá las pasivas, únicamente los at
   scroll horizontal, y tocar habilidad → objetivos → LISTO funciona.
 - 19/19 tests del motor (3 actualizados a la economía nueva).
 
+**✅ HECHO (20-jul, cierre): iconos de habilidad + arreglo de "no se ve".**
+- **"eso no se ve"** era `image-rendering: pixelated` sobre sprites de 256px
+  mostrados a 46-90px: al REDUCIR, 'pixelated' tira pixeles y rompe el dibujo
+  (es el mismo bug que ya se había arreglado para los sprites del juego y se
+  coló en las pantallas nuevas). Los sprites reducidos van con `auto`;
+  'pixelated' queda SOLO para lo que se amplía (fondos tileados, escenarios).
+- **ICONOS DE HABILIDAD**: `make_iconos_hab.py` dibuja 24 iconos pixel art
+  16×16 (exportados x4 a 64px) → `assets/iconos/`. El mapeo vive en
+  `src/iconos.js` y elige en 2 pasos: primero por EFECTO (veneno, escudo,
+  curar, robar, quemar, exponer, aturdir, área, modo, marca…) para que el
+  jugador aprenda el símbolo sin leer; si es daño simple, por la FORMA del
+  ataque (garra/colmillo/pico/ala/cola/tenaza/lengua) según el nombre y, si no
+  alcanza, según qué clase de animal es. Verificado: **las 544 habilidades
+  mapean a un archivo existente, 0 rotas**. Se muestran solo en divisores
+  exactos de 64 (32px en combate, 16px en la ficha) para que no se aliaseen.
+- ⚠️ **PixelLab está en $0** (`get_balance`), por eso los iconos son dibujados
+  por código. Si se recarga, se pueden reemplazar uno por uno sin tocar nada
+  más: el juego solo pide `assets/iconos/<nombre>.png`.
+- **Nombres más variados**: el vocabulario de `make_movesets.py` se amplió →
+  de 104 nombres únicos a **174** para 408 ranuras (repetición 3.9x → 2.3x).
+
 ## PRÓXIMOS PASOS (retomar por acá)
+
+0. **"Animales iguales que en Naruto-Arena" — falta el tramo grande**: hoy los
+   kits salen de 6 plantillas por rol, así que 2-3 animales comparten nombres y
+   estructura. Para que cada especie tenga SU identidad (como Chidori es de
+   Sasuke) hace falta una tabla a mano de 136 × 3 movimientos con su biología
+   real. Es trabajo de contenido, no de código: el motor y los iconos ya lo
+   soportan. Conviene hacerlo por tandas (empezando por los legendarios y los
+   30 de base, que son los que más se ven).
 
 1. **Probar el arco completo jugando**: cabecilla → provincia 2 → … → Monteverde →
    liga libre con leyendas (solo probé la 1ª provincia + el estado del jefe).
