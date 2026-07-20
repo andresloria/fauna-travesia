@@ -18,36 +18,53 @@ export function createUI(game) {
   const $ = (id) => document.getElementById(id);
   const phaseArea = $('phaseArea'), runbar = $('runbar'), logBox = $('log');
 
-  // ---------- tarjeta de animal ----------
+  // ---------- tarjeta de animal (estilo carta de colección) ----------
+  // Estructura: .nc (MARCO, la capa que brilla según rareza) > .nc-in (interior opaco)
+  //   barra: nivel + nombre + gema · arte a sangre sobre el bioma · barras de stats
+  //   · habilidades (1 común/raro/ultra · 2 legendario · 3 extinto y folclor) · rareza
+  const RAR_CLS = (a) => a.folk ? 'mitico' : a.ext ? 'extinto' : a.leg ? 'legendario' : (a.rarity || 'comun');
+  const MAXS = { atk: 30, def: 12, spd: 12, hab: 10 };
+  const SIC = { atk: '⚔', def: '🛡', spd: '💨', hab: '🌀' };
+  // fondo de la carta = escenario del bioma del animal
+  const BIO_BG = (bio) => SCN(bio === 'noche' ? 'bg_sanatorio' : 'bioma_' + (bio || 'bosque'));
+
+  function statBar(tipo, val) {
+    const pct = Math.min(100, Math.round((val || 0) / MAXS[tipo] * 100));
+    return `<div class="srow"><span class="sic">${SIC[tipo]}</span><span class="sval">${val || 0}</span>` +
+           `<span class="sbar"><i class="${tipo}" style="width:${pct}%"></i></span></div>`;
+  }
+  function hearts(hp) {
+    const n = Math.max(1, Math.min(5, Math.round(hp / 10)));
+    return `<span class="hp-hearts">${'❤'.repeat(n)}</span><span class="hp-num">${Math.max(0, hp)}</span>`;
+  }
+  function abilList(a) {
+    return [a.ab, a.ab2, a.ab3].filter(Boolean).map(k => ABILITIES[k]).filter(Boolean)
+      .map(x => `<div class="nc-ab ${x.cls}"><b>${x.sym}</b> ${x.n}</div>`).join('');
+  }
+
   function animalCard(a, opts = {}) {
-    const stage = Math.min(2, a.evo || 0);
-    const tcls = a.folk ? 'mitico' : a.ext ? 'extinct' : a.leg ? 'legendary' : ['t-base', 't-evo1', 't-evo2'][stage];
-    const stageLabel = a.folk ? 'MÍTICO' : a.ext ? 'EXTINTO' : a.leg ? 'LEGENDARIO' : STAGE[stage];
-    const ab = ABILITIES[a.ab], ab2 = a.ab2 ? ABILITIES[a.ab2] : null, ab3 = a.ab3 ? ABILITIES[a.ab3] : null;
+    const rc = RAR_CLS(a), rarN = (RARITY[rc] || RARITY.comun).n;
+    const etapa = a.folk ? 'MÍTICO' : STAGE[Math.min(2, a.evo || 0)];
     const act = opts.trade ? 'trade' : opts.swap ? 'swapwild' : opts.edit ? 'edit' : null;
-    const cls = 'acard ' + tcls + ' rc-' + a.rarity
-      + (opts.fainted || a.down ? ' fainted' : '') + (a.down ? ' down' : '') + (opts.cls ? ' ' + opts.cls : '')
-      + (act ? ' clickable' : '') + (opts.lead ? ' lead' : '');
-    const bio = BIOMES[a.bio] ? BIOMES[a.bio].e : '';
     const data = act ? `data-act="${act}" data-uid="${a.uid}"` : '';
-    const badge = (x) => `<span class="abil ${x.cls}">${x.sym} ${x.n}</span>`;
-    const abil = (ab ? badge(ab) : '') + (ab2 ? badge(ab2) : '') + (ab3 ? badge(ab3) : '');
-    const rar = RARITY[a.rarity];
-    // la etiqueta de rareza solo para raro/ultrararo: legendario/extinto ya lo dicen en la etiqueta de nivel + el brillo
-    const rarTag = (rar && (a.rarity === 'raro' || a.rarity === 'ultrararo')) ? `<span class="rar ${rar.cls}">${rar.n}</span>` : '';
-    const downTag = a.down ? `<span class="downtag">💤 Debilitado</span>` : '';
-    const lead = opts.lead ? `<span class="leadtag">PELEA 1°</span>` : '';
-    const ord = opts.order ? `<span class="ord">${opts.order}</span>` : '';
+    const cls = ['nc', 'rar-' + rc, (opts.fainted || a.down) ? 'fainted' : '', a.down ? 'down' : '',
+                 act ? 'clickable' : '', opts.lead ? 'lead' : '', opts.cls || ''].filter(Boolean).join(' ');
     const items = (a.items && a.items.length)
-      ? `<div class="cititems">${a.items.map(it => `<span title="${it.n} (${itemBonus(it)})">${it.e}</span>`).join('')}</div>` : '';
-    return `<div class="${cls}" ${data}>
-      ${lead}${rarTag}${downTag}
-      <span class="stage">${stageLabel} · Nv${a.level}</span>
-      <span class="bio">${bio}</span>
-      <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
-      <div class="an">${a.n}</div>
-      <div class="stats"><span class="st atk">⚔${a.atk}</span><span class="st hp">❤${Math.max(0, a.hp)}</span><span class="st def">🛡${a.def || 0}</span><span class="st spd">💨${a.spd}</span><span class="st hab">🌀${a.hab || 0}</span></div>
-      ${abil}${items}${ord}</div>`;
+      ? `<div class="nc-items">${a.items.map(it => `<span title="${it.n} (${itemBonus(it)})">${it.e}</span>`).join('')}</div>` : '';
+    const ord = opts.order ? `<span class="nc-ord">${opts.order}</span>` : '';
+    const lead = opts.lead ? `<span class="nc-lead">PELEA 1°</span>` : '';
+    const down = a.down ? `<span class="nc-down">💤 DEBILITADO</span>` : '';
+    return `<div class="${cls}" ${data}><div class="nc-in">
+      <div class="nc-top"><span class="nc-lv">${a.level}</span><span class="nc-name">${a.n}</span><span class="nc-gem" title="${rarN}"></span></div>
+      <div class="nc-art" style="background-image:url('${BIO_BG(a.bio)}')">
+        <img src="${ART(a.key)}" alt="${a.n}" draggable="false">
+        <span class="nc-stage">${etapa}</span>${lead}${down}
+        <span class="nc-hp">${hearts(a.hp)}</span>${items}${ord}
+      </div>
+      <div class="nc-stats">${statBar('atk', a.atk)}${statBar('def', a.def)}${statBar('spd', a.spd)}${statBar('hab', a.hab)}</div>
+      ${abilList(a)}
+      <div class="nc-rar">${rarN}</div>
+    </div></div>`;
   }
   function teamHTML(team, o = {}) {
     if (!team.length) return `<div class="team"><div class="empty-slot">🦴</div></div>`;
@@ -409,21 +426,21 @@ export function createUI(game) {
   const FX = { poison:'☣', shield:'🛡', heal:'✚', first:'⚡', rage:'🔥', thorns:'🌵', dodge:'🌀' };
   const FXN = { dodge:'Esquiva', heal:'Regenera' };   // nombres para fx que no son ABILITIES
   // carta de combate, con barra de vida y vida actual/máx
+  // Carta de COMBATE: misma carta pero compacta y con la barra de vida VIVA
+  // (playBattle mueve .hpfill y .hpcur, y marca .fainted sobre #bc-<uid>).
   function battleCard(a, max) {
-    const stage = Math.min(2, a.evo || 0);
-    const tcls = a.folk ? 'mitico' : a.ext ? 'extinct' : a.leg ? 'legendary' : ['t-base', 't-evo1', 't-evo2'][stage];
-    const stageLabel = a.folk ? 'MÍTICO' : a.ext ? 'EXTINTO' : a.leg ? 'LEGENDARIO' : STAGE[stage];
-    const ab = ABILITIES[a.ab], ab2 = a.ab2 ? ABILITIES[a.ab2] : null, ab3 = a.ab3 ? ABILITIES[a.ab3] : null;
-    const badge = (x) => `<span class="abil ${x.cls}">${x.sym} ${x.n}</span>`;
-    const bio = BIOMES[a.bio] ? BIOMES[a.bio].e : '';
-    return `<div class="acard ${tcls} rc-${a.rarity} battlecard" id="bc-${a.uid}">
-      <span class="stage">${a.folk ? '🌑 ' : ''}Nv${a.level}</span><span class="bio">${bio}</span>
-      <div class="art"><img src="${ART(a.key)}" alt="${a.n}" draggable="false"></div>
-      <div class="an">${a.n}</div>
-      <div class="hpbar"><div class="hpfill"></div></div>
-      <div class="bstats"><span class="st atk">⚔${a.atk}</span><span class="st def">🛡${a.def || 0}</span><span class="st spd">💨${a.spd}</span><span class="st hab">🌀${a.hab || 0}</span><span class="hpnum">❤<span class="hpcur">${a.hp}</span>/${max}</span></div>
-      ${ab ? badge(ab) : ''}${ab2 ? badge(ab2) : ''}${ab3 ? badge(ab3) : ''}
-      <div class="hitlayer"></div></div>`;
+    const rc = RAR_CLS(a), rarN = (RARITY[rc] || RARITY.comun).n;
+    return `<div class="nc rar-${rc} battlecard" id="bc-${a.uid}"><div class="nc-in">
+      <div class="nc-top"><span class="nc-lv">${a.level}</span><span class="nc-name">${a.n}</span><span class="nc-gem" title="${rarN}"></span></div>
+      <div class="nc-art" style="background-image:url('${BIO_BG(a.bio)}')">
+        <img src="${ART(a.key)}" alt="${a.n}" draggable="false">
+        <div class="hitlayer"></div>
+      </div>
+      <div class="nc-hpbar"><div class="hpfill"></div>
+        <span class="hpnum">❤<span class="hpcur">${a.hp}</span>/${max}</span></div>
+      <div class="nc-stats compact">${statBar('atk', a.atk)}${statBar('def', a.def)}${statBar('spd', a.spd)}</div>
+      ${abilList(a)}
+    </div></div>`;
   }
 
   // Combate SIMULTÁNEO: dos filas (tu equipo arriba, enemigo abajo). Cada paso del

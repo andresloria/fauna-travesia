@@ -94,7 +94,7 @@ export const SP = {
   rana_gladiadora: { n:"Rana arbórea gladiadora", e:"🐸", atk:2, hp:5, spd:5, hab:3, bio:"bosque", ab:"first", def:3, rarity:"raro" },
   rana_payaso: { n:"Rana payaso", e:"🐸", atk:6, hp:1, spd:4, hab:4, bio:"bosque", ab:"poison", def:0, rarity:"comun" },
   sapo_marino: { n:"Sapo marino", e:"🐸", atk:2, hp:5, spd:5, hab:3, bio:"sabana", ab:"poison", def:2, rarity:"comun" },
-  sapo_dorado: { n:"Sapo dorado (extinto)", e:"🐸", atk:12, hp:13, spd:4, hab:6, bio:"montana", ab:"poison", def:5, ext:true, rarity:"extinto" },
+  sapo_dorado: { n:"Sapo dorado (extinto)", e:"🐸", atk:12, hp:13, spd:4, hab:6, bio:"montana", ab:"poison", def:5, ext:true, rarity:"extinto", ab2:"heal", ab3:"shield" },
   salamandra: { n:"Salamandra sin pulmones", e:"🐸", atk:2, hp:5, spd:5, hab:3, bio:"montana", ab:"heal", def:2, rarity:"raro" },
   iguana: { n:"Iguana", e:"🦎", atk:2, hp:5, spd:4, hab:2, bio:"sabana", ab:"thorns", def:3, rarity:"comun" },
   garrobo: { n:"Garrobo", e:"🦎", atk:3, hp:3, spd:6, hab:1, bio:"sabana", ab:"thorns", def:2, rarity:"raro" },

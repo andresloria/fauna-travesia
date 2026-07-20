@@ -405,10 +405,12 @@ details.how p b{color:#7a3f18}
 
 .modal.panel{max-width:600px;max-height:84vh;overflow-y:auto;text-align:left;padding:18px}
 .panelhead{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:-18px;
-  background:linear-gradient(180deg,#13302a,#13302aee);padding:6px 0 8px;margin:-4px 0 6px;border-bottom:1px solid var(--brass-deep)}
-.panelhead h3{margin:0;font-family:'Fraunces',serif;font-size:18px}
-.panelsub{color:#bcae90;font-size:12px;margin:0 0 10px}
-.btn.ghost{background:transparent;border:1px solid rgba(196,160,78,.4);font-size:12px;padding:5px 9px}
+  background:var(--cream);padding:8px 0 9px;margin:-4px 0 6px;border-bottom:3px solid var(--line)}
+.panelhead h3{margin:0;font-family:var(--px);font-size:11px;line-height:1.7;color:#7a3f18}
+.panelsub{color:#6a5a3f;font-size:12px;margin:0 0 10px}
+/* el "cerrar" del panel: ACOTADO al encabezado (antes pisaba TODOS los .btn.ghost
+   del juego y dejaba "Seguir sin rescatar" ilegible) */
+.panelhead .btn.ghost{font-size:8px;padding:8px 11px}
 
 .dexgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:7px}
 .dexcell{border:1px solid rgba(196,160,78,.18);border-radius:9px;background:rgba(0,0,0,.18);padding:5px 3px;text-align:center}
@@ -665,3 +667,241 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 .acard.t-base .stage{background:#5a6152}
 .acard.t-evo1 .stage{background:#2f5e7d}
 .acard .stage{color:#fdf8ea}
+
+/* ============================================================
+   FIX: las etiquetas de los nodos se salían.
+   La regla .mapwrap.linear .mnode{width:46px} se hizo para el mapa nocturno
+   (17 nodos) pero se aplica a todos; "TRAFICANTES" en Press Start necesita
+   ~72px. Se ensancha el CONTENEDOR (el disco no cambia de tamaño).
+   ============================================================ */
+.mnode,.mapwrap.linear .mnode{width:92px}
+.mnode .ml{max-width:100%;white-space:normal;word-break:keep-all;hyphens:none}
+
+/* ============================================================
+   ESCALA DE ESCRITORIO — en pantalla grande todo un punto más grande
+   (el pixel art aguanta bien el escalado y se lee mucho mejor).
+   ============================================================ */
+@media(min-width:760px){
+  body{font-size:21px}
+  .wrap{max-width:880px}
+  h1{font-size:clamp(20px,2.6vw,26px)}
+  h1 .sub{font-size:21px}
+  .eyebrow{font-size:8.5px}
+  .section-h{font-size:10px}
+  .chip{padding:9px 14px;min-width:84px}
+  .chip .k{font-size:7.5px}
+  .chip .v{font-size:23px}
+  .chip.country .v{font-size:19px}
+  .hearts{font-size:21px}
+  .btn{font-size:10px;padding:14px 20px}
+  .ms-opt{font-size:9.5px;padding:12px 16px}
+  .ms-k{font-size:9px}
+  .ms-d,.map-hint,.log,.introbox p{font-size:20px}
+  details.how summary{font-size:9.5px}
+  details.how p{font-size:20px}
+
+  /* fichas de animal más grandes */
+  .acard{width:134px;padding:9px 9px 11px}
+  .acard .art{width:112px;height:112px;margin-top:13px}
+  .acard .an{font-size:9px;min-height:30px;margin-top:9px}
+  .acard .st{font-size:19px}
+  .acard .stats{gap:8px}
+  .acard .stage,.acard .rar,.acard .downtag{font-size:6.5px;padding:2px 6px}
+  .acard .abil{font-size:7px;padding:3px 8px}
+  .empty-slot{width:134px;min-height:186px}
+  .team{gap:11px}
+
+  /* mapa más alto y con nodos más grandes */
+  .mapwrap{height:clamp(480px,70vh,620px)}
+  .mnode,.mapwrap.linear .mnode{width:104px}
+  .mnode .disc,.mapwrap.linear .mnode .disc{width:56px;height:56px;font-size:25px}
+  .mapwrap.linear .mnode.airport .disc{width:64px;height:64px}
+  .mnode .ml,.mapwrap.linear .mnode .ml{font-size:7.5px;padding:3px 6px}
+  .maptag,.maptag b{font-size:10px}
+  .vista{width:clamp(190px,40%,260px)}
+}
+@media(min-width:1100px){
+  .wrap{max-width:960px}
+  .acard{width:146px}
+  .acard .art{width:124px;height:124px}
+  .acard .an{font-size:9.5px}
+}
+
+/* ============================================================
+   FIX: nombres largos ("Tántalo americano (garzón)") y la insignia de
+   habilidad ("Primer golpe") no caben en la carta con Press Start 2P, que es
+   muy ancha. Se pasan a VT323 —también pixel, pero angosta y más legible.
+   Press Start queda para etiquetas cortas (etapa, rareza).
+   ============================================================ */
+.acard .an{font-family:var(--body);font-size:17px;line-height:1.02;letter-spacing:.2px;
+  min-height:34px;overflow-wrap:anywhere;text-align:center;padding:0 1px}
+.acard .abil{font-family:var(--body);font-size:14px;line-height:1.15;letter-spacing:.2px;
+  padding:2px 7px;max-width:100%;overflow-wrap:anywhere}
+@media(min-width:760px){
+  .acard .an{font-size:20px;min-height:40px}
+  .acard .abil{font-size:16px;padding:3px 9px}
+}
+.acard .abil{white-space:normal}   /* que "Primer golpe" pueda partirse en dos líneas */
+
+/* Colección y logros: eran cajas oscuras (fondo negro translúcido) pensadas
+   para el tema viejo; sobre crema quedaban sucias/ilegibles. */
+.dexcell{border:3px solid var(--cream-lo);border-radius:3px;background:rgba(255,255,255,.45)}
+.dexcell.got{background:#fbf6e6;border-color:var(--line)}
+.dexcell.leg.got{background:linear-gradient(180deg,#fff3c4,#ffe08a);border-color:#8a6410}
+.dexart .qm{color:#8a7a55}
+.dexn{font-family:var(--body);font-size:15px;line-height:1.05;color:#2a2016}
+.dexcell.locked .dexn{color:#7a6a4a}
+.achrow{border:3px solid var(--cream-lo);border-radius:3px;background:rgba(255,255,255,.45)}
+.achrow.got{background:#eef7e4;border-color:#2e7a41}
+.achrow.locked .achn{color:#7a6a4a}
+.achn{color:#2a2016}
+
+/* ============================================================
+   CARTA DE ANIMAL (estilo carta de colección)
+   .nc  = MARCO: su fondo es la capa que BRILLA según la rareza
+   .nc-in = interior opaco, así el destello nunca cruza por encima del animal
+   ============================================================ */
+.nc{width:150px;padding:5px;background:var(--f,#6f6552);border-radius:4px;position:relative;
+  box-shadow:0 0 0 2px #0f0d09,4px 5px 0 rgba(0,0,0,.3);transition:transform .12s}
+.nc.clickable{cursor:pointer}
+.nc.clickable:hover{transform:translateY(-4px)}
+.nc-in{background:#1d1a14;border:2px solid #0f0d09;border-radius:2px;
+  display:flex;flex-direction:column;overflow:hidden;position:relative}
+/* barra: nivel + nombre + gema */
+.nc-top{display:flex;align-items:center;gap:5px;background:var(--f,#6f6552);padding:5px 6px;border-bottom:2px solid #0f0d09}
+.nc-lv{font-family:var(--px);font-size:8px;color:#1d1a14;background:#f0e4c4;border:2px solid #0f0d09;
+  border-radius:2px;padding:3px 4px;line-height:1;min-width:20px;text-align:center}
+.nc-name{flex:1;text-align:center;font-family:var(--body);font-size:16px;line-height:1.02;color:#fff;
+  text-shadow:1px 1px 0 rgba(0,0,0,.65);overflow-wrap:anywhere}
+.nc-gem{width:12px;height:12px;flex:none;border:2px solid #0f0d09;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff,var(--f2,#8a7e66))}
+/* arte a sangre sobre el bioma */
+.nc-art{position:relative;height:112px;background-size:cover;background-position:center;
+  image-rendering:pixelated;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.nc-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.55))}
+.nc-art img{position:relative;z-index:1;width:88%;height:88%;object-fit:contain;margin-bottom:2px;
+  image-rendering:pixelated;filter:drop-shadow(0 3px 3px rgba(0,0,0,.6))}
+.nc-stage,.nc-lead,.nc-down{position:absolute;z-index:2;font-family:var(--px);font-size:5px;line-height:1.5;
+  color:#f0e4c4;background:rgba(15,13,9,.85);border:1px solid #0f0d09;border-radius:2px;padding:2px 4px}
+.nc-stage{top:4px;left:4px}
+.nc-lead{top:4px;right:4px;background:#7a3f18;color:#ffe6b8}
+.nc-down{bottom:26px;left:4px;background:#3a3340;color:#cdbbe0}
+.nc-hp{position:absolute;bottom:4px;left:5px;z-index:2;display:flex;align-items:center;gap:4px}
+.hp-hearts{font-size:12px;letter-spacing:-1px;color:#e84b3a;text-shadow:0 1px 2px #000}
+.hp-num{font-family:var(--body);font-size:17px;color:#fff;text-shadow:1px 1px 0 #000;line-height:1}
+.nc-items{position:absolute;bottom:4px;right:4px;z-index:2;display:flex;gap:2px}
+.nc-items span{font-size:12px;background:rgba(15,13,9,.8);border-radius:2px;padding:1px 2px;cursor:help}
+.nc-ord{position:absolute;top:4px;right:4px;z-index:2;font-family:var(--px);font-size:7px;color:#1d1a14;
+  background:#e2b23e;border:1px solid #0f0d09;border-radius:2px;padding:2px 4px;line-height:1}
+.nc.lead .nc-ord{background:#ffd45e}
+/* barras de estadísticas */
+.nc-stats{background:#2a251b;padding:5px 6px;display:flex;flex-direction:column;gap:3px}
+.srow{display:flex;align-items:center;gap:5px}
+.sic{font-size:10px;width:13px;flex:none;text-align:center}
+.sval{font-family:var(--body);font-size:16px;color:#f0e4c4;width:22px;text-align:right;line-height:1}
+.sbar{flex:1;height:7px;background:#14110c;border:1px solid #0f0d09;border-radius:1px;overflow:hidden}
+.sbar i{display:block;height:100%}
+.sbar i.atk{background:linear-gradient(180deg,#e0704a,#b8422a)}
+.sbar i.def{background:linear-gradient(180deg,#e0c44a,#a8880f)}
+.sbar i.spd{background:linear-gradient(180deg,#5fb8e0,#2a7ba8)}
+.sbar i.hab{background:linear-gradient(180deg,#5fd0c0,#248f80)}
+/* habilidades y rareza */
+.nc-ab{background:#f0e4c4;color:#2a2016;font-family:var(--body);font-size:15px;line-height:1.1;
+  padding:4px 6px;border-top:2px solid #0f0d09;text-align:center}
+.nc-ab + .nc-ab{border-top-width:1px}
+.nc-rar{background:var(--f,#6f6552);color:#fff;font-family:var(--px);font-size:5px;line-height:1.6;
+  padding:3px 5px;text-align:center;text-shadow:1px 1px 0 rgba(0,0,0,.5)}
+/* estados */
+.nc.fainted{opacity:.42;filter:grayscale(.85)}
+.nc.down .nc-art img{filter:grayscale(.7) brightness(.8)}
+
+/* ---------- BRILLO POR RAREZA (viaja por el marco, nunca sobre el animal) ---------- */
+@keyframes marcoBrillo{0%{background-position:180% 0}100%{background-position:-80% 0}}
+@keyframes haloSuave{0%,100%{box-shadow:0 0 0 2px #0f0d09,0 0 7px var(--halo1),4px 5px 0 rgba(0,0,0,.3)}
+                     50%    {box-shadow:0 0 0 2px #0f0d09,0 0 13px var(--halo2),4px 5px 0 rgba(0,0,0,.3)}}
+@keyframes haloFuerte{0%,100%{box-shadow:0 0 0 2px #0f0d09,0 0 12px var(--halo1),4px 5px 0 rgba(0,0,0,.3)}
+                      50%    {box-shadow:0 0 0 2px #0f0d09,0 0 30px var(--halo2),4px 5px 0 rgba(0,0,0,.3)}}
+@keyframes auraNegra{0%,100%{box-shadow:0 0 0 2px #000,0 0 14px 3px rgba(8,6,14,.6),4px 5px 0 rgba(0,0,0,.3)}
+                     50%    {box-shadow:0 0 0 2px #000,0 0 36px 11px rgba(8,6,14,.92),0 0 54px 16px rgba(40,18,70,.5),4px 5px 0 rgba(0,0,0,.3)}}
+
+.nc.rar-comun{--f:#6f6552;--f2:#8a7e66}
+.nc.rar-raro{--f:#2f6f8f;--f2:#4a90ad;--halo1:rgba(74,144,173,.35);--halo2:rgba(122,190,220,.6);
+  background:linear-gradient(115deg,#2f6f8f 0%,#2f6f8f 34%,#7fc2dd 44%,#dff2fb 50%,#7fc2dd 56%,#2f6f8f 66%,#2f6f8f 100%);
+  background-size:300% 100%;animation:marcoBrillo 6s linear infinite,haloSuave 4s ease-in-out infinite}
+.nc.rar-ultrararo{--f:#6b3f9e;--f2:#8f5fc4;--halo1:rgba(143,95,196,.45);--halo2:rgba(186,138,232,.75);
+  background:linear-gradient(115deg,#6b3f9e 0%,#6b3f9e 32%,#b58ce0 43%,#f0e2ff 50%,#b58ce0 57%,#6b3f9e 68%,#6b3f9e 100%);
+  background-size:300% 100%;animation:marcoBrillo 4.6s linear infinite,haloSuave 3.2s ease-in-out infinite}
+.nc.rar-legendario{--f:#a8791a;--f2:#d4a52c;--halo1:rgba(232,193,74,.55);--halo2:rgba(255,214,96,.95);
+  background:linear-gradient(115deg,#a8791a 0%,#a8791a 28%,#f4d977 40%,#fffbe6 50%,#f4d977 60%,#a8791a 72%,#a8791a 100%);
+  background-size:300% 100%;animation:marcoBrillo 3.2s linear infinite,haloFuerte 2.4s ease-in-out infinite}
+.nc.rar-legendario .nc-top{background:linear-gradient(180deg,#f4d977,#c9971f 60%,#a8791a)}
+.nc.rar-legendario .nc-rar{background:linear-gradient(90deg,#a8791a,#f4d977,#a8791a);color:#2a2016;text-shadow:none}
+.nc.rar-legendario .nc-gem{background:radial-gradient(circle at 35% 30%,#fff,#ffd45e);box-shadow:0 0 7px #ffd45e}
+.nc.rar-extinto{--f:#a8442a;--f2:#cf6b45;--halo1:rgba(207,107,69,.5);--halo2:rgba(255,150,100,.9);
+  background:linear-gradient(115deg,#a8442a 0%,#a8442a 28%,#e89a6a 40%,#fff0e2 50%,#e89a6a 60%,#a8442a 72%,#a8442a 100%);
+  background-size:300% 100%;animation:marcoBrillo 3.4s linear infinite,haloFuerte 2.6s ease-in-out infinite}
+.nc.rar-extinto .nc-top{background:linear-gradient(180deg,#e89a6a,#c05a35 60%,#a8442a)}
+.nc.rar-extinto .nc-rar{background:linear-gradient(90deg,#a8442a,#e89a6a,#a8442a);color:#2a2016;text-shadow:none}
+.nc.rar-extinto .nc-gem{background:radial-gradient(circle at 35% 30%,#fff,#ff9664);box-shadow:0 0 7px #ff9664}
+/* MÍTICO (folclor del Tenebroso): carta negra con aura negra */
+.nc.rar-mitico{--f:#0a0810;--f2:#6b4a9e;--halo2:rgba(12,8,24,.95);
+  background:linear-gradient(115deg,#08060e 0%,#08060e 30%,#2a1d40 41%,#6b4a9e 50%,#2a1d40 59%,#08060e 70%,#08060e 100%);
+  background-size:300% 100%;animation:marcoBrillo 4.4s linear infinite,auraNegra 3s ease-in-out infinite}
+.nc.rar-mitico .nc-in{background:#07060c;border-color:#000}
+.nc.rar-mitico .nc-top{background:linear-gradient(180deg,#1a1226,#0a0810)}
+.nc.rar-mitico .nc-name{color:#d8c2f0;text-shadow:0 0 6px rgba(140,90,200,.8)}
+.nc.rar-mitico .nc-lv{background:#2a1d40;color:#e6d6ff;border-color:#000}
+.nc.rar-mitico .nc-gem{background:radial-gradient(circle at 35% 30%,#c9a8f0,#3a1f66);box-shadow:0 0 8px #6b4a9e}
+.nc.rar-mitico .nc-art::after{background:linear-gradient(180deg,rgba(10,6,20,.5),rgba(4,2,10,.85))}
+.nc.rar-mitico .nc-art img{filter:drop-shadow(0 0 10px rgba(150,100,220,.75)) saturate(.85)}
+.nc.rar-mitico .nc-stats{background:#120d1c}
+.nc.rar-mitico .sval{color:#d8c2f0}
+.nc.rar-mitico .nc-ab{background:#1a1226;color:#d8c2f0;border-top-color:#000}
+.nc.rar-mitico .nc-rar{background:linear-gradient(90deg,#08060e,#6b4a9e,#08060e);color:#f0e4ff}
+
+/* ---------- variante de COMBATE (compacta, con vida viva) ---------- */
+.nc.battlecard{width:112px;padding:4px}
+.nc.battlecard .nc-art{height:74px}
+.nc.battlecard .nc-name{font-size:14px}
+.nc.battlecard .nc-lv{font-size:7px;min-width:17px}
+.nc.battlecard .nc-ab{font-size:13px;padding:3px 4px}
+.nc.battlecard .sval{font-size:14px;width:19px}
+.nc.battlecard .nc-stats{padding:4px 5px;gap:2px}
+.nc-hpbar{position:relative;height:15px;background:#14110c;border-top:2px solid #0f0d09;overflow:hidden}
+.nc-hpbar .hpfill{height:100%;width:100%;background:linear-gradient(180deg,#7fd07f,#4c9e56);transition:width .28s}
+.nc-hpbar .hpfill.mid{background:linear-gradient(180deg,#e8c44a,#b8910f)}
+.nc-hpbar .hpfill.low{background:linear-gradient(180deg,#e86a4a,#b8331a)}
+.nc-hpbar .hpnum{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--body);font-size:14px;color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.85);line-height:1}
+.nc .hitlayer{position:absolute;inset:0;z-index:3;pointer-events:none;background:#fff;opacity:0}
+.nc .hitlayer.flash{animation:hitflash .32s}
+@keyframes hitflash{0%{opacity:.72}100%{opacity:0}}
+
+/* ---------- tamaños ---------- */
+@media(min-width:760px){
+  .nc{width:172px}
+  .nc-art{height:132px}
+  .nc-name{font-size:18px}
+  .nc-lv{font-size:9px}
+  .nc-ab{font-size:16px}
+  .sval{font-size:17px;width:24px}
+  .nc.battlecard{width:128px}
+  .nc.battlecard .nc-art{height:84px}
+}
+@media(max-width:520px){
+  .nc{width:112px;padding:4px}
+  .nc-art{height:84px}
+  .nc-name{font-size:14px}
+  .nc-ab{font-size:13px;padding:3px 4px}
+  .sval{font-size:14px;width:19px}
+  .sic{font-size:9px;width:11px}
+  .nc.battlecard{width:88px}
+  .nc.battlecard .nc-art{height:58px}
+  .nc.battlecard .nc-ab{font-size:11px}
+  .team{gap:6px}
+}
+@media(prefers-reduced-motion:reduce){
+  .nc.rar-raro,.nc.rar-ultrararo,.nc.rar-legendario,.nc.rar-extinto,.nc.rar-mitico{
+    animation:none;background-position:50% 0;
+    box-shadow:0 0 0 2px #0f0d09,0 0 14px var(--halo2,transparent),4px 5px 0 rgba(0,0,0,.3)}
+}

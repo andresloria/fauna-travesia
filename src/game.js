@@ -9,7 +9,7 @@ import * as M from './meta.js';
 import { ITEMS, RARE_ITEMS, SECRET, RULES, ABILITIES, RARITY, itemBonus } from './data.js';
 import { playScene } from './dialogo.js';
 import { HISTORIA, TENEBROSO, bossOf, charlaDe } from './historia.js';
-import { fichaEscena } from './fichas.js';
+import { fichaEscena, consejoHallazgo } from './fichas.js';
 
 export class Game {
   constructor(ui = null) {
@@ -354,6 +354,11 @@ export class Game {
     if (rare) this.log(`✦ ¡AVISTAMIENTO ${rare.rarity.toUpperCase()}! Apareció ${rare.e} <b>${rare.n}</b>.`);
     s.phase = 'wild';
     this.render();
+    // 💬 ante un hallazgo grande el guía habla: cuenta la ficha del animal y
+    // AYUDA A DECIDIR (qué habilidades trae, cómo se compara con el equipo,
+    // y si el refugio está lleno). Se puede saltar con SALTAR ⏭.
+    const notable = rare || s.wilds.find(a => a.rarity === 'ultrararo');
+    if (notable) this.escena(consejoHallazgo(notable, s.team));
   }
   captureWild(idx) {
     const s = this.s, a = s.wilds && s.wilds[idx];

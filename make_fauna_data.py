@@ -41,6 +41,14 @@ LEGEND_AB2 = {
     "manati": "heal", "quetzal": "first", "lapa": "first", "quetzaldorado": "shield",
     "tiburon_ballena": "heal",
 }
+# EXTINTO: aparece 1 de cada 100 veces, así que tiene que sentirse el premio gordo:
+# TRES habilidades (una más que un legendario). Del sapo dorado de Monteverde:
+#   veneno   -> su piel tóxica (ya viene de su categoría)
+#   regenera -> es un anfibio; y el bosque nuboso que lo sostenía
+#   escudo   -> lo que sobrevive solo en la memoria, cuesta tumbarlo
+EXTINTO_ABS = {
+    "sapo_dorado": ["poison", "heal", "shield"],
+}
 
 # ---- STARTERS básicos (siempre se eligen al inicio; NO son fauna silvestre) ----
 # def (defensa) neutral/baja: son equilibrados, sin destacar en aguante.
@@ -271,6 +279,13 @@ for slug, rec in SP.items():
         rec["rarity"] = "extinto"; rec["ext"] = True; rec.pop("leg", None)
         rec["atk"] = min(15, rec["atk"] + 6); rec["hp"] = min(24, rec["hp"] + 12)
         rec["def"] = min(10, rec.get("def", 0) + 4); rec["hab"] = min(9, rec.get("hab", 0) + 2)
+        # ...y sus TRES habilidades (antes se quedaba con una sola: la 2ª solo se
+        # asignaba en la rama de los legendarios, así que el extinto nunca la recibía)
+        abs3 = EXTINTO_ABS.get(slug)
+        if abs3:
+            rec["ab"] = abs3[0]
+            if len(abs3) > 1: rec["ab2"] = abs3[1]
+            if len(abs3) > 2: rec["ab3"] = abs3[2]
     elif slug in LEGENDARIO:
         # LEGENDARIO: que se NOTE — stats bastante por encima + sus 2 habilidades.
         rec["rarity"] = "legendario"; rec["leg"] = True

@@ -181,3 +181,65 @@ export function fichaEscena(a) {
 
 // ¿Tenemos ficha propia de esta especie?
 export const tieneFicha = (key) => !!FICHAS[key];
+
+// ---------- CONSEJO ante un hallazgo raro (legendario / extinto / ultra raro) ----------
+// El guía reconoce al animal, cuenta lo esencial de su ficha y —sobre todo— AYUDA
+// A DECIDIR: compara contra el equipo actual y dice qué aporta.
+const AB_TXT = {
+  poison:'derrite a los que aguantan mucho (su veneno ignora la defensa)',
+  shield:'aguanta el primer golpe a la mitad, sirve de muro',
+  heal:  'va curando al equipo mientras pelea',
+  first: 'pega antes que nadie la primera vez',
+  rage:  'se va poniendo más fuerte con cada ataque',
+  thorns:'devuelve daño a quien lo toque',
+};
+
+export function consejoHallazgo(a, team = []) {
+  const f = FICHAS[a.key];
+  const esExt = a.rarity === 'extinto', esLeg = a.rarity === 'legendario';
+  const linea = [];
+
+  // 1) el reconocimiento
+  if (esExt) {
+    linea.push({ who:'guia', txt:`No puede ser… ${a.n}. Esta especie estaba dada por EXTINTA.`, hi:[a.n,'EXTINTA'] });
+  } else if (esLeg) {
+    linea.push({ who:'guia', txt:`Quedate quieto. Eso es ${a.n} — hay gente que se pasa la vida entera sin ver uno.`, hi:[a.n] });
+  } else {
+    linea.push({ who:'guia', txt:`Mirá… ${a.n}. No se ven todos los días por aquí.`, hi:[a.n] });
+  }
+
+  // 2) el dato de la ficha (lo educativo)
+  if (f) {
+    linea.push({ who:'guia', txt:`${f.sci}. ${f.dato}`, hi:[f.sci] });
+    linea.push({ who:'guia', txt:`Conservación: ${f.cons}`, hi:['Conservación'] });
+  }
+
+  // 3) qué aporta al equipo (lo práctico)
+  const habs = [a.ab, a.ab2, a.ab3].filter(Boolean);
+  const nombres = { poison:'Veneno', shield:'Escudo', heal:'Regenera', first:'Primer golpe', rage:'Furia', thorns:'Púas' };
+  if (habs.length) {
+    const lista = habs.map(h => nombres[h] || h).join(' + ');
+    const explica = AB_TXT[habs[0]] || '';
+    linea.push({ who:'guia',
+      txt:`En combate trae ${lista}${habs.length > 1 ? ` — ${habs.length} habilidades, algo que casi nadie tiene` : ''}. ${explica ? 'Su fuerte: ' + explica + '.' : ''}`,
+      hi:[lista] });
+  }
+
+  // 4) la comparación honesta con lo que ya tenés
+  if (team.length) {
+    const flojo = team.reduce((m, x) => ((x.atk + x.hp) < (m.atk + m.hp) ? x : m), team[0]);
+    const mejorAtk = Math.max(...team.map(x => x.atk));
+    const lleno = team.length >= 5;
+    if (a.atk > mejorAtk) {
+      linea.push({ who:'guia', txt:`Pega más fuerte que cualquiera del refugio (${a.atk} contra ${mejorAtk}). Yo me lo llevaría.`, hi:['me lo llevaría'] });
+    } else if (a.atk + a.hp > flojo.atk + flojo.hp) {
+      linea.push({ who:'guia', txt:`Está mejor que ${flojo.n}, que es el más justo que traigo. Vos decidís.`, hi:[flojo.n] });
+    } else {
+      linea.push({ who:'guia', txt:`Ojo: viene bajo de nivel todavía. Tu equipo ya está más curtido — igual, con entrenamiento sube.`, hi:['bajo de nivel'] });
+    }
+    if (lleno) {
+      linea.push({ who:'guia', txt:`Y el refugio está lleno: si lo rescatás, tenés que soltar a otro. Elegí con calma.`, hi:['está lleno'] });
+    }
+  }
+  return linea;
+}
