@@ -1,0 +1,140 @@
+{
+  "_fuente": "narutoarena.fandom.com/wiki/Category:Characters — los 22 personajes documentados, extraidos 2026-07-20",
+  "_notas": "Vida = 100 para TODOS. cost: Tai/Nin/Gen/Blood = chakra especifico, Ran = aleatorio (comodin), [] = gratis. cd = cooldown en turnos.",
+
+  "Abumi_Zaku": [
+    {"n":"Decapitating Airwaves","d":"25 damage to one enemy. 'Extreme Decapitating Airwaves' may be used the following turn.","cost":["Blood"],"cd":0,"cls":"Physical, Ranged, Unique, Instant"},
+    {"n":"Wall of Air","d":"Protects one ally for 1 turn: the first harmful non-mental skill used on this ally is countered. Invisible.","cost":["Ran"],"cd":2,"cls":"Physical, Unique, Instant"},
+    {"n":"Extreme Decapitating Airwaves","d":"45 damage to ALL enemies. Requires 'Decapitating Airwaves' used the previous turn.","cost":["Blood","Ran","Ran"],"cd":0,"cls":"Physical, Ranged, Unique, Instant"},
+    {"n":"Airwave Deflection","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Chakra, Instant"}
+  ],
+  "Aburame_Shino": [
+    {"n":"Chakra Leech","d":"20 affliction damage and steals 1 random chakra.","cost":["Blood","Ran"],"cd":1,"cls":"Affliction, Ranged, Unique, Instant"},
+    {"n":"Female Bug","d":"For 4 turns, that enemy deals 5 less non-affliction damage and 'Chakra Leech' deals +5 to them. Stacks.","cost":["Ran"],"cd":1,"cls":"Physical, Ranged, Unique, Instant"},
+    {"n":"Bug Wall","d":"His whole team gains 20 destructible defense.","cost":["Blood","Ran"],"cd":3,"cls":"Physical, Unique, Instant"},
+    {"n":"Shino Hide","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Mental, Instant"}
+  ],
+  "Akimichi_Chouji": [
+    {"n":"Partial Multi-Size","d":"20 damage to one enemy.","cost":["Tai"],"cd":0,"cls":"Physical, Melee, Instant"},
+    {"n":"Meat Tank","d":"10 damage per turn for 2 turns; Chouji invulnerable those 2 turns.","cost":["Blood"],"cd":2,"cls":"Physical, Melee, Action"},
+    {"n":"Akimichi Pills","d":"Permanent: 'Multi-Size' +20 dmg, 'Meat Tank' +10/turn; Chouji takes 20 affliction damage. Max 3 pills.","cost":["Ran"],"cd":0,"cls":"Affliction, Unique, Instant"},
+    {"n":"Effortless Block","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Instant"}
+  ],
+  "Gaara": [
+    {"n":"Sand Coffin","d":"Stuns one enemy's non-mental skills 2 turns; they cannot reduce damage or become invulnerable. Replaced by 'Sand Burial' meanwhile.","cost":["Nin","Ran"],"cd":2,"cls":"Physical, Ranged, Control"},
+    {"n":"Sand Burial","d":"(payoff de Sand Coffin) remata al enemigo atrapado.","cost":["Nin","Nin"],"cd":0,"cls":"Physical, Ranged"},
+    {"n":"Sand Clone","d":"Until Gaara takes new non-affliction damage he ignores all harmful effects except damage. Free.","cost":[],"cd":2,"cls":"Chakra, Instant"},
+    {"n":"Armor of Sand","d":"Permanently gains 40 destructible defense; re-applies, no stack.","cost":["Ran"],"cd":4,"cls":"Chakra, Instant"},
+    {"n":"Shield of Sand","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Unique, Instant"}
+  ],
+  "Haruno_Sakura": [
+    {"n":"KO Punch","d":"20 damage and stuns physical/mental skills 1 turn. +10 during 'Inner Sakura'.","cost":["Tai"],"cd":0,"cls":"Physical, Melee, Instant"},
+    {"n":"Mystical Palm Healing","d":"Heals self or ally 25 health.","cost":["Nin"],"cd":0,"cls":"Chakra, Instant"},
+    {"n":"Inner Sakura","d":"For 4 turns +10 damage reduction, ignores non-damage effects; 'KO Punch' +10.","cost":["Ran"],"cd":4,"cls":"Mental, Unique, Instant"},
+    {"n":"Sakura Replacement","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Chakra, Instant"}
+  ],
+  "Hyuuga_Hanabi": [
+    {"n":"Hanabi Gentle Fist","d":"15 damage per turn for 2 turns; those turns, if the enemy uses chakra removal/drain/gain they lose 1 random chakra.","cost":["Tai"],"cd":1,"cls":"Physical, Melee, Action"},
+    {"n":"Hanabi Revolving Heaven","d":"15 damage per turn for 2 turns; those turns, if the enemy stuns, they get stunned 1 turn.","cost":["Tai"],"cd":1,"cls":"Chakra, Melee, Action"},
+    {"n":"Unyielding Tenacity","d":"For 2 turns cannot be killed, ignores stuns, +5 damage; her skills cost 1 Ran instead of Tai. Free.","cost":[],"cd":0,"cls":"Mental, Instant"},
+    {"n":"Hanabi Byakugan","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Mental, Instant"}
+  ],
+  "Hyuuga_Hinata": [
+    {"n":"Hinata Gentle Fist","d":"20 damage for 2 turns; during 'Byakugan' also removes 1 random chakra each turn.","cost":["Tai","Ran"],"cd":1,"cls":"Physical, Melee, Unique, Action"},
+    {"n":"Protective Sixty-Four Palms","d":"15 damage to all enemies; all allies gain 10 destructible defense 1 turn. 20 damage during 'Byakugan'.","cost":["Nin","Ran"],"cd":0,"cls":"Chakra, Unique, Instant"},
+    {"n":"Byakugan","d":"+15 damage reduction for 4 turns; improves her other skills.","cost":["Ran"],"cd":4,"cls":"Mental, Unique, Instant"},
+    {"n":"Hinata Block","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Instant"}
+  ],
+  "Hyuuga_Neji": [
+    {"n":"Neji Gentle Fist","d":"25 damage for 2 turns; that enemy deals 5 less non-affliction damage meanwhile.","cost":["Tai","Ran"],"cd":1,"cls":"Physical, Melee, Unique, Action"},
+    {"n":"Eight Trigrams Revolving Heaven","d":"Invulnerable 1 turn AND 15 damage to all enemies.","cost":["Blood"],"cd":1,"cls":"Chakra, Melee, Unique, Instant"},
+    {"n":"Sixty-Four Palms","d":"40 damage and that enemy loses 1 random chakra.","cost":["Tai","Blood"],"cd":1,"cls":"Physical, Melee, Unique, Instant"},
+    {"n":"Byakugan Insight","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Mental, Unique, Instant"}
+  ],
+  "Inuzuka_Kiba": [
+    {"n":"Garouga","d":"30 damage to one enemy. Improved and 1 cheaper during 'Double-Headed Wolf'.","cost":["Tai","Ran"],"cd":0,"cls":"Physical, Melee, Instant"},
+    {"n":"Double-Headed Wolf","d":"15 damage to ALL enemies per turn for 3 turns; Kiba +15 damage reduction; 'Garouga' improved.","cost":["Tai","Blood"],"cd":3,"cls":"Physical, Unique, Melee, Action"},
+    {"n":"Dynamic Marking","d":"One enemy cannot reduce damage or become invulnerable for 3 turns; wolf skills +5 vs them. Free.","cost":[],"cd":0,"cls":"Affliction, Ranged, Instant"},
+    {"n":"Smoke Bomb","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Instant"}
+  ],
+  "Kinuta_Dosu": [
+    {"n":"Resonating Echo Drill","d":"20 damage; enemy cannot reduce damage or become invulnerable 2 turns; next-turn 'Sound Manipulation' +10 vs them.","cost":["Tai"],"cd":0,"cls":"Physical, Melee, Instant"},
+    {"n":"Sound Manipulation","d":"10 damage; REST OF GAME that enemy takes +5 and deals -5 (non-affliction). Stacks.","cost":["Gen"],"cd":1,"cls":"Mental, Ranged, Instant"},
+    {"n":"Melody Arm Tuning","d":"For 4 turns 'Echo Drill' +20 and 'Sound Manipulation' +10.","cost":["Ran"],"cd":4,"cls":"Physical, Unique, Instant"},
+    {"n":"Agile Leap","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Instant"}
+  ],
+  "Nara_Shikamaru": [
+    {"n":"Meditate","d":"Marks one enemy 5 turns (setup). Cannot be countered/reflected. Free.","cost":[],"cd":0,"cls":"Mental, Ranged, Instant"},
+    {"n":"Shadow-Neck Bind","d":"15 damage to ALL enemies; they cannot reduce damage or become invulnerable 1 turn (2 vs 'Meditate' target).","cost":["Gen"],"cd":1,"cls":"Chakra, Ranged, Action"},
+    {"n":"Shadow Imitation","d":"Stuns ALL enemies' non-mental skills 1 turn (2 vs 'Meditate' targets).","cost":["Gen","Ran"],"cd":3,"cls":"Chakra, Ranged, Control"},
+    {"n":"Shikamaru Hide","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Mental, Instant"}
+  ],
+  "Nohara_Rin": [
+    {"n":"Pit Trap","d":"For 1 turn Rin +15 damage reduction; enemy takes 15 piercing (ignores invulnerability) at end of their turn, +15 more if they use a skill. Invisible.","cost":["Gen"],"cd":0,"cls":"Physical, Ranged, Instant"},
+    {"n":"Rin Mystical Palm","d":"Heals ally 25 and removes all harmful afflictions.","cost":["Nin"],"cd":0,"cls":"Chakra, Instant"},
+    {"n":"Medical Kit","d":"Ally heals 10/turn for 3 turns; their healing skills +10 meanwhile.","cost":["Ran","Ran"],"cd":3,"cls":"Physical, Instant"},
+    {"n":"Rin Flee","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Instant"}
+  ],
+  "Rehabilitated_Gaara": [
+    {"n":"Sand Mastery","d":"15 damage per turn for 3 turns; Gaara gains 35 destructible defense.","cost":["Ran","Ran"],"cd":3,"cls":"Physical, Ranged, Action"},
+    {"n":"Prison Sand Burial","d":"Enemy team's non-mental skills cost +1 random for 1 turn; then replaced by 'Desert Imperial Funeral' 1 turn.","cost":["Nin"],"cd":0,"cls":"Physical, Ranged, Instant"},
+    {"n":"Desert Imperial Funeral","d":"Destroys enemies' destructible defense and deals 40 piercing to them (payoff).","cost":["Blood","Nin"],"cd":0,"cls":"Physical, Ranged, Instant"},
+    {"n":"Quicksand Waterfall Flow","d":"15 damage to enemy TEAM per turn for 4 turns; their defense skills -10, his team's +10.","cost":["Nin","Nin"],"cd":4,"cls":"Physical, Ranged, Action"},
+    {"n":"Shield of Shukaku","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Instant"}
+  ],
+  "Rock_Lee": [
+    {"n":"High Speed Taijutsu","d":"10 damage per turn 3 turns; Lee +10 damage reduction; 'Front Lotus' +10 vs that enemy. Stacks. +15 during 'Fifth Gate'.","cost":["Tai"],"cd":0,"cls":"Physical, Melee, Action"},
+    {"n":"Front Lotus","d":"30 damage. +30 during 'Fifth Gate Opening'.","cost":["Tai","Ran"],"cd":0,"cls":"Physical, Melee, Instant"},
+    {"n":"Fifth Gate Opening","d":"Cleanses himself, LOSES 50 health, invulnerable 2 turns; replaced by 'Final Lotus'.","cost":["Tai"],"cd":4,"cls":"Mental, Instant"},
+    {"n":"Final Lotus","d":"100 damage to one enemy, expends ALL his chakra.","cost":["Tai","Tai"],"cd":0,"cls":"Physical, Melee, Instant"},
+    {"n":"Lee Block","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Instant"}
+  ],
+  "Temari": [
+    {"n":"Cutting Whirlwind","d":"20 damage; next turn Temari invulnerable to non-mental skills.","cost":["Nin"],"cd":0,"cls":"Physical, Ranged, Instant"},
+    {"n":"Quick Beheading Dance","d":"35 damage to ALL enemies.","cost":["Nin","Ran","Ran"],"cd":2,"cls":"Physical, Ranged, Unique, Instant"},
+    {"n":"Dust Wind","d":"ALL allies invulnerable 1 turn; enemies deal -15 for 2 turns.","cost":["Nin","Nin"],"cd":5,"cls":"Physical, Ranged, Instant"},
+    {"n":"Backflip","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Instant"}
+  ],
+  "Tenten": [
+    {"n":"Twin Rising Dragons","d":"20 damage to one enemy, 10 to the rest; marks them for the Trap. Cannot be countered.","cost":["Tai"],"cd":0,"cls":"Physical, Ranged, Instant"},
+    {"n":"Twin Rising Dragons Trap","d":"5 damage to all; their physical/chakra damage -5 for 1 turn; consumes the marks.","cost":["Ran"],"cd":0,"cls":"Physical, Ranged, Instant"},
+    {"n":"Full Release","d":"Invulnerable to physical/chakra 1 turn; her next skill is doubled/extended.","cost":["Ran"],"cd":1,"cls":"Physical, Instant"},
+    {"n":"Spiked Boulder Wall","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Instant"}
+  ],
+  "Tsuchi_Kin": [
+    {"n":"Illusion Bell Needles","d":"15 damage. +25 if used the turn after 'Unnerving Bells'. After 'Needle and Bell Trap': Kin invulnerable 1 turn.","cost":["Ran"],"cd":0,"cls":"Mental, Ranged, Instant"},
+    {"n":"Needle and Bell Trap","d":"Enemy cannot reduce damage or become invulnerable 2 turns; combos with her other bells (stun or +10).","cost":["Ran"],"cd":1,"cls":"Physical, Ranged, Instant"},
+    {"n":"Unnerving Bells","d":"Enemy loses 1 chakra; combos: +15 physical or chakra damage taken 1 turn.","cost":["Gen"],"cd":2,"cls":"Mental, Ranged, Instant"},
+    {"n":"Sharp Analysis","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Mental, Instant"}
+  ],
+  "Uchiha_Obito": [
+    {"n":"Piercing Stab","d":"15 piercing damage. +10 during 'Obito Sharingan'.","cost":["Ran"],"cd":0,"cls":"Physical, Melee, Instant"},
+    {"n":"Great Fireball","d":"15 affliction damage per turn 2 turns. During Sharingan: instant 30 affliction, no cooldown.","cost":["Nin"],"cd":1,"cls":"Affliction, Ranged, Instant"},
+    {"n":"Obito Sharingan","d":"+15 damage reduction 4 turns; if Obito dies, ally gains permanent +5 reduction and +5 damage.","cost":["Ran"],"cd":4,"cls":"Mental, Unique, Instant"},
+    {"n":"Obito Flee","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Instant"}
+  ],
+  "Uchiha_Sasuke": [
+    {"n":"Lion Combo","d":"30 damage. +15 vs enemy affected by 'Sharingan'.","cost":["Tai","Ran"],"cd":0,"cls":"Physical, Melee, Instant"},
+    {"n":"Chidori","d":"30 piercing damage. +25 vs 'Sharingan' target.","cost":["Nin","Ran"],"cd":1,"cls":"Chakra, Melee, Instant"},
+    {"n":"Sharingan","d":"Marks one enemy 4 turns: Sasuke +15 damage reduction; that enemy cannot reduce damage or become invulnerable.","cost":["Ran"],"cd":4,"cls":"Mental, Unique, Instant"},
+    {"n":"Swift Block","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Instant"}
+  ],
+  "Uzumaki_Naruto": [
+    {"n":"Naruto Combo","d":"20 damage. +10 during 'Shadow Clones'.","cost":["Tai"],"cd":0,"cls":"Physical, Melee, Instant"},
+    {"n":"Rasengan","d":"45 damage and stuns their skills 1 turn. REQUIRES 'Shadow Clones' active.","cost":["Nin","Ran"],"cd":1,"cls":"Chakra, Melee, Instant"},
+    {"n":"Shadow Clones","d":"+15 damage reduction 4 turns; 'Combo' +10; unlocks 'Rasengan'.","cost":["Ran"],"cd":3,"cls":"Chakra, Instant"},
+    {"n":"Sexy Technique","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Chakra, Instant"}
+  ],
+  "Yamanaka_Ino": [
+    {"n":"Mind Body Disturbance","d":"Stuns one enemy's non-mental skills 1 turn; 30 piercing (ignores invulnerability) to one RANDOM enemy; target cannot reduce/become invulnerable.","cost":["Gen","Ran"],"cd":0,"cls":"Mental, Ranged, Instant"},
+    {"n":"Mind Body Switch","d":"One enemy stunned and exposed for 4 turns; replaced by 'Art of the Valentine' meanwhile.","cost":["Gen","Gen"],"cd":3,"cls":"Mental, Ranged, Control"},
+    {"n":"Chakra Hair Strand Trap","d":"For 1 turn: if that enemy uses a harmful skill, their cooldowns +1 for 2 turns. Invisible.","cost":["Ran"],"cd":1,"cls":"Chakra, Ranged, Instant"},
+    {"n":"Ino Block","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Instant"}
+  ],
+  "Young_Kakashi": [
+    {"n":"White Fang Slash","d":"20 piercing; enemy -5 damage 1 turn; Kakashi +5 damage next turn.","cost":["Tai"],"cd":0,"cls":"Physical, Melee, Instant"},
+    {"n":"Amateur Raikiri","d":"20 piercing; same riders as White Fang.","cost":["Nin"],"cd":0,"cls":"Chakra, Melee, Instant"},
+    {"n":"Implanted Sharingan","d":"Reactive trap 2 turns: mirrors what the enemy does (chakra gain / stun / +10 damage). Invisible, free.","cost":[],"cd":1,"cls":"Mental, Ranged, Unique, Instant"},
+    {"n":"Sword Parry","d":"Invulnerable 1 turn.","cost":["Ran"],"cd":4,"cls":"Physical, Instant"}
+  ]
+}

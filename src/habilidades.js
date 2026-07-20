@@ -8,6 +8,11 @@
 //   recargas: 0 básicos · 1 fuertes · 2-3 control · 4 definitivas y esquiva
 // ============================================================
 
+import { MOVESETS_GEN } from './movesets_gen.js';
+
+// ⚠️ VIDA = 100 PARA TODOS (regla ARENA, 20-jul): ni nivel ni rareza tocan stats.
+// El nivel solo desbloquea habilidades (Nv1/Nv4/Nv8). Ver ARENA.md §3.
+
 // ---------- tipos de energía = biomas ----------
 export const ENERGIA = {
   bosque:  { n:'Bosque',  e:'🌳', color:'#3f8f4a' },
@@ -239,9 +244,13 @@ export const MOVESETS = {
 };
 
 // ---------- utilidades ----------
+// Los kits a mano (MOVESETS) MANDAN; los generados (MOVESETS_GEN, por
+// make_movesets.py) cubren el resto del roster. Juntos: las 136 especies.
+const kitDe = (key) => MOVESETS[key] || MOVESETS_GEN[key] || null;
+
 // Habilidades disponibles para un animal según su nivel (+ la esquiva siempre).
 export function habsDe(key, nivel = 1) {
-  const m = MOVESETS[key];
+  const m = kitDe(key);
   if (!m) return { pasiva: null, habs: [], esquiva: ESQUIVA };
   return {
     pasiva: m.pasiva,
@@ -250,5 +259,5 @@ export function habsDe(key, nivel = 1) {
     esquiva: ESQUIVA,
   };
 }
-export const tieneMoveset = (key) => !!MOVESETS[key];
-export const COBERTURA = () => Object.keys(MOVESETS).length;
+export const tieneMoveset = (key) => !!kitDe(key);
+export const COBERTURA = () => new Set([...Object.keys(MOVESETS), ...Object.keys(MOVESETS_GEN)]).size;

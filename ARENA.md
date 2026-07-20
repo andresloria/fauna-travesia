@@ -47,6 +47,54 @@ Ejemplos verificados:
 - *Neji · 64 Palmas*: 40 daño **y el enemigo pierde 1 energía al azar**, recarga 1.
 - *Neji · Kaiten*: invulnerable 1 turno **y** 15 de daño a TODOS, recarga 1.
 
+## 2b. ESTUDIO COMPLETO — los 22 personajes del wiki (2026-07-20)
+
+**Datos crudos en `tools/na_personajes.json`** (cada habilidad con daño, costo, recarga y
+clases, transcrita del wiki). De ahí salen las reglas de diseño de kits:
+
+**REGLA DE ORO: vida 100 para todos, sin excepción.** Un Genin y un Kage tienen la misma
+vida; la diferencia es el kit. En Fauna: ni nivel ni rareza tocan stats — el nivel solo
+desbloquea habilidades.
+
+**El patrón de kit dominante (Naruto, Sasuke, Hinata, Sakura, Kiba, Dosu, Obito, Lee):**
+1. **Golpe básico** — 15-30, costo 1 específico, recarga 0. *Mejora durante el "modo".*
+2. **Golpe fuerte / utilidad** — 25-45 con rider (aturdir, robar energía, perforar),
+   costo 2, recarga 0-1. A veces *requiere* el modo (Rasengan).
+3. **MODO** — buff de 4 turnos, costo 1 comodín, recarga 3-4: +10-15 de reducción de daño
+   y **mejora las otras dos habilidades** (Sharingan, Shadow Clones, Byakugan, Inner Sakura,
+   Melody Arm, Fifth Gate). Esto es lo que hace que un kit se sienta "de ese personaje".
+4. **Esquiva** — invulnerable 1 turno, costo 1 comodín, recarga 4. **Los 22 la tienen.**
+
+**Variantes de kit** (para que no todos sean "modo"):
+- **Setup → payoff**: Zaku (Airwaves 25 habilita Extreme 45 a TODOS al turno siguiente);
+  Gaara (Coffin atrapa → se REEMPLAZA por Burial); Kin (3 campanas que comban entre sí).
+- **Control**: Shikamaru (marca gratis 5 turnos → aturdir en área); Ino (aturdir + exponer).
+- **Sanador**: Sakura/Rin (cura 25 recarga 0 · cura 10/turno×3 · limpiar toxinas).
+- **Tanque**: Gaara (defensa 40 permanente) · Shino (20 al equipo) · Chouji (invulnerable
+  mientras pega 10/turno).
+- **Muro de contraataque**: Zaku (Wall of Air: contraataca la 1ª habilidad, invisible).
+
+**Mecánicas que existen en el original** (catálogo ampliado para el motor):
+- **Perforante** — ignora reducción de daño (Chidori, White Fang); algunas ignoran
+  invulnerabilidad (toxinas, Pit Trap, Mind Body Disturbance).
+- **Exponer** — "no puede reducir daño ni volverse invulnerable" 1-3 turnos. A menudo
+  GRATIS (Dynamic Marking de Kiba, recarga 0): es el counter de la Esquiva.
+- **Invisible** — trampas que el rival no ve (Pit Trap, Hair Strand, Implanted Sharingan).
+- **Robar vs quemar energía** — Shino roba (la gana), Neji quema (se pierde).
+- **Subir costos** (Prison Sand: +1 al rival 1 turno) y **subir recargas** (Hair Strand:
+  +1 a todas si ataca).
+- **Acumulable permanente** — Sound Manipulation de Dosu: +5 recibido / -5 infligido el
+  RESTO de la pelea, apilable. (Es el "counter de tanques".)
+- **Inmatable** — Hanabi: 2 turnos sin poder morir, gratis.
+- **Autodaño con pago** — Lee pierde 50 de vida por 2 turnos invulnerable + Final Lotus 100;
+  Chouji come píldoras (+20 de daño permanente a cambio de 20 de toxina).
+- **Daño a un enemigo AL AZAR** (Mind Body Disturbance): castigo no dirigible.
+
+**Economía verificada**: específico para lo firma, comodín para modos/utilidad; habilidades
+GRATIS existen y son setup/marca (Meditate, Dynamic Marking, Sand Clone, Tenacity).
+AoE barato = 15 · AoE caro (3 energías) = 35-45. Recarga 5 existe (Dust Wind, equipo entero
+invulnerable).
+
 ## 3. Adaptación a Fauna
 
 ### Energía = los 4 biomas (ya existen en el juego)
@@ -67,7 +115,10 @@ impredecible.
 - **1 pasiva** — siempre activa, lo distingue (no cuesta energía, no se elige).
 - **3 habilidades** — se desbloquean por nivel: **Nv1 · Nv4 · Nv8**.
 - **1 esquiva** — invulnerable 1 turno, recarga 4. Todos la tienen desde el principio.
-- Vida base **100** (se mantiene el escalado por nivel/rareza como bonus).
+- **Vida = 100 PARA TODOS, SIEMPRE** (regla de Andrés, 20-jul). Como el original: ni el nivel
+  ni la rareza tocan la vida ni los stats. Subir de nivel SOLO desbloquea habilidades
+  (Nv1/Nv4/Nv8). La diferencia entre un común y un legendario está en su kit, no en números
+  inflados — igual que un Genin y un Kage en Naruto-Arena tenían ambos 100.
 
 ### Clases (traducidas)
 | Original | Fauna |

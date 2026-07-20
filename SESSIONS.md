@@ -60,6 +60,27 @@ está **copiado, no inventado**.
 Rangos D→S derivados de la rareza; la mayoría piden **rachas** (perder reinicia), que es lo que
 obliga a armar estrategia.
 
+**5. (20-jul) REGLA: vida 100 para TODOS** — pedido de Andrés. Como el original: ni nivel ni
+rareza tocan stats; el nivel solo desbloquea habilidades. Escrito en ARENA.md §3.
+
+**6. (20-jul) Estudio COMPLETO del wiki** — los 22 personajes documentados de Naruto-Arena,
+cada habilidad con daño/costo/recarga/clases → `tools/na_personajes.json` (crudo) y
+ARENA.md §2b (patrones destilados: el kit-MODO, setup→payoff, exponer como counter de la
+esquiva, perforante, invisible, marca permanente…).
+
+**7. (20-jul) Moveset para las 136 especies** — `make_movesets.py` genera
+`src/movesets_gen.js` (122 kits por arquetipo: rol × bioma × rareza, números del estudio;
+la rareza sube COMPLEJIDAD, no números) + los 14 a mano de `habilidades.js` que siempre
+mandan. `habsDe()` ya resuelve contra ambos: **cobertura 136/136**. Quedan 13 marcados
+`TODO kit a mano` (legendarios/míticos sin kit propio: danta*, manatí, lapa, águila harpía,
+sapo dorado*, tiburón ballena, quetzal dorado y las 6 leyendas). *danta y sapo_dorado tienen
+provisional pero merecen kit único.
+
+**8. (20-jul) Mockups aprobados en artifacts** — pantalla de combate CALCADA de la referencia
+del original (fondo de selva del juego, tuyos a la izquierda / rival a la derecha / tiles al
+medio, LISTO+timer+energía arriba, descripción abajo) y pantalla de armar equipo (ficha al
+tocar, refugio abajo, misiones visibles en los bloqueados). Falta implementarlas en el juego.
+
 ---
 
 ## PRÓXIMOS PASOS (retomar por acá)
