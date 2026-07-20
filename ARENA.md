@@ -114,3 +114,52 @@ desbloquean animales nuevos para el refugio.
 - [ ] Pantalla de combate (cola, objetivos, LISTO, AUTO)
 - [ ] Los 130 animales
 - [ ] Sistema de misiones
+
+---
+
+## 7. MISIONES para desbloquear animales (`src/misiones.js`)
+
+Copiado del original: misiones por **RANGO D → C → B → A → S**, y la mayoría piden
+**RACHAS**. La racha es lo que obliga a armar estrategia: no alcanza con jugar mucho,
+hay que ganar **sin fallar**.
+
+Misiones reales del original que sirvieron de molde:
+- *"Win Four Battles In A Row With Neji"*
+- *"Win 5 Battles In A Row With Shikamaru Or Temari In Your Team"*
+- *"Win 5 Battles In A Row With At Least One Member Of The Sound Genin"*
+- *"Win 15 Battles With Naruto, Sasuke, Or Sakura In Your Team"*
+- *"Defeat the Sand Siblings with Hinata / Shino / Kiba on your team"*
+
+**El rango sale de la rareza** (qué tan difícil es ver al animal):
+| Rango | Rareza | Sentido |
+|---|---|---|
+| D | común | Fauna que se ve seguido |
+| C | raro | Cuesta un poco más |
+| B | ultra raro | Poca gente los ve |
+| A | legendario | Encuentro de toda una vida |
+| S | extinto / mítico | Ya no deberían existir |
+
+**Tipos de objetivo implementados**: `racha`, `total`, `conEquipo`, `bioma` (equipo entero
+de un bioma), `sinCaidos`, `liberar`, `rescatar`, `vencer`, `sinEsquiva`, `soloClase`,
+`conClase`, `soloUnoVivo`, `primeroElFuerte`, `curado`, `robado`, `contraatacado`,
+`ganarJuego`, `vencerFolk`.
+
+Ejemplos ya escritos:
+- **Jaguar (A)**: ganá 6 seguidos con equipo de puro bosque.
+- **Quetzal (A)**: liberá 10 animales PLENOS.
+- **Puma (A)**: ganá 5 seguidos quedándote con UN solo animal en pie.
+- **Sapo dorado (S)**: 12 especies de montaña + ganar el juego sin perder a nadie.
+- **Las 6 leyendas (S)**: vencerlas en el mapa Tenebroso.
+
+⚠️ El rango de cada misión **debe coincidir** con la rareza del animal. Hay un chequeo:
+`rangoDe(SP[key].rarity) === MISIONES[key].rango`. Ya corrigió 5 desalineadas.
+
+## 8. Estado (actualizado)
+- [x] Reglas del combate estudiadas y documentadas
+- [x] Catálogo de efectos (`src/habilidades.js`)
+- [x] 14 animales con pasiva + 3 habilidades
+- [x] Sistema de misiones por rango (`src/misiones.js`) — 25 misiones
+- [ ] Motor de combate por turnos nuevo (reemplaza `fight()`)
+- [ ] Pantalla de combate (cola de habilidades, objetivos, LISTO, AUTO)
+- [ ] Los 116 animales restantes
+- [ ] Enganchar el progreso de misiones a `meta.js`
