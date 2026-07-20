@@ -4,32 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAUNA · Travesía</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900&family=Spectral:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./styles.css?v=10">
+<link rel="stylesheet" href="./styles.css?v=11">
 </head>
 <body>
-<button id="dexBtn" class="soundbtn meta1" aria-label="Colección" title="Colección de fauna">📖</button>
-<button id="achBtn" class="soundbtn meta2" aria-label="Logros" title="Logros">🏆</button>
 <button id="soundBtn" class="soundbtn" aria-label="Sonido de ambiente" title="Sonido de ambiente">🔊</button>
 <div class="wrap">
-  <div class="eyebrow">Roguelike de fauna · Guardianes de Costa Rica</div>
-  <h1>Fauna · Travesía<span class="sub">Rescatá, rehabilitá y devolvé la fauna tica a la naturaleza</span></h1>
+  <div class="eyebrow">Liga de fauna · Guardianes de Costa Rica</div>
+  <h1>Fauna · Travesía<span class="sub">Armá tu equipo, vencé a los cazadores y liberá la fauna tica</span></h1>
 
   <details class="how"><summary>Cómo se juega</summary>
-    <p>Querés ser <b>guía de naturaleza</b> y ver a todos los animales de Costa Rica, pero descubrís una <b>red de cazadores furtivos</b>: drogan a los animales para dominarlos y por eso te atacan. Tu misión es <b>rescatarlos</b> y sacar a los cazadores del país.</p>
-    <p>Recorrés las <b>7 provincias</b>. En cada una <b>elegís tu ruta</b>: desde el inicio salen <b>3 opciones</b>, y así fila por fila (5 filas) hasta el <b>cabecilla 🚨</b>. Cada casilla es un bioma con un animal a <b>rescatar 🩹</b>, un <b>animal alterado 🐾</b>, un <b>furtivo 🪤</b> o <b>traficantes 🏹</b>, un hallazgo 🎁, un refugio 🏕️ o una <b>sorpresa ❓</b> (objeto, pelea ¡o un <b>jefe de zona 👑</b>!). Las primeras 2 filas son tranquilas; después, los cazadores acechan.</p>
-    <p>Tus rescatados se <b>rehabilitan</b> (suben de nivel: herido → recuperándose → <b>pleno</b>), tienen <b>rareza</b> (común…legendario) y un <b>efecto</b> (veneno, escudo, furia, regenera…). Cuando estén <b>plenos</b>, <b>liberalos 🌿</b>: eso suma <b>conservación</b>, el objetivo. Perdé un combate y perdés un corazón ❤️; sin corazones, termina la misión.</p>
+    <p>Los <b>cazadores furtivos</b> drogan a la fauna tica para pelear con ella. Vos sos <b>guía de naturaleza</b>: armás un equipo de <b>3 animales</b> y los enfrentás en combates <b>por turnos</b>.</p>
+    <p>En cada turno tu energía son los <b>biomas</b> (🌳🌾🌊⛰): cada animal vivo te da 1 por turno. Cada animal usa <b>1 habilidad por turno</b> y el <b>orden de la cola importa</b>. Ganá 4 combates en una provincia y te espera su <b>cabecilla</b>; vencé a los 7 y subí a <b>Monteverde</b>.</p>
+    <p>Cada victoria <b>libera</b> a los animales drogados del rival y da <b>XP</b>: al subir de nivel (4 y 8) tus animales aprenden habilidades nuevas. Empezás con ~30 especies; <b>todas las demás se desbloquean con MISIONES</b> (rachas, hazañas, cabecillas). Las <b>leyendas del folclor</b> aparecen al final…</p>
   </details>
 
-  <div class="runbar" id="runbar"></div>
-  <div id="phaseArea"></div>
-  <div class="log" id="log"></div>
+  <div id="app"></div>
 </div>
 
-<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
-
-<script type="module" src="./src/main.js?v=10"></script>
+<script type="module" src="./src/main.js?v=11"></script>
 </body>
 </html>

@@ -112,17 +112,43 @@ Los 46 tests viejos siguen verdes (el motor viejo aún existe hasta el swap de U
   (ahora tickean al cierre del turno del envenenado = 1 vez por ronda, como el original).
 - Cache-busting: index.html a `?v=10` · puerto local a **5650**.
 
+**✅ HECHO (20-jul, tarde): EL TABLERO SE FUE — estructura Naruto-Arena completa.**
+Pedido de Andrés: *"el sistema de ir por un tablero lo descartamos; ahora será igual que
+Naruto-Arena; ~30 animales fijos y el resto por misiones; música más relajante"*.
+- **`src/liga.js`** — el juego nuevo: LIGA por provincias. Rivales al azar del pool de la
+  provincia → cada **4 victorias, el cabecilla** (con sus escenas de historia de siempre)
+  → 7 provincias → **Monteverde** → **liga libre** donde las 6 leyendas del Tenebroso
+  aparecen de jefes (vencerlas las desbloquea). XP por victoria (+2, jefe +4) → nivel
+  (tabla 2/5/9/14/20/27/35, cap Nv8) → habilidades. Persistencia en `fauna_liga_v1`.
+- **31 animales de BASE** (comunes cubriendo roles y biomas) y **105 con MISIÓN**: las 25
+  a mano + `misionAutoDe()` (misiones.js) genera el resto por rango. Progreso real desde
+  el log de la arena: rachas con filtros, totales, curado/robado/contraataques, jefes,
+  leyendas, "rescatar" = especies GANADAS (las de base no cuentan — la Danta se
+  auto-cumplía el día 1, arreglado y verificado).
+- **`src/seleccionUI.js`** — la pantalla principal (mockup aprobado): ficha con pasiva +
+  4 habilidades (Nv marcado), equipo de 3, refugio con candados y misión visible, perfil
+  con récord/racha, modal MISIONES por rango con barras de progreso, avatar 1ª vez.
+- **`main.js` reescrito** (el tablero quedó sin usar en game.js/ui.js/engine.js) ·
+  index.html nuevo (v=11, "Cómo se juega" del rediseño).
+- **`assets/audio/ambiente.mp3`** — música RELAJANTE nueva (make_musica_ambiente.py:
+  pads lentos, caja de música pentatónica, pájaros, brisa; 74 s loop) para la selección;
+  pelea.ogg sigue en combate.
+- **Verificado en navegador**: avatar → selección (136 tiles) → EMPEZAR → escena de
+  llegada VN → arena "CAZADORES DE SAN JOSÉ" → victoria → aviso de misión cumplida →
+  récord/racha/liberados guardados → 4 wins muestra "¡TE ESPERA DON RUFINO!" con botón
+  🚨 ENFRENTAR AL CABECILLA. Cero errores de consola. Puerto local: **5651**.
+
 ## PRÓXIMOS PASOS (retomar por acá)
 
-1. **Pantalla de SELECCIÓN de equipo** (mockup aprobado): elegir 3 del refugio antes de
-   pelear (hoy van los 3 de mayor nivel automático) + ficha con pasiva/habs/rangos.
-2. **Retirar `E.fight()` del motor** y adaptar los tests viejos que lo cubren (el flujo
-   ya no lo usa; sigue solo por los 46 tests).
-3. **Kits a mano para los 13 marcados TODO** en `movesets_gen.js` (legendarios + leyendas).
-4. **Enganchar misiones a `meta.js`** — rachas/contadores en localStorage.
-5. **Rebalancear con `combateAuto`** (ya simula el combate nuevo).
-6. Pulir la arena: animaciones de golpe/daño flotante, sonido de combate, y que los
-   sostenidos/control muestren de quién dependen.
+1. **Probar el arco completo jugando**: cabecilla → provincia 2 → … → Monteverde →
+   liga libre con leyendas (solo probé la 1ª provincia + el estado del jefe).
+2. **Kits a mano para los 13 marcados TODO** en `movesets_gen.js` (legendarios + leyendas).
+3. **Retirar del repo el juego viejo** (game.js, ui.js, partes de engine.js y sus tests)
+   cuando el nuevo esté rodado — o dejarlo como archivo histórico.
+4. **Rebalancear con `combateAuto`**: nivel de rivales por provincia vs curva de XP.
+5. Pulir la arena: daño flotante, sonido de golpes, indicador de sostenidos/control.
+6. Las **fichas educativas** (fichas.js) hoy quedaron fuera del flujo — engancharlas al
+   desbloquear una especie nueva (el guía te la presenta).
 
 ### Pendientes viejos que siguen abiertos
 - Paneles laterales EQUIPO / MOCHILA / PROGRESO (hoy los chips van en fila arriba).

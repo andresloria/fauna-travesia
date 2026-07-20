@@ -128,8 +128,32 @@ export const MISIONES = {
   f_llorona:   { rango:'S', n:'La Llorona',            desc:'Vencé a la Llorona: cerrá la noche.',      obj:{ tipo:'vencerFolk', key:'f_llorona' } },
 };
 
+// ---------- misiones AUTOMÁTICAS ----------
+// Regla del rediseño (20-jul): ~30 animales fijos desbloqueados; TODOS los
+// demás se desbloquean con misión. Los que no tienen misión a mano reciben
+// una según su rango (mismo molde del original: rachas y totales).
+const BIO_N = { bosque:'bosque', sabana:'sabana', agua:'agua', montana:'montaña', noche:'la noche' };
+export function misionAutoDe(key, sp) {
+  const rango = rangoDe(sp?.rarity || 'comun');
+  const bio = sp?.bio || 'bosque';
+  const n = sp?.n || key;
+  switch (rango) {
+    case 'D': return { rango, n:`Tras la pista: ${n}`, auto:true,
+      desc:'Ganá 3 combates.', obj:{ tipo:'total', n:3 } };
+    case 'C': return { rango, n:`Tras la pista: ${n}`, auto:true,
+      desc:'Ganá 3 combates seguidos.', obj:{ tipo:'racha', n:3 } };
+    case 'B': return { rango, n:`Poca gente lo ve: ${n}`, auto:true,
+      desc:`Ganá 5 combates seguidos.`, obj:{ tipo:'racha', n:5 } };
+    case 'A': return { rango, n:`Encuentro único: ${n}`, auto:true,
+      desc:'Ganá 6 combates seguidos sin que caiga ninguno de tus animales.',
+      obj:{ tipo:'racha', n:6, sinCaidos:true } };
+    default:  return { rango:'S', n:`Lo imposible: ${n}`, auto:true,
+      desc:'Vencé a 8 cabecillas.', obj:{ tipo:'vencer', n:8 } };
+  }
+}
+
 // ---------- utilidades ----------
-export const misionDe   = (key) => MISIONES[key] || null;
+export const misionDe   = (key, sp) => MISIONES[key] || (sp ? misionAutoDe(key, sp) : null);
 export const tieneMision= (key) => !!MISIONES[key];
 export function porRango() {
   const o = { D:[], C:[], B:[], A:[], S:[] };

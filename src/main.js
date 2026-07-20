@@ -1,40 +1,32 @@
 // ============================================================
-// main.js — punto de entrada. Conecta el juego con la interfaz.
+// main.js — punto de entrada del REDISEÑO (20-jul): estructura Naruto-Arena.
+// Ya no hay tablero: seleccionás 3 del refugio → rivales al azar → cada 4
+// victorias, el cabecilla → 7 provincias + Monteverde → liga libre con las
+// leyendas. Los animales se desbloquean por MISIONES (ver src/liga.js).
+// El juego viejo de tablero quedó en src/game.js + src/ui.js (sin usar).
 // ============================================================
 
-import { Game } from './game.js';
-import { createUI } from './ui.js';
+import { crearSeleccion } from './seleccionUI.js';
 
-const game = new Game();
-const ui = createUI(game);
-game.ui = ui;     // inyectamos la interfaz en el juego
-game.newRun();    // ¡a jugar!
+const app = document.getElementById('app');
+const sel = crearSeleccion(app);
 
-// Útil para experimentar desde la consola del navegador: window.game
-window.game = game;
+// Útil para experimentar desde la consola: window.liga
+window.liga = sel;
 
-// ---------- música 8-bit (CC0, OpenGameArt) ----------
-// Dos temas que cambian según la fase: explorar el mapa = naturaleza,
-// combate = acción. Crossfade suave. Los navegadores no dejan autoplay:
-// arranca tras el primer toque. La preferencia (on/off) se guarda.
-// La UI avisa la fase con window.faunaMusic.set('map' | 'battle').
+// ---------- música ----------
+// Selección de equipo = AMBIENTE RELAJANTE nuevo (assets/audio/ambiente.mp3,
+// generado con make_musica_ambiente.py: pads lentos + caja de música + pájaros).
+// Combate = pelea.ogg. arenaUI avisa con window.faunaMusic.set('battle'|'map').
 (function setupMusic() {
   const btn = document.getElementById('soundBtn');
-  // pre='none' = no se baja hasta que toca sonar (no cargamos 10 MP3 de golpe)
-  const mk = (src, vol, pre = 'auto') => { const a = new Audio(); a.preload = pre; a.src = src; a.loop = true; a.volume = 0; a._vol = vol; return a; };
+  const mk = (src, vol, pre = 'auto') => {
+    const a = new Audio(); a.preload = pre; a.src = src; a.loop = true; a.volume = 0; a._vol = vol; return a;
+  };
   const tracks = {
-    map: mk('assets/audio/naturaleza.mp3', 0.30),   // intro / por defecto
-    battle: mk('assets/audio/pelea.ogg', 0.40),     // combate
-    noche: mk('assets/audio/noche.mp3', 0.38, 'none'),   // EASTER EGG: mapa Tenebroso
-    // un tema por PROVINCIA (mismo hilo 8-bit, distinto color) — carga al llegar
-    prov_sanjose:    mk('assets/audio/prov_sanjose.mp3', 0.30, 'none'),
-    prov_alajuela:   mk('assets/audio/prov_alajuela.mp3', 0.30, 'none'),
-    prov_cartago:    mk('assets/audio/prov_cartago.mp3', 0.30, 'none'),
-    prov_heredia:    mk('assets/audio/prov_heredia.mp3', 0.30, 'none'),
-    prov_guanacaste: mk('assets/audio/prov_guanacaste.mp3', 0.30, 'none'),
-    prov_puntarenas: mk('assets/audio/prov_puntarenas.mp3', 0.30, 'none'),
-    prov_limon:      mk('assets/audio/prov_limon.mp3', 0.30, 'none'),
-    monteverde:      mk('assets/audio/monteverde.mp3', 0.32, 'none'),   // final secreto
+    map: mk('assets/audio/ambiente.mp3', 0.34),      // ambiente relajante (nuevo)
+    battle: mk('assets/audio/pelea.ogg', 0.38),
+    noche: mk('assets/audio/noche.mp3', 0.36, 'none'),   // leyendas del Tenebroso
   };
   let on = (localStorage.getItem('fauna_sound') || 'on') !== 'off';
   let started = false, want = 'map';
@@ -51,22 +43,19 @@ window.game = game;
     if (!started) return;
     for (const k in tracks) {
       const a = tracks[k], target = (on && k === want) ? a._vol : 0;
-      if (target > 0) { if (a.paused) { a.volume = 0; a.play().catch(() => {}); } fade(a, target, 500); }
-      else fade(a, 0, 350);
+      if (target > 0) { if (a.paused) { a.volume = 0; a.play().catch(() => {}); } fade(a, target, 600); }
+      else fade(a, 0, 400);
     }
   }
-
   const sync = () => { if (btn) { btn.textContent = on ? '🔊' : '🔇'; btn.classList.toggle('off', !on); } };
   sync();
 
   window.faunaMusic = { set(name) { if (tracks[name]) { want = name; apply(); } } };
 
-  // primer gesto → habilita el audio (si está activado)
   window.addEventListener('pointerdown', function once() {
     window.removeEventListener('pointerdown', once);
     started = true; apply();
   });
-
   if (btn) btn.addEventListener('click', (e) => {
     e.stopPropagation();
     on = !on;

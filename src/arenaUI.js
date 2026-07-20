@@ -292,7 +292,7 @@ export function abrirArena(opts) {
     fin.querySelector('.ar-finbtn').onclick = () => {
       root.remove();
       document.body.classList.remove('ar-lock');
-      opts.onFin(gane, caidos);
+      opts.onFin(gane, caidos, st);   // st completo: liga.js saca de ahí las misiones
     };
   }
 
