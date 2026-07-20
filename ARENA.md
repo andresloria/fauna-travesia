@@ -1,0 +1,116 @@
+# ARENA — combate por turnos estilo Naruto-Arena, adaptado a Fauna Travesía
+
+Documento de diseño. Reemplaza el combate automático actual (`fight()` en `engine.js`).
+Fuente estudiada: `narutoarena.fandom.com` (The Basics + fichas de personajes).
+**Todo lo numérico de abajo está copiado del juego original**, no inventado.
+
+---
+
+## 1. Reglas base (del original)
+
+- Equipos de **3**. En Fauna: tenés un refugio de 5 y **elegís 3** antes de cada combate.
+- Por turnos. **El primer turno se sortea**; después el orden lo definís vos con la cola.
+- Cada animal usa **1 habilidad por turno** (si te alcanza la energía y no está en recarga).
+- **Energía**: al empezar tu turno recibís **1 energía por cada animal VIVO**. El primer turno,
+  solo 1. Por eso *matar a un enemigo le baja la economía*: es la estrategia central (enfocar
+  a uno hasta tumbarlo en vez de repartir daño).
+- **Cola de habilidades**: elegís habilidad → se iluminan los objetivos válidos → se encola.
+  **El orden importa** (izq→der): si querés romper un escudo antes de pegar, esa va primero.
+  Doble clic para sacarla. Botón **LISTO** ejecuta el turno.
+- **Recarga (cooldown)**: turnos que la habilidad queda bloqueada tras usarse.
+- **Esquiva universal**: TODOS los personajes del original tienen una 4ª habilidad que los hace
+  **invulnerables 1 turno, recarga 4**. En Fauna es la **Esquiva** de cada animal.
+- **Contraataques**: algunas habilidades se disparan solas cuando te atacan, durante el turno rival.
+
+## 2. Lenguaje numérico extraído (vida base 100)
+
+| Concepto | Valores reales del original |
+|---|---|
+| Golpe básico barato | **15–20** de daño |
+| Golpe fuerte | **25–30** |
+| Golpe pesado / caro | **40** |
+| Definitiva (gasta toda la energía) | **100** |
+| Daño por turno (veneno/sangrado) | **10–25** por turno, **2–4** turnos |
+| Curación | **25** |
+| Reducción de daño | **5–10** puntos, 3–4 turnos |
+| Defensa destructible (escudo con puntos) | **20–40** |
+| Daño en área (a todos) | **15** |
+| Invulnerabilidad | **1–2** turnos |
+| Robo de energía | **1** al azar |
+| Recargas | **0** (básicos) · **1** (fuertes repetibles) · **2–3** (control/defensa) · **4** (definitivas y esquiva) |
+
+Ejemplos verificados:
+- *Rock Lee · Front Lotus*: 30 daño, recarga 0. *Final Lotus*: 100 gastando toda la energía.
+- *Sakura · Mystical Palm*: cura 25, recarga 0. *KO Punch*: 20 + aturde 1 turno.
+- *Gaara · Armor of Sand*: +40 de defensa destructible, recarga 4.
+- *Shino · Chakra Leech*: 20 de daño de toxina **y roba 1 energía al azar**, recarga 1.
+- *Neji · 64 Palmas*: 40 daño **y el enemigo pierde 1 energía al azar**, recarga 1.
+- *Neji · Kaiten*: invulnerable 1 turno **y** 15 de daño a TODOS, recarga 1.
+
+## 3. Adaptación a Fauna
+
+### Energía = los 4 biomas (ya existen en el juego)
+| Tipo | Color | Sentido |
+|---|---|---|
+| 🌳 Bosque | verde | fuerza y garra |
+| 🌾 Sabana | dorado | velocidad y aguante |
+| 🌊 Agua | azul | curación y control |
+| ⛰️ Montaña | morado | lo raro y poderoso |
+| ⚪ Comodín | gris | paga cualquier tipo |
+
+**Cambio propuesto sobre el original**: en Naruto-Arena cada tipo salía 25% al azar. Acá cada
+animal vivo da 1 energía con **50% de que sea la de SU bioma** y 50% al azar. Así **armar el
+equipo importa**: equipo puro de bosque = energía fiable pero rígida; mixto = versátil pero
+impredecible.
+
+### Estructura de cada animal
+- **1 pasiva** — siempre activa, lo distingue (no cuesta energía, no se elige).
+- **3 habilidades** — se desbloquean por nivel: **Nv1 · Nv4 · Nv8**.
+- **1 esquiva** — invulnerable 1 turno, recarga 4. Todos la tienen desde el principio.
+- Vida base **100** (se mantiene el escalado por nivel/rareza como bonus).
+
+### Clases (traducidas)
+| Original | Fauna |
+|---|---|
+| Physical | **Físico** — garra, mordida, embestida |
+| Chakra | **Natural** — energía del animal |
+| Affliction | **Toxina** — persiste y **atraviesa invulnerabilidad** |
+| Mental | **Instinto** — miedo, señuelo, aviso |
+| Melee / Ranged | **Cuerpo a cuerpo / A distancia** |
+| Instant | **Instantáneo** — pasa y ya |
+| Action | **Sostenido** — dura varios turnos solo |
+| Control | **Control** — dura mientras el usuario siga en pie |
+| Unique | **Único** — solo ese animal lo tiene |
+
+## 4. Catálogo de efectos disponibles
+
+Para construir habilidades (ver `src/habilidades.js`):
+
+- `dano` — daño directo
+- `danoTurnos` — daño por turno N turnos (toxina: ignora invulnerabilidad)
+- `curar` — cura vida a un aliado
+- `defensa` — defensa destructible (puntos que absorben daño)
+- `reducir` — reduce el daño que recibe, N turnos
+- `invulnerable` — no recibe nada, N turnos
+- `aturdir` — bloquea habilidades del enemigo, N turnos (se puede limitar por clase)
+- `robarEnergia` — le quitás 1 energía al rival **y la ganás vos**
+- `quemarEnergia` — el rival pierde 1 energía (no la ganás)
+- `area` — afecta a todos los enemigos
+- `contraataque` — se dispara si te atacan durante el turno rival
+- `amplificar` — el objetivo recibe +X daño de cierta habilidad
+- `limpiar` — quita efectos dañinos de un aliado
+- `reemplazar` — la habilidad se transforma en otra durante N turnos
+
+## 5. Cómo se consiguen los animales
+Misiones (reemplazan el farmeo), como los personajes bloqueados del original:
+*"rescatá 3 animales de agua"*, *"ganá un combate sin perder a nadie"*, *"liberá 5 plenos"* →
+desbloquean animales nuevos para el refugio.
+
+## 6. Estado de implementación
+- [x] Reglas estudiadas y documentadas
+- [x] Catálogo de efectos definido (`src/habilidades.js`)
+- [x] Primer lote de animales con habilidades a mano
+- [ ] Motor de combate por turnos nuevo (reemplaza `fight()`)
+- [ ] Pantalla de combate (cola, objetivos, LISTO, AUTO)
+- [ ] Los 130 animales
+- [ ] Sistema de misiones

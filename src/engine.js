@@ -69,6 +69,10 @@ function starterRankUp(a) {
 
 export function levelUp(a) {
   a.level++; a.atk += 1; a.hp += 2;
+  // La DEFENSA es la estadística que más pesa (medido 1v1: +2 def sube la victoria
+  // 21 puntos; +2 ataque solo 7). Antes el nivel no la tocaba, así que subir de
+  // nivel casi no se sentía: dos niveles enteros valían +4 puntos de victoria.
+  if (a.level % 3 === 0) a.def = (a.def || 0) + 1;
   // al RECUPERARSE (etapa de rehabilitación) también gana aguante: +1 defensa
   const evoed = RULES.EVO_LEVELS.includes(a.level);
   if (evoed) { a.atk += 2; a.hp += 3; a.def = (a.def || 0) + 1; a.evo++; }
@@ -84,7 +88,7 @@ export function setLevel(a, L) { while (a.level < L) levelUp(a); return a; }
 // SENCILLO) y se dispara al final. Tu poder crece rápido (cada victoria sube de
 // nivel a TODO el equipo + capturás + evolucionás), así que el enemigo tiene que
 // acelerar para seguir siendo un reto. Bajá RAMP = más difícil; subilo = más fácil.
-const RAMP = 8;
+const RAMP = 6;
 const accel = (depth) => depth + Math.floor(depth * depth / RAMP);
 // TAMAÑO del equipo enemigo (cuántos animales): rampa lineal y DETERMINISTA.
 // Furtivos/traficantes = nº de provincia + 1 (tope 5); el Cabecilla, uno más.
@@ -92,8 +96,16 @@ const accel = (depth) => depth + Math.floor(depth * depth / RAMP);
 export function retSize(depth)     { return Math.min(5, depth + 2); }
 export function poacherSize(depth) { return Math.min(5, depth + 2); }
 export function bossSize(depth)    { return Math.min(5, depth + 3); }
-// NIVEL de los enemigos (su fuerza): sube con la curva acelerada (no el tamaño).
-export function enemyLevel(depth, isBoss) { return (isBoss ? 3 : 2) + accel(depth); }
+// NIVEL de los enemigos: la curva por profundidad MÁS un piso que sigue al jugador.
+// Sin ese piso el juego se rompía: cada victoria sube de nivel a los 5 animales, así
+// que en una partida normal terminabas en Nv~25 contra un cabecilla de Nv~15 y ganabas
+// el 85%. El piso NO adelanta al jugador (va por detrás), solo evita que lo dejes atrás.
+export function enemyLevel(depth, isBoss, playerLvl = 0) {
+  const base = (isBoss ? 3 : 2) + accel(depth);
+  if (!playerLvl) return base;
+  const piso = Math.round(playerLvl - (isBoss ? 1 : 3));
+  return Math.max(base, Math.max(1, piso));
+}
 export function wildLevel(depth) { return 1 + depth; }
 export function poacherLevel(depth) { return enemyLevel(depth, false); }   // traficantes: nivel de furtivo normal (su gracia es el robo + recompensa, no la fuerza)
 
@@ -326,8 +338,8 @@ export function fight(teamA, teamB) {
     return {
       uid: c.uid, side, atk: c.atk, hp: c.hp, max: c.hp, spd: c.spd || 0, hab: c.hab || 0,
       def: c.def || 0, acts: c.acts || 1, level: c.level || 1, abs,
-      shieldAbsorb: abs.includes('shield'),   // absorbe el primer golpe (una vez)
-      firstReady: abs.includes('first'),      // prioridad sobre la velocidad (una vez)
+      shieldAbsorb: abs.includes('shield'),   // absorbe el 1er golpe DE CADA RONDA (se rearma)
+      firstReady: abs.includes('first'),      // prioridad sobre la velocidad, CADA RONDA
       rageStacks: 0,                           // furia: +1 ⚔ por cada ataque que hace
       poisonStacks: 0,                         // veneno ACUMULADO encima (DoT que ignora defensa)
       alive: true,
@@ -362,9 +374,19 @@ export function fight(teamA, teamB) {
     // +1 extra por ronda (atraviesa defensa/escudo). En peleas normales (≤~10 rondas)
     // nunca se activa; solo corta los casos degenerados de muro contra muro.
     const fatigue = Math.max(0, guard - 12);
-    // orden de la ronda: prioridad 'first' → velocidad desc → ATAQUE asc → uid (estable)
+    // PRIMER GOLPE y ESCUDO se REARMAN cada ronda. Antes servían UNA sola vez en toda
+    // la pelea y quedaban inservibles: medido en 1v1, 'primer golpe' ganaba 31.7% —
+    // MENOS que no tener habilidad (32.4%) — y 'escudo' 35.4%.
+    // Además cada uno tira un dado de desempate: a igual velocidad el orden ya no lo
+    // decidía el uid (el bando A ganaba el 100% de los espejos exactos).
+    aliveIn(ALL).forEach(x => {
+      x.firstReady = x.abs.includes('first');
+      x.shieldAbsorb = x.abs.includes('shield');
+      x.roll = Math.random();
+    });
+    // orden de la ronda: prioridad 'first' → velocidad desc → ATAQUE asc → azar
     const order = aliveIn(ALL).slice().sort((x, y) =>
-      ((y.firstReady ? 1 : 0) - (x.firstReady ? 1 : 0)) || (y.spd - x.spd) || (x.atk - y.atk) || (x.uid - y.uid));
+      ((y.firstReady ? 1 : 0) - (x.firstReady ? 1 : 0)) || (y.spd - x.spd) || (x.atk - y.atk) || (x.roll - y.roll));
     for (const at of order) {
       if (!at.alive) continue;
       // ATAQUES MÚLTIPLES: un combatiente con `acts`>1 (los seres del folclor) ataca
@@ -373,13 +395,17 @@ export function fight(teamA, teamB) {
       if (!at.alive) break;
       if (!aliveIn(A).length || !aliveIn(B).length) break;
       const tgt = pickTarget(at);
+      // PRIMER GOLPE: además de la prioridad, ese golpe entra por sorpresa y pega +1.
+      // Solo con la prioridad seguía siendo la habilidad más floja de todas.
+      const sorpresa = at.firstReady;
       if (at.firstReady) at.firstReady = false;   // gastó su prioridad aunque no haya a quién pegar
       if (!tgt) continue;
 
       const fx = [];
       // FURIA: gana +1 ⚔ cada vez que ataca (acumula durante la pelea)
       if (at.abs.includes('rage')) { at.rageStacks++; fx.push('rage'); }
-      let dealt = at.atk + at.rageStacks;
+      let dealt = at.atk + at.rageStacks + (sorpresa ? 1 : 0);
+      if (sorpresa) fx.push('first');
       // ESQUIVA por habilidad del defensor
       if (tgt.hab > 0 && Math.random() < Math.min(DODGE_MAX, tgt.hab * DODGE_PER)) {
         dealt = 0; fx.push('dodge');
@@ -387,7 +413,9 @@ export function fight(teamA, teamB) {
         // DEFENSA: resta daño a CADA golpe, pero nunca menos de 1 (siempre raspa algo)
         if (dealt > 0) dealt = Math.max(1, dealt - tgt.def);
         // ESCUDO: el PRIMER golpe que recibe le hace solo la mitad (luego, normal)
-        if (tgt.shieldAbsorb && dealt > 0) { tgt.shieldAbsorb = false; dealt = Math.ceil(dealt / 2); fx.push('shield'); }
+        // ESCUDO: amortigua el 1er golpe de cada ronda. Un tercio (no la mitad): con la
+        // mitad + el taunt que ya tiene, el escudo se comía a todas las demás (77.6%).
+        if (tgt.shieldAbsorb && dealt > 0) { tgt.shieldAbsorb = false; dealt = Math.ceil(dealt * 2 / 3); fx.push('shield'); }
         if (dealt > 0) dealt += fatigue;   // fatiga: rompe los empates de muro contra muro
         if (dealt > 0) tgt.hp -= dealt;
         if (tgt.abs.includes('thorns') && dealt > 0) { at.hp -= 1; fx.push('thorns'); }

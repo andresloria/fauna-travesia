@@ -168,6 +168,8 @@ export class Game {
   animal(uid) { return this.s.team.find(a => a.uid === uid); }
   depth() { return this.s.cleared; }   // dificultad = países ya cruzados
   fighters() { return this.s.team.filter(a => !a.down); }   // los que NO están debilitados
+  // nivel promedio del equipo: el enemigo lo usa de piso para no quedarse atrás
+  avgLevel() { const t = this.s.team; return t.length ? Math.round(t.reduce((m, a) => m + a.level, 0) / t.length) : 1; }
 
   // ---------- inicial ----------
   chooseStarter(i) {
@@ -217,10 +219,10 @@ export class Game {
     switch (n.type) {
       case 'bioma':    return this.wildEncounter(n.bio);
       case 'combate':  return this.startBattle(
-        E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false), 0.12),
+        E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false, this.avgLevel()), 0.12),
         'Furtivo', '🪤', 'retador');
       case 'cazador':  return this.startBattle(
-        E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d), 0.25),
+        E.genEnemy(s.country, E.poacherSize(d), E.enemyLevel(d, false, this.avgLevel()), 0.25),
         'Banda de traficantes', '🏹', 'cazador');
       case 'intercambio': {
         const maxLv = s.team.reduce((m, a) => Math.max(m, a.level), 1);
@@ -233,7 +235,7 @@ export class Game {
         // 💬 careo con el cabecilla PROPIO de esta provincia, y luego la pelea
         const b = bossOf(s.country.n);
         return this.escenaProv('jefe').then(() => this.startBattle(
-          E.genEnemy(s.country, E.bossSize(d), E.enemyLevel(d, true), 0.4),
+          E.genEnemy(s.country, E.bossSize(d), E.enemyLevel(d, true, this.avgLevel()), 0.4),
           b.n, '🚨', 'jefe', `assets/personajes/${b.art}.png`));
       }
       case 'tesoro': {
@@ -291,9 +293,9 @@ export class Game {
         [{ label: 'Seguir 🧭', action: () => this.backToMap() }]);
     }
     if (late && d >= 3 && r < 60) return this.startBattle(              // emboscada de traficantes
-      E.genEnemy(s.country, E.poacherSize(d), E.poacherLevel(d), 0.25), 'Emboscada de traficantes', '🏹', 'cazador');
+      E.genEnemy(s.country, E.poacherSize(d), E.enemyLevel(d, false, this.avgLevel()), 0.25), 'Emboscada de traficantes', '🏹', 'cazador');
     if (late && r < 74) return this.startBattle(                        // furtivo al acecho
-      E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false), 0.12), 'Furtivo al acecho', '🪤', 'retador');
+      E.genEnemy(s.country, E.retSize(d), E.enemyLevel(d, false, this.avgLevel()), 0.12), 'Furtivo al acecho', '🪤', 'retador');
     // por defecto: un animal drogado y alterado te ataca
     const f = this.fighters(), nf = f.length || 1;
     const avg = Math.round(f.reduce((m, a) => m + a.level, 0) / nf);
@@ -432,7 +434,15 @@ export class Game {
   // ---------- combate ----------
   startBattle(enemy, oppName, oppEmoji, kind, oppArt = null) {
     const s = this.s;
-    const fighters = this.fighters();        // los debilitados NO pelean
+    let fighters = this.fighters();           // los debilitados NO pelean
+    if (!fighters.length && s.team.length) {
+      // NUNCA te quedás sin nadie: el más entero se levanta como puede. Antes esto
+      // era un callejón sin salida (perdías corazón tras corazón sin poder pelear).
+      const a = s.team.reduce((m, x) => (x.hp > m.hp ? x : m), s.team[0]);
+      a.down = false;
+      this.log(`💪 ${a.e} <b>${a.n}</b> se levanta como puede: no te deja solo.`);
+      fighters = this.fighters();
+    }
     if (!fighters.length) {                   // equipo agotado: no podés combatir
       this.log('💤 Tu equipo está <b>agotado</b>. Buscá un refugio 🏕️ para recuperar a tus animales.');
       return this.hurt();

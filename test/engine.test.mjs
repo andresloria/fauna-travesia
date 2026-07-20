@@ -102,12 +102,23 @@ test('velocidad: el más rápido pega primero y puede tumbar sin recibir daño',
   assert.equal(finalHp(steps, 1), 3, 'no recibió daño porque pegó primero y tumbó al lento');
 });
 
-test('Primer golpe: prioridad UNA vez por pelea, luego manda la velocidad', () => {
-  const A = [{ uid: 1, atk: 1, hp: 30, spd: 1, ab: 'first' }];  // lento, pero con prioridad
-  const B = [{ uid: 2, atk: 1, hp: 30, spd: 5, ab: null }];     // rápido
+test('Primer golpe: prioridad en CADA ronda, aunque sea el más lento', () => {
+  const A = [{ uid: 1, atk: 1, hp: 40, spd: 1, ab: 'first' }];  // lento, pero con prioridad
+  const B = [{ uid: 2, atk: 1, hp: 40, spd: 9, ab: null }];     // mucho más rápido
   const strikes = E.fight(A, B).steps.filter(s => s.kind === 'strike');
-  assert.equal(strikes[0].attacks[0].from, 1, 'la PRIMERA acción es del de primer golpe');
-  assert.ok(strikes.some((s, i) => i > 0 && s.attacks[0].from === 2), 'luego el más rápido actúa antes');
+  // cada ronda son 2 golpes: el de prioridad y el del rival. El de 'first' abre SIEMPRE.
+  const pares = Math.floor(strikes.length / 2);
+  for (let r = 0; r < pares; r++)
+    assert.equal(strikes[r * 2].attacks[0].from, 1, `ronda ${r + 1}: abre el de primer golpe`);
+  assert.ok(pares >= 3, 'la pelea duró varias rondas');
+});
+
+test('Primer golpe: su golpe de prioridad pega +1 (sorpresa)', () => {
+  const A = [{ uid: 1, atk: 5, hp: 40, spd: 9, ab: 'first' }];
+  const B = [{ uid: 2, atk: 1, hp: 40, spd: 1, ab: null }];
+  const strikes = E.fight(A, B).steps.filter(s => s.kind === 'strike' && s.attacks[0].from === 1);
+  assert.equal(strikes[0].attacks[0].dmg, 6, '5 de ataque + 1 de sorpresa = 6');
+  assert.ok((strikes[0].attacks[0].fx || []).includes('first'), 'marca el efecto para la UI');
 });
 
 test('orden: a igual velocidad pega primero el de MENOS ataque', () => {
@@ -160,13 +171,14 @@ test('mkAnimal trae velocidad (spd)', () => {
   assert.ok(typeof E.mkAnimal('jaguar').spd === 'number', 'el animal tiene spd numérico');
 });
 
-test('efecto Escudo: el primer golpe le hace solo la MITAD', () => {
+test('efecto Escudo: amortigua un TERCIO el primer golpe de cada ronda', () => {
   const A = [{ uid: 1, atk: 2, hp: 8, spd: 1, ab: 'shield' }];
   const B = [{ uid: 2, atk: 10, hp: 1, spd: 9, ab: null }];   // más rápido: pega primero
   const { result, steps } = E.fight(A, B);
   const hitOnA = steps.find(s => s.kind === 'strike' && s.attacks[0].to === 1);
-  assert.equal(hitOnA.hp[1], 3, 'el escudo redujo 10 a la mitad (5): 8 - 5 = 3');
-  assert.equal(result, 'W', 'sobrevive el golpe a medias y después gana');
+  // 10 amortiguado a dos tercios = ceil(6.67) = 7  ->  8 - 7 = 1
+  assert.equal(hitOnA.hp[1], 1, 'el escudo dejó 10 en 7: 8 - 7 = 1');
+  assert.equal(result, 'W', 'sobrevive el golpe amortiguado y después gana');
 });
 
 test('efecto Veneno: rompe el empate a favor del portador', () => {
@@ -360,9 +372,9 @@ test('DEFENSA: un nivel bajo no revienta a uno alto (su golpe queda en 1)', () =
 
 test('DEFENSA + ESCUDO se combinan en el primer golpe', () => {
   const A = [{ uid: 1, atk: 7, hp: 20, spd: 5 }];                       // pega 7
-  const B = [{ uid: 2, atk: 1, hp: 30, spd: 1, def: 3, ab: 'shield' }]; // (7−3)=4 → mitad = 2
+  const B = [{ uid: 2, atk: 1, hp: 30, spd: 1, def: 3, ab: 'shield' }]; // (7−3)=4 → dos tercios = 3
   const first = E.fight(A, B).steps.find(s => s.kind === 'strike' && s.attacks[0].from === 1);
-  assert.equal(first.attacks[0].dmg, 2, '7 − 3 def = 4; escudo lo parte a la mitad = 2');
+  assert.equal(first.attacks[0].dmg, 3, '7 − 3 def = 4; el escudo lo deja en 3 (dos tercios)');
 });
 
 test('VENENO acumula y derrite tanques (ignora defensa)', () => {

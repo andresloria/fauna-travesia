@@ -91,7 +91,9 @@ export const PLAYER_FLAGS = ['🇨🇷','🇲🇽','🇪🇸','🇦🇷','🇨�
 
 export const RULES = {
   MAX_TEAM: 5,
-  MAX_HEARTS: 1,        // UNA sola vida: perder un combate = fin de la travesía (roguelike duro)
+  MAX_HEARTS: 2,        // TRES vidas. Con 1 sola, el juego era una ruleta: hay 8 cabecillas
+                        // y se perdía ~10% de cada uno → solo el 43% llegaba al final,
+                        // y los "+1 corazón" del refugio y del jefe no hacían nada (topados en 1).
   MAX_ITEMS: 3,        // objetos que se le pueden equipar a un animal
   STARTER_LEVEL: 2,    // nivel inicial de tu primer rescatado
   EVO_LEVELS: [3, 6],  // niveles en los que un animal se RECUPERA (etapa de rehabilitación)
