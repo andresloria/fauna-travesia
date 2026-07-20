@@ -13,29 +13,35 @@ function test(name, fn) {
 // rng determinista
 const rngFijo = (seq) => { let i = 0; return () => seq[i++ % seq.length]; };
 
-const EQ = (k1, k2, k3, nivel = 8) => [{ key: k1, nivel }, { key: k2, nivel }, { key: k3, nivel }];
+const EQ = (k1, k2, k3) => [{ key: k1 }, { key: k2 }, { key: k3 }];
 const TA = () => EQ('jaguar', 'quetzal', 'tortuga');
 const TB = () => EQ('serpiente', 'cocodrilo', 'murcielago');
 
 console.log('\nFAUNA · ARENA — tests del motor por turnos\n');
 
 // ---------- construcción y reglas de vida ----------
-test('todos empiezan con VIDA 100, sin importar rareza ni nivel', () => {
-  const st = A.mkCombate(EQ('jaguar', 'perezoso', 'sapo_dorado', 1), TB(), { abre: 'A', rng: rngFijo([0.1]) });
+test('todos empiezan con VIDA 100, sin importar rareza', () => {
+  const st = A.mkCombate(EQ('jaguar', 'perezoso', 'sapo_dorado'), TB(), { abre: 'A', rng: rngFijo([0.1]) });
   for (const u of st.unidades) assert.equal(u.hp, 100, u.key + ' debe tener 100');
 });
 
-test('el nivel solo desbloquea habilidades: Nv1 tiene 1+esquiva, Nv8 tiene 3+esquiva', () => {
-  const st1 = A.mkCombate(EQ('jaguar', 'quetzal', 'tortuga', 1), TB(), { abre: 'A' });
-  const st8 = A.mkCombate(TA(), TB(), { abre: 'A' });
-  assert.equal(st1.unidades[0].habs.length, 2);  // Zarpazo + Esquivar
-  assert.equal(st8.unidades[0].habs.length, 4);  // 3 + Esquivar
+test('SIN NIVELES: todos entran con sus 3 habilidades + esquiva', () => {
+  const st = A.mkCombate(TA(), TB(), { abre: 'A' });
+  for (const u of st.unidades)
+    assert.equal(u.habs.length, 4, u.key + ' debe traer 3 + esquiva');
 });
 
-test('las 136 especies construyen unidad válida con 4 habilidades a Nv8', () => {
+test('SIN PASIVAS: ninguna unidad trae pasiva', () => {
+  const st = A.mkCombate(TA(), TB(), { abre: 'A' });
+  for (const u of st.unidades) assert.equal(u.pasiva, undefined);
+  // la tortuga ya NO arranca con defensa (era la pasiva Caparazón)
+  assert.equal(st.unidades.find(u => u.key === 'tortuga').defensa, 0);
+});
+
+test('las 136 especies construyen unidad válida con sus habilidades', () => {
   import('../src/fauna_roster.js').then(({ SP }) => {
     for (const k of Object.keys(SP)) {
-      const u = A.mkUnidad({ key: k, nivel: 8 }, 'A', 0);
+      const u = A.mkUnidad({ key: k }, 'A', 0);
       assert.equal(u.hp, 100);
       assert.ok(u.habs.length >= 2, k + ' necesita habilidades');
       assert.ok(u.habs[u.habs.length - 1].esEsquiva, k + ' debe cerrar con la Esquiva');
@@ -78,9 +84,9 @@ test('matar a un enemigo le baja la economía (menos vivos = menos energía)', (
 test('no se puede usar habilidad sin energía; el comodín paga con cualquiera', () => {
   const st = A.mkCombate(TA(), TB(), { abre: 'A', rng: rngFijo([0.99]) }); // 1 montaña
   const jaguar = st.unidades[0];
-  const iZarpazo = jaguar.habs.findIndex(h => h.n === 'Zarpazo');          // cuesta bosque
-  const iEsquiva = jaguar.habs.findIndex(h => h.esEsquiva);                // cuesta comodín
-  assert.equal(A.puedeUsar(st, jaguar, iZarpazo).ok, false, 'sin bosque no hay Zarpazo');
+  const iMordida = jaguar.habs.findIndex(h => h.n === 'Mordida al cráneo'); // pide bosque
+  const iEsquiva = jaguar.habs.findIndex(h => h.esEsquiva);                 // pide comodín
+  assert.equal(A.puedeUsar(st, jaguar, iMordida).ok, false, 'sin bosque no hay Mordida');
   assert.equal(A.puedeUsar(st, jaguar, iEsquiva).ok, true, 'el comodín acepta la montaña');
 });
 
@@ -158,7 +164,7 @@ test('defensa destructible absorbe daño; Mordida al cráneo la ignora', () => {
   const iZar = jag.habs.findIndex(h => h.n === 'Zarpazo');            // 25 normal
   A.ejecutarTurno(st, [{ uid: 'A0', hab: iZar, objetivo: coco.uid }]);
   assert.equal(coco.hp, 100, 'la defensa absorbe el Zarpazo entero');
-  assert.equal(coco.defensa, 5, '30 - 25 = 5');
+  assert.equal(coco.defensa, 10, '30 - 20 = 10');
   A.ejecutarTurno(st, []);                       // turno B
   st.energia.A = { bosque: 9, sabana: 9, agua: 9, montana: 9 };
   const iMor = jag.habs.findIndex(h => h.n === 'Mordida al cráneo');  // 40 ignora defensa
@@ -178,29 +184,19 @@ test('robar energía: el ladrón la gana, el rival la pierde', () => {
   assert.ok(st.energia.A.sabana >= 1, 'A ganó la sabana robada');
 });
 
-// ---------- pasivas ----------
-test('pasiva Caparazón: la tortuga empieza con 20 de defensa', () => {
-  const st = A.mkCombate(TA(), TB(), { abre: 'A' });
-  assert.equal(st.unidades.find(u => u.key === 'tortuga').defensa, 20);
-});
-
-test('pasiva Madrugador (manigordo): su primera habilidad no gasta energía', () => {
-  const st = A.mkCombate(EQ('manigordo', 'jaguar', 'tortuga'), TB(), { abre: 'A', rng: rngFijo([0.0]) });
-  st.energia.A = { bosque: 1, sabana: 0, agua: 0, montana: 0 };
-  const mani = st.unidades[0];
-  const iZar = 0;
-  A.ejecutarTurno(st, [{ uid: mani.uid, hab: iZar, objetivo: 'B0' }]);
-  assert.equal(st.energia.A.bosque, 1, 'no debió gastar la energía');
-});
-
-test('pasiva Púas (puercoespín): el atacante melee recibe 10', () => {
-  const st = A.mkCombate(TA(), EQ('puercoespin', 'serpiente', 'cocodrilo'), { abre: 'A', rng: rngFijo([0.5]) });
-  st.energia.A = { bosque: 9, sabana: 9, agua: 9, montana: 9 };
+// ---------- costo de energía = lo único que limita ----------
+test('sin la energía del bioma, la habilidad no se puede usar (aunque exista)', () => {
+  const st = A.mkCombate(TA(), TB(), { abre: 'A', rng: rngFijo([0.0]) });
+  st.energia.A = { bosque: 0, sabana: 3, agua: 0, montana: 0 };
   const jag = st.unidades[0];
-  const puerco = st.unidades.find(u => u.key === 'puercoespin');
+  const iMor = jag.habs.findIndex(h => h.n === 'Mordida al cráneo');   // pide bosque
+  assert.equal(A.puedeUsar(st, jag, iMor).ok, false, 'sin bosque no se puede');
+  st.energia.A.bosque = 1;
+  assert.equal(A.puedeUsar(st, jag, iMor).ok, true, 'con bosque sí');
+  // y el BÁSICO siempre se puede: cuesta comodín (cualquier energía)
   const iZar = jag.habs.findIndex(h => h.n === 'Zarpazo');
-  A.ejecutarTurno(st, [{ uid: 'A0', hab: iZar, objetivo: puerco.uid }]);
-  assert.equal(jag.hp, 90, 'el jaguar debe recibir 10 de vuelta');
+  st.energia.A = { bosque: 0, sabana: 1, agua: 0, montana: 0 };
+  assert.equal(A.puedeUsar(st, jag, iZar).ok, true, 'el básico nunca deja sin jugar');
 });
 
 // ---------- fin del combate ----------
@@ -235,10 +231,9 @@ test('500 combates automáticos con equipos al azar: nadie revienta, todos termi
   let rng = (() => { let s = 42; return () => { s = (s * 1103515245 + 12345) % 2147483648; return s / 2147483648; }; })();
   for (let g = 0; g < 500; g++) {
     const pick = () => keys[Math.floor(rng() * keys.length)];
-    const nivel = () => [1, 4, 8][Math.floor(rng() * 3)];
     const st = A.combateAuto(
-      [{ key: pick(), nivel: nivel() }, { key: pick(), nivel: nivel() }, { key: pick(), nivel: nivel() }],
-      [{ key: pick(), nivel: nivel() }, { key: pick(), nivel: nivel() }, { key: pick(), nivel: nivel() }],
+      [{ key: pick() }, { key: pick() }, { key: pick() }],
+      [{ key: pick() }, { key: pick() }, { key: pick() }],
       { rng });
     assert.ok(st.fin === 'A' || st.fin === 'B', 'el combate debe terminar');
     if (st.fin === 'A') finA++;

@@ -111,10 +111,26 @@ invulnerable).
 1 energía; después, 1 por cada animal vivo al final de tu turno anterior. Si se acaba el
 tiempo del turno, la cola se cancela entera y pasa el turno.
 
-### Estructura de cada animal
-- **1 pasiva** — siempre activa, lo distingue (no cuesta energía, no se elige).
-- **3 habilidades** — se desbloquean por nivel: **Nv1 · Nv4 · Nv8**.
-- **1 esquiva** — invulnerable 1 turno, recarga 4. Todos la tienen desde el principio.
+### Estructura de cada animal  ⚠️ (rediseño 20-jul: SIN niveles ni pasivas)
+- **3 habilidades** — TODAS disponibles desde el principio. No hay pasivas: solo ataques.
+- **1 esquiva** — invulnerable 1 turno, recarga 4. Todos la tienen.
+- **Lo único que limita qué podés usar es el COSTO EN ENERGÍA DE BIOMA** (y la recarga).
+
+### Economía de costos (medida, no a ojo — `tools/kits.mjs`)
+Al quitar niveles y pasivas quedó al descubierto un error de diseño: los kits cuyo
+**ataque básico pedía energía de bioma específico** se quedaban sin jugar (25% de que
+salga la que necesitás), y rendían **5%** contra el 94% de los que tenían básico gratis.
+Prueba directa: al mismo animal, con el básico gratis → 97%; con costo de bioma → 0%.
+Regla nueva, pareja para todos:
+| Habilidad | Costo | Daño / efecto | Recarga |
+|---|---|---|---|
+| **Básico** | 1 **comodín** (cualquier energía) | 20 | 0 |
+| **Segunda** (la firma del rol) | `[bio]` o `[bio, comodín]` | 25-40 + rider | 1-3 |
+| **Tercera** (la grande) | `[bio, comodín]` o `[bio, bio]` | área / modo / permanente | 3-4 |
+
+Así el **bioma sigue decidiendo la estrategia** (cada cuánto usás lo bueno) pero ningún
+animal queda inutilizable. Resultado medido: roles de **41% a 61%** (antes 5%–94%) y
+brecha entre animales en juego real de **23.6 puntos** (antes 48.6).
 - **Vida = 100 PARA TODOS, SIEMPRE** (regla de Andrés, 20-jul). Como el original: ni el nivel
   ni la rareza tocan la vida ni los stats. Subir de nivel SOLO desbloquea habilidades
   (Nv1/Nv4/Nv8). La diferencia entre un común y un legendario está en su kit, no en números

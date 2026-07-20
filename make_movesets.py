@@ -9,10 +9,15 @@
 #   toxina 10-25/turno 2-4t · cura 25 cd0 · defensa 20-40 · AoE 15 (35-45 caro)
 #   exponer/marcar GRATIS cd0-1 · esquiva universal: invulnerable 1t comodin cd4
 #
+# ⚠️ SIN NIVELES y SIN PASIVAS (decision de Andres, 20-jul):
+#   TODOS los animales tienen sus 3 habilidades + esquiva DESDE EL PRINCIPIO.
+#   Lo unico que decide que podes usar es el COSTO EN ENERGIA DE BIOMA.
+#   No hay pasivas: solo ataques. La diferencia entre animales esta en su kit.
+#
 # Rareza NO toca numeros (vida 100 parejo): sube la COMPLEJIDAD del kit
 #   comun      → numeros planos, efectos directos
 #   raro       → una habilidad lleva rider (como Neji 64 Palmas)
-#   ultrararo  → patron MODO (la Nv8 mejora a las otras, como Sharingan)
+#   ultrararo  → patron MODO (una habilidad mejora a las otras, como Sharingan)
 #   legendario/extinto/mitico → kit unico A MANO en habilidades.js (los que
 #   falten salen aqui marcados TODO para no dejar hueco)
 #
@@ -83,21 +88,7 @@ V = {
           'esquiva':'Se desvanece en la niebla'},
 }
 
-# ---------- pasivas por rol ----------
-PASIVAS = {
- 'rage':   [('Sangre caliente','Cuando su vida baja de 50, sus golpes pegan +5.'),
-            ('Territorial','El primer golpe que da cada combate pega +10.')],
- 'first':  [('Reflejos','La primera vez que lo atacan cada combate, esquiva el golpe.'),
-            ('Madrugador','Su primera habilidad de cada combate no gasta energia.')],
- 'heal':   [('Instinto de manada','Al final de su turno, el aliado mas herido recupera 5.'),
-            ('Piel que sana','Si no lo atacaron en el turno, recupera 10.')],
- 'poison': [('Piel toxica','Quien lo golpee cuerpo a cuerpo recibe 5 de toxina por 2 turnos.'),
-            ('Colores de aviso','Los rivales le pegan 5 menos el primer turno de cada toxina suya.')],
- 'shield': [('Coraza','Empieza cada combate con 10 de defensa destructible.'),
-            ('Paciencia','Si no ataca en el turno, gana 10 de defensa destructible.')],
- 'thorns': [('Puas','Quien lo golpee cuerpo a cuerpo recibe 10 de dano.'),
-            ('Advertencia','El primer golpe que recibe cada combate se le devuelve a medias.')],
-}
+# (Las PASIVAS se eliminaron el 20-jul: solo ataques.)
 
 # ---------- helpers de efectos (mismo formato que habilidades.js) ----------
 def dmg(v, o='enemigo'): return {'t':'dano','v':v,'obj':o}
@@ -117,101 +108,112 @@ def exponer(t=2, o='enemigo'): return {'t':'exponer','turnos':t,'obj':o}
 def modo(t=4): return {'t':'modo','turnos':t}
 
 # ---------- plantillas de kit por rol ----------
-# Cada plantilla: (nv1, nv4, nv8) con nombre-clave, desc, costo, recarga, clases, efectos.
-# bio = energia del animal. Numeros = lenguaje NA verificado.
+# ECONOMIA (rebalanceada 20-jul, medida con tools/kits.mjs):
+#   El problema: los basicos que costaban energia de bioma ESPECIFICO hacian que
+#   un equipo se quedara sin jugar (25% de chance por energia). Medido: los roles
+#   con basico gratis rendian 94% y los que pagaban bioma, 5%.
+#   Regla nueva, PAREJA para todos los roles:
+#     · BASICO: cuesta 1 COMODIN (cualquier energia sirve) → nadie se queda sin
+#       jugar nunca. 20 de dano, recarga 0.
+#     · SEGUNDA: la firma del rol. Cuesta [bio] o [bio, comodin] → aca SI importa
+#       el bioma del equipo. Recarga 1-3.
+#     · TERCERA: la grande. Cuesta [bio, comodin] o [bio, bio]. Recarga 3-4.
+#   Asi el bioma sigue decidiendo la estrategia (cada cuanto usas lo bueno) pero
+#   ningun animal queda inutilizable.
 def kit_rage(key, bio, cat, rareza):
     b = pick(key, 'b', V[cat]['basico']); f = pick(key, 'f', V[cat]['fuerte'])
-    nv1 = {'n': b, 'desc': '25 de dano a un enemigo.',
-           'costo': [bio], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(25)]}
+    nv1 = {'n': b, 'desc': '20 de dano a un enemigo.',
+           'costo': ['comodin'], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(20)]}
     if rareza == 'comun':
         nv4 = {'n': f, 'desc': '35 de dano a un enemigo.',
-               'costo': [bio,'comodin'], 'recarga': 1, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(35)]}
+               'costo': [bio], 'recarga': 1, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(35)]}
         nv8 = {'n': pick(key,'u',['Rugido','Frenesi','Carga salvaje']),
-               'desc': '15 de dano a TODOS los enemigos.',
-               'costo': [bio,'comodin'], 'recarga': 2, 'clases': ['fisico','instant'], 'efectos': [area(15)]}
+               'desc': '20 de dano a TODOS los enemigos.',
+               'costo': [bio,'comodin'], 'recarga': 3, 'clases': ['fisico','instant'], 'efectos': [area(20)]}
     elif rareza == 'raro':
         nv4 = {'n': f, 'desc': '40 de dano y el enemigo pierde 1 energia al azar.',
                'costo': [bio,'comodin'], 'recarga': 1, 'clases': ['fisico','melee','instant'],
                'efectos': [dmg(40), quemar(1)]}
         nv8 = {'n': pick(key,'u',['Frenesi','Rabia del monte']),
-               'desc': '15 de dano a TODOS los enemigos y quema 1 energia.',
+               'desc': '20 de dano a TODOS los enemigos y quema 1 energia.',
                'costo': [bio,bio], 'recarga': 3, 'clases': ['fisico','unico','instant'],
-               'efectos': [area(15), quemar(1)]}
-    else:  # ultrararo+: patron MODO (Sharingan / Shadow Clones)
-        nv4 = {'n': f, 'desc': f'30 de dano. Durante su modo pega +15.',
-               'costo': [bio,'comodin'], 'recarga': 0, 'clases': ['fisico','melee','instant'],
+               'efectos': [area(20), quemar(1)]}
+    else:
+        nv4 = {'n': f, 'desc': '30 de dano. Durante su modo pega +15.',
+               'costo': [bio], 'recarga': 0, 'clases': ['fisico','melee','instant'],
                'efectos': [dmg(30)], 'enModo': [dmg(45)]}
         nv8 = {'n': pick(key,'u',['Instinto depredador','Furia ancestral']),
                'desc': 'MODO: 4 turnos con 15 menos de dano recibido y sus ataques mejorados.',
-               'costo': ['comodin'], 'recarga': 4, 'clases': ['instinto','unico','instant'],
+               'costo': [bio,'comodin'], 'recarga': 4, 'clases': ['instinto','unico','instant'],
                'efectos': [modo(4), reduc(15,4)]}
     return nv1, nv4, nv8
 
 def kit_first(key, bio, cat, rareza):
     b = pick(key, 'b', V[cat]['basico'])
     nv1 = {'n': b, 'desc': '20 de dano a un enemigo.',
-           'costo': [bio], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(20)]}
+           'costo': ['comodin'], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(20)]}
     nv4 = {'n': pick(key,'m',['Marcar presa','Acorralar','Hostigar']),
-           'desc': 'GRATIS: el enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.',
-           'costo': [], 'recarga': 0, 'clases': ['instinto','rango','instant'], 'efectos': [exponer(3)]}
+           'desc': '15 de dano; ademas ese enemigo no puede reducir dano ni volverse invulnerable por 3 turnos.',
+           'costo': [bio], 'recarga': 1, 'clases': ['instinto','rango','instant'],
+           'efectos': [dmg(15), exponer(3)]}
     if rareza in ('comun','raro'):
         nv8 = {'n': pick(key,'u',['Remolino','Giro defensivo']),
-               'desc': 'Invulnerable 1 turno y 15 de dano a TODOS los enemigos.',
-               'costo': [bio], 'recarga': 1, 'clases': ['fisico','unico','instant'],
-               'efectos': [invul(1), area(15)]}
+               'desc': 'Invulnerable 1 turno y 20 de dano a TODOS los enemigos.',
+               'costo': [bio,'comodin'], 'recarga': 3, 'clases': ['fisico','unico','instant'],
+               'efectos': [invul(1), area(20)]}
     else:
         nv8 = {'n': pick(key,'u',['Velocidad cegadora','Instinto agudo']),
-               'desc': 'MODO: 4 turnos; su golpe basico pega +10 y no gasta energia.',
-               'costo': ['comodin'], 'recarga': 4, 'clases': ['instinto','unico','instant'],
-               'efectos': [modo(4), reduc(10,4)]}
+               'desc': 'MODO: 4 turnos; recibe 15 menos de dano y sus golpes pegan mas.',
+               'costo': [bio,'comodin'], 'recarga': 4, 'clases': ['instinto','unico','instant'],
+               'efectos': [modo(4), reduc(15,4)]}
     return nv1, nv4, nv8
 
 def kit_heal(key, bio, cat, rareza):
     b = pick(key, 'b', V[cat]['basico'])
-    nv1 = {'n': b, 'desc': '15 de dano a un enemigo.',
-           'costo': [], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(15)]}
+    nv1 = {'n': b, 'desc': '20 de dano a un enemigo.',
+           'costo': ['comodin'], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(20)]}
     nv4 = {'n': pick(key,'m',['Cuido de manada','Acicalar','Amparo']),
            'desc': 'Cura 25 a un aliado.',
-           'costo': [bio], 'recarga': 0, 'clases': ['natural','instant'], 'efectos': [cura(25)]}
+           'costo': [bio], 'recarga': 1, 'clases': ['natural','instant'], 'efectos': [cura(25)]}
     if rareza in ('comun','raro'):
         nv8 = {'n': pick(key,'u',['Refugio','Cuido constante']),
                'desc': 'Un aliado se cura 10 por turno durante 3 turnos y pierde los efectos daninos.',
-               'costo': [bio,'comodin'], 'recarga': 3, 'clases': ['natural','sostenido'],
+               'costo': [bio,'comodin'], 'recarga': 4, 'clases': ['natural','sostenido'],
                'efectos': [{'t':'curarTurnos','v':10,'turnos':3,'obj':'aliado'}, limpiar()]}
     else:
         nv8 = {'n': pick(key,'u',['Canto del bosque','Aliento vital']),
-               'desc': 'Todo el equipo gana 10 de defensa destructible y cura 10.',
+               'desc': 'Todo el equipo gana 15 de defensa destructible y cura 15.',
                'costo': [bio,bio], 'recarga': 4, 'clases': ['natural','unico','instant'],
-               'efectos': [defen(10,'equipo'), cura(10,'equipo')]}
+               'efectos': [defen(15,'equipo'), cura(15,'equipo')]}
     return nv1, nv4, nv8
 
 def kit_poison(key, bio, cat, rareza):
     nv1 = {'n': pick(key,'b',['Toxina','Secrecion','Picadura toxica']),
-           'desc': '10 de toxina por turno durante 3 turnos. Atraviesa invulnerabilidad.',
-           'costo': [bio], 'recarga': 0, 'clases': ['toxina','sostenido'], 'efectos': [dot(10,3)]}
+           'desc': '15 de toxina por turno durante 2 turnos. Atraviesa invulnerabilidad.',
+           'costo': ['comodin'], 'recarga': 0, 'clases': ['toxina','sostenido'], 'efectos': [dot(15,2)]}
     if rareza in ('comun','raro'):
-        nv4 = {'n': pick(key,'m',['Veneno espeso','Ponzoña']),
-               'desc': '20 de toxina por turno durante 2 turnos.',
-               'costo': [bio,'comodin'], 'recarga': 1, 'clases': ['toxina','sostenido'], 'efectos': [dot(20,2)]}
+        nv4 = {'n': pick(key,'m',['Veneno espeso','Ponzona']),
+               'desc': '25 de toxina por turno durante 2 turnos.',
+               'costo': [bio], 'recarga': 1, 'clases': ['toxina','sostenido'], 'efectos': [dot(25,2)]}
         nv8 = {'n': pick(key,'u',['Nube toxica','Brote venenoso']),
-               'desc': '15 de toxina a TODOS los enemigos.',
-               'costo': [bio,bio], 'recarga': 3, 'clases': ['toxina','unico','instant'],
-               'efectos': [{'t':'dano','v':15,'obj':'todos','toxina':True}]}
+               'desc': '20 de toxina a TODOS los enemigos.',
+               'costo': [bio,'comodin'], 'recarga': 3, 'clases': ['toxina','unico','instant'],
+               'efectos': [{'t':'dano','v':20,'obj':'todos','toxina':True}]}
     else:
         nv4 = {'n': pick(key,'m',['Drenar','Sangria']),
-               'desc': '20 de toxina y le ROBA 1 energia al enemigo.',
-               'costo': [bio,'comodin'], 'recarga': 1, 'clases': ['toxina','unico','instant'],
-               'efectos': [{'t':'dano','v':20,'obj':'enemigo','toxina':True}, robar(1)]}
-        nv8 = {'n': pick(key,'u',['Marca letal','Toxina persistente']),
-               'desc': 'PERMANENTE: ese enemigo recibe +5 de dano el resto del combate. Acumulable.',
+               'desc': '25 de toxina y le ROBA 1 energia al enemigo.',
                'costo': [bio], 'recarga': 1, 'clases': ['toxina','unico','instant'],
-               'efectos': [{'t':'marcaPermanente','v':5,'obj':'enemigo'}]}
+               'efectos': [{'t':'dano','v':25,'obj':'enemigo','toxina':True}, robar(1)]}
+        nv8 = {'n': pick(key,'u',['Marca letal','Toxina persistente']),
+               'desc': '15 de dano y PERMANENTE: ese enemigo recibe +5 de dano el resto del combate. Acumulable.',
+               'costo': [bio,'comodin'], 'recarga': 1, 'clases': ['toxina','unico','instant'],
+               'efectos': [dmg(15), {'t':'marcaPermanente','v':5,'obj':'enemigo'}]}
     return nv1, nv4, nv8
 
 def kit_shield(key, bio, cat, rareza):
     b = pick(key, 'b', V[cat]['basico'])
-    nv1 = {'n': b, 'desc': '15 de dano a un enemigo.',
-           'costo': [], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(15)]}
+    nv1 = {'n': b, 'desc': '20 de dano a un enemigo.',
+           'costo': ['comodin'], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(20)]}
     nv4 = {'n': pick(key,'m',['Acorazarse','Atrincherarse','Plantarse']),
            'desc': 'Gana 30 de defensa destructible.',
            'costo': [bio], 'recarga': 3, 'clases': ['natural','instant'], 'efectos': [defen(30)]}
@@ -223,14 +225,14 @@ def kit_shield(key, bio, cat, rareza):
     else:
         nv8 = {'n': pick(key,'u',['Coraza ancestral','Piel de piedra']),
                'desc': 'PERMANENTE: gana 40 de defensa destructible; se reaplica sola, no se acumula.',
-               'costo': ['comodin'], 'recarga': 4, 'clases': ['natural','unico','instant'],
+               'costo': [bio,'comodin'], 'recarga': 4, 'clases': ['natural','unico','instant'],
                'efectos': [{'t':'defensa','v':40,'obj':'self','permanente':True}]}
     return nv1, nv4, nv8
 
 def kit_thorns(key, bio, cat, rareza):
     b = pick(key, 'b', V[cat]['basico'])
-    nv1 = {'n': b, 'desc': '15 de dano a un enemigo.',
-           'costo': [], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(15)]}
+    nv1 = {'n': b, 'desc': '20 de dano a un enemigo.',
+           'costo': ['comodin'], 'recarga': 0, 'clases': ['fisico','melee','instant'], 'efectos': [dmg(20)]}
     nv4 = {'n': pick(key,'m',['Erizarse','Guardia con puas']),
            'desc': 'CONTRAATAQUE: 2 turnos, quien lo ataque recibe 25 de dano.',
            'costo': [bio], 'recarga': 3, 'clases': ['fisico','unico','control'], 'efectos': [contra(25)]}
@@ -264,19 +266,17 @@ for key, a in ROSTER.items():
     rareza = a['rarity']
     rol = a['ab'] if a['ab'] in KITS else 'rage'
     nv1, nv4, nv8 = KITS[rol](key, bio, cat, rareza)
-    pas_n, pas_d = pick(key, 'p', PASIVAS[rol])
     marca = ''
     if rareza in ('legendario','extinto','mitico'):
         marca = '  // TODO: kit unico a mano (legendario/mitico) — este es provisional\n'
         stats['todo_a_mano'].append(key)
     habs = []
-    for nv, h in ((1, nv1), (4, nv4), (8, nv8)):
-        hh = {'nv': nv, 'n': h['n'], 'desc': h['desc'], 'costo': h['costo'],
+    for h in (nv1, nv4, nv8):
+        hh = {'n': h['n'], 'desc': h['desc'], 'costo': h['costo'],
               'recarga': h['recarga'], 'clases': h['clases'], 'efectos': h['efectos']}
         habs.append('      ' + js_val(hh) + ',')
     out_lines.append(
         f"  {key}: {{\n{marca}"
-        f"    pasiva:{{ n:'{pas_n}', desc:'{pas_d}' }},\n"
         f"    habs:[\n" + '\n'.join(habs) + "\n    ],\n  },")
     stats['gen'] += 1
 
@@ -285,6 +285,8 @@ header = f"""// ============================================================
 // Kits ARENA para los animales SIN kit propio en habilidades.js.
 // Numeros del estudio de Naruto-Arena (tools/na_personajes.json, ARENA.md §2b).
 // Vida 100 para todos; la rareza sube la complejidad del kit, no los numeros.
+// SIN NIVELES y SIN PASIVAS: las 3 habilidades estan disponibles desde el
+// principio; lo unico que limita es el COSTO EN ENERGIA DE BIOMA.
 // Re-generar: python make_movesets.py --aplicar
 // ============================================================
 

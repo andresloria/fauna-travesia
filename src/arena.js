@@ -3,7 +3,8 @@
 // Lógica PURA y testeable (como engine.js): sin DOM, sin estado global.
 //
 // Reglas implementadas (ver ARENA.md §1-§2b, fuente: el wiki del original):
-//   · Equipos de 3, vida 100 PARA TODOS. La rareza/nivel no tocan stats.
+//   · Equipos de 3, vida 100 PARA TODOS. Sin niveles ni pasivas: todos entran
+//     con sus 3 habilidades + esquiva; solo limita el COSTO de energia.
 //   · Energía = biomas (🌳🌾🌊⛰). Cada ganancia es 25% cada tipo, AL AZAR.
 //     Primer turno: 1. Después: 1 por cada animal vivo al final de tu turno.
 //   · 1 habilidad por animal por turno, pagando costo (comodín = cualquiera).
@@ -22,26 +23,23 @@ export const BIOMAS = ['bosque', 'sabana', 'agua', 'montana'];
 export const VIDA = 100;
 
 // ---------- construcción ----------
-// equipo: [{key, nivel}] ×3  →  unidades listas para combatir
-export function mkUnidad({ key, nivel = 1, ref = null }, lado, idx) {
+// equipo: [{key}] ×3  →  unidades listas para combatir.
+// SIN NIVELES y SIN PASIVAS: todos entran con sus 3 habilidades + esquiva.
+export function mkUnidad({ key, ref = null }, lado, idx) {
   const sp = SP[key] || { n: key, e: '🐾', bio: 'bosque' };
-  const kit = habsDe(key, nivel);
-  const u = {
-    uid: `${lado}${idx}`, lado, idx, key, nivel,
-    ref,                                      // uid del animal del refugio (para game.js)
+  const kit = habsDe(key);
+  return {
+    uid: `${lado}${idx}`, lado, idx, key,
+    ref,                                      // clave del animal del refugio
     n: sp.n, e: sp.e, bio: BIOMAS.includes(sp.bio) ? sp.bio : 'montana',
     hp: VIDA, viva: true,
-    pasiva: kit.pasiva,                       // registro PASIVAS la interpreta
     habs: [...kit.habs, { ...ESQUIVA, esEsquiva: true }],
-    bloqueadas: kit.bloqueadas || [],
     recargas: {},                             // nombre → turnos restantes
     efectos: [],                              // efectos activos sobre la unidad
     defensa: 0, defensaPerm: 0,               // destructible (y la permanente)
     usadaEsteTurno: false,
-    contadores: { golpeada: 0, ataco: false, primeraGratis: false, sobrevivio1: false },
+    contadores: { golpeada: 0, ataco: false },
   };
-  aplicarPasivaInicial(u);
-  return u;
 }
 
 export function mkCombate(equipoA, equipoB, opts = {}) {
@@ -158,7 +156,7 @@ export function validarCola(st, lado, cola) {
     if (!h) return { ok: false, motivo: 'habilidad inválida' };
     if (u.recargas[h.n] > 0) return { ok: false, motivo: `${h.n} en recarga` };
     if (aturdida(u, h.clases || [])) return { ok: false, motivo: `${u.n} aturdida` };
-    costos.push(u.contadores.primeraGratis ? [] : (h.costo || []));
+    costos.push(h.costo || []);
   }
   if (!alcanza(st.energia[lado], costos)) return { ok: false, motivo: 'energía insuficiente' };
   return { ok: true };
@@ -176,8 +174,7 @@ export function ejecutarTurno(st, cola) {
     const u = st.unidades.find(x => x.uid === acc.uid);
     if (!u.viva) continue;                      // murió por un contraataque previo
     const h = u.habs[acc.hab];
-    if (u.contadores.primeraGratis) u.contadores.primeraGratis = false;
-    else pagar(st.energia[lado], h.costo || []);
+    pagar(st.energia[lado], h.costo || []);
     u.usadaEsteTurno = true;
     u.recargas[h.n] = (h.recarga || 0) + 1;     // +1 porque tickea al final de ESTE turno
     u.contadores.ataco = true;
@@ -203,8 +200,6 @@ export function ejecutarTurno(st, cola) {
     const n = st.jugados[st.lado] === 0 ? 1 : vivos(st, st.lado).length;
     const ganadas = ganarEnergia(st, st.lado, n);
     eventos.push({ t: 'energia', lado: st.lado, ganadas });
-    // pasivas de inicio de turno del lado entrante
-    for (const u of vivos(st, st.lado)) pasivaInicioTurno(st, u, eventos);
     // duración de efectos del lado entrante (sus buffs caducan al empezar su turno)
     for (const u of st.unidades) if (u.lado === st.lado) caducarEfectos(u);
   }
@@ -301,23 +296,18 @@ function hacerDano(st, u, o, base, h, eventos, { toxina = false, ignoraDefensa =
   v += efecto(u, 'amp').reduce((s, f) => s + f.v, 0);          // amplificado propio
   if (efecto(u, 'amp').length) u.efectos = u.efectos.filter(x => x.t !== 'amp');
   v += efecto(o, 'marca').reduce((s, f) => s + f.v, 0);        // marca permanente
-  v += pasivaDanoExtra(st, u, o);
   if (!toxina && !expuesta(o)) {
-    let red = efecto(o, 'reducir').reduce((s, f) => s + f.v, 0) + pasivaReduccion(o);
-    red = Math.max(0, red - pasivaIgnoraReduccion(u));
+    const red = efecto(o, 'reducir').reduce((s, f) => s + f.v, 0);
     v = Math.max(0, v - red);
   }
   if (!ignoraDefensa && !toxina && o.defensa > 0) {
     const absorbe = Math.min(o.defensa, v);
     o.defensa -= absorbe; v -= absorbe;
-    const extra = pasivaRompeDefensa(u);
-    if (extra && o.defensa > 0) o.defensa = Math.max(0, o.defensa - extra);
   }
   if (v <= 0) { eventos.push({ t: 'golpe', de: u.uid, uid: o.uid, v: 0 }); return; }
   o.hp -= v;
   o.contadores.golpeada++;
   eventos.push({ t: 'golpe', de: u.uid, uid: o.uid, v, toxina });
-  pasivaAlSerGolpeada(st, u, o, h, v, eventos);
   // contraataque activo del golpeado
   for (const c of efecto(o, 'contra')) if (u.viva && u.lado !== o.lado)
     { u.hp -= c.v; eventos.push({ t: 'contra', de: o.uid, uid: u.uid, v: c.v }); revisarMuerte(st, u, eventos); }
@@ -326,12 +316,6 @@ function hacerDano(st, u, o, base, h, eventos, { toxina = false, ignoraDefensa =
 
 function revisarMuerte(st, o, eventos) {
   if (o.hp > 0 || !o.viva) return;
-  // pasiva: sobrevive a 1 la primera vez (Cola desprendible / iguana)
-  if (pasivaSobrevive(o) && !o.contadores.sobrevivio1) {
-    o.contadores.sobrevivio1 = true; o.hp = 1;
-    eventos.push({ t: 'sobrevive', uid: o.uid });
-    return;
-  }
   o.viva = false; o.hp = 0; o.efectos = [];
   eventos.push({ t: 'cae', uid: o.uid });
   chequearFin(st);
@@ -360,8 +344,6 @@ function tickFinDeTurno(st, lado, eventos) {
     }
     u.efectos = u.efectos.filter(f => !(['dot', 'hot'].includes(f.t) && f.turnos <= 0));
   }
-  // pasivas de fin de turno del lado activo
-  for (const u of vivos(st, lado)) pasivaFinTurno(st, u, eventos);
 }
 
 function caducarEfectos(u) {
@@ -372,60 +354,7 @@ function caducarEfectos(u) {
   if (u.defensaPerm > 0) u.defensa = Math.max(u.defensa, u.defensaPerm);
 }
 
-// ============================================================
-// PASIVAS — registro por nombre (los kits las declaran por texto;
-// el motor las interpreta aquí; las no listadas son solo sabor).
-// ============================================================
-function aplicarPasivaInicial(u) {
-  const p = u.pasiva?.n || '';
-  if (p === 'Caparazón' ) u.defensa = 20;
-  if (p === 'Coraza') u.defensa = 10;
-  if (p === 'Madrugador') u.contadores.primeraGratis = true;
-}
-function pasivaReduccion(o) {
-  const p = o.pasiva?.n || '';
-  if (p === 'Metabolismo lento') return 5;
-  return 0;
-}
-function pasivaIgnoraReduccion(u) {
-  return (u.pasiva?.n === 'Depredador tope') ? 5 : 0;
-}
-function pasivaRompeDefensa(u) {
-  return (u.pasiva?.n === 'Mandíbula de presión') ? 10 : 0;
-}
-function pasivaDanoExtra(st, u, o) {
-  const p = u.pasiva?.n || '';
-  let v = 0;
-  if (p === 'Sangre caliente' && u.hp < 50) v += 5;
-  if (p === 'Territorial' && !u.contadores.ataco) v += 10;
-  if (p === 'Cazador solitario' && vivos(st, u.lado).length === 1) v += 15;
-  if (p === 'Emboscada' && !o.contadores.golpeada) v += 10;
-  return v;
-}
-function pasivaSobrevive(o) { return o.pasiva?.n === 'Cola desprendible'; }
-function pasivaAlSerGolpeada(st, u, o, h, v, eventos) {
-  const po = o.pasiva?.n || '';
-  const melee = (h.clases || []).includes('melee');
-  if (po === 'Piel tóxica' && melee) u.efectos.push({ t: 'dot', v: 10, turnos: 2 });
-  if (po === 'Piel toxica' && melee) u.efectos.push({ t: 'dot', v: 5, turnos: 2 });
-  if (po === 'Púas' && melee) { u.hp -= 10; eventos.push({ t: 'contra', de: o.uid, uid: u.uid, v: 10 }); revisarMuerte(st, u, eventos); }
-  if (po === 'Puas' && melee) { u.hp -= 10; eventos.push({ t: 'contra', de: o.uid, uid: u.uid, v: 10 }); revisarMuerte(st, u, eventos); }
-  if (po === 'Alerta de manada') {
-    for (const a of vivos(st, o.lado)) if (a.uid !== o.uid && a.pasiva?.n === 'Alerta de manada')
-      st.energia[o.lado].sabana++;
-  }
-  // 'Ojos de sobresalto' / 'Reflejos': esquivan el PRIMER golpe — se maneja en hacerDano
-}
-function pasivaInicioTurno(st, u, eventos) { /* reservado */ }
-function pasivaFinTurno(st, u, eventos) {
-  const p = u.pasiva?.n || '';
-  if (p === 'Instinto de manada') {
-    const herido = vivos(st, u.lado).filter(a => a.hp < VIDA).sort((a, b) => a.hp - b.hp)[0];
-    if (herido) herido.hp = Math.min(VIDA, herido.hp + 5);
-  }
-  if (p === 'Piel que sana' && u.contadores.golpeada === 0) u.hp = Math.min(VIDA, u.hp + 10);
-  if (p === 'Ave sagrada') void 0; // aura -5: aplicada como reducción de equipo en hacerDano (v2)
-}
+// (El sistema de PASIVAS se eliminó el 20-jul: solo ataques.)
 
 // ============================================================
 // AUTO / IA — arma una cola razonable para el lado activo.
@@ -445,7 +374,7 @@ export function colaAuto(st, lado = st.lado) {
       const h = u.habs[i];
       if (u.recargas[h.n] > 0) continue;
       if (aturdida(u, h.clases || [])) continue;
-      const costo = u.contadores.primeraGratis ? [] : (h.costo || []);
+      const costo = h.costo || [];
       if (!alcanza(pool, [costo])) continue;
       const objs = objetivosDe(st, u, i);
       if (!objs.length) continue;
@@ -483,7 +412,7 @@ export function colaAuto(st, lado = st.lado) {
     }
     if (mejor) {
       const h = u.habs[mejor.hab];
-      pagar(pool, u.contadores.primeraGratis ? [] : (h.costo || []));
+      pagar(pool, h.costo || []);
       cola.push(mejor);
     }
   }

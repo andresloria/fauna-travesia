@@ -22,15 +22,12 @@ const MAX_PELEAS = 400;          // tope por liga (para detectar ligas que no te
 const PERFILES = {
   // toca lo primero que ve
   novato: (st) => barajar(st.desbloqueados).slice(0, 3),
-  // los 3 de mayor nivel, desempatando al azar (si no, siempre juegan los mismos)
+  // elige por kit "que se ve fuerte" (lo que haría un jugador normal leyendo)
   normal: (st) => barajar(st.desbloqueados)
-    .sort((a, b) => L.nivelDe(st, b) - L.nivelDe(st, a)).slice(0, 3),
-  // nivel alto + roles variados (daño, aguante, apoyo) sin repetir bioma si se puede
+    .sort((a, b) => valorKit(b) - valorKit(a)).slice(0, 3),
+  // mejor kit + biomas variados (para no depender de una sola energía)
   experto: (st) => {
-    const cand = st.desbloqueados.slice().sort((a, b) => {
-      const d = L.nivelDe(st, b) - L.nivelDe(st, a);
-      return d || (valorKit(b) - valorKit(a));
-    });
+    const cand = st.desbloqueados.slice().sort((a, b) => valorKit(b) - valorKit(a));
     const eq = [], biomas = new Set();
     for (const k of cand) {
       if (eq.length === 3) break;
@@ -43,7 +40,7 @@ const PERFILES = {
 };
 // heurística simple: cuánto "ofrece" el kit de un animal
 function valorKit(key) {
-  const kit = habsDe(key, 8);
+  const kit = habsDe(key);
   let v = 0;
   for (const h of kit.habs) for (const f of (h.efectos || [])) {
     if (f.t === 'dano') v += (f.obj === 'todos' ? f.v * 2 : f.v);
@@ -80,8 +77,8 @@ function jugarLiga(perfil) {
     try {
       pelea = L.proximaPelea(st);
       arenaSt = A.combateAuto(
-        equipo.map(k => ({ key: k, nivel: L.nivelDe(st, k), ref: k })),
-        pelea.rivales.map(x => ({ key: x.key, nivel: x.nivel })));
+        equipo.map(k => ({ key: k })),
+        pelea.rivales.map(x => ({ key: x.key })));
       L.registrarResultado(st, pelea, arenaSt, equipo);
     } catch (e) {
       r.excepciones.push(`${e.message} @${pelea?.tipo || '?'}`);
@@ -103,7 +100,6 @@ function jugarLiga(perfil) {
   r.provincias = Math.min(st.prov, 8);
   r.desbloqueos = st.desbloqueados.length - L.BASE.length;
   r.record = st.record; r.mejorRacha = st.mejorRacha;
-  r.nivelFinal = st.desbloqueados.map(k => L.nivelDe(st, k)).sort((a, b) => b - a).slice(0, 3);
   if (r.peleas >= MAX_PELEAS) r.tope = true;
   return r;
 }

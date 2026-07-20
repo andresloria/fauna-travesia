@@ -913,8 +913,10 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 body.ar-lock{overflow:hidden}
 .ar-root{position:fixed;inset:0;z-index:200;background:rgba(8,14,7,.92);
   display:grid;place-items:center}
-.ar-stage{width:100%;height:100%;display:grid;place-items:center}
-.ar-win{position:relative;width:940px;height:600px;flex:0 0 auto;transform-origin:center center;
+.ar-stage{position:relative;width:100%;height:100%}
+/* la ventana se ancla al centro y se escala desde ahí (así nunca se sale) */
+.ar-win{position:absolute;left:50%;top:50%;width:940px;height:600px;
+  transform:translate(-50%,-50%);transform-origin:center center;
   border:5px solid #23301c;border-radius:4px;overflow:hidden;
   box-shadow:0 0 0 2px #0c120a,0 14px 40px rgba(0,0,0,.6);
   font-family:var(--body);color:#efe6cc;-webkit-font-smoothing:none}
@@ -1183,4 +1185,77 @@ body.ar-lock{overflow:hidden}
   .sl-perfil{flex-direction:row;flex-wrap:wrap;justify-content:space-between;align-items:center}
   .sl-pnom{width:100%}
   .sl-grid{max-height:340px}
+}
+
+/* ============================================================
+   ARENA EN CELULAR — la ventana fija de 940×600 no sirve en vertical:
+   quedaba a escala 0.39 (letra de 2px) y fuera de pantalla. Acá se
+   convierte en una COLUMNA FLUIDA con el mismo orden de lectura:
+   marcador arriba → rivales → tus filas → descripción.
+   ============================================================ */
+@media (max-width: 899px){
+  .ar-root{display:block;overflow-y:auto;overflow-x:hidden;padding:6px;
+    -webkit-overflow-scrolling:touch}
+  .ar-stage{display:block;width:auto;height:auto}
+  .ar-win{position:relative;left:auto;top:auto;width:100%;height:auto;min-height:0;
+    transform:none!important;display:flex;flex-direction:column;gap:7px;
+    padding:8px;border-width:3px;box-shadow:0 0 0 2px #0c120a}
+  /* el fondo se estira mucho en vertical (los escenarios son 256×256): se
+     oscurece para que los paneles se lean bien */
+  .ar-bg{position:absolute;inset:0;z-index:0;background-position:center 30%}
+  .ar-bg::after{background:linear-gradient(180deg,rgba(8,16,7,.72),rgba(8,16,7,.60))}
+  .ar-bigart{display:none}                     /* no hay lugar para el cabecilla grande */
+
+  /* barra superior: los dos nombres en fila, LISTO ancho debajo */
+  .ar-top{position:static;inset:auto;order:1;grid-template-columns:1fr 1fr;gap:6px}
+  .ar-mid{grid-column:1/-1;order:3;min-width:0;width:100%}
+  .ar-plate{order:1}
+  .ar-plate.r{order:2}
+  .ar-p{width:34px;height:34px;font-size:17px}
+  .ar-plate b{font-size:7px}
+  .ar-plate span{font-size:14px;line-height:1.05}
+  .ar-ready{font-size:9px;padding:11px 6px}
+  .ar-pool{width:100%;justify-content:center;gap:5px;padding:4px 6px}
+
+  /* rivales en fila arriba (como en el original, enfrentados) */
+  .ar-enemies{position:static;inset:auto;order:2;flex-direction:row;
+    justify-content:space-around;align-items:flex-start;gap:6px;width:100%}
+  .ar-enemy{flex:1;min-width:0}
+  .ar-enemy .ar-por{width:54px;height:54px}
+  .ar-hp{min-width:0;width:100%;font-size:7px;padding:2px}
+
+  /* tus filas: retrato + las 4 habilidades, a lo ancho */
+  .ar-rows{position:static;inset:auto;order:3;gap:7px;width:100%}
+  .ar-row{padding:5px;gap:6px}
+  .ar-por{width:46px;height:46px}
+  .ar-unit{flex:0 0 auto}
+  .ar-fxs{max-width:52px}
+  .ar-strip{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;min-width:0}
+  .ar-sk{width:auto;height:58px;padding:2px 1px}
+  .ar-sk .ar-ico{font-size:16px}
+  .ar-skn{font-size:10px;line-height:.9}
+  .ar-orb{width:7px;height:7px}
+  .ar-ord{width:17px;height:17px;font-size:8px;top:-7px;right:-5px}
+  .ar-why{font-size:4.5px}
+
+  /* pie: descripción arriba, botones abajo */
+  .ar-foot{position:static;inset:auto;order:4;grid-template-columns:1fr;gap:6px;width:100%}
+  .ar-desc{order:1;min-height:0;padding:6px 8px;gap:7px}
+  .ar-dico{width:38px;height:38px;flex:0 0 38px;font-size:17px}
+  .ar-dn{font-size:7px}
+  .ar-dd{font-size:15px}
+  .ar-dtags{font-size:13px}
+  .ar-fbtns{order:2;flex-direction:row;gap:6px}
+  .ar-fb{font-size:7px;padding:9px 4px}
+
+  /* el cartel de fin, dentro de la columna */
+  .ar-fin{position:fixed;inset:0}
+  .ar-finbox{padding:18px 20px;width:min(320px,88vw)}
+  .ar-fint{font-size:11px}
+}
+
+/* pantallas MUY angostas: dos filas de habilidades */
+@media (max-width: 359px){
+  .ar-strip{grid-template-columns:repeat(2,1fr)}
+  .ar-sk{height:52px}
 }

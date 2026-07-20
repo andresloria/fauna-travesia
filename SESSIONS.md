@@ -138,6 +138,33 @@ Naruto-Arena; ~30 animales fijos y el resto por misiones; música más relajante
   récord/racha/liberados guardados → 4 wins muestra "¡TE ESPERA DON RUFINO!" con botón
   🚨 ENFRENTAR AL CABECILLA. Cero errores de consola. Puerto local: **5651**.
 
+**✅ HECHO (20-jul, noche): SIN NIVELES, SIN PASIVAS + celular arreglado.**
+Pedido de Andrés: *"eliminá los niveles, todos pueden usar todas las habilidades, solo
+depende del costo de energía de bioma; eliminá las pasivas, únicamente los ataques"* +
+*"en celular se ve cortadísimo, es injugable"*.
+- **Fuera niveles y XP**: `habsDe(key)` devuelve siempre las 3 + esquiva. Fuera de
+  `arena.js` (mkUnidad sin `nivel`), `liga.js` (sin XP ni `st.animales`), `seleccionUI.js`
+  (sin "Nv" ni avisos de subida). La dificultad ahora la da el POOL: en provincias
+  avanzadas y contra cabecillas salen especies de rareza mayor (`elegirRivales`).
+- **Fuera pasivas**: se borró todo el registro del motor (~60 líneas) y el generador.
+- **⚠️ REBALANCE OBLIGADO (medido con `tools/kits.mjs`)**: quitar las pasivas destapó que
+  los kits cuyo **básico costaba bioma específico se quedaban sin jugar** (rendían 5% vs
+  94% de los que tenían básico gratis). Prueba directa: mismo animal, básico gratis 97%
+  vs básico con bioma 0%. **Arreglo: el básico ahora cuesta 1 COMODÍN y pega 20, parejo
+  para los 136** (los 14 a mano incluidos). El bioma sigue mandando en la 2ª y 3ª.
+  Resultado: roles de **41%–61%** (antes 5%–94%), brecha entre animales en juego real
+  **23.6 puntos** (antes 48.6), 0 peleas estancadas (antes 66), combates de 15 turnos
+  (antes 23). Puma nerfeado: su definitiva de 100 ahora exige 2 de montaña + toda la
+  energía (mataba de un golpe en el turno 1 → 96% de victorias).
+- **📱 CELULAR**: la ventana fija de 940×600 se dibujaba **de x=287 a x=654 en una
+  pantalla de 375** (casi toda fuera) y a escala 0.39 la letra quedaba en 2px. Ahora:
+  (a) la ventana se ancla con `position:absolute; left/top:50%` + `translate(-50%,-50%)`
+  para que nunca se salga en escritorio, y (b) **bajo 900px NO se escala**: un @media la
+  convierte en columna fluida (marcador → rivales → tus filas → descripción), tiles de
+  65×58 y letra de 10px. Verificado en 375×812: ventana de 6→369, **0 desbordes**, sin
+  scroll horizontal, y tocar habilidad → objetivos → LISTO funciona.
+- 19/19 tests del motor (3 actualizados a la economía nueva).
+
 ## PRÓXIMOS PASOS (retomar por acá)
 
 1. **Probar el arco completo jugando**: cabecilla → provincia 2 → … → Monteverde →

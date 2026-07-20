@@ -4,23 +4,24 @@ import * as A from '../src/arena.js';
 import { SP } from '../src/fauna_roster.js';
 import { habsDe } from '../src/habilidades.js';
 
-const REF = [{ key: 'iguana', nivel: 8 }, { key: 'tucan', nivel: 8 }, { key: 'boa', nivel: 8 }];
+const REF = [{ key: 'iguana' }, { key: 'tucan' }, { key: 'boa' }];
 const N = 120;
 const filas = [];
 for (const key of Object.keys(SP)) {
   if (SP[key].folk) continue;
   let w = 0;
   for (let i = 0; i < N; i++) {
-    const s = A.combateAuto([{ key, nivel: 8 }, { key, nivel: 8 }, { key, nivel: 8 }], REF);
+    const s = A.combateAuto([{ key }, { key }, { key }], REF);
     if (s.fin === 'A') w++;
   }
-  const kit = habsDe(key, 8);
+  const kit = habsDe(key);
+  const gratis = kit.habs.filter(h => !(h.costo || []).length).length;
   filas.push({ key, n: SP[key].n, wr: w / N, rol: SP[key].ab, bio: SP[key].bio,
-               nHabs: kit.habs.length, pasiva: kit.pasiva?.n || '—' });
+               nHabs: kit.habs.length, gratis });
 }
 filas.sort((a, b) => b.wr - a.wr);
-const p = (f) => `  ${(f.wr * 100).toFixed(0).padStart(3)}%  ${f.n.padEnd(26).slice(0, 26)} ${f.rol.padEnd(7)} ${f.bio.padEnd(8)} ${f.pasiva}`;
-console.log('\n=== KITS a Nv8 (trío del mismo animal vs equipo de referencia) ===');
+const p = (f) => `  ${(f.wr * 100).toFixed(0).padStart(3)}%  ${f.n.padEnd(26).slice(0, 26)} ${f.rol.padEnd(7)} ${f.bio.padEnd(8)} gratis:${f.gratis}`;
+console.log('\n=== KITS (trío del mismo animal vs equipo de referencia · sin niveles) ===');
 console.log('\n🏆 TOP 12');   filas.slice(0, 12).forEach(f => console.log(p(f)));
 console.log('\n💀 BOTTOM 12'); filas.slice(-12).forEach(f => console.log(p(f)));
 

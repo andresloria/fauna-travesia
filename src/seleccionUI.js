@@ -1,6 +1,6 @@
 // ============================================================
 // seleccionUI.js — PANTALLA PRINCIPAL del rediseño (mockup aprobado):
-// arriba la FICHA del animal tocado (pasiva + habilidades + rango), botonera
+// arriba la FICHA del animal tocado (sus 3 habilidades + esquiva y su rango), botonera
 // EMPEZAR/MISIONES, y abajo: tu equipo (3) · el refugio completo (desbloqueados
 // a color, bloqueados en gris con su misión) · tu perfil (récord y racha).
 // Habla con liga.js (estado) y lanza combates con arenaUI.js.
@@ -65,16 +65,13 @@ export function crearSeleccion(root) {
     const key = fichaKey, sp = SP[key];
     if (!sp) return '';
     const abierto = L.desbloqueado(st, key);
-    const nivel = L.nivelDe(st, key);
-    const kit = habsDe(key, 8);       // en la ficha se ven TODAS (las de nivel alto, marcadas)
+    const kit = habsDe(key);          // SIN niveles: siempre están las 3
     const rango = rangoDe(sp.rarity);
-    const xp = st.animales[key]?.xp || 0;
-    const falta = L.xpParaSiguiente(xp);
     const habs = kit.habs.map(h => `
-      <div class="sl-ht ${abierto && nivel >= h.nv ? '' : 'bloq'}">
+      <div class="sl-ht">
         <div class="sl-htn">${h.n}</div>
         <div class="sl-htd">${h.desc}</div>
-        <div class="sl-htf">${orbes(h.costo)}<em>↻ ${h.recarga || 0}</em><b class="sl-nv">Nv${h.nv}</b></div>
+        <div class="sl-htf">${orbes(h.costo)}<em>↻ ${h.recarga || 0}</em></div>
       </div>`).join('') + `
       <div class="sl-ht esq">
         <div class="sl-htn">🛡 Esquivar</div>
@@ -94,9 +91,7 @@ export function crearSeleccion(root) {
         <div class="sl-finfo">
           <div class="sl-fnom">${sp.n.toUpperCase()}
             <span class="sl-fbio" style="color:${BCOLOR[sp.bio]}">${BEMO[sp.bio] || ''} ${sp.bio}</span>
-            ${abierto ? `<span class="sl-fnv">Nv ${nivel}${falta != null ? ` · ${falta} XP para subir` : ' · MÁX'}</span>` : ''}
           </div>
-          ${kit.pasiva ? `<div class="sl-pasiva"><b>★ PASIVA · ${kit.pasiva.n}</b>${kit.pasiva.desc}</div>` : ''}
           <div class="sl-habrow">${habs}</div>
           ${mision}
         </div>
@@ -115,7 +110,7 @@ export function crearSeleccion(root) {
       <span class="sl-trk" style="--r:${RCOLOR[rango]}">${rango}</span>
       <img src="${ART(key)}" alt="${sp.n}" loading="lazy">
       <span class="sl-tn">${sp.n}</span>
-      ${abierto ? (enEq ? '<span class="sl-teq">EN EQUIPO</span>' : `<span class="sl-tnv">Nv ${L.nivelDe(st, key)}</span>`) : '<span class="sl-lock">🔒</span>'}
+      ${abierto ? (enEq ? '<span class="sl-teq">EN EQUIPO</span>' : '') : '<span class="sl-lock">🔒</span>'}
     </button>`;
   }
 
@@ -255,7 +250,7 @@ export function crearSeleccion(root) {
 
     if (window.faunaMusic) window.faunaMusic.set('battle');
     abrirArena({
-      miEquipo: equipo.map(k => ({ key: k, nivel: L.nivelDe(st, k), ref: k })),
+      miEquipo: equipo.map(k => ({ key: k, ref: k })),
       rivalEquipo: pelea.rivales,
       titulo: pelea.titulo, sub: pelea.sub,
       fondo: pelea.fondo, bigart: pelea.bigart, rivalArt: pelea.rivalArt,
@@ -273,11 +268,6 @@ export function crearSeleccion(root) {
         }
         for (const d of r.desbloqueos) {
           await avisar('🔓 ¡MISIÓN CUMPLIDA!', `${SP[d].e || ''} <b>${SP[d].n}</b> se une a tu refugio.`);
-        }
-        for (const s of r.subidas) {
-          const nuevas = habsDe(s.key, s.a).habs.filter(x => x.nv > s.de && x.nv <= s.a);
-          if (nuevas.length)
-            await avisar('⬆️ ¡NIVEL ' + s.a + '!', `${SP[s.key].n} aprendió: <b>${nuevas.map(x => x.n).join(', ')}</b>`);
         }
         if (r.ganoJuego) await avisar('🏆 ¡COSTA RICA LIBRE!',
           'Venciste al Cabecilla en Monteverde. La red cayó… pero la LIGA LIBRE apenas empieza: las leyendas del Tenebroso te esperan.');

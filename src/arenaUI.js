@@ -28,7 +28,7 @@ const orbes = (costo) => !costo || !costo.length
 const icoDe = (h) => h.esEsquiva ? '🛡' : (ICO[(h.efectos || [])[0]?.t] || '✳️');
 
 // ---------- abrirArena: game.js llama esto y se olvida ----------
-// opts: { miEquipo:[{key,nivel,ref,n}], rivalEquipo:[{key,nivel}], titulo, sub,
+// opts: { miEquipo:[{key,ref}], rivalEquipo:[{key}], titulo, sub,
 //         fondo (url), bigart (url|null), guiaArt, rivalArt, onFin(won, caidosRefs) }
 export function abrirArena(opts) {
   const st = A.mkCombate(opts.miEquipo, opts.rivalEquipo, { abre: Math.random() < 0.5 ? 'A' : 'B' });
@@ -38,6 +38,7 @@ export function abrirArena(opts) {
   document.body.classList.add('ar-lock');
 
   let cola = [];               // [{uid, hab, objetivo}]
+  let ultimaDesc = null;       // {u,h} de la última habilidad mirada (persiste al re-render)
   let seleccion = null;        // {uid, hab} esperando objetivo
   let auto = false;
   let timerId = null, timerFin = 0;
@@ -49,7 +50,7 @@ export function abrirArena(opts) {
     const p = { ...st.energia.A };
     for (const acc of cola) {
       const u = u$(acc.uid);
-      if (!u.contadores.primeraGratis) A.pagar(p, u.habs[acc.hab].costo || []);
+      A.pagar(p, u.habs[acc.hab].costo || []);
     }
     return p;
   };
@@ -92,7 +93,7 @@ export function abrirArena(opts) {
           <button class="ar-fb ${auto ? 'on' : ''}" id="arAuto">🤖 AUTO ${auto ? 'ON' : 'OFF'}</button>
           <button class="ar-fb mal" id="arHuir">🏳 RENDIRSE</button>
         </div>
-        <div class="ar-desc" id="arDesc">${descHTML(null)}</div>
+        <div class="ar-desc" id="arDesc">${descHTML(ultimaDesc)}</div>
       </div>
     </div></div>`;
     ajustarEscala();
@@ -122,8 +123,7 @@ export function abrirArena(opts) {
     else if (u.recargas[h.n] > 0) { off = 'off'; why = `↻ ${u.recargas[h.n]}`; }
     else if (A.aturdida(u, h.clases || [])) { off = 'off'; why = 'ATURDIDA'; }
     else if (acc && !esta) off = 'off';
-    else if (!esta && !u.contadores.primeraGratis &&
-             !A.alcanza(poolRestante(), [h.costo || []])) { off = 'off'; why = 'SIN ENERGÍA'; }
+    else if (!esta && !A.alcanza(poolRestante(), [h.costo || []])) { off = 'off'; why = 'SIN ENERGÍA'; }
     const sel = esta || (seleccion && seleccion.uid === u.uid && seleccion.hab === i);
     const orden = esta ? cola.indexOf(acc) + 1 : null;
     return `<button class="ar-sk ${off} ${sel ? 'sel' : ''} ${h.esEsquiva ? 'esq' : ''}"
@@ -225,7 +225,11 @@ export function abrirArena(opts) {
     root.querySelector('#arAuto').onclick = () => { auto = !auto; if (auto && st.lado === 'A' && !st.fin) jugarTurnoMio(true); else render(); };
     root.querySelector('#arHuir').onclick = () => terminar(false, true);
   }
-  function mostrarDesc(par) { const d = root.querySelector('#arDesc'); if (d) d.innerHTML = descHTML(par); }
+  function mostrarDesc(par) {
+    ultimaDesc = par;
+    const d = root.querySelector('#arDesc');
+    if (d) d.innerHTML = descHTML(par);
+  }
 
   // -------- turnos --------
   function jugarTurnoMio(forzarAuto = false) {
@@ -296,10 +300,17 @@ export function abrirArena(opts) {
     };
   }
 
+  // En pantallas anchas la arena es una "ventana de consola" de 940×600 que se
+  // escala entera. En celular eso quedaba a escala 0.39 (letra de 2px) y encima
+  // se salía de la pantalla, así que ahí NO se escala: el CSS la vuelve una
+  // columna fluida (ver @media en styles.css).
+  const MOVIL = () => window.innerWidth < 900;
   function ajustarEscala() {
     const win = root.querySelector('.ar-win');
+    if (!win) return;
+    if (MOVIL()) { win.style.transform = ''; return; }
     const s = Math.min(1, (window.innerWidth - 8) / 940, (window.innerHeight - 8) / 600);
-    win.style.transform = `scale(${s})`;
+    win.style.transform = `translate(-50%,-50%) scale(${s})`;
   }
   window.addEventListener('resize', ajustarEscala);
 

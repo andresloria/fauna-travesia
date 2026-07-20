@@ -6,7 +6,8 @@
 //   · Vencés al cabecilla → siguiente provincia (7 + Monteverde al final).
 //   · Después de Monteverde: liga libre, y las LEYENDAS aparecen de jefes.
 //   · ~30 animales fijos desbloqueados; TODOS los demás, por MISIONES.
-//   · Vida 100 parejo; ganar da XP → el nivel desbloquea habilidades (1/4/8).
+//   · Vida 100 parejo, SIN niveles ni pasivas: todos con sus 3 habilidades +
+//     esquiva. Solo limita el costo de energia de bioma.
 // Persistencia: localStorage 'fauna_liga_v1'. Lógica pura: la UI la consume.
 // ============================================================
 
@@ -34,17 +35,10 @@ export const BASE = [
   'anolis', 'yiguirro', 'comadreja', 'geco',
 ].filter(k => SP[k]);
 
-// ---------- niveles por XP (ganar = +2 · jefe = +4; cap Nv8) ----------
-const XP_NIVEL = [0, 2, 5, 9, 14, 20, 27, 35];   // xp mínimo para Nv 1..8
-export const nivelDeXp = (xp) => {
-  let nv = 1;
-  for (let i = 0; i < XP_NIVEL.length; i++) if (xp >= XP_NIVEL[i]) nv = i + 1;
-  return Math.min(8, nv);
-};
-export const xpParaSiguiente = (xp) => {
-  const nv = nivelDeXp(xp);
-  return nv >= 8 ? null : XP_NIVEL[nv] - xp;
-};
+// ---------- SIN NIVELES (20-jul) ----------
+// Los animales no suben de nivel ni tienen stats: entran todos iguales con sus
+// 3 habilidades + esquiva. Lo único que decide qué podés usar es la ENERGÍA de
+// bioma. La progresión del juego es COLECCIONAR animales (misiones), no subirlos.
 
 // ---------- estado ----------
 export function nuevoEstado() {
@@ -53,7 +47,6 @@ export function nuevoEstado() {
     guia: null,                        // {name, guide:'hombre'|'mujer'}
     record: { w: 0, l: 0 }, racha: 0, mejorRacha: 0,
     liberados: 0,                      // cada victoria libera a los 3 del rival
-    animales: Object.fromEntries(BASE.map(k => [k, { xp: 0 }])),
     desbloqueados: [...BASE],
     prov: 0, winsProv: 0,              // 0-6 provincias · 7 Monteverde · 8+ liga libre
     jefesVencidos: 0, ganoJuego: false,
@@ -72,7 +65,6 @@ export function cargar() {
     if (raw) {
       const st = { ...nuevoEstado(), ...JSON.parse(raw) };
       // migración suave: garantizar la BASE
-      for (const k of BASE) if (!st.animales[k]) { st.animales[k] = { xp: 0 }; }
       st.desbloqueados = [...new Set([...st.desbloqueados, ...BASE])];
       return st;
     }
@@ -82,7 +74,6 @@ export function cargar() {
 export function guardar(st) {
   try { localStorage.setItem(LS, JSON.stringify(st)); } catch {}
 }
-export const nivelDe = (st, key) => nivelDeXp(st.animales[key]?.xp || 0);
 export const desbloqueado = (st, key) => st.desbloqueados.includes(key);
 
 // ---------- provincia / progresión ----------
@@ -102,11 +93,24 @@ export const fondoDe = (prov, esFolk) =>
   esFolk ? 'assets/escenarios/bg_sanatorio.png'
          : `assets/escenarios/${FONDO_PROV[prov.n] || 'bioma_bosque'}.png`;
 
-// nivel de los rivales: sube con la provincia; el jefe pega +2
-const nivelRival = (st, esJefe) => {
-  const base = Math.min(8, 1 + Math.floor(st.prov * 0.9) + (esJefe ? 2 : 0));
-  return Math.max(1, Math.min(8, base + (Math.random() < 0.35 ? 1 : 0) - (Math.random() < 0.25 ? 1 : 0)));
-};
+// Sin niveles, la dificultad la da el POOL: en las provincias avanzadas y
+// contra cabecillas salen especies de rareza mayor (mejores kits).
+const RANK_RAREZA = { comun:0, raro:1, ultrararo:2, legendario:3, extinto:4, mitico:4 };
+const fuerzaDe = (key) => RANK_RAREZA[SP[key]?.rarity] ?? 0;
+function elegirRivales(st, pool, esJefe) {
+  const orden = pool.slice().sort((a, b) => fuerzaDe(b) - fuerzaDe(a));
+  const duros = orden.slice(0, Math.max(3, Math.ceil(orden.length * 0.4)));
+  const suaves = orden.slice(-Math.max(3, Math.ceil(orden.length * 0.6)));
+  // cuanto mas avanzada la provincia (y si es jefe), mas probable el pool duro
+  const pDuro = Math.min(0.85, 0.15 + st.prov * 0.09 + (esJefe ? 0.3 : 0));
+  const out = [];
+  while (out.length < 3) {
+    const fuente = Math.random() < pDuro ? duros : suaves;
+    const k = fuente[Math.floor(Math.random() * fuente.length)];
+    if (k) out.push(k);
+  }
+  return out.map(k => ({ key: k }));
+}
 
 const alAzar = (arr, n) => {
   const c = arr.slice();
@@ -127,7 +131,7 @@ export function proximaPelea(st) {
       const key = pendientes[Math.floor(Math.random() * pendientes.length)];
       return {
         tipo: 'leyenda', key, prov,
-        rivales: [{ key, nivel: 8 }],
+        rivales: [{ key }, { key }, { key }],   // la leyenda se multiplica: 3 contra 3
         titulo: SP[key].n.toUpperCase(), sub: 'Leyenda de Costa Rica',
         bigart: `assets/folclor/${key}.png`, rivalArt: `assets/folclor/${key}.png`,
         fondo: fondoDe(prov, true),
@@ -136,11 +140,10 @@ export function proximaPelea(st) {
   }
 
   const pool = prov.pool.filter(k => SP[k]);
-  const keys = alAzar(pool, 3);
   const b = esJefe ? bossOf(prov.n) : null;
   return {
     tipo: esJefe ? 'jefe' : 'normal', prov,
-    rivales: keys.map(k => ({ key: k, nivel: nivelRival(st, esJefe) })),
+    rivales: elegirRivales(st, pool, esJefe),
     titulo: esJefe ? b.n.toUpperCase() : `CAZADORES DE ${prov.n.toUpperCase()}`,
     sub: esJefe ? b.t : prov.n,
     bigart: esJefe ? `assets/personajes/${b.art}.png` : null,
@@ -156,7 +159,7 @@ export function proximaPelea(st) {
 // ============================================================
 export function registrarResultado(st, pelea, arenaSt, equipo) {
   const gane = arenaSt.fin === 'A';
-  const out = { subidas: [], desbloqueos: [], provinciaLiberada: null, ganoJuego: false, leyenda: null };
+  const out = { desbloqueos: [], provinciaLiberada: null, ganoJuego: false, leyenda: null };
   st.ultimoEquipo = equipo.slice();
 
   // ---- resumen de la pelea (para misiones) ----
@@ -168,7 +171,8 @@ export function registrarResultado(st, pelea, arenaSt, equipo) {
   const robadoAhora = log.filter(e => e.t === 'robarEnergia' && String(e.uid).startsWith('A')).length;
   const contraAhora = log.filter(e => e.t === 'contra' && String(e.de).startsWith('A')).reduce((s, e) => s + (e.v || 0), 0);
   const caidasB = log.filter(e => e.t === 'cae' && String(e.uid).startsWith('B'));
-  const masFuerteB = arenaSt.unidades.filter(u => u.lado === 'B').sort((a, b) => b.nivel - a.nivel)[0];
+  const masFuerteB = arenaSt.unidades.filter(u => u.lado === 'B')
+    .sort((a, b) => fuerzaDe(b.key) - fuerzaDe(a.key))[0];
   const primeroElFuerte = caidasB.length > 0 && masFuerteB && caidasB[0].uid === masFuerteB.uid;
   st.stats.curado += curadoAhora; st.stats.robado += robadoAhora; st.stats.contraatacado += contraAhora;
 
@@ -176,14 +180,6 @@ export function registrarResultado(st, pelea, arenaSt, equipo) {
   if (gane) {
     st.record.w++; st.racha++; st.mejorRacha = Math.max(st.mejorRacha, st.racha);
     st.liberados += arenaSt.unidades.filter(u => u.lado === 'B').length;
-    const xpGanada = (pelea.tipo === 'normal') ? 2 : 4;
-    for (const k of equipo) {
-      const a = st.animales[k]; if (!a) continue;
-      const antes = nivelDeXp(a.xp);
-      a.xp += xpGanada;
-      const ahora = nivelDeXp(a.xp);
-      if (ahora > antes) out.subidas.push({ key: k, de: antes, a: ahora });
-    }
   } else {
     st.record.l++; st.racha = 0;
   }
@@ -218,7 +214,6 @@ export function registrarResultado(st, pelea, arenaSt, equipo) {
     avanzarMision(st, key, m, contexto);
     if (misionCumplida(st, key, m)) {
       st.desbloqueados.push(key);
-      st.animales[key] = st.animales[key] || { xp: 0 };
       out.desbloqueos.push(key);
     }
   }
