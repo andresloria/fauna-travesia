@@ -69,7 +69,7 @@ export function createUI(game) {
       <div class="chip"><div class="k">Corazones</div><div class="hearts">${'❤'.repeat(s.hearts) || '—'}</div></div>
       <div class="chip"><div class="k">Provincias</div><div class="v">${s.cleared}/${RULES.RUN_LENGTH}</div></div>
       <div class="chip"><div class="k">Equipo</div><div class="v">${s.team.length}/${RULES.MAX_TEAM}</div></div>
-      <div class="chip"><div class="k">Liberados</div><div class="v" style="color:var(--hp)">🌿 ${s.released || 0}</div></div>
+      <div class="chip"><div class="k">Liberados</div><div class="v libres">🌿 ${s.released || 0}</div></div>
       <div class="chip"><div class="k">Mochila</div><div class="v">${s.bag.length ? s.bag.map(i => i.e).join('') : '—'}</div></div>`;
   }
   function renderLog(s) { logBox.innerHTML = s.log.map(l => `<div class="le">${l}</div>`).join(''); }

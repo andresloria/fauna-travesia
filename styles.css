@@ -6,22 +6,41 @@
   --combate:#a63d2e;--tesoro:#c4a04e;--descanso:#5aa86b;--airport:#7a6f53;--cazador:#3a1f2a;--intercambio:#2f6f8f;--salvaje:#6a8a3e;--sorpresa:#8a5fae;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:radial-gradient(130% 90% at 50% -8%,#14352c 0%,var(--bg-mid) 44%,var(--bg-deep) 100%);
-  color:var(--paper);font-family:'Spectral',Georgia,serif;min-height:100vh;padding:14px 12px 30px;-webkit-font-smoothing:antialiased}
+/* ---------- SKIN GBA: cielo + paneles crema + tipografía pixel ---------- */
+:root{
+  --sky1:#8fd0ef;--sky2:#bfe6f5;--sky3:#dff3fb;
+  --cream:#ece2c6;--cream-hi:#faf4e2;--cream-lo:#c9b98c;
+  --line:#2b2117;--ink-g:#2a2016;--ink-soft-g:#6a5a3f;
+  --px:'PressStart',monospace;--body:'VT323',monospace;
+}
+body{background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 46%,var(--sky3) 100%);
+  background-attachment:fixed;
+  color:var(--ink-g);font-family:var(--body);font-size:19px;min-height:100vh;
+  padding:14px 12px 30px;-webkit-font-smoothing:none}
 .wrap{max-width:760px;margin:0 auto}
-.eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);text-align:center}
-h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(26px,5.5vw,40px);text-align:center;line-height:.95;margin-top:4px}
-h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2vw,15px);color:var(--brass);margin-top:3px}
+.eyebrow{font-family:var(--px);font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:#2e6f8f;text-align:center;line-height:1.9}
+h1{font-family:var(--px);font-weight:400;font-size:clamp(15px,3.6vw,24px);text-align:center;
+  line-height:1.7;margin-top:8px;color:#7a3f18;text-shadow:2px 2px 0 #e9dfc2}
+h1 .sub{display:block;font-family:var(--body);font-size:clamp(16px,2.4vw,20px);
+  color:var(--ink-soft-g);margin-top:6px;text-shadow:none;line-height:1.1}
 
-.runbar{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin:12px 0 4px}
-.chip{background:rgba(0,0,0,.24);border:1px solid rgba(196,160,78,.25);border-radius:8px;padding:6px 13px;text-align:center}
-.chip .k{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#bdae90}
-.chip .v{font-family:'Fraunces',serif;font-weight:900;font-size:18px}
-.chip.country .v{font-size:15px}
-.hearts{font-size:16px;letter-spacing:2px;color:var(--atk)}
+/* panel crema con borde grueso y bisel (la caja base de todo el juego) */
+.gbabox,.chip,.event-box,.how,.modesel,.log,.editp,.statbox,.teampanel{
+  background:var(--cream);border:3px solid var(--line);border-radius:3px;
+  box-shadow:inset 0 0 0 2px var(--cream-lo),inset 0 0 0 4px var(--cream-hi),3px 4px 0 rgba(0,0,0,.22);
+  color:var(--ink-g)}
 
-.section-h{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin:14px 0 8px;display:flex;align-items:center;gap:8px}
-.section-h::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--brass-deep),transparent)}
+.runbar{display:flex;gap:8px;justify-content:center;align-items:stretch;flex-wrap:wrap;margin:14px 0 6px}
+.chip{padding:7px 11px;text-align:center;min-width:70px}
+.chip .k{font-family:var(--px);font-size:6.5px;letter-spacing:.06em;text-transform:uppercase;color:#8a7a55}
+.chip .v{font-family:var(--body);font-size:20px;line-height:1.1;color:var(--ink-g)}
+.chip.country .v{font-size:17px}
+.hearts{font-size:18px;letter-spacing:1px;color:#c4382a;line-height:1.1}
+
+.section-h{font-family:var(--px);font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;
+  color:#2e7a41;margin:16px 0 9px;display:flex;align-items:center;gap:8px;line-height:1.8}
+.section-h::after{content:"";flex:1;height:3px;background:var(--line);opacity:.35;border-radius:2px}
 
 /* ---------- MAPA: escenario propio de cada provincia ----------
    Capas: pasto tileado (z0) → vista del lugar + props (z1) → senderos (z2)
@@ -87,22 +106,26 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 .mnode.available:hover .disc{transform:scale(1.12)}
 .mnode.current .disc{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.4)}
 .mnode.visited{opacity:.45} .mnode.locked{opacity:.32}
-.map-hint{text-align:center;font-style:italic;font-size:13px;color:#cbbd9c;margin-top:6px}
+.map-hint{text-align:center;font-family:var(--body);font-size:18px;color:var(--ink-soft-g);margin-top:9px;line-height:1.15}
+.map-hint b{color:#7a3f18}
 
 /* ---------- tarjeta de animal (arte + tiers + efecto) ---------- */
 .team{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;min-height:150px}
-.acard{width:106px;border-radius:12px;background:linear-gradient(180deg,#f4ead2,var(--paper-edge));color:var(--ink);
+.acard{width:106px;border-radius:3px;background:var(--cream);color:var(--ink-g);
   padding:7px 7px 9px;position:relative;display:flex;flex-direction:column;align-items:center;
-  box-shadow:0 6px 14px rgba(0,0,0,.3);border:1px solid var(--paper-edge);transition:transform .12s}
+  border:3px solid var(--line);
+  box-shadow:inset 0 0 0 2px var(--cream-lo),inset 0 0 0 4px var(--cream-hi),3px 4px 0 rgba(0,0,0,.28);
+  transition:transform .12s}
 .acard.clickable{cursor:pointer}
 .acard.clickable:hover{transform:translateY(-4px)}
 .acard .art{width:86px;height:86px;border-radius:9px;display:flex;align-items:center;justify-content:center;
   position:relative;overflow:hidden;background:radial-gradient(circle at 50% 38%,#fffaf0,#e7d9b6);
   margin-top:11px}   /* baja la imagen para que las etiquetas (nivel/rareza/bioma) no tapen al animal */
 .acard .art img{width:90%;height:90%;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.22))}
-.acard .an{font-family:'Fraunces',serif;font-weight:600;font-size:12px;text-align:center;line-height:1.05;margin-top:6px;min-height:26px;display:flex;align-items:center}
-.acard .stats{display:flex;gap:7px;margin-top:2px}
-.acard .st{font-family:'DM Mono',monospace;font-weight:600;font-size:13px}
+.acard .an{font-family:var(--px);font-size:7.5px;text-align:center;line-height:1.5;margin-top:7px;
+  min-height:24px;display:flex;align-items:center;color:var(--ink-g)}
+.acard .stats{display:flex;gap:6px;margin-top:3px}
+.acard .st{font-family:var(--body);font-size:16px;line-height:1}
 .acard .st.atk{color:var(--atk)} .acard .st.hp{color:var(--hp)} .acard .st.def{color:#cba24a}
 .acard .stage{position:absolute;top:6px;left:6px;font-family:'DM Mono',monospace;font-size:8px;font-weight:600;color:#fff;border-radius:7px;padding:1px 6px;letter-spacing:.04em;z-index:3;white-space:nowrap}
 .acard .bio{position:absolute;top:6px;right:6px;font-size:12px;z-index:3}
@@ -127,17 +150,27 @@ h1 .sub{display:block;font-weight:400;font-style:italic;font-size:clamp(11px,2.2
 @keyframes lunge{50%{transform:translateY(-8px) scale(1.06)}}
 .empty-slot{width:106px;min-height:148px;border-radius:12px;border:1px dashed rgba(196,160,78,.3);display:flex;align-items:center;justify-content:center;color:#9c8f72;font-size:22px}
 
-.btn{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:11px 22px;border-radius:7px;
-  border:1px solid var(--brass);background:var(--brass);color:var(--bg-deep);cursor:pointer;transition:transform .1s,background .15s}
-.btn:hover{background:#d8b766}.btn:active{transform:translateY(1px)} .btn.ghost{background:transparent;color:var(--brass)}
-.btn.danger{background:transparent;border-color:var(--atk);color:var(--atk)}
-.btn.liberar{background:var(--hp);border-color:var(--hp);color:#08110a}
-.btn:disabled{opacity:.4;cursor:not-allowed}
+/* botón estilo GBA (mismo lenguaje que las opciones de diálogo) */
+.btn{font-family:var(--px);font-size:8.5px;letter-spacing:.04em;text-transform:uppercase;
+  padding:12px 16px;border-radius:3px;line-height:1.6;
+  border:3px solid var(--line);background:#7a3f18;color:#f6e9cc;cursor:pointer;
+  box-shadow:inset 0 0 0 2px #a9642f,0 3px 0 rgba(0,0,0,.35);transition:transform .08s,background .12s}
+.btn:hover{background:#96521f}
+.btn:active{transform:translateY(2px);box-shadow:inset 0 0 0 2px #a9642f,0 1px 0 rgba(0,0,0,.35)}
+.btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn.ghost{background:#6a6152;box-shadow:inset 0 0 0 2px #8a8172,0 3px 0 rgba(0,0,0,.35)}
+.btn.ghost:hover{background:#7d7462}
+.btn.danger{background:#8f2f24;box-shadow:inset 0 0 0 2px #b2483a,0 3px 0 rgba(0,0,0,.35)}
+.btn.danger:hover{background:#a53a2c}
+.btn.liberar{background:#2e7a41;box-shadow:inset 0 0 0 2px #46a05c,0 3px 0 rgba(0,0,0,.35)}
+.btn.liberar:hover{background:#389350}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .center{text-align:center;margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 
-.event-box{background:rgba(0,0,0,.24);border:1px solid rgba(196,160,78,.25);border-radius:12px;padding:18px;text-align:center}
-.event-box .big{font-size:54px;line-height:1} .event-box .title{font-family:'Fraunces',serif;font-weight:900;font-size:20px;margin:6px 0}
-.event-box .desc{font-style:italic;color:#cbbd9c;font-size:13px;margin:10px 0 4px}
+.event-box{padding:18px;text-align:center}
+.event-box .big{font-size:54px;line-height:1}
+.event-box .title{font-family:var(--px);font-size:11px;line-height:1.7;margin:8px 0;color:#7a3f18}
+.event-box .desc{font-family:var(--body);color:var(--ink-soft-g);font-size:19px;line-height:1.15;margin:10px 0 4px}
 
 /* ---------- editar personaje ---------- */
 .section-h span .btn{padding:5px 12px;font-size:9px}
@@ -263,11 +296,14 @@ button.slot.full .rm{position:absolute;top:-5px;right:-5px;width:15px;height:15p
 .wildpick .wilddesc{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:#bdae90}
 .wildpick .btn{padding:8px 14px;font-size:10px}
 
-.log{background:rgba(0,0,0,.28);border:1px solid rgba(196,160,78,.2);border-radius:10px;padding:10px 13px;font-size:12px;line-height:1.5;max-height:110px;overflow:auto;margin-top:14px}
-.log .le{padding:2px 0;color:#d8cdb2;border-bottom:1px solid rgba(196,160,78,.1)} .log .le b{color:var(--brass)}
+.log{padding:10px 13px;font-family:var(--body);font-size:18px;line-height:1.2;max-height:120px;overflow:auto;margin-top:16px}
+.log .le{padding:3px 0;color:var(--ink-soft-g);border-bottom:1px dotted var(--cream-lo)}
+.log .le b{color:#7a3f18}
 details.how{max-width:560px;margin:6px auto;background:rgba(0,0,0,.2);border:1px solid rgba(196,160,78,.2);border-radius:9px;padding:8px 14px;font-size:13px}
-details.how summary{cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--brass)}
-details.how p{margin-top:8px;color:#d8cdb2;line-height:1.5}
+details.how{padding:11px 14px;margin-bottom:4px}
+details.how summary{cursor:pointer;font-family:var(--px);font-size:8px;letter-spacing:.04em;text-transform:uppercase;color:#2e7a41;line-height:1.7}
+details.how p{margin-top:9px;font-family:var(--body);font-size:18px;color:var(--ink-soft-g);line-height:1.16}
+details.how p b{color:#7a3f18}
 
 .overlay{position:fixed;inset:0;background:rgba(7,16,14,.92);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:30}
 .overlay.show{display:flex}
@@ -329,10 +365,10 @@ details.how p{margin-top:8px;color:#d8cdb2;line-height:1.5}
 .editname{font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:var(--paper);padding:6px 0}
 
 /* ---------- botón de sonido ---------- */
-.soundbtn{position:fixed;top:12px;right:12px;z-index:40;width:42px;height:42px;border-radius:50%;
-  border:1px solid rgba(196,160,78,.45);background:rgba(11,26,23,.82);backdrop-filter:blur(4px);
-  font-size:19px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 3px 10px rgba(0,0,0,.4);transition:transform .12s,border-color .15s}
+.soundbtn{position:fixed;top:12px;right:12px;z-index:40;width:42px;height:42px;
+  border:3px solid var(--line);background:#1c1712;border-radius:3px;
+  font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 0 rgba(0,0,0,.35);transition:transform .12s}
 .soundbtn:hover{transform:scale(1.08);border-color:var(--gold)}
 .soundbtn:active{transform:scale(.96)}
 .soundbtn.off{opacity:.6;filter:grayscale(.4)}
@@ -400,13 +436,14 @@ details.how p{margin-top:8px;color:#d8cdb2;line-height:1.5}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .toast .te{font-size:20px}
 
-.modesel{border:1px solid rgba(196,160,78,.25);border-radius:12px;padding:10px 12px;margin:0 0 12px;background:rgba(0,0,0,.14);text-align:center}
-.modesel .ms-k{display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);margin-bottom:6px}
+.modesel{padding:12px;margin:0 0 14px;text-align:center}
+.modesel .ms-k{display:block;font-family:var(--px);font-size:8px;letter-spacing:.05em;text-transform:uppercase;color:#2e7a41;margin-bottom:9px;line-height:1.7}
 .ms-opts{display:inline-flex;gap:6px;margin-bottom:6px}
-.ms-opt{font-family:'DM Mono',monospace;font-size:13px;padding:7px 14px;border:1px solid rgba(196,160,78,.4);background:rgba(11,26,23,.6);color:#d8cdb2;border-radius:8px;cursor:pointer}
-.ms-opt.on{background:#9cc454;color:#14210f;border-color:#9cc454;font-weight:700}
-.ms-opt.on.danger{background:#c0492f;border-color:#c0492f;color:#fff}
-.ms-d{display:block;font-size:11px;color:#bcae90;max-width:48ch;margin:0 auto;line-height:1.45}
+.ms-opt{font-family:var(--px);font-size:8px;line-height:1.6;padding:10px 13px;border:3px solid var(--line);background:#d9cca6;color:#5a4a33;border-radius:3px;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.28)}
+.ms-opt.on{background:#2e7a41;color:#f2f8ec;box-shadow:inset 0 0 0 2px #46a05c,0 3px 0 rgba(0,0,0,.35)}
+.ms-opt.on.danger{background:#8f2f24;color:#fdeae6;box-shadow:inset 0 0 0 2px #b2483a,0 3px 0 rgba(0,0,0,.35)}
+.ms-d{display:block;font-family:var(--body);font-size:18px;color:var(--ink-soft-g);max-width:46ch;margin:8px auto 0;line-height:1.15}
+.ms-d b{color:#7a3f18}
 
 /* ---------- defensa: 5 stats por carta entran en una línea ---------- */
 .acard .stats{gap:5px}
@@ -564,3 +601,67 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
   .mnode .disc{width:33px;height:33px;font-size:15px}
   .mnode .ml{font-size:4.5px}
 }
+
+/* ============================================================
+   SKIN GBA — ajustes de legibilidad sobre el fondo claro.
+   Todo lo que antes era texto claro sobre verde oscuro pasa a
+   tinta oscura sobre crema. (El mapa, los diálogos y el combate
+   tienen su propio fondo oscuro y NO se tocan aquí.)
+   ============================================================ */
+.introbox,.avatarbox,.modal,.wildpick,.dexpanel,.achpanel,.editp{
+  background:var(--cream);border:3px solid var(--line);border-radius:3px;
+  box-shadow:inset 0 0 0 2px var(--cream-lo),inset 0 0 0 4px var(--cream-hi),3px 4px 0 rgba(0,0,0,.22);
+  color:var(--ink-g)}
+.introbox p,.modal p,.introbox,.panelsub,.avatarbox{color:var(--ink-soft-g);font-family:var(--body);font-style:normal}
+.introbox p{font-size:19px;line-height:1.16}
+.introbox p b,.modal p b{color:#7a3f18}
+.introt,.modal h3,.avatarbox h3,.dexpanel h3,.achpanel h3{
+  font-family:var(--px);font-size:11px;line-height:1.7;color:#7a3f18}
+.panelsub,.wildpick .wilddesc,.editf label,.statbox .k,.avatarbox label,.guideopt .pick,.bagitem .plus{
+  font-family:var(--px);font-size:7px;letter-spacing:.04em;color:#8a7a55;line-height:1.7}
+.statbox .v,.editname,.teamhead .t{color:var(--ink-g)}
+.teamhead .t{font-family:var(--px);font-size:9px;line-height:1.7}
+.teamhead .s{font-family:var(--body);font-size:17px;color:var(--ink-soft-g)}
+.editname{font-family:var(--body);font-size:20px}
+.battle-msg{color:var(--paper)}                 /* el combate sigue oscuro: se deja */
+/* campos de texto sobre crema */
+.editf input[type=text],.avatarbox input[type=text]{
+  background:#fbf6e6;border:3px solid var(--line);border-radius:3px;color:var(--ink-g);
+  font-family:var(--body);font-size:20px;box-shadow:inset 2px 2px 0 rgba(0,0,0,.12)}
+.editf input[type=text]:focus,.avatarbox input[type=text]:focus{outline:none;border-color:#7a3f18}
+/* huecos y ranuras */
+.empty-slot,.slot{border:3px dashed var(--cream-lo);border-radius:3px;color:#a2926a;background:rgba(255,255,255,.35)}
+.slot.full{border-style:solid;border-color:var(--line);background:#fbf6e6}
+.bagitem{font-family:var(--body);font-size:18px;color:var(--ink-g);background:#fbf6e6;
+  border:3px solid var(--line);border-radius:3px;box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.bagitem:hover{background:#fff}
+/* etiquetas de las cartas en pixel */
+.acard .stage,.acard .rar,.acard .downtag,.acard .abil,.leadtag{font-family:var(--px)}
+.acard .stage{font-size:5.5px;line-height:1.6;padding:2px 5px;border-radius:2px}
+.acard .rar,.acard .downtag{font-size:5.5px;line-height:1.6;border-radius:2px}
+.acard .abil{font-size:6px;line-height:1.7;border-radius:2px;padding:3px 6px}
+.starter:hover{transform:translateY(-6px)}
+
+/* Colores de acento re-calibrados para el fondo CLARO (antes eran para el verde
+   oscuro y quedaban lavados). Objetivo: >=4.5:1 en texto chico. */
+.chip .k,.statbox .k,.panelsub,.wildpick .wilddesc,.editf label,.avatarbox label,
+.guideopt .pick,.bagitem .plus{color:#6a5a3f}
+.avtx .v,.chip.avatar .v{color:#7a3f18}
+.acard .st.atk,.bstats .st.atk{color:#a63524}
+.acard .st.hp,.bstats .st.hp{color:#256b36}
+.acard .st.def,.bstats .st.def{color:#8a6410}
+.acard .st.spd,.bstats .st.spd{color:#2a6a86}
+.acard .st.hab,.bstats .st.hab{color:#1f6b66}
+.hearts{color:#b32d1e}
+.chip .v[style*="--hp"],.chip .v{color:var(--ink-g)}
+.log .le b{color:#7a3f18}
+.acard .st.def,.bstats .st.def{color:#7a5708}
+.modesel .ms-k,.section-h{color:#256b36}
+.chip .v.libres{color:#256b36}
+.linklike{color:#7a3f18;font-family:var(--body);font-size:18px;text-decoration:underline}
+.linklike:hover{color:#a3541f}
+.soundbtn{color:#f0e4c4}
+/* etiqueta de etapa: fondo oscuro para que el texto blanco se lea */
+.acard.t-base .stage{background:#5a6152}
+.acard.t-evo1 .stage{background:#2f5e7d}
+.acard .stage{color:#fdf8ea}
