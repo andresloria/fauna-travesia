@@ -102,11 +102,11 @@ test('1 habilidad por animal por turno (la cola lo rechaza)', () => {
 
 // ---------- cola en orden ----------
 test('la cola se ejecuta EN ORDEN: exponer primero permite pegarle al invulnerable', () => {
-  const st = A.mkCombate(EQ('manigordo', 'jaguar', 'tortuga'), TB(), { abre: 'A', rng: rngFijo([0.0]) });
+  const st = A.mkCombate(EQ('monocara', 'jaguar', 'tortuga'), TB(), { abre: 'A', rng: rngFijo([0.0]) });
   st.energia.A = { bosque: 9, sabana: 9, agua: 9, montana: 9 };
   const serp = st.unidades.find(u => u.uid === 'B0');
   serp.efectos.push({ t: 'invulnerable', turnos: 1 });
-  const mani = st.unidades.find(u => u.key === 'manigordo');
+  const mani = st.unidades.find(u => u.key === 'monocara');
   const iExp = mani.habs.findIndex(h => (h.efectos || []).some(f => f.t === 'exponer'));
   const jag = st.unidades.find(u => u.key === 'jaguar');
   const iZar = jag.habs.findIndex(h => h.n === 'Zarpazo');

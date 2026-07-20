@@ -5,13 +5,14 @@ import { SP } from '../src/fauna_roster.js';
 import { habsDe } from '../src/habilidades.js';
 
 const REF = [{ key: 'iguana' }, { key: 'tucan' }, { key: 'boa' }];
+const SOCIOS = [{ key: 'pizote' }, { key: 'garza' }];   // bosque + agua, fijos
 const N = 120;
 const filas = [];
 for (const key of Object.keys(SP)) {
   if (SP[key].folk) continue;
   let w = 0;
   for (let i = 0; i < N; i++) {
-    const s = A.combateAuto([{ key }, { key }, { key }], REF);
+    const s = A.combateAuto([{ key }, ...SOCIOS], REF);
     if (s.fin === 'A') w++;
   }
   const kit = habsDe(key);
@@ -21,7 +22,7 @@ for (const key of Object.keys(SP)) {
 }
 filas.sort((a, b) => b.wr - a.wr);
 const p = (f) => `  ${(f.wr * 100).toFixed(0).padStart(3)}%  ${f.n.padEnd(26).slice(0, 26)} ${f.rol.padEnd(7)} ${f.bio.padEnd(8)} gratis:${f.gratis}`;
-console.log('\n=== KITS (trío del mismo animal vs equipo de referencia · sin niveles) ===');
+console.log('\n=== KITS (el animal + 2 socios fijos, contra equipo de referencia) ===');
 console.log('\n🏆 TOP 12');   filas.slice(0, 12).forEach(f => console.log(p(f)));
 console.log('\n💀 BOTTOM 12'); filas.slice(-12).forEach(f => console.log(p(f)));
 

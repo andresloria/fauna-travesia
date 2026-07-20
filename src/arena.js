@@ -330,8 +330,19 @@ function chequearFin(st) {
 // ⚠️ Solo tickean las unidades del lado que ACABA de jugar: así una toxina de
 // "3 turnos" dura 3 rondas completas (como el original), no 3 medio-turnos.
 function tickFinDeTurno(st, lado, eventos) {
+  // AGOTAMIENTO: pasada la ronda 20 el combate se vuelve insostenible y todos
+  // pierden vida (creciente). Evita las peleas eternas entre equipos defensivos
+  // sin tocar el juego normal, que dura ~12 rondas.
+  const ronda = Math.floor(st.turno / 2);
+  const cansancio = ronda >= 20 ? 5 + (ronda - 20) * 5 : 0;
   for (const u of st.unidades) {
     if (!u.viva || u.lado !== lado) continue;
+    if (cansancio) {
+      u.hp -= cansancio;
+      eventos.push({ t: 'agotamiento', uid: u.uid, v: cansancio });
+      revisarMuerte(st, u, eventos);
+      if (st.fin) return;
+    }
     for (const f of efecto(u, 'dot')) {
       u.hp -= f.v; f.turnos--;
       eventos.push({ t: 'toxina', uid: u.uid, v: f.v });

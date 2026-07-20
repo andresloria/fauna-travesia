@@ -186,6 +186,38 @@ depende del costo de energía de bioma; eliminá las pasivas, únicamente los at
 - **Nombres más variados**: el vocabulario de `make_movesets.py` se amplió →
   de 104 nombres únicos a **174** para 408 ranuras (repetición 3.9x → 2.3x).
 
+**✅ HECHO (20-jul, cierre 2): KITS VARIADOS — se corrigió el "copy-paste".**
+Andrés: *"no pongas un ataque generico por 1, que todos sean diferentes... que
+existan unos que peguen con 1 energia pero de BIOMA... lo hiciste super generico"*.
+Tenía razón y mi arreglo anterior (todos con básico de 1 comodín) era **el error
+opuesto**. Conté los costos REALES del original (`tools/na_personajes.json`):
+  23 habilidades cuestan **1 chakra ESPECÍFICO** ← la categoría de daño más grande
+  38 cuestan 1 Random, pero casi todas son el Bloqueo universal y los MODOS
+   5 son GRATIS (marcas/setup, nunca daño fuerte) · los combos de 2 y 3 son mixtos
+- **17 FORMAS de kit** calcadas de personajes reales (`make_movesets.py`), 2-3 por
+  rol, elegidas de forma determinista por animal: *Lee* (castigo sostenido),
+  *Sasuke* (dos golpes + MODO), *Kiba* (área sostenida + marca gratis), *Temari*
+  (área cara + refugio de equipo), *Kin* (barato encadenado), *Neji* (presión
+  con recarga 1), *Sakura*, *Rin*, *Hinata*, *Shino*, *Obito*, *Dosu*, *Gaara*,
+  *Chouji*, *Zaku* y dos de púas. Ahora dos animales del mismo rol suelen tener
+  estructura de costo, recarga y efectos DISTINTA.
+- Reparto de costos resultante: **124 de 1 energía de bioma**, comodín reservado
+  para modos/bloqueos, 17 gratis, 15 de 3 energías. Espeja al original.
+- **Los combates dejaron de ser rápidos**: de 15 a **24-28 turnos** por pelea.
+- **AGOTAMIENTO** (`arena.js`): pasada la ronda 20 todos pierden vida creciente.
+  Sin esto, con costos de bioma **138 peleas se estancaban en 200 turnos** entre
+  equipos defensivos. Ahora: **0 estancadas** en 30.000 combates.
+- Balance por rol: **42.9%–62.5%** (el rol *primer golpe* subió de 35% a 49%
+  tras subirle el daño; *veneno* bajó de 80% poniéndole recarga a Dosu).
+- `tools/kits.mjs` corregido: medía tríos del MISMO animal, lo que castigaba de
+  más a los mono-bioma. Ahora mide el animal + 2 socios fijos (equipo mixto real).
+
+⚠️ **Hallazgo abierto**: en la simulación el perfil "experto" (elige por poder de
+kit) ahora rinde PEOR que el que elige al azar. No es que el juego esté mal: es
+que **la diversidad de biomas pesa más que el poder bruto del kit**, y la
+heurística del simulador no lo sabe. Hay que enseñarle a valorar la cobertura de
+energía antes de volver a usar esos números como medida de "jugar bien".
+
 ## PRÓXIMOS PASOS (retomar por acá)
 
 0. **"Animales iguales que en Naruto-Arena" — falta el tramo grande**: hoy los
