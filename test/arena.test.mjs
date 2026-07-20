@@ -142,9 +142,11 @@ test('la Esquiva bloquea daño directo, pero la TOXINA la atraviesa', () => {
     { uid: rana.uid, hab: iTox, objetivo: jag.uid },
     { uid: coco.uid, hab: iDen, objetivo: jag.uid },
   ]);
-  assert.ok(jag.hp < 100, 'la toxina debe tickear (hp=' + jag.hp + ')');
   const golpes = st.log.filter(e => e.t === 'bloqueado' && e.uid === 'A0');
   assert.ok(golpes.length >= 1, 'la Dentellada debió ser bloqueada');
+  assert.equal(jag.hp, 100, 'la toxina aún no tickeó (tickea al cierre del turno del envenenado)');
+  A.ejecutarTurno(st, []);   // el turno de A cierra → SU toxina tickea
+  assert.ok(jag.hp < 100, 'la toxina debe tickear pese a la invulnerabilidad (hp=' + jag.hp + ')');
 });
 
 test('defensa destructible absorbe daño; Mordida al cráneo la ignora', () => {

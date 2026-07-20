@@ -23,11 +23,12 @@ export const VIDA = 100;
 
 // ---------- construcción ----------
 // equipo: [{key, nivel}] ×3  →  unidades listas para combatir
-export function mkUnidad({ key, nivel = 1 }, lado, idx) {
+export function mkUnidad({ key, nivel = 1, ref = null }, lado, idx) {
   const sp = SP[key] || { n: key, e: '🐾', bio: 'bosque' };
   const kit = habsDe(key, nivel);
   const u = {
     uid: `${lado}${idx}`, lado, idx, key, nivel,
+    ref,                                      // uid del animal del refugio (para game.js)
     n: sp.n, e: sp.e, bio: BIOMAS.includes(sp.bio) ? sp.bio : 'montana',
     hp: VIDA, viva: true,
     pasiva: kit.pasiva,                       // registro PASIVAS la interpreta
@@ -342,9 +343,11 @@ function chequearFin(st) {
 }
 
 // ---------- fin de turno: dots, hots, caducidad ----------
+// ⚠️ Solo tickean las unidades del lado que ACABA de jugar: así una toxina de
+// "3 turnos" dura 3 rondas completas (como el original), no 3 medio-turnos.
 function tickFinDeTurno(st, lado, eventos) {
   for (const u of st.unidades) {
-    if (!u.viva) continue;
+    if (!u.viva || u.lado !== lado) continue;
     for (const f of efecto(u, 'dot')) {
       u.hp -= f.v; f.turnos--;
       eventos.push({ t: 'toxina', uid: u.uid, v: f.v });

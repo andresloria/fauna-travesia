@@ -97,16 +97,32 @@ esquiva, defensa destructible (+ ignorarla), robar energía, pasivas (Caparazón
 Púas…), IA `colaAuto` + `combateAuto`, y fuzz de 500 combates (52.8% el que abre, 0 cuelgues).
 Los 46 tests viejos siguen verdes (el motor viejo aún existe hasta el swap de UI).
 
+**✅ HECHO (20-jul): la PANTALLA de combate + el SWAP.**
+- `src/arenaUI.js` + CSS `ar-*` en styles.css: ventana 940×600 escalada entera (estilo
+  emulador), fondo de selva del juego, cabecilla grande, tus filas a la izquierda con
+  tiles de habilidad, rivales a la derecha, LISTO + timer (60 s; si vence, pasa el turno,
+  como el original), energía por bioma, cola con números de orden (click al tile encolado
+  la saca), objetivos en amarillo, AUTO (usa `colaAuto`), RENDIRSE, descripción abajo.
+- `game.js startBattle()` YA NO usa `E.fight()`: abre la arena con los **3 de mayor nivel**
+  en pie y devuelve el resultado a `onBattleEnd()` intacto (corazones, debilitados,
+  recompensas, modo furtivo — todo el flujo de siempre).
+- Verificado EN NAVEGADOR con clicks reales: seleccionar → objetivos encendidos → cola
+  ①② → LISTO pega → AUTO termina el combate → cartel → onFin → el juego siguió sin
+  errores de consola. Bug arreglado de paso: las toxinas tickeaban cada medio-turno
+  (ahora tickean al cierre del turno del envenenado = 1 vez por ronda, como el original).
+- Cache-busting: index.html a `?v=10` · puerto local a **5650**.
+
 ## PRÓXIMOS PASOS (retomar por acá)
 
-1. **Pantalla de combate** — mockups YA APROBADOS en artifacts (combate calcado del original
-   + selección de equipo). Conectarla a `src/arena.js`: tiles de habilidad, objetivos en
-   amarillo, cola con orden, LISTO + timer, AUTO (`colaAuto`), descripción abajo.
-2. **El swap** — `game.js`: reemplazar los combates de `fight()` por la pantalla ARENA
-   (elegir 3 del refugio antes de pelear). Retirar el auto-combate y adaptar los 46 tests.
+1. **Pantalla de SELECCIÓN de equipo** (mockup aprobado): elegir 3 del refugio antes de
+   pelear (hoy van los 3 de mayor nivel automático) + ficha con pasiva/habs/rangos.
+2. **Retirar `E.fight()` del motor** y adaptar los tests viejos que lo cubren (el flujo
+   ya no lo usa; sigue solo por los 46 tests).
 3. **Kits a mano para los 13 marcados TODO** en `movesets_gen.js` (legendarios + leyendas).
 4. **Enganchar misiones a `meta.js`** — rachas/contadores en localStorage.
-5. **Rebalancear con `combateAuto`** (ya sirve de simulador del combate NUEVO).
+5. **Rebalancear con `combateAuto`** (ya simula el combate nuevo).
+6. Pulir la arena: animaciones de golpe/daño flotante, sonido de combate, y que los
+   sostenidos/control muestren de quién dependen.
 
 ### Pendientes viejos que siguen abiertos
 - Paneles laterales EQUIPO / MOCHILA / PROGRESO (hoy los chips van en fila arriba).

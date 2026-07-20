@@ -10,6 +10,7 @@ import { ITEMS, RARE_ITEMS, SECRET, RULES, ABILITIES, RARITY, itemBonus } from '
 import { playScene } from './dialogo.js';
 import { HISTORIA, TENEBROSO, bossOf, charlaDe } from './historia.js';
 import { fichaEscena, consejoHallazgo } from './fichas.js';
+import { abrirArena } from './arenaUI.js';
 
 export class Game {
   constructor(ui = null) {
@@ -447,10 +448,30 @@ export class Game {
       this.log('💤 Tu equipo está <b>agotado</b>. Buscá un refugio 🏕️ para recuperar a tus animales.');
       return this.hurt();
     }
-    const { result, steps, fallenAUids } = E.fight(fighters, enemy);  // el motor decide; la UI solo anima
-    s.phase = 'battle';
-    s.battle = { enemy, fighters, oppName, oppEmoji, steps, result, kind, fallenAUids, oppArt };
-    this.ui.playBattle(s, () => this.onBattleEnd());
+    // ⚔️ ARENA (rediseño 20-jul): combate POR TURNOS estilo Naruto-Arena.
+    // El motor viejo (E.fight) quedó retirado de este flujo.
+    // Si tenés más de 3 en pie, van los 3 de mayor nivel (la pantalla de
+    // selección de equipo viene después).
+    const tres = fighters.slice().sort((a, b) => b.level - a.level).slice(0, 3);
+    if (fighters.length > 3)
+      this.log(`⚔️ Van al frente: ${tres.map(a => a.e + ' ' + a.n).join(', ')}`);
+    const rivales = enemy.map(x => ({ key: x.key, nivel: x.level }));
+    const noche = kind === 'folclor' || s.night;
+    abrirArena({
+      miEquipo: tres.map(a => ({ key: a.key, nivel: a.level, ref: a.uid })),
+      rivalEquipo: rivales,
+      titulo: oppName.toUpperCase(), sub: s.country ? s.country.n : '',
+      fondo: `assets/escenarios/${noche ? 'bg_sanatorio' : 'bioma_bosque'}.png`,
+      bigart: oppArt || null,
+      rivalArt: oppArt || null,
+      guiaArt: `assets/personajes/guia_${(s.avatar && s.avatar.guide) === 'mujer' ? 'mujer' : 'hombre'}.png`,
+      guiaSub: s.avatar ? s.avatar.name : 'Guía de naturaleza',
+      onFin: (won, caidosRefs) => {
+        s.battle = { enemy, fighters: tres, oppName, oppEmoji, result: won ? 'W' : 'L',
+                     kind, fallenAUids: caidosRefs, oppArt };
+        this.onBattleEnd();
+      },
+    });
   }
   onBattleEnd() {
     const s = this.s, b = s.battle, won = b.result === 'W';
