@@ -92,6 +92,55 @@ cuando el motor las soporte.
 | Rana dardo verdinegra | Alcaloides cutáneos | elimina defensa enemiga |
 | Cocodrilo americano | Piel acorazada | invulnerable solo a physical, mental |
 
+## La 4ª habilidad que se descartó
+
+Regla del juego: **3 ataques + la Esquiva universal**. El documento trae 4
+porque el original le da a cada personaje su propia invulnerabilidad además
+del bloqueo universal. Se descarta la 4ª y la Esquiva ocupa su lugar.
+
+La columna "¿era su esquiva?" dice si esa habilidad no hacía otra cosa que
+volver invulnerable — si dice **NO**, se perdió algo y hay que mirarlo.
+
+| Animal | Habilidad descartada | ¿era su esquiva? |
+|---|---|---|
+| Rana de vidrio | Salto evasivo | sí |
+| Terciopelo | Mimetismo en hojarasca | sí |
+| Sapo marino | Inflado defensivo | sí |
+| Mono tití | Salto entre ramas | sí |
+| Zorro gris | Huida astuta | sí |
+| Boa | Evasión ágil | sí |
+| Tapir (Danta) | Huida veloz | sí |
+| Coyote | Evasión ágil | sí |
+| Colibrí garganta de fuego | Vuelo suspendido | sí |
+| Basilisco | Carrera sobre el agua | sí |
+| Escarabajo Hércules | Excavación | sí |
+| Colibrí | Vuelo veloz | sí |
+| Armadillo | Madriguera | sí |
+| Puercoespín | Huida veloz | sí |
+| Sapo dorado | Ocultamiento | sí |
+| Mono congo (Aullador) | Braquiación evasiva | sí |
+| Manigordo (Ocelote) | Acecho sigiloso | sí |
+| Cangrejo terrestre | Enterramiento | sí |
+| Delfín nariz de botella | Inmersión profunda | sí |
+| Puma | Camuflaje en la maleza | sí |
+| Toboba | Evasión ágil | sí |
+| Coral | Huida veloz | sí |
+| Mariposa búho | Vuelo errático | sí |
+| Mono araña | Evasión ágil | sí |
+| Cascabel | Esquive instintivo | sí |
+| Lechuza | Esquive instintivo | sí |
+| Jaguar | Evasión ágil | sí |
+| Águila harpía | Repliegue | sí |
+| Mariposa morpho | Mimetismo alar | sí |
+| Jaguarundi | Huida veloz | sí |
+| Rana dardo verdinegra | Coloración aposemática | sí |
+| Chancho de monte | Estampida | sí |
+| Mantarraya | Esquive instintivo | sí |
+| Cocodrilo americano | Emboscada sumergida | sí |
+| Geco | Autotomía de cola | sí |
+| Salamandra | Ocultamiento | sí |
+| Tiburón martillo | Esquive instintivo | sí |
+
 ## Habilidades APROXIMADAS a mano
 
 El documento no traía mecánica estructurada para estas (su efecto original

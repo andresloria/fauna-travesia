@@ -284,6 +284,27 @@ APROX = {
 
 
 # ------------------------------------------------------------------
+# 3c. De las 4 del documento a las 3 del juego
+#     REGLA DEL JUEGO (fijada por Andrés): cada animal usa **3 ataques + la
+#     Esquiva universal**. El documento trae 4 porque el juego de referencia
+#     le da a cada personaje su propia habilidad de invulnerabilidad además
+#     del bloqueo universal.
+#     Se comprobó contra los datos: en 32 de 37 kits la 4ª habilidad es
+#     EXACTAMENTE eso (su única mecánica es volverse invulnerable), y en los
+#     5 restantes también lo es (esos traen dos). Así que se descarta la 4ª
+#     y la Esquiva universal de arena.js ocupa su lugar.
+# ------------------------------------------------------------------
+def solo_invulnerabilidad(r):
+    """¿su única mecánica es volverse invulnerable?"""
+    m = r['mecanica']
+    if not m.get('invulnerable'):
+        return False
+    return not [k for k, v in m.items()
+                if k not in ('invulnerable', 'objetivo', 'invuln_clases')
+                and v not in (None, False, [], '')]
+
+
+# ------------------------------------------------------------------
 # 4. La descripción se escribe DESDE los efectos implementados
 # ------------------------------------------------------------------
 A_QUIEN = {'enemigo': 'a un enemigo', 'todos': 'a TODOS los enemigos',
@@ -384,7 +405,7 @@ def main():
         for pers, cat, habs in lista:
             habs.sort(key=lambda r: r['slot'])
 
-    salida, reporte_falta, sin_efecto, aproximadas = {}, [], [], []
+    salida, reporte_falta, sin_efecto, aproximadas, descartes = {}, [], [], [], []
     variantes = collections.OrderedDict()
 
     for animal, lista in por_animal.items():
@@ -397,6 +418,13 @@ def main():
         otras = [p for p, c, h in lista if (p, c, h) != (pers, cat, habs)]
         if otras:
             variantes[key] = list(dict.fromkeys(otras))
+
+        # 4 del documento -> 3 del juego: fuera la esquiva propia (ver §3c)
+        if len(habs) == 4:
+            descartada = habs[-1]
+            habs = habs[:-1]
+            descartes.append((animal, key, descartada['nombre_es'],
+                              'sí' if solo_invulnerabilidad(descartada) else 'NO — revisar'))
 
         out = []
         for r in habs:
@@ -487,6 +515,17 @@ def main():
         for animal, hab, en in sin_efecto:
             R.append(f'| {animal} | {hab} | {en}… |')
 
+    if descartes:
+        R += ['', '## La 4ª habilidad que se descartó', '',
+              'Regla del juego: **3 ataques + la Esquiva universal**. El documento trae 4',
+              'porque el original le da a cada personaje su propia invulnerabilidad además',
+              'del bloqueo universal. Se descarta la 4ª y la Esquiva ocupa su lugar.', '',
+              'La columna "¿era su esquiva?" dice si esa habilidad no hacía otra cosa que',
+              'volver invulnerable — si dice **NO**, se perdió algo y hay que mirarlo.', '',
+              '| Animal | Habilidad descartada | ¿era su esquiva? |', '|---|---|---|']
+        for animal, key, hab, era in descartes:
+            R.append(f'| {animal} | {hab} | {era} |')
+
     if aproximadas:
         R += ['', '## Habilidades APROXIMADAS a mano', '',
               'El documento no traía mecánica estructurada para estas (su efecto original',
@@ -505,7 +544,11 @@ def main():
 
     REPORTE.write_text('\n'.join(R), encoding='utf-8')
 
-    print(f'OK {SALIDA.name}: {len(salida)} especies con kit oficial')
+    raros = [d for d in descartes if d[3] != 'sí']
+    print(f'OK {SALIDA.name}: {len(salida)} especies con kit oficial (3 ataques + esquiva)')
+    print(f'   4ª habilidad descartada en {len(descartes)} kits'
+          + (f' · ⚠️ {len(raros)} NO eran su esquiva: '
+             + ', '.join(f'{a}/{h}' for a, k, h, e in raros) if raros else ''))
     print(f'   faltan crear: {len(faltan_crear)} animales')
     print(f'   habilidades con mecánica parcial: {len(reporte_falta)}')
     print(f'   habilidades aproximadas a mano: {len(aproximadas)}')

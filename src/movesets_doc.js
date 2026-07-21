@@ -19,9 +19,6 @@ export const MOVESETS_DOC = {
     { n:"Postura defensiva", desc:"Gana 30 de defensa destructible.",
       costo:["sabana", "comodin"], recarga:4, clases:["instinto"],
       efectos:[{"t": "defensa", "v": 30, "obj": "self"}] },
-    { n:"Salto evasivo", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["instinto"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Kabuto Yakushi · Shippuden
   serpiente: { habs: [
@@ -34,9 +31,6 @@ export const MOVESETS_DOC = {
     { n:"Mordida neurotóxica", desc:"Lo aturde 1 turno.",
       costo:["sabana"], recarga:2, clases:["instinto", "rango"],
       efectos:[{"t": "aturdir", "turnos": 1, "obj": "todos"}] },
-    { n:"Mimetismo en hojarasca", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["natural"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Zaku Abumi · Original (Parte 1)
   sapo_marino: { habs: [
@@ -49,9 +43,6 @@ export const MOVESETS_DOC = {
     { n:"Proyectil certero", desc:"45 de daño a TODOS los enemigos.",
       costo:["montana", "comodin", "comodin"], recarga:0, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 45, "obj": "todos"}] },
-    { n:"Inflado defensivo", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["natural"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Konohamaru Sarutobi · Shippuden
   mono_titi: { habs: [
@@ -64,9 +55,6 @@ export const MOVESETS_DOC = {
     { n:"Lanzamiento de ramas", desc:"10 de daño a un enemigo.",
       costo:["bosque"], recarga:0, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}] },
-    { n:"Salto entre ramas", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["instinto"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Tsume Inuzuka · Original (Parte 1)
   zorro_gris: { habs: [
@@ -79,9 +67,6 @@ export const MOVESETS_DOC = {
     { n:"Postura defensiva", desc:"Invulnerable 1 turno a todo el equipo.",
       costo:["comodin"], recarga:1, clases:["fisico"],
       efectos:[{"t": "invulnerable", "turnos": 1, "obj": "equipo"}] },
-    { n:"Huida astuta", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Kushina Uzumaki · Original (Parte 1)
   boa: { habs: [
@@ -94,9 +79,6 @@ export const MOVESETS_DOC = {
     { n:"Sacudida paralizante", desc:"Lo aturde 2 turnos.",
       costo:["montana", "sabana"], recarga:4, clases:["natural", "rango"],
       efectos:[{"t": "aturdir", "turnos": 2, "obj": "enemigo"}] },
-    { n:"Evasión ágil", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["natural"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Hashirama Senju · Revividos (Edo Tensei)
   danta: { habs: [
@@ -109,9 +91,6 @@ export const MOVESETS_DOC = {
     { n:"Postura defensiva", desc:"Gana 30 de defensa destructible permanente a todo el equipo.",
       costo:["montana", "montana"], recarga:5, clases:["fisico"],
       efectos:[{"t": "defensa", "v": 30, "obj": "equipo", "permanente": true}] },
-    { n:"Huida veloz", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["instinto"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Young Kakashi · Original (Parte 1)
   coyote: { habs: [
@@ -124,9 +103,6 @@ export const MOVESETS_DOC = {
     { n:"Golpe aturdidor", desc:"Gana 1 de energía.",
       costo:[], recarga:1, clases:["instinto", "rango"],
       efectos:[{"t": "darEnergia", "tipo": "comodin", "obj": "self"}] },
-    { n:"Evasión ágil", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Rin Nohara · Original (Parte 1)
   colibri_fuego: { habs: [
@@ -139,9 +115,6 @@ export const MOVESETS_DOC = {
     { n:"Regeneración", desc:"Cura 10 por turno durante 3 turnos a un aliado.",
       costo:["comodin", "comodin"], recarga:3, clases:["fisico"],
       efectos:[{"t": "curarTurnos", "v": 10, "turnos": 3, "obj": "aliado"}] },
-    { n:"Vuelo suspendido", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Obito Uchiha · Original (Parte 1)
   basilisco: { habs: [
@@ -154,9 +127,6 @@ export const MOVESETS_DOC = {
     { n:"Ponzoña persistente", desc:"Recibe 15 menos de daño durante 4 turnos a un aliado.",
       costo:["comodin"], recarga:4, clases:["instinto"],
       efectos:[{"t": "reducir", "v": 15, "turnos": 4, "obj": "aliado"}] },
-    { n:"Carrera sobre el agua", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Sakura Haruno · Shippuden
   escarabajo: { habs: [
@@ -169,9 +139,6 @@ export const MOVESETS_DOC = {
     { n:"Embestida de cuerno", desc:"Recibe 10 menos de daño durante 4 turnos.",
       costo:["comodin"], recarga:4, clases:["instinto"],
       efectos:[{"t": "reducir", "v": 10, "turnos": 4, "obj": "self"}] },
-    { n:"Excavación", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["natural"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Hinata Hyūga · Shippuden
   colibri_talamanca: { habs: [
@@ -184,9 +151,6 @@ export const MOVESETS_DOC = {
     { n:"Golpe demoledor", desc:"Recibe 15 menos de daño durante 4 turnos.",
       costo:["comodin"], recarga:4, clases:["instinto"],
       efectos:[{"t": "reducir", "v": 15, "turnos": 4, "obj": "self"}] },
-    { n:"Vuelo veloz", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Kitsuchi · Shippuden
   armadillo: { habs: [
@@ -199,9 +163,6 @@ export const MOVESETS_DOC = {
     { n:"Golpe aturdidor", desc:"45 de daño a un enemigo. Aturde sus habilidades físicas 2 turnos. Aturde sus habilidades de instinto 2 turnos.",
       costo:["montana", "montana"], recarga:2, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 45, "obj": "enemigo"}, {"t": "aturdir", "turnos": 2, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 2, "obj": "enemigo", "clase": "instinto"}] },
-    { n:"Madriguera", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Tenten · Shippuden
   puercoespin: { habs: [
@@ -213,9 +174,6 @@ export const MOVESETS_DOC = {
       efectos:[{"t": "dano", "v": 5, "obj": "todos", "ignoraInvulnerable": true}] },
     { n:"Púas defensivas", desc:"Invulnerable 1 turno.",
       costo:["comodin"], recarga:1, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
-    { n:"Huida veloz", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
       efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Jiraiya · Shippuden
@@ -229,9 +187,6 @@ export const MOVESETS_DOC = {
     { n:"Toxina corrosiva", desc:"25 de daño a TODOS los enemigos (toxina: atraviesa la invulnerabilidad, ignora la invulnerabilidad).",
       costo:["bosque", "montana", "sabana"], recarga:0, clases:["toxina", "rango"],
       efectos:[{"t": "dano", "v": 25, "obj": "todos", "toxina": true, "ignoraInvulnerable": true}] },
-    { n:"Ocultamiento", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Hiruzen Sarutobi · Original (Parte 1)
   mono_congo: { habs: [
@@ -244,9 +199,6 @@ export const MOVESETS_DOC = {
     { n:"Mordida", desc:"5 de daño a TODOS los enemigos (ignora la invulnerabilidad). Recibe 5 menos de daño durante 1 turnos.",
       costo:["bosque", "agua", "sabana"], recarga:0, clases:["melee"],
       efectos:[{"t": "dano", "v": 5, "obj": "todos", "ignoraInvulnerable": true}, {"t": "reducir", "v": 5, "turnos": 1, "obj": "self"}] },
-    { n:"Braquiación evasiva", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Yūgao Uzuki · Original (Parte 1)
   manigordo: { habs: [
@@ -259,9 +211,6 @@ export const MOVESETS_DOC = {
     { n:"Contraataque reflejo", desc:"Queda expuesto 2 turnos (no puede volverse invulnerable).",
       costo:["sabana"], recarga:1, clases:[],
       efectos:[{"t": "exponer", "turnos": 2, "obj": "enemigo"}] },
-    { n:"Acecho sigiloso", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Demon Brothers · Original (Parte 1)
   cangrejo: { habs: [
@@ -274,9 +223,6 @@ export const MOVESETS_DOC = {
     { n:"Caparazón", desc:"Gana 20 de defensa destructible permanente.",
       costo:["comodin", "comodin"], recarga:1, clases:["natural"],
       efectos:[{"t": "defensa", "v": 20, "obj": "self", "permanente": true}] },
-    { n:"Enterramiento", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["instinto"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Iruka Umino · Original (Parte 1)
   delfin: { habs: [
@@ -289,9 +235,6 @@ export const MOVESETS_DOC = {
     { n:"Proyectil certero", desc:"40 de daño a un enemigo (ignora la invulnerabilidad).",
       costo:["agua"], recarga:2, clases:["natural", "rango"],
       efectos:[{"t": "dano", "v": 40, "obj": "enemigo", "ignoraInvulnerable": true}] },
-    { n:"Inmersión profunda", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Mizuki · Original (Parte 1)
   puma: { habs: [
@@ -303,9 +246,6 @@ export const MOVESETS_DOC = {
       efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}] },
     { n:"Acecho del puma", desc:"Invulnerable 1 turno.",
       costo:["sabana"], recarga:1, clases:["instinto"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
-    { n:"Camuflaje en la maleza", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
       efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Anko Mitarashi · Original (Parte 1)
@@ -319,9 +259,6 @@ export const MOVESETS_DOC = {
     { n:"Veneno neurotóxico", desc:"20 de daño a un enemigo. 5 de toxina por turno durante 3 turnos a un enemigo.",
       costo:["agua", "comodin"], recarga:0, clases:["toxina", "fisico", "melee"],
       efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "danoTurnos", "v": 5, "turnos": 3, "obj": "enemigo"}] },
-    { n:"Evasión ágil", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Shizune · Original (Parte 1)
   coral: { habs: [
@@ -334,9 +271,6 @@ export const MOVESETS_DOC = {
     { n:"Recuperación", desc:"Cura 35 a un aliado.",
       costo:["comodin", "comodin"], recarga:1, clases:["natural"],
       efectos:[{"t": "curar", "v": 35, "obj": "aliado"}] },
-    { n:"Huida veloz", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Kurenai Yuhi · Original (Parte 1)
   mariposa_buho: { habs: [
@@ -349,9 +283,6 @@ export const MOVESETS_DOC = {
     { n:"Golpe aturdidor", desc:"Lo aturde 2 turnos. Gana 5 de defensa destructible.",
       costo:["sabana", "sabana"], recarga:4, clases:["instinto", "rango"],
       efectos:[{"t": "aturdir", "turnos": 2, "obj": "enemigo"}, {"t": "defensa", "v": 5, "obj": "self"}] },
-    { n:"Vuelo errático", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["instinto"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Asuma Sarutobi · Shippuden
   mono_arana: { habs: [
@@ -364,9 +295,6 @@ export const MOVESETS_DOC = {
     { n:"Contraataque reflejo", desc:"Contraataca: quien lo golpee recibe 25.",
       costo:["comodin"], recarga:0, clases:["fisico", "melee"],
       efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
-    { n:"Evasión ágil", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Curse Mark Sasuke · Original (Parte 1)
   cascabel: { habs: [
@@ -378,9 +306,6 @@ export const MOVESETS_DOC = {
       efectos:[{"t": "dano", "v": 55, "obj": "enemigo"}, {"t": "aturdir", "turnos": 2, "obj": "enemigo"}] },
     { n:"Regeneración", desc:"Invulnerable 1 turno.",
       costo:["montana"], recarga:1, clases:[],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
-    { n:"Esquive instintivo", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["instinto"],
       efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Ao · Shippuden
@@ -394,9 +319,6 @@ export const MOVESETS_DOC = {
     { n:"Represalia", desc:"Contraataca: quien lo golpee recibe 25.",
       costo:["montana"], recarga:2, clases:["natural"],
       efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
-    { n:"Esquive instintivo", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Madara Uchiha · Shippuden
   jaguar: { habs: [
@@ -409,9 +331,6 @@ export const MOVESETS_DOC = {
     { n:"Ponzoña persistente", desc:"10 de daño a un enemigo.",
       costo:["agua"], recarga:1, clases:["toxina"],
       efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}] },
-    { n:"Evasión ágil", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["natural"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Deva Path Pain · Shippuden
   aguila_harpia: { habs: [
@@ -424,9 +343,6 @@ export const MOVESETS_DOC = {
     { n:"Caída en picada", desc:"45 de daño a un enemigo (ignora la defensa).",
       costo:["bosque", "montana", "sabana"], recarga:3, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 45, "obj": "enemigo", "ignoraDefensa": true}] },
-    { n:"Repliegue", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["instinto"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Konan · Shippuden
   mariposa: { habs: [
@@ -439,9 +355,6 @@ export const MOVESETS_DOC = {
     { n:"Descarga a distancia", desc:"25 de daño a un enemigo.",
       costo:["agua", "comodin"], recarga:0, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
-    { n:"Mimetismo alar", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["natural"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Yugito Nii · Shippuden
   leon_brenero: { habs: [
@@ -454,9 +367,6 @@ export const MOVESETS_DOC = {
     { n:"Garra letal", desc:"15 de daño a un enemigo.",
       costo:["montana"], recarga:1, clases:["fisico", "melee"],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
-    { n:"Huida veloz", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Mei Terumi · Shippuden
   rana_verdinegra: { habs: [
@@ -469,9 +379,6 @@ export const MOVESETS_DOC = {
     { n:"Alcaloides cutáneos", desc:"10 de daño a TODOS los enemigos (toxina: atraviesa la invulnerabilidad).",
       costo:["montana", "comodin"], recarga:3, clases:["toxina", "natural", "rango"],
       efectos:[{"t": "dano", "v": 10, "obj": "todos", "toxina": true}] },
-    { n:"Coloración aposemática", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Jūgo · Shippuden
   chancho_monte: { habs: [
@@ -484,9 +391,6 @@ export const MOVESETS_DOC = {
     { n:"Recuperación", desc:"Gana 20 de defensa destructible permanente a un aliado.",
       costo:["montana", "comodin"], recarga:1, clases:["natural"],
       efectos:[{"t": "defensa", "v": 20, "obj": "aliado", "permanente": true}] },
-    { n:"Estampida", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["instinto"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Toroi · Revividos (Edo Tensei)
   mantarraya: { habs: [
@@ -499,9 +403,6 @@ export const MOVESETS_DOC = {
     { n:"Aguijón caudal", desc:"10 de daño a TODOS los enemigos (ignora la defensa).",
       costo:["montana"], recarga:1, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 10, "obj": "todos", "ignoraDefensa": true}] },
-    { n:"Esquive instintivo", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Tobirama Senju · Revividos (Edo Tensei)
   cocodrilo: { habs: [
@@ -513,9 +414,6 @@ export const MOVESETS_DOC = {
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
     { n:"Piel acorazada", desc:"Invulnerable 1 turno.",
       costo:["sabana"], recarga:3, clases:["instinto"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
-    { n:"Emboscada sumergida", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
       efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Mū · Revividos (Edo Tensei)
@@ -529,9 +427,6 @@ export const MOVESETS_DOC = {
     { n:"Perforación", desc:"40 de daño a un enemigo (ignora la defensa, ignora la invulnerabilidad).",
       costo:["agua", "comodin", "comodin"], recarga:1, clases:["natural", "rango"],
       efectos:[{"t": "dano", "v": 40, "obj": "enemigo", "ignoraDefensa": true, "ignoraInvulnerable": true}] },
-    { n:"Autotomía de cola", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["natural"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Hanzō · Revividos (Edo Tensei)
   salamandra: { habs: [
@@ -544,9 +439,6 @@ export const MOVESETS_DOC = {
     { n:"Toxina corrosiva", desc:"20 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
       costo:["montana"], recarga:0, clases:["fisico", "toxina"],
       efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "toxina": true}] },
-    { n:"Ocultamiento", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
   // Fuguki Suikazan · Revividos (Edo Tensei)
   tiburon_martillo: { habs: [
@@ -559,9 +451,6 @@ export const MOVESETS_DOC = {
     { n:"Sacudida paralizante", desc:"10 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades naturales 1 turno.",
       costo:["agua", "comodin"], recarga:2, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}] },
-    { n:"Esquive instintivo", desc:"Invulnerable 1 turno.",
-      costo:["comodin"], recarga:4, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
 };
 
