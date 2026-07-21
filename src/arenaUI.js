@@ -50,6 +50,19 @@ export function abrirArena(opts) {
   document.body.appendChild(root);
   document.body.classList.add('ar-lock');
 
+  // ---------- HOTSEAT (opts.pvp) ----------
+  // Sin PvP el jugador es SIEMPRE el lado A y el bot juega B. En hotseat los
+  // dos lados son humanos que se pasan el aparato, así que "yo" es el lado que
+  // tiene el turno y toda la pantalla se dibuja desde SU punto de vista: sus
+  // animales abajo, los del otro arriba.
+  const PVP = !!opts.pvp;
+  const yo = () => (PVP ? st.lado : 'A');
+  const elOtro = () => A.rival(yo());
+  const nombreDe = (lado) => PVP
+    ? (lado === 'A' ? (opts.jugador1 || 'Jugador 1') : (opts.jugador2 || 'Jugador 2'))
+    : (lado === 'A' ? 'Vos' : (opts.titulo || 'Cazadores'));
+  let tapado = false;          // la cortina de "pasá el aparato"
+
   let cola = [];               // [{uid, hab, objetivo}]
   let seleccion = null;        // {uid, hab, aliado?} esperando objetivo
   let activo = null;           // qué animal mío se está mirando (celular)
@@ -59,13 +72,13 @@ export function abrirArena(opts) {
   let cerrando = false, animando = false;
 
   const u$ = (uid) => st.unidades.find(x => x.uid === uid);
-  const mios = () => st.unidades.filter(u => u.lado === 'A');
-  const rivales = () => st.unidades.filter(u => u.lado === 'B');
+  const mios = () => st.unidades.filter(u => u.lado === yo());
+  const rivales = () => st.unidades.filter(u => u.lado === elOtro());
   const enCola = (uid) => cola.find(a => a.uid === uid);
 
   // energía que queda después de pagar lo que ya está en la cola
   const poolRestante = () => {
-    const p = { ...st.energia.A };
+    const p = { ...st.energia[yo()] };
     for (const acc of cola) A.pagar(p, u$(acc.uid).habs[acc.hab].costo || []);
     return p;
   };
@@ -76,9 +89,9 @@ export function abrirArena(opts) {
       <div class="ar-fondo" style="background-image:url('${opts.fondo}')"></div>
 
       <header class="ar-top">
-        <div class="ar-lado">
+        <div class="ar-lado" id="arLadoIzq">
           <img src="${opts.guiaArt}" alt="">
-          <div><b>Vos</b><span>${opts.guiaSub || 'Guía de naturaleza'}</span></div>
+          <div><b>—</b><span>${opts.guiaSub || 'Guía de naturaleza'}</span></div>
         </div>
         <div class="ar-reloj">
           <svg viewBox="0 0 48 48" aria-hidden="true">
@@ -89,7 +102,7 @@ export function abrirArena(opts) {
         </div>
         <div class="ar-lado der">
           ${opts.rivalArt ? `<img src="${opts.rivalArt}" alt="">` : '<div class="ar-sinart">🪤</div>'}
-          <div><b>${opts.titulo || 'Cazadores'}</b><span>${opts.sub || ''}</span></div>
+          <div id="arLadoDer"><b>${opts.titulo || 'Cazadores'}</b><span>${opts.sub || ''}</span></div>
         </div>
       </header>
 
@@ -130,11 +143,18 @@ export function abrirArena(opts) {
     pintarHabilidades();
     elInfo.innerHTML = infoHTML();
 
+    // en hotseat los nombres cambian de lado según de quién sea el turno
+    const izq = root.querySelector('#arLadoIzq div');
+    if (izq) izq.innerHTML = `<b>${nombreDe(yo())}</b><span>${PVP ? 'te toca' : (opts.guiaSub || 'Guía de naturaleza')}</span>`;
+    const der = root.querySelector('#arLadoDer');
+    if (der && PVP) der.innerHTML = `<b>${nombreDe(elOtro())}</b><span>espera</span>`;
+
     const listo = $('arListo');
-    const miTurno = st.lado === 'A' && !st.fin && !animando;
+    const miTurno = st.lado === yo() && !st.fin && !animando && !tapado;
     listo.disabled = !miTurno;
     listo.textContent = st.fin ? '—' : miTurno ? '▶ LISTO' : 'Turno del rival…';
-    $('arAuto').classList.toggle('on', auto);
+    const bAuto = $('arAuto');
+    if (PVP) bAuto.style.display = 'none'; else bAuto.classList.toggle('on', auto);
 
     conectar();
     requestAnimationFrame(pintarFlechas);
@@ -183,8 +203,8 @@ export function abrirArena(opts) {
     // el CAMBIO (3 cualesquiera → 1 a elección) solo se ofrece con la cola
     // vacía: si ya encolaste, esas 3 podrían estar reservadas para pagar lo
     // encolado y el cambio te rompería la jugada.
-    const puedoCambiar = st.lado === 'A' && !st.fin && !animando
-      && cola.length === 0 && A.puedeCambiar(st, 'A');
+    const puedoCambiar = st.lado === yo() && !st.fin && !animando && !tapado
+      && cola.length === 0 && A.puedeCambiar(st, yo());
     elEnergia.innerHTML = A.BIOMAS.map(b => `
       <div class="ar-e ${pool[b] ? '' : 'cero'}" title="${BIOMA_N[b]}">
         <img src="${BIOMA_ICO(b)}" alt="${BIOMA_N[b]}" draggable="false">
@@ -214,7 +234,7 @@ export function abrirArena(opts) {
     const esta = acc && acc.hab === i;
     const eligiendo = seleccion && seleccion.uid === u.uid && seleccion.hab === i;
     let off = '', motivo = '';
-    if (st.lado !== 'A' || st.fin || !u.viva || animando) off = 'off';
+    if (st.lado !== yo() || st.fin || !u.viva || animando) off = 'off';
     else if (u.recargas[h.n] > 0) { off = 'off'; motivo = `↻${u.recargas[h.n]}`; }
     else if (A.aturdida(u, h.clases || [])) { off = 'off'; motivo = 'aturdida'; }
     else if (acc && !esta) off = 'off';
@@ -275,7 +295,7 @@ export function abrirArena(opts) {
       if (!p1 || !p2) continue;
       if (acc.uid === acc.objetivo) continue;          // se la aplicó a sí mismo
       const my = (p1.y + p2.y) / 2;                    // curva suave en S
-      const aliada = acc.objetivo.startsWith('A');
+      const aliada = acc.objetivo.startsWith(yo());
       d += `<path class="${aliada ? 'ali' : ''}"
               d="M${p1.x},${p1.y} C${p1.x},${my} ${p2.x},${my} ${p2.x},${p2.y}"/>
             <circle class="${aliada ? 'ali' : ''}" cx="${p2.x}" cy="${p2.y}" r="5"/>`;
@@ -308,7 +328,7 @@ export function abrirArena(opts) {
     let infoFijada = verInfo;
     root.querySelectorAll('.ar-h').forEach(el => {
       el.onmouseenter = () => {
-        if (st.lado !== 'A' || st.fin || animando) return;
+        if (st.lado !== yo() || st.fin || animando) return;
         const u = u$(el.dataset.uid);
         elInfo.innerHTML = infoHTML({ u, h: u.habs[+el.dataset.hab] });
         engancharCerrar();
@@ -320,7 +340,7 @@ export function abrirArena(opts) {
     });
     root.querySelectorAll('.ar-h').forEach(el => el.onclick = (ev) => {
       ev.stopPropagation();
-      if (st.lado !== 'A' || st.fin || animando) return;
+      if (st.lado !== yo() || st.fin || animando) return;
       const uid = el.dataset.uid, hab = +el.dataset.hab;
       const u = u$(uid), h = u.habs[hab];
       verInfo = { u, h };
@@ -344,7 +364,7 @@ export function abrirArena(opts) {
       render();
     };
     root.querySelectorAll('.ar-pick').forEach(el => el.onclick = () => {
-      if (A.cambiarEnergia(st, 'A', el.dataset.bioma)) { cambioAbierto = false; render(); }
+      if (A.cambiarEnergia(st, yo(), el.dataset.bioma)) { cambioAbierto = false; render(); }
     });
 
     engancharCerrar();
@@ -364,15 +384,15 @@ export function abrirArena(opts) {
   $('arListo').onclick = () => jugarTurnoMio();
   $('arAuto').onclick = () => {
     auto = !auto;
-    if (auto && st.lado === 'A' && !st.fin && !animando) jugarTurnoMio(true); else render();
+    if (auto && st.lado === yo() && !st.fin && !animando) jugarTurnoMio(true); else render();
   };
   $('arHuir').onclick = () => terminar(false, true);
 
   // ---------------- turnos ----------------
   async function jugarTurnoMio(forzarAuto = false) {
-    if (st.lado !== 'A' || st.fin || cerrando || animando) return;
+    if (st.lado !== yo() || st.fin || cerrando || animando) return;
     pararTimer();
-    const q = (auto || forzarAuto) ? A.colaAuto(st, 'A') : cola;
+    const q = (auto || forzarAuto) ? A.colaAuto(st, yo()) : cola;
     if (!q.length && !auto && !forzarAuto) { /* pasar el turno vacío está permitido */ }
     let r = A.ejecutarTurno(st, q);
     if (!r.ok) r = A.ejecutarTurno(st, []);
@@ -393,9 +413,34 @@ export function abrirArena(opts) {
 
   function despuesDelTurno() {
     if (st.fin) return terminar(st.fin === 'A', false);
+    if (PVP) return pasarElAparato();      // hotseat: le toca al otro humano
     if (st.lado === 'B') return turnoRival();
     if (auto) return jugarTurnoMio(true);
     arrancarTimer();
+  }
+
+  // ---------------- hotseat: cortina entre jugadores ----------------
+  // Sin esto el que espera ve la jugada del otro y el juego pierde la gracia.
+  function pasarElAparato() {
+    pararTimer();
+    tapado = true;
+    cola = []; seleccion = null; verInfo = null; activo = null;
+    render();
+    const cortina = document.createElement('div');
+    cortina.className = 'ar-cortina';
+    cortina.innerHTML = `<div class="ar-cortbox">
+      <div class="ar-cortt">Pasale el aparato a</div>
+      <div class="ar-cortn">${nombreDe(st.lado)}</div>
+      <div class="ar-cortd">Que el otro no vea tu jugada.</div>
+      <button class="ar-listo" id="arListoYa">Estoy listo</button>
+    </div>`;
+    esc.appendChild(cortina);
+    cortina.querySelector('#arListoYa').onclick = () => {
+      cortina.remove();
+      tapado = false;
+      render();
+      arrancarTimer();
+    };
   }
 
   // ---------------- resolución animada ----------------
@@ -548,6 +593,8 @@ export function abrirArena(opts) {
 
   // ---------------- arranque ----------------
   render();
-  if (st.lado === 'B') turnoRival(); else arrancarTimer();
+  if (PVP) { if (st.lado !== 'A') pasarElAparato(); else arrancarTimer(); }
+  else if (st.lado === 'B') turnoRival();
+  else arrancarTimer();
   return st;   // (los tests / la consola pueden inspeccionarlo)
 }

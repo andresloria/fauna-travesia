@@ -163,6 +163,7 @@ export function crearSeleccion(root) {
         <button class="sl-btn go" id="slPelear" ${equipo.length === 3 ? '' : 'disabled'}>
           ${jefe && !libre ? '🚨 ENFRENTAR AL CABECILLA' : '▶ EMPEZAR COMBATE'}</button>
         <button class="sl-btn mis" id="slMisiones">📜 MISIONES</button>
+        <button class="sl-btn mis" id="slVersus">⚔ 2 JUGADORES</button>
       </div>
       <div class="sl-bottom">
         <div class="gbabox sl-panel">
@@ -210,6 +211,7 @@ export function crearSeleccion(root) {
     const pelear = root.querySelector('#slPelear');
     if (pelear) pelear.onclick = () => empezar();
     root.querySelector('#slMisiones').onclick = () => { modal = 'misiones'; abrirMisiones(); };
+    root.querySelector('#slVersus').onclick = () => abrirVersus();
   }
 
   // ---------- misiones ----------
@@ -294,6 +296,89 @@ export function crearSeleccion(root) {
           'Venciste al Cabecilla en Monteverde. La red cayó… pero la LIGA LIBRE apenas empieza: las leyendas del Tenebroso te esperan.');
         // CIERRE DE EXPEDICIÓN: el punto pensado para soltar el juego
         if (r.expedicion) await resumenExpedicion(r.expedicion);
+        render();
+      },
+    });
+  }
+
+  // ---------- VERSUS: dos jugadores en el mismo aparato ----------
+  // Sin servidor ni cuentas: los dos arman equipo por turnos y después se
+  // pasan el teléfono en cada jugada (la arena pone una cortina en medio).
+  // Es la forma más barata de probar el balance con humanos de verdad, que es
+  // la medición que ninguna simulación da.
+  function abrirVersus() {
+    const libres = st.desbloqueados.filter(k => SP[k]);
+    let quien = 0;                          // 0 = jugador 1, 1 = jugador 2
+    const nombres = ['Jugador 1', 'Jugador 2'];
+    const equipos = [[], []];
+
+    const box = root.querySelector('#slModal');
+    const pintar = () => {
+      const eq = equipos[quien];
+      box.innerHTML = `<div class="sl-ov"><div class="sl-modal gbabox">
+        <div class="sl-mh">⚔ VERSUS — arma tu equipo
+          <button class="sl-x" id="vsX">✕</button></div>
+        <div class="sl-vs">
+          <div class="sl-vsfila">
+            <label>Turno de</label>
+            <input class="sl-input" id="vsNombre" maxlength="14" value="${nombres[quien]}">
+          </div>
+          <div class="sl-secth">Tu equipo (${eq.length}/3)</div>
+          <div class="sl-slots" style="flex-direction:row">
+            ${[0, 1, 2].map(i => eq[i]
+              ? `<div class="sl-slot" data-quitar="${i}" style="flex:1">
+                   <img src="${ART(eq[i])}" alt=""><span class="slb">${SP[eq[i]].n}</span></div>`
+              : '<div class="sl-slot vacio" style="flex:1"><span class="mas">+</span></div>').join('')}
+          </div>
+          <div class="sl-secth">Elegí de tu refugio</div>
+          <div class="sl-grid" style="max-height:34vh">
+            ${libres.map(k => `<button class="sl-tile ${eq.includes(k) ? 'eneq' : ''}"
+                data-vs="${k}"><img src="${ART(k)}" alt="" loading="lazy">
+                <span class="sl-tn">${SP[k].n}</span></button>`).join('')}
+          </div>
+          <button class="sl-btn go" id="vsOk" ${eq.length === 3 ? '' : 'disabled'}>
+            ${quien === 0 ? '▶ Listo — le toca al jugador 2' : '⚔ ¡A PELEAR!'}</button>
+        </div>
+      </div></div>`;
+
+      box.querySelector('#vsX').onclick = () => { box.innerHTML = ''; modal = null; };
+      box.querySelector('#vsNombre').oninput = (e) => { nombres[quien] = e.target.value || `Jugador ${quien + 1}`; };
+      box.querySelectorAll('[data-vs]').forEach(el => el.onclick = () => {
+        const k = el.dataset.vs;
+        const i = equipos[quien].indexOf(k);
+        if (i >= 0) equipos[quien].splice(i, 1);
+        else if (equipos[quien].length < 3) equipos[quien].push(k);
+        pintar();
+      });
+      box.querySelectorAll('[data-quitar]').forEach(el => el.onclick = () => {
+        equipos[quien].splice(+el.dataset.quitar, 1); pintar();
+      });
+      box.querySelector('#vsOk').onclick = () => {
+        if (equipos[quien].length < 3) return;
+        if (quien === 0) { quien = 1; pintar(); return; }
+        box.innerHTML = ''; modal = null;
+        pelearVersus(nombres, equipos);
+      };
+    };
+    modal = 'versus';
+    pintar();
+  }
+
+  function pelearVersus(nombres, equipos) {
+    if (window.faunaMusic) window.faunaMusic.set('battle');
+    abrirArena({
+      pvp: true,
+      jugador1: nombres[0], jugador2: nombres[1],
+      miEquipo: equipos[0].map(k => ({ key: k })),
+      rivalEquipo: equipos[1].map(k => ({ key: k })),
+      titulo: nombres[1], sub: 'versus',
+      fondo: 'assets/escenarios/bioma_bosque.png',
+      guiaArt: `assets/personajes/guia_${st.guia.guide}.png`,
+      onFin: async (ganoJ1) => {
+        if (window.faunaMusic) window.faunaMusic.set('map');
+        // el versus NO toca el progreso de la campaña: es un modo aparte
+        await avisar('⚔ FIN DEL VERSUS',
+          `Ganó <b>${ganoJ1 ? nombres[0] : nombres[1]}</b>. Esta pelea no afecta tu liga.`);
         render();
       },
     });

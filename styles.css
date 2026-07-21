@@ -1762,3 +1762,29 @@ details.how b{color:var(--m-acc2); font-weight:700}
 .sl-exb img{width:22px; height:22px; object-fit:contain; image-rendering:auto}
 .sl-exbtns{display:flex; flex-direction:column; gap:8px}
 @media (min-width:520px){ .sl-exbtns{flex-direction:row} .sl-exbtns .sl-btn{flex:1} }
+
+/* ---------- HOTSEAT: cortina de "pasá el aparato" (22-jul) ----------
+   Sin esto el que espera ve la jugada del otro y el juego pierde la gracia. */
+.ar-cortina{position:absolute; inset:0; z-index:12; display:grid; place-items:center;
+  background:rgba(6,11,16,.97); backdrop-filter:blur(8px)}
+.ar-cortbox{text-align:center; padding:30px 26px; max-width:340px}
+.ar-cortt{font-size:14px; color:var(--ar-tx2); letter-spacing:.04em}
+.ar-cortn{font-size:30px; font-weight:800; color:var(--ar-acc2); line-height:1.15;
+  margin:8px 0 14px; word-break:break-word}
+.ar-cortd{font-size:13.5px; color:var(--ar-tx2); margin-bottom:22px; line-height:1.45}
+.ar-cortbox .ar-listo{width:100%; padding:14px}
+
+/* ---------- elegir modo de juego ---------- */
+.sl-modos{display:grid; gap:10px; margin:14px 0}
+@media (min-width:560px){ .sl-modos{grid-template-columns:1fr 1fr} }
+.sl-modo{text-align:left; padding:14px 16px; border-radius:var(--m-r); cursor:pointer;
+  background:var(--m-panel2); border:1px solid var(--m-linea); color:var(--m-tx);
+  font-family:var(--m-sans); transition:transform .12s, border-color .12s}
+.sl-modo:hover{border-color:var(--m-acc)}
+.sl-modo:active{transform:scale(.98)}
+.sl-modo b{display:block; font-size:15px; font-weight:800; margin-bottom:4px}
+.sl-modo span{display:block; font-size:12.5px; color:var(--m-tx2); line-height:1.4}
+.sl-vs{display:grid; gap:12px}
+.sl-vsfila{display:grid; grid-template-columns:1fr; gap:6px}
+.sl-vsfila label{font-size:12px; font-weight:700; color:var(--m-tx2);
+  text-transform:uppercase; letter-spacing:.08em}

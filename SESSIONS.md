@@ -5,6 +5,30 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 22 jul 2026 · #4 VERSUS: DOS JUGADORES EN EL MISMO APARATO
+
+Botón **⚔ 2 JUGADORES** en la pantalla principal. Sin servidor, sin cuentas,
+sin romper la regla de "sitio estático".
+
+- **Armado por turnos**: el jugador 1 elige 3 y pone su nombre, después el 2.
+- **La arena dejó de asumir que el jugador es el lado A.** Ahora hay `yo()` que
+  devuelve `st.lado` en PvP: toda la pantalla se dibuja desde el punto de vista
+  del que tiene el turno — sus animales abajo, los del otro arriba, su energía,
+  sus habilidades. Verificado: al pasar el turno los equipos se dan vuelta.
+- **Cortina entre jugadas**: "Pasale el aparato a [nombre]" a pantalla completa.
+  Sin eso el que espera ve la jugada del otro y el juego pierde la gracia.
+- El botón AUTO se esconde (no tiene sentido con dos humanos) y **el versus NO
+  toca el progreso de la campaña**: es un modo aparte.
+
+### Por qué esto importa para el balance
+El #3 quedó trabado porque cinco palancas de datos no movieron la brecha, y la
+hipótesis viva es que **el driver sea la IA y no los kits**. En versus no juega
+la IA: juegan dos personas. Si la brecha se achica ahí, el balance de datos
+estaba bien todo el tiempo y lo que había que arreglar era el bot.
+**Es la medición que ninguna simulación puede dar.**
+
+---
+
 ## Sesión — 22 jul 2026 · #3 BALANCE: CINCO PALANCAS, NINGUNA FUNCIONÓ
 
 Objetivo: cerrar la brecha entre los 12 que siempre ganan (71%) y los 12 que
