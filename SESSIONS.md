@@ -221,12 +221,20 @@ energía antes de volver a usar esos números como medida de "jugar bien".
 **✅ HECHO (20-jul, cierre 3): guías con su arte completo + FONDO DE BOSQUE.**
 Decisión final de Andrés: *"usá esos artes sin editar nada, también quitá el
 color celeste y poné verde con árboles"*.
-- **Los guías van con el PNG original, sin recortar ni retocar**, a escala 1:1
-  (256×256 nativos). En celular **se apilan** en vez de achicarse, porque
-  cualquier reducción arruina el pixel art (los ojos son de 2px). Se probaron y
-  descartaron: `pixelated` reducido (pierde píxeles), `auto` reducido (emborrona
-  pelo y barba) y un retrato recortado ×2 (se veía bien pero él quiere el arte
-  entero). El panel `.sl-avatar` pasó a 580px para que quepan los dos.
+- **Los guías van con el PNG original, sin recortar ni retocar y SIN NADA
+  encima**: se quitó el `opacity:.6` del no-seleccionado (eso sí alteraba la
+  imagen; ahora el no elegido se distingue con un velo del MARCO, vía `::after`).
+  Verificado en el navegador: opacity 1 en ambos, `filter:none`.
+- ⚠️ **Por qué "no se ve el pelo": está así en el arte.** Ampliando el archivo
+  ×5 se ve que el pelo del guía son **hebras sueltas de 1-2 px** sobre una
+  cabeza casi calva. A 256px esas hebras desaparecen. Solución: mostrarlos al
+  **DOBLE (512 = ×2 exacto)** y **APILADOS**, que así caben en el ancho normal
+  de la página; en celular bajan a ×1 (256), también exacto. Solo escalas
+  enteras, nunca una rota.
+- Se probaron y descartaron antes: `pixelated` reducido (pierde píxeles), `auto`
+  reducido (emborrona pelo y barba) y un retrato recortado ×2 (legible pero él
+  quiere el arte entero). También se descartó ensanchar el `.wrap` con `:has()`
+  para ponerlos lado a lado: el panel de 1040px se salía de la página.
 - **Fondo: bosque verde tileable** (`make_fondo_bosque.py` → 128×128 sin
   costura, copas vistas desde arriba en 3 verdes; se dibuja a 64px y se amplía
   ×2 para que el píxel quede chunky como los sprites). Reemplaza el degradado

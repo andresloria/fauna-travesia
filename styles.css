@@ -1061,21 +1061,33 @@ body.ar-lock{overflow:hidden}
   text-shadow:1px 1px 0 rgba(12,26,14,.85)}
 
 /* avatar primera vez */
-.sl-avatar{max-width:580px;margin:0 auto;padding:18px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.sl-avatar{max-width:600px;margin:0 auto;padding:18px;display:flex;flex-direction:column;gap:14px;align-items:center}
 .sl-avt{font-family:var(--px);font-size:10px;color:#7a3f18}
 .sl-input{font-family:var(--body);font-size:22px;padding:6px 10px;border:3px solid var(--line);
   border-radius:3px;background:#fff8e6;color:var(--ink-g);width:min(100%,340px);text-align:center}
 /* Los guías van con su ARTE COMPLETO, sin recortar ni retocar: el PNG nativo de
-   256×256 a escala 1:1. En celular se apilan (siguen a 1:1) en vez de achicarse,
-   porque cualquier reducción arruina el pixel art. */
-.sl-avopts{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
-.sl-avopt{position:relative;width:256px;height:256px;border:3px solid var(--line);
-  border-radius:3px;overflow:hidden;cursor:pointer;opacity:.6;
+   256×256. NADA de opacity ni filter encima — se ve tal cual el archivo.
+   ⚠️ El pelo del guía son hebras de 1-2 px sobre una cabeza casi calva: a 256px
+   se pierden. Por eso se muestran al DOBLE (512 = ×2 exacto, sin pérdida con
+   'pixelated') y APILADOS, que así caben en el ancho normal de la página sin
+   ningún truco de layout. En celular bajan a ×1 (256), también exacto.
+   Escalas: ×2 o ×1. Nunca una escala rota. */
+.sl-avopts{display:flex;flex-direction:column;gap:14px;align-items:center}
+.sl-avopt{position:relative;width:512px;height:512px;border:3px solid var(--line);
+  border-radius:3px;overflow:hidden;cursor:pointer;
   background:linear-gradient(180deg,#dceac9 0%,#c3dbab 68%,#a9c98f 100%);
   box-shadow:inset 0 0 0 2px #fff8e6}
-.sl-avopt img{display:block;width:256px;height:256px;max-width:none;
+.sl-avopt img{display:block;width:512px;height:512px;max-width:none;
   image-rendering:pixelated}
-.sl-avopt.sel{opacity:1;box-shadow:inset 0 0 0 2px #fff8e6,0 0 0 3px #e8c558}
+/* el NO elegido se distingue con un velo del marco, sin tocar la imagen */
+.sl-avopt:not(.sel)::after{content:"";position:absolute;inset:0;
+  background:rgba(30,52,26,.13);pointer-events:none}
+.sl-avopt.sel{box-shadow:inset 0 0 0 2px #fff8e6,0 0 0 3px #e8c558}
+
+@media(max-width:600px){
+  .sl-avopt{width:256px;height:256px}
+  .sl-avopt img{width:256px;height:256px}
+}
 
 /* ficha */
 .sl-ficha{padding:11px;display:grid;grid-template-columns:130px 1fr;gap:12px;margin-bottom:10px}
