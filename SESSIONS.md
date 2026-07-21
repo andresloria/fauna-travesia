@@ -5,6 +5,36 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 22 jul 2026 · FIX: la arena salía CORTADA en Mac
+
+Andrés lo vio en Mac. Causa: los MacBook son anchos pero **cortos** (~720-820px
+de alto de navegador) y la bandeja de escritorio con **3 tiras de habilidades**
+come 352px (media pantalla). Eso aplastaba el campo a 296px y la fila de MIS
+animales quedaba **45px por debajo** del panel, cortada. En Windows el monitor
+es más alto y nunca se disparó — por eso no lo vi antes.
+
+**Arreglo**: nuevo breakpoint `@media (min-width:900px) and (max-height:860px)`
+que vuelve a la **tira ÚNICA del animal activo** (lo mismo que en celular) y
+apila el panel compacto. Recupera ~160px.
+
+Medido en 4 resoluciones:
+| viewport | antes | ahora |
+|---|---|---|
+| 1280×720 (MacBook 13") | fila tapada 45px | 43px de margen ✅ |
+| 1440×789 (MacBook 14") | tapada | ✅ tira única |
+| 1440×940 (16"/monitor) | ok | ✅ mantiene las 3 tiras |
+| inicio 1280×720 | — | sin desborde, scroll normal |
+
+📌 **Los MacBook son el caso "ancho-pero-bajo".** Un layout de escritorio que
+asume pantalla alta se rompe ahí. Los breakpoints por `max-height` importan
+tanto como los de `max-width`, y hay que probarlos: 720/789/940 cubren el
+rango real de MacBooks.
+
+📌 El screenshot del navegador se cuelga con esta arena (timer + fondo grande);
+la verificación fue por medición de `getBoundingClientRect`, no visual.
+
+---
+
 ## Sesión — 22 jul 2026 · #4 VERSUS: DOS JUGADORES EN EL MISMO APARATO
 
 Botón **⚔ 2 JUGADORES** en la pantalla principal. Sin servidor, sin cuentas,
