@@ -225,11 +225,20 @@ reducción los arruina**: con `image-rendering:auto` se emborronan el pelo y los
 ojos, y con `pixelated` se pierden pixeles sueltos (los ojos son de 1px).
 Se probaron las dos y Andrés vetó las dos.
 
-**Solución: mostrarlos 1:1, sin escalar.** El marco es angosto (140×248, 120×230
-en celular) con `overflow:hidden`, y la imagen va a su tamaño natural 256×256
-centrada: se recorta SOLO el margen transparente (el dibujo ocupa ~117px de
-ancho de los 256). Escala medida en el navegador: **1.000**. Se les ve el pelo
-blanco, los anteojos, la barba, el carné, el sombrero y el mapa.
+Mostrarlos 1:1 tampoco alcanzó, y la medición explicó por qué: **son sprites de
+CUERPO ENTERO, así que la cabeza mide apenas ~45px** dentro de los 256. Los ojos
+son de 2 píxeles y la barba de 4: a ese tamaño no hay CSS que los salve.
+
+**Solución: un RETRATO, no el cuerpo entero** (`make_retratos.py`). Recorta
+cabeza + hombros (detecta el centro de la cabeza mirando la franja superior del
+contenido) y lo amplía **×2 con vecino-más-cercano** — ampliar pixel art en
+enteros es SIN pérdida. La cabeza pasa de 45px a ~90px. Los dos salen en un
+lienzo común de 124×114 (→ 248×228) para que el marco no cambie de tamaño.
+Se muestra **1:1 en escritorio y a la MITAD EXACTA en celular** (124px = ½ de
+248), las dos relaciones enteras. Verificado: escala 1.000 / 0.500, sin scroll
+lateral, y el flujo elegir→empezar→refugio sigue intacto.
+Nota: el panel `.sl-avatar` pasó de 420 a 560px de ancho, porque dos retratos de
+248 no cabían y se salían de la caja crema.
 
 📌 **Regla general para sprites de este juego**: averiguar la resolución NATIVA
 antes de elegir cómo mostrarlos. Si el arte es nativo (bloque 1×1), mostrarlo a

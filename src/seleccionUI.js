@@ -42,8 +42,8 @@ export function crearSeleccion(root) {
         <div class="sl-avt">¿Quién sos?</div>
         <input id="slNombre" class="sl-input" maxlength="14" placeholder="Tu nombre" value="Guía">
         <div class="sl-avopts">
-          <div class="sl-avopt sel" data-g="hombre"><img src="assets/personajes/guia_hombre.png" alt=""></div>
-          <div class="sl-avopt" data-g="mujer"><img src="assets/personajes/guia_mujer.png" alt=""></div>
+          <div class="sl-avopt sel" data-g="hombre"><img src="assets/personajes/retrato_guia_hombre.png" alt="Guía"></div>
+          <div class="sl-avopt" data-g="mujer"><img src="assets/personajes/retrato_guia_mujer.png" alt="Guía"></div>
         </div>
         <button class="sl-btn go" id="slGo">EMPEZAR 🌿</button>
       </div>`;

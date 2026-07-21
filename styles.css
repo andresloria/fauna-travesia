@@ -1050,28 +1050,27 @@ body.ar-lock{overflow:hidden}
 .sl-head .s{font-size:19px;color:var(--ink-soft-g);line-height:1.1}
 
 /* avatar primera vez */
-.sl-avatar{max-width:420px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:12px;align-items:center}
+.sl-avatar{max-width:560px;margin:0 auto;padding:18px;display:flex;flex-direction:column;gap:14px;align-items:center}
 .sl-avt{font-family:var(--px);font-size:10px;color:#7a3f18}
 .sl-input{font-family:var(--body);font-size:22px;padding:6px 10px;border:3px solid var(--line);
-  border-radius:3px;background:#fff8e6;color:var(--ink-g);width:100%;text-align:center}
-/* Los guías son pixel art NATIVO de 256px (bloque real 1x1: cada pixel cuenta).
-   Cualquier reducción los arruina: con 'auto' se emborronan el pelo y los ojos,
-   con 'pixelated' se pierden pixeles sueltos. Por eso se muestran 1:1 —sin
-   escalar— dentro de un marco angosto que recorta SOLO el margen transparente
-   (el dibujo ocupa ~117px de ancho de los 256). */
+  border-radius:3px;background:#fff8e6;color:var(--ink-g);width:min(100%,340px);text-align:center}
+/* Los guías son pixel art NATIVO de 256px de CUERPO ENTERO: ahí la cabeza mide
+   ~45px (ojos de 2px, barba de 4) y no se ve nada. Por eso la pantalla usa un
+   RETRATO recortado a cabeza+hombros y ampliado x2 (make_retratos.py): ampliar
+   pixel art en enteros es sin pérdida. Se muestra 1:1 en escritorio y a la
+   MITAD EXACTA en celular; nunca a una escala rara. */
 .sl-avopts{display:flex;gap:16px;justify-content:center}
-.sl-avopt{position:relative;width:140px;height:248px;border:3px solid var(--line);
-  border-radius:3px;overflow:hidden;cursor:pointer;opacity:.55;
-  background:linear-gradient(180deg,#cfe3f2 0%,#dceac9 62%,#bcd3a3 100%);
+.sl-avopt{position:relative;width:248px;height:228px;border:3px solid var(--line);
+  border-radius:3px;overflow:hidden;cursor:pointer;opacity:.6;
+  background:linear-gradient(180deg,#cfe3f2 0%,#dceac9 70%,#bcd3a3 100%);
   box-shadow:inset 0 0 0 2px #fff8e6}
-.sl-avopt img{position:absolute;left:50%;bottom:-4px;margin-left:-128px;
-  width:256px;height:256px;max-width:none;image-rendering:pixelated}
-.sl-avopt::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;
-  background:linear-gradient(180deg,transparent,rgba(90,120,70,.35))}
+.sl-avopt img{display:block;width:248px;height:228px;max-width:none;
+  image-rendering:pixelated}
 .sl-avopt.sel{opacity:1;box-shadow:inset 0 0 0 2px #fff8e6,0 0 0 3px #e8c558}
-@media(max-width:400px){
+@media(max-width:560px){
   .sl-avopts{gap:10px}
-  .sl-avopt{width:120px;height:230px}
+  .sl-avopt{width:124px;height:114px}
+  .sl-avopt img{width:124px;height:114px}
 }
 
 /* ficha */
