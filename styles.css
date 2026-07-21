@@ -1695,3 +1695,18 @@ details.how b{color:var(--m-acc2); font-weight:700}
 /* costo en la ficha de la pantalla de equipo: mismo icono de bioma */
 .sl-orb{width:15px; height:15px; border:0; border-radius:0; display:inline-block;
   vertical-align:middle; image-rendering:auto; background:none}
+
+/* ---------- cambio de energía 5→1 (regla del original) ---------- */
+.ar-cambio{margin-top:4px; cursor:pointer; font-family:inherit; font-size:10.5px;
+  font-weight:800; letter-spacing:.3px; padding:6px 4px; border-radius:10px;
+  color:var(--ar-acc2); background:var(--ar-panel);
+  border:1px solid rgba(255,138,60,.35)}
+.ar-cambio.off{opacity:.35; cursor:not-allowed; border-color:var(--ar-linea);
+  color:var(--ar-tx2)}
+.ar-picker{display:flex; flex-direction:column; gap:4px; margin-top:4px;
+  padding:5px; border-radius:11px; background:var(--ar-panel2);
+  border:1px solid rgba(255,138,60,.4); box-shadow:var(--ar-sombra)}
+.ar-pick{cursor:pointer; border:1px solid var(--ar-linea); border-radius:8px;
+  background:rgba(255,255,255,.06); padding:4px; display:grid; place-items:center}
+.ar-pick:hover{background:rgba(255,138,60,.2); border-color:var(--ar-acc)}
+.ar-pick img{width:20px; height:20px; image-rendering:auto}

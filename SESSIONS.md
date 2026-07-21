@@ -5,6 +5,44 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 22 jul 2026 · KIT ÚNICO PARA LAS 136 ESPECIES + cambio de energía
+
+Reclamo de Andrés (con razón): el documento trae **179 kits completos** y el
+juego solo usaba 37 — el resto compartía plantillas casi iguales.
+
+### Reasignación
+`ASIGNADOS` en `make_habilidades_doc.py`: los kits de animales del documento
+que no tienen sprite se reasignan **por afinidad** a especies que sí lo tienen
+(el mapache recibe el kit de arena de Gaara —Shukaku ES un mapache-tanuki—, el
+venado el del clan Nara que cría venados, la jicotea el de Guy cuya invocación
+es una tortuga, las leyendas del folclor los kits de jefes: la Segua el zorro
+de nueve colas, la Tulevieja a Konan de la lluvia…). Resultado:
+- **136/136 especies con kit del documento, 0 duplicados** (el generador
+  REVIENTA si dos especies quedan con el mismo kit — no puede volver a pasar).
+- 43 kits quedan en reserva para especies nuevas (lista en el reporte).
+- Las mecánicas sin estructura se aproximan **leyendo el efecto completo en
+  inglés** (`aprox_desde_en`); solo 22 de 408 habilidades quedaron genéricas
+  (las de sellos/invocaciones, listadas para curar a mano).
+
+### Reglas del original (el scribd que pasó Andrés)
+El documento de Scribd está truncado (solo se ve el índice), pero el índice
+coincide con The Basics que ya implementamos. Lo que sí faltaba:
+- **CAMBIO DE ENERGÍA: 5 cualesquiera → 1 del tipo que elijás, 1 vez por
+  turno** (`cambiarEnergia` en arena.js + botón "⇄ 5→1" bajo la columna de
+  energía). Paga sacando de los montones más grandes. En la UI solo se ofrece
+  con la cola vacía: si ya encolaste, esas 5 podrían estar reservadas.
+
+### Verificado
+- 0 kits duplicados en el juego vivo (medido en el navegador sobre las 136).
+- Cambio 5→1 probado en vivo: 3🌳+2🌾 → 1⛰, una vez por turno, con test.
+- Liga completa: 100% terminadas, 0 colgadas, 0 excepciones, 82-93
+  desbloqueos por liga. 21 tests arena + 6 misiones + 46 engine.
+
+📌 Los tests que nombraban habilidades del documento ("Sangría" del
+murciélago) se rompen con cada reasignación: SIEMPRE kit de laboratorio.
+
+---
+
 ## Sesión — 21 jul 2026 (cierre) · POWER METAL Y AJUSTES DE JUEGO
 
 - **Música de combate: power metal** (`make_musica_pelea.py` → `pelea_metal.mp3`,

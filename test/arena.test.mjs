@@ -195,8 +195,10 @@ test('robar energía: el ladrón la gana, el rival la pierde', () => {
   st.energia.A = { bosque: 9, sabana: 0, agua: 0, montana: 9 };
   st.energia.B = { bosque: 0, sabana: 1, agua: 0, montana: 0 };
   const mur = st.unidades.find(u => u.key === 'murcielago');
-  const iSan = mur.habs.findIndex(h => h.n === 'Sangría');
-  A.ejecutarTurno(st, [{ uid: mur.uid, hab: iSan, objetivo: 'B0' }]);
+  // kit de laboratorio: el del roster cambia con cada versión del documento
+  mur.habs = [{ n: 'LAB roba', costo: ['comodin'], recarga: 0, clases: ['toxina'],
+    efectos: [{ t: 'robarEnergia', n: 1, obj: 'enemigo' }] }];
+  A.ejecutarTurno(st, [{ uid: mur.uid, hab: 0, objetivo: 'B0' }]);
   // ojo: al pasar el turno B gana su energía inicial — se chequea el TIPO robado
   assert.equal(st.energia.B.sabana, 0, 'B perdió su sabana');
   assert.ok(st.energia.A.sabana >= 1, 'A ganó la sabana robada');
@@ -215,6 +217,32 @@ test('sin la energía del bioma, la habilidad no se puede usar (aunque exista)',
   const iZar = iHab(jag, 'LAB golpe');
   st.energia.A = { bosque: 0, sabana: 1, agua: 0, montana: 0 };
   assert.equal(A.puedeUsar(st, jag, iZar).ok, true, 'el básico nunca deja sin jugar');
+});
+
+// ---------- cambio de energía (regla del original: 5 cualquiera -> 1 a elección) ----------
+test('cambio de energía: paga 5 cualesquiera y recibe 1 del tipo elegido', () => {
+  const st = A.mkCombate(TA(), TB(), { abre: 'A', rng: rngFijo([0.0]) });
+  st.energia.A = { bosque: 4, sabana: 2, agua: 0, montana: 0 };
+  assert.equal(A.puedeCambiar(st, 'A'), true);
+  assert.equal(A.cambiarEnergia(st, 'A', 'agua'), true);
+  assert.equal(st.energia.A.agua, 1, 'ganó el agua elegida');
+  assert.equal(A.totalE(st.energia.A), 2, '6 - 5 + 1 = 2');
+  // solo una vez por turno
+  st.energia.A = { bosque: 9, sabana: 0, agua: 0, montana: 0 };
+  assert.equal(A.cambiarEnergia(st, 'A', 'agua'), false, 'ya cambió este turno');
+  // al turno siguiente puede de nuevo
+  A.ejecutarTurno(st, []);   // pasa A
+  A.ejecutarTurno(st, []);   // pasa B -> vuelve A
+  st.energia.A = { bosque: 9, sabana: 0, agua: 0, montana: 0 };
+  assert.equal(A.cambiarEnergia(st, 'A', 'montana'), true, 'turno nuevo, cambio nuevo');
+});
+
+test('cambio de energía: con menos de 5 no se puede', () => {
+  const st = A.mkCombate(TA(), TB(), { abre: 'A', rng: rngFijo([0.0]) });
+  st.energia.A = { bosque: 2, sabana: 2, agua: 0, montana: 0 };
+  assert.equal(A.puedeCambiar(st, 'A'), false);
+  assert.equal(A.cambiarEnergia(st, 'A', 'agua'), false);
+  assert.equal(A.totalE(st.energia.A), 4, 'no tocó nada');
 });
 
 // ---------- fin del combate ----------

@@ -112,6 +112,28 @@ export function pagar(pool, costo) {
   if (todo) for (const b of BIOMAS) pool[b] = 0;   // definitiva: gasta TODA la energía
 }
 
+// ---------- cambio de energía ----------
+// Regla del juego original: podés cambiar 5 energías CUALESQUIERA por 1 del
+// tipo que elijás, una vez por turno. Es la válvula de escape cuando el azar
+// no te da el bioma que tu equipo necesita.
+export function puedeCambiar(st, lado) {
+  return !st.fin && !(st.cambioUsado && st.cambioUsado[lado])
+      && totalE(st.energia[lado]) >= 5;
+}
+export function cambiarEnergia(st, lado, tipo) {
+  if (!BIOMAS.includes(tipo) || !puedeCambiar(st, lado)) return false;
+  const pool = st.energia[lado];
+  // paga las 5 sacando siempre del montón más grande (conserva las escasas)
+  for (let i = 0; i < 5; i++) {
+    const b = BIOMAS.slice().sort((x, y) => pool[y] - pool[x])[0];
+    pool[b]--;
+  }
+  pool[tipo]++;
+  st.cambioUsado = { ...(st.cambioUsado || {}), [lado]: true };
+  st.log.push({ t: 'cambio', lado, tipo });
+  return true;
+}
+
 // ---------- validación de acciones ----------
 // ¿puede u usar su habilidad i ahora? (sin considerar el resto de la cola)
 export function puedeUsar(st, u, i) {
@@ -196,6 +218,7 @@ export function ejecutarTurno(st, cola) {
   for (const u of st.unidades) { u.usadaEsteTurno = false; }
 
   // 4. energía del lado entrante: SU primer turno = 1; después, 1 por vivo
+  if (st.cambioUsado) st.cambioUsado[st.lado] = false;   // puede volver a cambiar
   if (!st.fin) {
     const n = st.jugados[st.lado] === 0 ? 1 : vivos(st, st.lado).length;
     const ganadas = ganarEnergia(st, st.lado, n);

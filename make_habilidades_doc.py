@@ -96,7 +96,125 @@ MAPA = {
     # nombre de la especie en el roster) y el de Salamanqueja queda de variante.
     'Geco': 'geco', 'Salamanqueja': None,
 }
-# los 62 que faltan crear se detectan solos (no están en MAPA con key)
+# ------------------------------------------------------------------
+# 2b. REASIGNACIÓN (pedido de Andrés, 21-jul): el documento trae 179 kits
+#     completos y el juego solo usaba 37 — el resto del roster quedaba con
+#     plantillas repetidas. Los kits de animales SIN sprite se reasignan a
+#     especies que SÍ tienen sprite, elegidos por afinidad (el grupo del
+#     animal del documento, la personalidad del personaje original, o el
+#     papel del bicho en el ecosistema). Cada kit se usa UNA sola vez; el
+#     generador revienta si dos especies terminan con el mismo.
+#     key del roster -> (animal del documento, personaje original)
+# ------------------------------------------------------------------
+ASIGNADOS = {
+    # ---- mamíferos ----
+    'perezoso':          ('Pez globo', 'Chōza Akimichi'),            # grandote lento y tanque
+    'perezoso_dos':      ('Garrapata', 'Yoroi Akadō'),               # drena despacio
+    'monocara':          ('Mono tití', 'Konohamaru Sarutobi'),       # mono juguetón (2º kit)
+    'caucel':            ('Coyote', 'Kiba Inuzuka'),                 # felino feral
+    'tigrillo':          ('Coyote', 'Kakashi Hatake'),               # gato sigiloso
+    'saino':             ('Escarabajo rinoceronte', 'Jirōbō'),       # embestida maciza
+    'venado':            ('Araña de seda dorada', 'Shikamaru Nara'), # ¡el clan Nara cría VENADOS!
+    'cabro_monte':       ('Mantis orquídea', 'Rock Lee'),            # patadas y salto
+    'pizote':            ('Ratonera', 'Misumi Tsurugi'),             # flexible y ladrón
+    'mapache':           ('Hormiga león', 'Gaara'),                  # ¡Shukaku ES un mapache-tanuki!
+    'mapache_cangrejero':('Hormiga león', 'Rehabilitated Gaara'),    # el hermano de arriba
+    'martilla':          ('Salamanqueja', 'Hayate Gekkō'),           # nocturno y veloz
+    'olingo':            ('Murciélago pescador', 'C'),               # sensor nocturno
+    'tolomuco':          ('Tiburón punta blanca', 'Darui'),          # tranquilo pero letal
+    'grison':            ('Cangrejo ermitaño', 'Atsui'),             # tejón fogoso
+    'nutria':            ('Sábalo', 'Suigetsu Hōzuki'),              # cuerpo de agua, juguetón
+    'comadreja':         ('Murciélago vampiro', 'Karin'),            # muerde y se cura
+    'zorro_pelon':       ('Zorro gris', 'Naruto Uzumaki'),           # el zorro del zorro
+    'oso_hormiguero':    ('Camarón mantis', 'Asura Path Pain'),      # brazos demoledores
+    'serafin':           ('Luciérnaga', 'Fukasaku and Shima'),       # chiquitito y sabio
+    'tepezcuintle':      ('Sapo común', 'Dodai'),                    # tanque de goma
+    'guatusa':           ('Saltamontes', 'Kin Tsuchi'),              # nerviosa, campanillas
+    'ardilla':           ('Grillo', 'Dosu Kinuta'),                  # parlanchina resonante
+    'murcielago':        ('Murciélago narigudo', 'Inoichi Yamanaka'),# ecolocación = leer mentes
+    'manati':            ('Babosa gigante', 'Tsunade'),              # gigante gentil que cura
+    'ballena':           ('Pulpo', 'Killer B'),                      # B rapea, la ballena canta
+    # ---- aves ----
+    'yiguirro':          ('Cigarra', 'Tayuya'),                      # el cantor nacional, flauta
+    'quetzal':           ('Urraca copetona', 'Itachi Uchiha'),       # el ave elegante, cuervos
+    'quetzaldorado':     ('Sapo dorado', 'Sage Mode Naruto'),        # DORADO modo sabio (mítico)
+    'lapa':              ('Hormiga de fuego', 'Pakura'),             # roja fuego
+    'lapa_verde':        ('Hormiga de fuego', 'Torune Aburame'),     # la pareja verde
+    'tucan':             ('Escarabajo bombardero', 'Deidara'),       # artista explosivo
+    'tucan_castano':     ('Escarabajo bombardero', 'Gari'),          # familia bombardera
+    'tucancillo':        ('Escarabajo joya', 'Ginkaku'),             # tucancito joya
+    'cusingo':           ('Escarabajo bombardero', 'Jinpachi Munashi'),
+    'pajaro_campana':    ('Elanio', 'Temari'),                       # el CAMPANAZO = ondas de viento
+    'oropendola':        ('Araña de seda dorada', 'Maki'),           # teje nidos = telas
+    'ermitano':          ('Colibrí', 'Hinata Hyūga'),                # colibrí para el colibrí
+    'jacamar':           ('Pez aguja', 'Kushimaru Kuriarare'),       # pico-aguja
+    'momoto':            ('Mochuelo', 'Hanabi Hyūga'),               # péndulo de precisión
+    'tangara_azul':      ('Avispa alfarera', 'Fū Yamanaka'),
+    'tangara_dorada':    ('Escarabajo Hércules', 'Kinkaku'),         # el hermano DORADO
+    'bienteveo':         ('Gavilán blanco', 'Baki'),                 # cuchillas de viento
+    'garza':             ('Raya látigo', 'Haku'),                    # blanca, elegante, espejos
+    'espatula':          ('Raya látigo', 'Haku'),                    # (la 2ª copia del kit)
+    'jabiru':            ('Langosta', 'Jinin Akebino'),              # golpe contundente
+    'tantalo':           ('Pez sapo', 'Gengetsu Hōzuki'),            # espejismo del pantano
+    'ibis':              ('Estrella de mar', 'Hidan'),               # el ave ritual
+    'pelicano':          ('Armadillo', 'Chōji Akimichi'),            # el buche expansivo
+    'fragata':           ('Halcón peregrino', 'Minato Namikaze'),    # el más veloz del cielo
+    'caracara':          ('Águila solitaria', 'Nagato'),
+    'zopilote_negro':    ('Zopilote rey', 'Ibiki Morino'),           # zope interrogador
+    'zopilote_rojo':     ('Garrapata', 'Preta Path Pain'),           # absorbe carroña
+    'carpintero':        ('Viuda negra', 'Puppet Master Kankurō'),   # trabaja la madera
+    'saltarin':          ('Mantis orquídea', 'Drunken Lee'),         # ¡el que BAILA!
+    'trogon':            ('Búho de anteojos', 'Neji Hyūga'),         # porte sereno
+    'martin_pescador':   ('Barracuda', 'Chōjūrō'),                   # zambullida precisa
+    'anhinga':           ('Barracuda', 'Ameyuri Ringo'),             # pico-espada relámpago
+    'tinamu':            ('Estucurú', 'Hiashi Hyūga'),               # el mayor discreto
+    'chachalaca':        ('Chinche asesina', 'Sakon and Ukon'),      # el dúo escandaloso
+    'loro':              ('Calamar', 'Sai'),                         # imita = copia con tinta
+    # ---- anfibios y reptiles ----
+    'rana_ojos_rojos':   ('Sapo dorado', 'Sage Mode Jiraiya'),       # la rana ícono, sabia
+    'ranadardo':         ('Sapo marino', 'Kurotsuchi'),              # corrosiva
+    'rana_lechera':      ('Tortuga candado', 'Izumo and Kotetsu'),   # ¡jarabe pegajoso!
+    'rana_tungara':      ('Camarón pistola', 'Utakata'),             # ¡nido de BURBUJAS!
+    'rana_gladiadora':   ('Puma', 'A'),                              # la gladiadora, pura fuerza
+    'rana_payaso':       ('Mantis religiosa', 'Omoi'),               # el dramático
+    'iguana':            ('Escorpión de corteza', 'Rasa'),           # polvo de oro al sol
+    'garrobo':           ('Escorpión de corteza', 'Shukaku Gaara'),  # bestia de arena
+    'anolis':            ('Avispa esmeralda', 'Ino Yamanaka'),       # despliegue que encanta
+    'caiman':            ('Morena', 'Zabuza Momochi'),               # asesino silencioso del agua
+    'lora':              ('Cascabel muda', 'Orochimaru'),            # la serpiente del sannin
+    'matabuey':          ('Cascabel muda', 'White Snake Orochimaru'),# la víbora mayor
+    'serpiente_mar':     ('Raya redonda', 'Shigure'),                # agujas de lluvia
+    'mica':              ('Boa', 'Yamato'),                          # constrictora + madera
+    'bejuquilla':        ('Tapir (Danta)', 'Hashirama Senju'),       # ¡bejuco = estilo madera!
+    # ---- tortugas ----
+    'tortuga':           ('Armadillo zopilote', 'Ittan'),            # murallas de tierra
+    'tortuga_baula':     ('Ciempiés gigante', 'Kakuzu'),             # la anciana indestructible
+    'tortuga_carey':     ('Alacrán', 'Sasori'),                      # su caparazón es arte
+    'tortuga_lora':      ('Hormiga león', 'Kazekage Gaara'),         # anida en la ARENA
+    'tortuga_cabezona':  ('Hormiga león', 'Regimental Commander Gaara'),
+    'jicotea':           ('Mantis religiosa', 'Might Guy'),          # ¡la invocación de Guy ES una tortuga!
+    # ---- marinos ----
+    'tiburon':           ('Tiburón toro', 'Kisame Hoshigaki'),       # el kit de tiburón al tiburón
+    'tiburon_ballena':   ('Pulpo', 'Eight-Tailed B'),                # el gigante tentaculado
+    'pez_vela':          ('Halcón peregrino', 'Yondaime Minato'),    # el pez más RÁPIDO del mar
+    'marlin':            ('Halcón peregrino', 'Sasuke Uchiha'),      # la espada del mar
+    # ---- invertebrados ----
+    'mariposa_julia':    ('Libélula', 'Ōnoki'),                      # vuelo que levita
+    'hormiga_bala':      ('Hormiga guerrera', 'Animal Path Pain'),   # la hormiga a la hormiga
+    'abeja':             ('Avispa parasitoide', 'Shino Aburame'),    # el amo de los bichos
+    'tarantula':         ('Araña banana', 'Kidōmaru'),               # la araña a la araña
+    # ---- básicos ----
+    'perro':             ('Coyote', 'Kiba Inuzuka'),                 # ¡EL kit del perro! (2ª copia)
+    'gato':              ('Mono araña', 'Asuma Sarutobi'),           # garras de chakra
+    'comemaiz':          ('Zorro gris', 'Naruto Uzumaki'),           # el del montón que sorprende (2ª copia)
+    # ---- leyendas del folclor (kits de jefes de nivel S) ----
+    'f_cadejos':         ('Zorro gris', 'One-Tailed Naruto'),        # el perro demonio, manto de bestia
+    'f_segua':           ('Zorro gris', 'Nine-Tailed Naruto'),       # la transformación monstruosa
+    'f_llorona':         ('Boa', 'Naraka Path Pain'),                # el reino de los muertos, el río
+    'f_tulevieja':       ('Mariposa morpho', 'Konan of the Rain'),   # ¡el ave bruja de la LLUVIA!
+    'f_padre':           ('Chinche asesina', 'Human Path Pain'),     # arranca almas
+    'f_carreta':         ('Terciopelo', 'Reanimator Kabuto'),        # levanta a los muertos
+}
 
 # ------------------------------------------------------------------
 # 3. Traducción de una habilidad del documento -> habilidad del motor
@@ -284,6 +402,72 @@ APROX = {
 
 
 # ------------------------------------------------------------------
+# 3b-bis. Aproximación AUTOMÁTICA desde el texto en inglés.
+#     Con la reasignación entraron ~100 kits nuevos: aproximar a mano cada
+#     habilidad rara ya no es viable. Cuando el documento no trae mecánica
+#     estructurada, se lee el efecto completo en inglés (la fuente
+#     autoritativa según la leyenda del Excel) buscando las frases estándar
+#     del juego original. Queda marcada como APROXIMADA en el reporte y la
+#     descripción se genera de lo implementado, nunca del texto original.
+# ------------------------------------------------------------------
+def aprox_desde_en(en):
+    t = (en or '').lower()
+    if not t:
+        return []
+    efs = []
+
+    def num(pat, defecto=None):
+        m = re.search(pat, t)
+        return int(m.group(1)) if m else defecto
+
+    d = num(r'deal(?:s|ing)? (\d+) (?:additional )?(?:piercing |affliction )?damage')
+    if d:
+        e = {'t': 'dano', 'v': d, 'obj': 'todos' if 'all enemies' in t else 'enemigo'}
+        if 'affliction' in t:
+            e['toxina'] = True
+        if 'piercing' in t:
+            e['ignoraDefensa'] = True
+        efs.append(e)
+    v = num(r'(?:steal\w*|absorb\w*) (\d+) (?:points? of |of their )?health')
+    if v:
+        efs.append({'t': 'dano', 'v': v, 'obj': 'enemigo'})
+        efs.append({'t': 'curar', 'v': v, 'obj': 'self'})
+    c = num(r'(?:restor\w+|regain\w*|heal\w*) (\d+) (?:points? of )?health')
+    if c:
+        efs.append({'t': 'curar', 'v': c, 'obj': 'aliado' if 'an ally' in t else 'self'})
+    red = num(r'(\d+) points? of (?:permanent )?damage reduction')
+    if red:
+        efs.append({'t': 'reducir', 'v': red, 'turnos': turnos_en(en), 'obj': 'self'})
+    dd = num(r'(\d+)[a-z\- ]{0,32}destructible (?:defense|barrier)')
+    if dd:
+        efs.append({'t': 'defensa', 'v': dd, 'obj': 'aliado' if 'an ally' in t else 'self'})
+    if 'cannot become invulnerable' in t or 'cannot reduce damage' in t:
+        efs.append({'t': 'exponer', 'turnos': turnos_en(en), 'obj': 'enemigo'})
+    elif re.search(r'(?:become|becomes|making|makes|will be|grant\w*)[^.]{0,40}invulnerab', t):
+        obj = 'aliado' if 'an ally' in t else ('equipo' if re.search(r'(his|her|their) team', t) else 'self')
+        efs.append({'t': 'invulnerable', 'turnos': 1, 'obj': obj})
+    if re.search(r'\bstunn?(ed|ing|s)?\b', t) and 'ignores stun' not in t and 'cannot be stun' not in t:
+        efs.append({'t': 'aturdir', 'turnos': num(r'stunn?\w* for (\d+) turns?', 1), 'obj': 'enemigo'})
+    if (re.search(r'\bcounters?\b|\bcountering\b|\breflect', t)
+            and 'uncounterable' not in t and 'cannot be counter' not in t):
+        efs.append({'t': 'contraataque', 'v': 25, 'obj': 'self'})
+    if 'chakra' in t:
+        if 'steal' in t or 'absorb' in t:
+            efs.append({'t': 'robarEnergia', 'n': 1, 'obj': 'enemigo'})
+        elif 'deplete' in t or 'removes' in t:
+            efs.append({'t': 'quemarEnergia', 'n': 1, 'obj': 'enemigo'})
+        elif re.search(r'gain\w*[^.]{0,25}chakra', t):
+            efs.append({'t': 'darEnergia', 'tipo': 'comodin', 'obj': 'self'})
+    amp = num(r'(?:strengthen\w+|increas\w+)[^.]{0,28} by (\d+)')
+    if amp and 'damage' in t and not any(e['t'] == 'amplificar' for e in efs):
+        efs.append({'t': 'amplificar', 'v': amp, 'turnos': 2, 'obj': 'self'})
+    deb = num(r'damage is weakened by (\d+)')
+    if deb:
+        efs.append({'t': 'reducir', 'v': deb, 'turnos': turnos_en(en), 'obj': 'self'})
+    return efs
+
+
+# ------------------------------------------------------------------
 # 3c. De las 4 del documento a las 3 del juego
 #     REGLA DEL JUEGO (fijada por Andrés): cada animal usa **3 ataques + la
 #     Esquiva universal**. El documento trae 4 porque el juego de referencia
@@ -405,41 +589,64 @@ def main():
         for pers, cat, habs in lista:
             habs.sort(key=lambda r: r['slot'])
 
-    salida, reporte_falta, sin_efecto, aproximadas, descartes = {}, [], [], [], []
-    variantes = collections.OrderedDict()
+    salida, reporte_falta, aproximadas, genericas, descartes = {}, [], [], [], []
 
+    # ---- POOL: todos los kits COMPLETOS del documento, en su orden ----
+    pool = []
     for animal, lista in por_animal.items():
-        key = MAPA.get(animal)
+        for pers, cat, habs in lista:
+            if len(habs) == 4:
+                pool.append({'animal': animal, 'pers': pers, 'cat': cat,
+                             'habs': habs, 'usado': None})
+
+    def tomar(animal, pers=None, para=None):
+        for k in pool:
+            if k['usado'] is None and k['animal'] == animal and (pers is None or k['pers'] == pers):
+                k['usado'] = para
+                return k
+        return None
+
+    # 1) los que se llaman igual (MAPA): su PRIMER kit completo, como siempre
+    plan = []
+    for animal, key in MAPA.items():
         if not key:
             continue
-        # el kit base es el 1º COMPLETO (4 habilidades). El documento trae un par
-        # de kits truncados; si todos lo están, se usa el primero tal cual.
-        pers, cat, habs = next((k for k in lista if len(k[2]) == 4), lista[0])
-        otras = [p for p, c, h in lista if (p, c, h) != (pers, cat, habs)]
-        if otras:
-            variantes[key] = list(dict.fromkeys(otras))
+        k = tomar(animal, para=key)
+        if k:
+            plan.append((key, k))
+    # 2) los reasignados a mano (ASIGNADOS)
+    for key, (animal, pers) in ASIGNADOS.items():
+        k = tomar(animal, pers, para=key)
+        if not k:
+            raise SystemExit(f'ASIGNADOS: ya no queda ningún kit "{animal} · {pers}" para {key}')
+        plan.append((key, k))
+
+    for key, kit in plan:
+        animal, pers, cat, habs = kit['animal'], kit['pers'], kit['cat'], kit['habs']
 
         # 4 del documento -> 3 del juego: fuera la esquiva propia (ver §3c)
-        if len(habs) == 4:
-            descartada = habs[-1]
-            habs = habs[:-1]
-            descartes.append((animal, key, descartada['nombre_es'],
-                              'sí' if solo_invulnerabilidad(descartada) else 'NO — revisar'))
+        descartada = habs[-1]
+        habs = habs[:-1]
+        descartes.append((animal, key, descartada['nombre_es'],
+                          'sí' if solo_invulnerabilidad(descartada) else 'NO — revisar'))
 
         out = []
         for r in habs:
             cl, bypass = clases_de(r['clases'])
             efs, falta = efectos_de(r['mecanica'], bypass, r.get('efecto_en', ''))
-            if not efs and (key, r['nombre_es']) in APROX:
+            if not efs and (key, r['nombre_es']) in APROX:      # curadas a mano
                 efs = APROX[(key, r['nombre_es'])]
                 aproximadas.append((animal, r['nombre_es'], r['efecto_en'][:110]))
+            if not efs:                                         # leídas del inglés
+                efs = aprox_desde_en(r.get('efecto_en', ''))
+                if efs:
+                    aproximadas.append((animal, r['nombre_es'], r['efecto_en'][:110]))
+            if not efs:                                         # último recurso
+                efs = [{'t': 'dano', 'v': 15 + 5 * len(costo_de(r['costo'])), 'obj': 'enemigo'}]
+                genericas.append((animal, r['nombre_es'], r['efecto_en'][:110]))
             desc = describir(efs)
-            if efs and not desc:
-                raise SystemExit(f'{key}/{r["nombre_es"]}: tiene efectos pero la '
-                                 f'descripción salió vacía — no se puede publicar así')
-            if not efs:
-                sin_efecto.append((animal, r['nombre_es'], r['efecto_en'][:90]))
-                desc = '(sin efecto mecánico todavía — ver reporte)'
+            if not desc:
+                raise SystemExit(f'{key}/{r["nombre_es"]}: descripción vacía — no se publica así')
             if falta:
                 reporte_falta.append((animal, key, r['nombre_es'], falta))
             out.append({
@@ -450,7 +657,22 @@ def main():
                 'clases': cl,
                 'efectos': efs,
             })
-        salida[key] = {'habs': out, 'origen': f'{pers} · {cat}'}
+        salida[key] = {'habs': out, 'origen': f'{animal} → {pers} · {cat}'}
+
+    # ---- NINGÚN par de especies puede compartir kit (el reclamo original) ----
+    firmas = {}
+    for key, kit in salida.items():
+        firma = json.dumps([(h['n'], h['efectos']) for h in kit['habs']],
+                           ensure_ascii=False, sort_keys=True)
+        if firma in firmas:
+            raise SystemExit(f'KIT DUPLICADO: "{key}" y "{firmas[firma]}" quedaron con el mismo kit')
+        firmas[firma] = key
+
+    # ---- cobertura contra el roster real ----
+    roster_js = (AQUI / 'src' / 'fauna_roster.js').read_text(encoding='utf-8')
+    roster = set(re.findall(r'^\s*([a-z_0-9]+):\s*\{\s*n:"', roster_js, re.M))
+    sin_kit = sorted(roster - set(salida))
+    sobrantes = [k for k in pool if k['usado'] is None]
 
     # ---- JS ----
     def js(v):
@@ -477,27 +699,36 @@ def main():
         L.append('  ] },')
     L.append('};')
     L.append('')
-    L.append('// Kits alternativos que trae el documento para el mismo animal (otras')
-    L.append('// versiones del personaje original). Todavía no se usan.')
-    L.append('export const VARIANTES_DOC = ' + js({k: v for k, v in variantes.items()}) + ';')
+    L.append('// Kits del documento que quedaron SIN usar (reserva para especies nuevas).')
+    L.append('export const VARIANTES_DOC = ' + js([f"{k['animal']} · {k['pers']}" for k in sobrantes]) + ';')
     L.append('')
     SALIDA.write_text('\n'.join(L), encoding='utf-8')
 
     # ---- reporte ----
-    faltan_crear = sorted({r['animal'] for r in d} - {a for a in MAPA if MAPA.get(a)}
-                          - {'Salamanqueja'})
-    grupos = {}
-    for r in d:
-        grupos.setdefault(r['animal'], r['grupo'])
+    nombres = dict(re.findall(r'^\s*([a-z_0-9]+):\s*\{\s*n:"([^"]+)"', roster_js, re.M))
 
     R = ['# Reporte de habilidades (documento de Andrés)', '',
-         f'- Habilidades en el documento: **{len(d)}** · animales: **{len(por_animal)}**',
-         f'- Animales que YA existen en el juego y quedaron con kit oficial: **{len(salida)}**',
-         f'- Animales que **falta crear**: **{len(faltan_crear)}**', '',
-         '## Animales que faltan crear', '',
-         '| Animal | Grupo | Habilidades en el doc |', '|---|---|---|']
-    for a in faltan_crear:
-        R.append(f'| {a} | {grupos[a]} | {sum(1 for r in d if r["animal"] == a)} |')
+         f'- Kits completos en el documento: **{len(pool)}** ({len(d)} habilidades, {len(por_animal)} animales)',
+         f'- Especies del juego con kit del documento: **{len(salida)}** de {len(roster)}',
+         f'- Kits sin usar (reserva para especies nuevas): **{len(sobrantes)}**', '',
+         '## A quién le tocó cada kit', '',
+         'Los kits de animales del documento que no tienen sprite se **reasignaron por',
+         'afinidad** a especies del juego que quedaban con kits de plantilla repetidos',
+         '(pedido de Andrés, 21-jul). Cada kit se usa UNA sola vez.', '',
+         '| Especie del juego | Kit del documento | Personaje original |', '|---|---|---|']
+    for key, kit in salida.items():
+        R.append(f'| {nombres.get(key, key)} | {kit["origen"].split(" → ")[0]} | '
+                 f'{kit["origen"].split(" → ")[-1]} |')
+
+    if sin_kit:
+        R += ['', f'## ⚠️ Especies del roster SIN kit del documento ({len(sin_kit)})', '',
+              ', '.join(f'`{k}`' for k in sin_kit)]
+
+    if sobrantes:
+        R += ['', f'## Kits en reserva ({len(sobrantes)})', '',
+              'Para cuando se agreguen especies nuevas al roster.', '']
+        for k in sobrantes:
+            R.append(f'- {k["animal"]} · {k["pers"]} ({k["cat"]})')
 
     R += ['', '## Mecánicas que el motor todavía no hace', '',
           'Estas habilidades se aplicaron **sin** esa parte. La descripción que ve el',
@@ -507,12 +738,12 @@ def main():
     for animal, key, hab, falta in reporte_falta:
         R.append(f'| {animal} | {hab} | {"; ".join(falta)} |')
 
-    if sin_efecto:
-        R += ['', '## Habilidades que quedaron SIN efecto', '',
-              'El documento no trae mecánica estructurada para estas (el efecto completo',
-              'en inglés describe cosas que hay que codificar a mano).', '',
+    if genericas:
+        R += ['', '## ⚠️ Habilidades GENÉRICAS (último recurso)', '',
+              'Ni la mecánica estructurada ni la lectura del inglés dieron efectos:',
+              'quedaron como daño simple según su costo. Candidatas a curarse a mano.', '',
               '| Animal | Habilidad | Efecto original (EN) |', '|---|---|---|']
-        for animal, hab, en in sin_efecto:
+        for animal, hab, en in genericas:
             R.append(f'| {animal} | {hab} | {en}… |')
 
     if descartes:
@@ -527,39 +758,24 @@ def main():
             R.append(f'| {animal} | {hab} | {era} |')
 
     if aproximadas:
-        R += ['', '## Habilidades APROXIMADAS a mano', '',
-              'El documento no traía mecánica estructurada para estas (su efecto original',
-              'usa reflejos, sellos, invocaciones o vínculos de vida, que el motor no tiene).',
-              'Se aproximaron leyendo el efecto completo en inglés. **La descripción que ve',
-              'el jugador dice lo que de verdad hace la versión nuestra**, no la original.', '',
+        R += ['', '## Habilidades APROXIMADAS', '',
+              'El documento no traía mecánica estructurada para estas: se aproximaron',
+              'leyendo el efecto completo en inglés. **La descripción que ve el jugador',
+              'dice lo que de verdad hace la versión nuestra**, no la original.', '',
               '| Animal | Habilidad | Efecto original (EN) |', '|---|---|---|']
         for animal, hab, en in aproximadas:
             R.append(f'| {animal} | {hab} | {en}… |')
 
-    if variantes:
-        R += ['', '## Kits alternativos disponibles (no usados todavía)', '',
-              '| Especie | Otras versiones en el documento |', '|---|---|']
-        for k, v in variantes.items():
-            R.append(f'| {k} | {", ".join(v)} |')
-
     REPORTE.write_text('\n'.join(R), encoding='utf-8')
 
-    raros = [d for d in descartes if d[3] != 'sí']
-    print(f'OK {SALIDA.name}: {len(salida)} especies con kit oficial (3 ataques + esquiva)')
-    print(f'   4ª habilidad descartada en {len(descartes)} kits'
-          + (f' · ⚠️ {len(raros)} NO eran su esquiva: '
-             + ', '.join(f'{a}/{h}' for a, k, h, e in raros) if raros else ''))
-    print(f'   faltan crear: {len(faltan_crear)} animales')
-    print(f'   habilidades con mecánica parcial: {len(reporte_falta)}')
-    print(f'   habilidades aproximadas a mano: {len(aproximadas)}')
-    print(f'   habilidades sin efecto: {len(sin_efecto)}')
-    # aviso: aproximaciones escritas para kits que al final no se usaron
-    usadas = {(k, h) for k, h, _ in
-              [(MAPA[a], n, e) for a, n, e in aproximadas]} if aproximadas else set()
-    sobran = [k for k in APROX if k not in {(MAPA[a], n) for a, n, _ in aproximadas}]
-    if sobran:
-        print(f'   ⚠️ {len(sobran)} aproximaciones sin usar (su kit no quedó de base): '
-              + ', '.join(f'{k[0]}/{k[1]}' for k in sobran))
+    raros = [x for x in descartes if x[3] != 'sí']
+    print(f'OK {SALIDA.name}: {len(salida)}/{len(roster)} especies con kit del documento')
+    print(f'   kits sin usar (reserva): {len(sobrantes)}')
+    print(f'   4ª descartada en {len(descartes)} kits · {len(raros)} NO eran su esquiva (ver reporte)')
+    print(f'   con mecánica parcial: {len(reporte_falta)} · aproximadas: {len(aproximadas)}'
+          f' · genéricas: {len(genericas)}')
+    if sin_kit:
+        print(f'   ⚠️ especies SIN kit del documento: {len(sin_kit)}: {", ".join(sin_kit)}')
     print(f'OK {REPORTE.name}')
 
 

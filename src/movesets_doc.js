@@ -8,7 +8,7 @@
 // ============================================================
 
 export const MOVESETS_DOC = {
-  // Oboro · Original (Parte 1)
+  // Rana de vidrio → Oboro · Original (Parte 1)
   rana_cristal: { habs: [
     { n:"Lengua pegajosa", desc:"15 de daño a TODOS los enemigos.",
       costo:["comodin", "comodin"], recarga:0, clases:["natural", "rango"],
@@ -20,7 +20,7 @@ export const MOVESETS_DOC = {
       costo:["sabana", "comodin"], recarga:4, clases:["instinto"],
       efectos:[{"t": "defensa", "v": 30, "obj": "self"}] },
   ] },
-  // Kabuto Yakushi · Shippuden
+  // Terciopelo → Kabuto Yakushi · Shippuden
   serpiente: { habs: [
     { n:"Colmillos de terciopelo", desc:"20 de daño a un enemigo (ignora la defensa).",
       costo:["agua"], recarga:0, clases:["natural", "melee"],
@@ -32,7 +32,7 @@ export const MOVESETS_DOC = {
       costo:["sabana"], recarga:2, clases:["instinto", "rango"],
       efectos:[{"t": "aturdir", "turnos": 1, "obj": "todos"}] },
   ] },
-  // Zaku Abumi · Original (Parte 1)
+  // Sapo marino → Zaku Abumi · Original (Parte 1)
   sapo_marino: { habs: [
     { n:"Lengua pegajosa", desc:"25 de daño a un enemigo.",
       costo:["montana"], recarga:0, clases:["fisico", "rango"],
@@ -44,7 +44,7 @@ export const MOVESETS_DOC = {
       costo:["montana", "comodin", "comodin"], recarga:0, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 45, "obj": "todos"}] },
   ] },
-  // Konohamaru Sarutobi · Shippuden
+  // Mono tití → Konohamaru Sarutobi · Shippuden
   mono_titi: { habs: [
     { n:"Acicalado social", desc:"Recibe 10 menos de daño durante 3 turnos.",
       costo:["comodin"], recarga:4, clases:["instinto"],
@@ -56,7 +56,7 @@ export const MOVESETS_DOC = {
       costo:["bosque"], recarga:0, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}] },
   ] },
-  // Tsume Inuzuka · Original (Parte 1)
+  // Zorro gris → Tsume Inuzuka · Original (Parte 1)
   zorro_gris: { habs: [
     { n:"Mordida", desc:"10 de daño a un enemigo. Recibe 10 menos de daño durante 4 turnos.",
       costo:["comodin"], recarga:4, clases:["fisico", "melee"],
@@ -68,7 +68,7 @@ export const MOVESETS_DOC = {
       costo:["comodin"], recarga:1, clases:["fisico"],
       efectos:[{"t": "invulnerable", "turnos": 1, "obj": "equipo"}] },
   ] },
-  // Kushina Uzumaki · Original (Parte 1)
+  // Boa → Kushina Uzumaki · Original (Parte 1)
   boa: { habs: [
     { n:"Golpe aturdidor", desc:"15 de daño a un enemigo (ignora la defensa). Lo aturde 1 turno.",
       costo:["sabana", "comodin"], recarga:1, clases:["natural", "rango"],
@@ -80,19 +80,7 @@ export const MOVESETS_DOC = {
       costo:["montana", "sabana"], recarga:4, clases:["natural", "rango"],
       efectos:[{"t": "aturdir", "turnos": 2, "obj": "enemigo"}] },
   ] },
-  // Hashirama Senju · Revividos (Edo Tensei)
-  danta: { habs: [
-    { n:"Cuero grueso", desc:"Invulnerable 1 turno.",
-      costo:["montana", "comodin"], recarga:2, clases:["natural", "melee"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
-    { n:"Embestida", desc:"20 de daño a un enemigo.",
-      costo:["montana", "comodin"], recarga:2, clases:["fisico", "melee"],
-      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
-    { n:"Postura defensiva", desc:"Gana 30 de defensa destructible permanente a todo el equipo.",
-      costo:["montana", "montana"], recarga:5, clases:["fisico"],
-      efectos:[{"t": "defensa", "v": 30, "obj": "equipo", "permanente": true}] },
-  ] },
-  // Young Kakashi · Original (Parte 1)
+  // Coyote → Young Kakashi · Original (Parte 1)
   coyote: { habs: [
     { n:"Estocada perforante", desc:"20 de daño a un enemigo (ignora la defensa).",
       costo:["bosque"], recarga:0, clases:["fisico", "melee"],
@@ -104,7 +92,7 @@ export const MOVESETS_DOC = {
       costo:[], recarga:1, clases:["instinto", "rango"],
       efectos:[{"t": "darEnergia", "tipo": "comodin", "obj": "self"}] },
   ] },
-  // Rin Nohara · Original (Parte 1)
+  // Colibrí garganta de fuego → Rin Nohara · Original (Parte 1)
   colibri_fuego: { habs: [
     { n:"Pico como aguja", desc:"30 de daño a un enemigo (ignora la defensa, ignora la invulnerabilidad). Recibe 15 menos de daño durante 1 turnos.",
       costo:["sabana"], recarga:0, clases:["fisico", "rango"],
@@ -116,7 +104,7 @@ export const MOVESETS_DOC = {
       costo:["comodin", "comodin"], recarga:3, clases:["fisico"],
       efectos:[{"t": "curarTurnos", "v": 10, "turnos": 3, "obj": "aliado"}] },
   ] },
-  // Obito Uchiha · Original (Parte 1)
+  // Basilisco → Obito Uchiha · Original (Parte 1)
   basilisco: { habs: [
     { n:"Mordida", desc:"15 de daño a un enemigo (ignora la defensa). Su próximo golpe pega +10.",
       costo:["comodin"], recarga:0, clases:["fisico", "melee"],
@@ -128,7 +116,7 @@ export const MOVESETS_DOC = {
       costo:["comodin"], recarga:4, clases:["instinto"],
       efectos:[{"t": "reducir", "v": 15, "turnos": 4, "obj": "aliado"}] },
   ] },
-  // Sakura Haruno · Shippuden
+  // Escarabajo Hércules → Sakura Haruno · Shippuden
   escarabajo: { habs: [
     { n:"Embestida aturdidora", desc:"20 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades de instinto 1 turno. Su próximo golpe pega +10.",
       costo:["bosque"], recarga:0, clases:["fisico", "melee"],
@@ -140,19 +128,7 @@ export const MOVESETS_DOC = {
       costo:["comodin"], recarga:4, clases:["instinto"],
       efectos:[{"t": "reducir", "v": 10, "turnos": 4, "obj": "self"}] },
   ] },
-  // Hinata Hyūga · Shippuden
-  colibri_talamanca: { habs: [
-    { n:"Picotazo", desc:"20 de daño a un enemigo.",
-      costo:["bosque", "comodin"], recarga:1, clases:["fisico", "melee"],
-      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
-    { n:"Embestida feroz", desc:"15 de daño a TODOS los enemigos. Gana 10 de defensa destructible. Su próximo golpe pega +5.",
-      costo:["agua", "comodin"], recarga:0, clases:["natural", "melee"],
-      efectos:[{"t": "dano", "v": 15, "obj": "todos"}, {"t": "defensa", "v": 10, "obj": "self"}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
-    { n:"Golpe demoledor", desc:"Recibe 15 menos de daño durante 4 turnos.",
-      costo:["comodin"], recarga:4, clases:["instinto"],
-      efectos:[{"t": "reducir", "v": 15, "turnos": 4, "obj": "self"}] },
-  ] },
-  // Kitsuchi · Shippuden
+  // Armadillo → Kitsuchi · Shippuden
   armadillo: { habs: [
     { n:"Coraza reactiva", desc:"35 de daño a un enemigo.",
       costo:["bosque", "comodin"], recarga:1, clases:["fisico", "melee"],
@@ -164,7 +140,7 @@ export const MOVESETS_DOC = {
       costo:["montana", "montana"], recarga:2, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 45, "obj": "enemigo"}, {"t": "aturdir", "turnos": 2, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 2, "obj": "enemigo", "clase": "instinto"}] },
   ] },
-  // Tenten · Shippuden
+  // Puercoespín → Tenten · Shippuden
   puercoespin: { habs: [
     { n:"Proyectil certero", desc:"20 de daño a TODOS los enemigos (ignora la invulnerabilidad).",
       costo:["bosque"], recarga:0, clases:["fisico", "rango"],
@@ -176,7 +152,7 @@ export const MOVESETS_DOC = {
       costo:["comodin"], recarga:1, clases:["fisico"],
       efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
-  // Jiraiya · Shippuden
+  // Sapo dorado → Jiraiya · Shippuden
   sapo_dorado: { habs: [
     { n:"Bufotoxina", desc:"20 de daño a un enemigo.",
       costo:["agua"], recarga:0, clases:["toxina", "rango"],
@@ -188,7 +164,7 @@ export const MOVESETS_DOC = {
       costo:["bosque", "montana", "sabana"], recarga:0, clases:["toxina", "rango"],
       efectos:[{"t": "dano", "v": 25, "obj": "todos", "toxina": true, "ignoraInvulnerable": true}] },
   ] },
-  // Hiruzen Sarutobi · Original (Parte 1)
+  // Mono congo (Aullador) → Hiruzen Sarutobi · Original (Parte 1)
   mono_congo: { habs: [
     { n:"Toxina corrosiva", desc:"20 de daño a un enemigo (toxina: atraviesa la invulnerabilidad). 10 de toxina por turno durante 2 turnos a un enemigo.",
       costo:["agua", "comodin"], recarga:0, clases:["toxina", "rango"],
@@ -200,7 +176,7 @@ export const MOVESETS_DOC = {
       costo:["bosque", "agua", "sabana"], recarga:0, clases:["melee"],
       efectos:[{"t": "dano", "v": 5, "obj": "todos", "ignoraInvulnerable": true}, {"t": "reducir", "v": 5, "turnos": 1, "obj": "self"}] },
   ] },
-  // Yūgao Uzuki · Original (Parte 1)
+  // Manigordo (Ocelote) → Yūgao Uzuki · Original (Parte 1)
   manigordo: { habs: [
     { n:"Zarpazo desgarrador", desc:"50 de daño a un enemigo.",
       costo:["bosque", "sabana"], recarga:1, clases:["fisico", "melee"],
@@ -212,31 +188,7 @@ export const MOVESETS_DOC = {
       costo:["sabana"], recarga:1, clases:[],
       efectos:[{"t": "exponer", "turnos": 2, "obj": "enemigo"}] },
   ] },
-  // Demon Brothers · Original (Parte 1)
-  cangrejo: { habs: [
-    { n:"Pinza inmovilizante", desc:"Aturde sus habilidades físicas 1 turno. Aturde sus habilidades naturales 1 turno.",
-      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
-      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}] },
-    { n:"Toxina corrosiva", desc:"30 de daño a un enemigo. Su próximo golpe pega +10.",
-      costo:["comodin", "comodin"], recarga:0, clases:["fisico", "melee", "toxina"],
-      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "amplificar", "v": 10, "turnos": 2, "obj": "self"}] },
-    { n:"Caparazón", desc:"Gana 20 de defensa destructible permanente.",
-      costo:["comodin", "comodin"], recarga:1, clases:["natural"],
-      efectos:[{"t": "defensa", "v": 20, "obj": "self", "permanente": true}] },
-  ] },
-  // Iruka Umino · Original (Parte 1)
-  delfin: { habs: [
-    { n:"Ecolocalización de impacto", desc:"20 de daño a un enemigo.",
-      costo:["bosque"], recarga:0, clases:["fisico", "rango"],
-      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
-    { n:"Coordinación de manada", desc:"Invulnerable 1 turno a un aliado.",
-      costo:["comodin"], recarga:1, clases:["fisico"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "aliado"}] },
-    { n:"Proyectil certero", desc:"40 de daño a un enemigo (ignora la invulnerabilidad).",
-      costo:["agua"], recarga:2, clases:["natural", "rango"],
-      efectos:[{"t": "dano", "v": 40, "obj": "enemigo", "ignoraInvulnerable": true}] },
-  ] },
-  // Mizuki · Original (Parte 1)
+  // Puma → Mizuki · Original (Parte 1)
   puma: { habs: [
     { n:"Proyectil certero", desc:"15 de daño a un enemigo.",
       costo:["comodin"], recarga:1, clases:["fisico", "rango"],
@@ -248,19 +200,7 @@ export const MOVESETS_DOC = {
       costo:["sabana"], recarga:1, clases:["instinto"],
       efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
-  // Anko Mitarashi · Original (Parte 1)
-  bocaraca: { habs: [
-    { n:"Embestida serpentina", desc:"5 de daño a un enemigo. Su próximo golpe pega +5.",
-      costo:[], recarga:0, clases:["fisico", "melee"],
-      efectos:[{"t": "dano", "v": 5, "obj": "enemigo"}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
-    { n:"Ponzoña necrótica", desc:"10 de daño a TODOS los enemigos (toxina: atraviesa la invulnerabilidad).",
-      costo:["agua"], recarga:2, clases:["toxina", "rango"],
-      efectos:[{"t": "dano", "v": 10, "obj": "todos", "toxina": true}] },
-    { n:"Veneno neurotóxico", desc:"20 de daño a un enemigo. 5 de toxina por turno durante 3 turnos a un enemigo.",
-      costo:["agua", "comodin"], recarga:0, clases:["toxina", "fisico", "melee"],
-      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "danoTurnos", "v": 5, "turnos": 3, "obj": "enemigo"}] },
-  ] },
-  // Shizune · Original (Parte 1)
+  // Coral → Shizune · Original (Parte 1)
   coral: { habs: [
     { n:"Neurotoxina de coral", desc:"15 de daño a un enemigo.",
       costo:["comodin"], recarga:0, clases:["toxina", "fisico", "rango"],
@@ -272,7 +212,7 @@ export const MOVESETS_DOC = {
       costo:["comodin", "comodin"], recarga:1, clases:["natural"],
       efectos:[{"t": "curar", "v": 35, "obj": "aliado"}] },
   ] },
-  // Kurenai Yuhi · Original (Parte 1)
+  // Mariposa búho → Kurenai Yuhi · Original (Parte 1)
   mariposa_buho: { habs: [
     { n:"Proyectil certero", desc:"10 de daño a un enemigo. Gana 5 de defensa destructible.",
       costo:["sabana"], recarga:2, clases:["instinto", "rango"],
@@ -284,7 +224,7 @@ export const MOVESETS_DOC = {
       costo:["sabana", "sabana"], recarga:4, clases:["instinto", "rango"],
       efectos:[{"t": "aturdir", "turnos": 2, "obj": "enemigo"}, {"t": "defensa", "v": 5, "obj": "self"}] },
   ] },
-  // Asuma Sarutobi · Shippuden
+  // Mono araña → Asuma Sarutobi · Shippuden
   mono_arana: { habs: [
     { n:"Zarpazo", desc:"15 de daño a TODOS los enemigos (ignora la invulnerabilidad). Recibe 15 menos de daño durante 2 turnos.",
       costo:["bosque", "agua"], recarga:2, clases:["fisico", "melee"],
@@ -296,7 +236,7 @@ export const MOVESETS_DOC = {
       costo:["comodin"], recarga:0, clases:["fisico", "melee"],
       efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
   ] },
-  // Curse Mark Sasuke · Original (Parte 1)
+  // Cascabel → Curse Mark Sasuke · Original (Parte 1)
   cascabel: { habs: [
     { n:"Ponzoña persistente", desc:"45 de daño a un enemigo (ignora la defensa).",
       costo:["agua", "agua"], recarga:1, clases:["toxina", "natural", "melee"],
@@ -308,7 +248,7 @@ export const MOVESETS_DOC = {
       costo:["montana"], recarga:1, clases:[],
       efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
   ] },
-  // Ao · Shippuden
+  // Lechuza → Ao · Shippuden
   lechuza: { habs: [
     { n:"Carga veloz", desc:"10 de daño a un enemigo. Recibe 5 menos de daño durante 3 turnos.",
       costo:["sabana"], recarga:3, clases:["natural", "rango"],
@@ -320,7 +260,7 @@ export const MOVESETS_DOC = {
       costo:["montana"], recarga:2, clases:["natural"],
       efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
   ] },
-  // Madara Uchiha · Shippuden
+  // Jaguar → Madara Uchiha · Shippuden
   jaguar: { habs: [
     { n:"Toxina corrosiva", desc:"Recibe 10 menos de daño durante 4 turnos.",
       costo:["comodin"], recarga:0, clases:["instinto"],
@@ -332,7 +272,7 @@ export const MOVESETS_DOC = {
       costo:["agua"], recarga:1, clases:["toxina"],
       efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}] },
   ] },
-  // Deva Path Pain · Shippuden
+  // Águila harpía → Deva Path Pain · Shippuden
   aguila_harpia: { habs: [
     { n:"Púas defensivas", desc:"20 de daño a un enemigo (ignora la invulnerabilidad). Contraataca: quien lo golpee recibe 25.",
       costo:["sabana"], recarga:0, clases:["natural", "rango"],
@@ -344,19 +284,7 @@ export const MOVESETS_DOC = {
       costo:["bosque", "montana", "sabana"], recarga:3, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 45, "obj": "enemigo", "ignoraDefensa": true}] },
   ] },
-  // Konan · Shippuden
-  mariposa: { habs: [
-    { n:"Estocada perforante", desc:"25 de daño a un enemigo (ignora la defensa). Su próximo golpe pega +5.",
-      costo:["montana"], recarga:0, clases:["fisico", "melee"],
-      efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "ignoraDefensa": true}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
-    { n:"Sacudida paralizante", desc:"15 de daño a un enemigo.",
-      costo:["montana", "agua"], recarga:3, clases:["fisico", "rango"],
-      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
-    { n:"Descarga a distancia", desc:"25 de daño a un enemigo.",
-      costo:["agua", "comodin"], recarga:0, clases:["fisico", "rango"],
-      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
-  ] },
-  // Yugito Nii · Shippuden
+  // Jaguarundi → Yugito Nii · Shippuden
   leon_brenero: { habs: [
     { n:"Emboscada felina", desc:"Entra en modo especial 4 turnos. Recibe 15 menos de daño durante 4 turnos.",
       costo:[], recarga:0, clases:["natural"],
@@ -368,7 +296,7 @@ export const MOVESETS_DOC = {
       costo:["montana"], recarga:1, clases:["fisico", "melee"],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
   ] },
-  // Mei Terumi · Shippuden
+  // Rana dardo verdinegra → Mei Terumi · Shippuden
   rana_verdinegra: { habs: [
     { n:"Batracotoxina", desc:"15 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
       costo:["montana"], recarga:3, clases:["toxina", "natural", "rango"],
@@ -380,7 +308,7 @@ export const MOVESETS_DOC = {
       costo:["montana", "comodin"], recarga:3, clases:["toxina", "natural", "rango"],
       efectos:[{"t": "dano", "v": 10, "obj": "todos", "toxina": true}] },
   ] },
-  // Jūgo · Shippuden
+  // Chancho de monte → Jūgo · Shippuden
   chancho_monte: { habs: [
     { n:"Embestida aturdidora", desc:"40 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades de cuerpo a cuerpo 1 turno.",
       costo:["bosque", "montana"], recarga:0, clases:["fisico", "melee"],
@@ -392,7 +320,7 @@ export const MOVESETS_DOC = {
       costo:["montana", "comodin"], recarga:1, clases:["natural"],
       efectos:[{"t": "defensa", "v": 20, "obj": "aliado", "permanente": true}] },
   ] },
-  // Toroi · Revividos (Edo Tensei)
+  // Mantarraya → Toroi · Revividos (Edo Tensei)
   mantarraya: { habs: [
     { n:"Rociada", desc:"20 de daño a un enemigo.",
       costo:["comodin"], recarga:0, clases:["fisico", "rango"],
@@ -404,31 +332,7 @@ export const MOVESETS_DOC = {
       costo:["montana"], recarga:1, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 10, "obj": "todos", "ignoraDefensa": true}] },
   ] },
-  // Tobirama Senju · Revividos (Edo Tensei)
-  cocodrilo: { habs: [
-    { n:"Proyectil certero", desc:"15 de daño a un enemigo.",
-      costo:["agua"], recarga:0, clases:["fisico", "rango"],
-      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
-    { n:"Mordida y giro", desc:"15 de daño a un enemigo.",
-      costo:["agua", "sabana"], recarga:3, clases:["fisico", "rango"],
-      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
-    { n:"Piel acorazada", desc:"Invulnerable 1 turno.",
-      costo:["sabana"], recarga:3, clases:["instinto"],
-      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
-  ] },
-  // Mū · Revividos (Edo Tensei)
-  geco: { habs: [
-    { n:"Empalada", desc:"25 de daño a un enemigo (ignora la defensa, ignora la invulnerabilidad).",
-      costo:["agua", "comodin"], recarga:0, clases:["natural", "rango"],
-      efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "ignoraDefensa": true, "ignoraInvulnerable": true}] },
-    { n:"Sacudida paralizante", desc:"Recibe 15 menos de daño durante 2 turnos. Cura 15 a sí mismo.",
-      costo:["agua"], recarga:4, clases:["natural"],
-      efectos:[{"t": "reducir", "v": 15, "turnos": 2, "obj": "self"}, {"t": "curar", "v": 15, "obj": "self"}] },
-    { n:"Perforación", desc:"40 de daño a un enemigo (ignora la defensa, ignora la invulnerabilidad).",
-      costo:["agua", "comodin", "comodin"], recarga:1, clases:["natural", "rango"],
-      efectos:[{"t": "dano", "v": 40, "obj": "enemigo", "ignoraDefensa": true, "ignoraInvulnerable": true}] },
-  ] },
-  // Hanzō · Revividos (Edo Tensei)
+  // Salamandra → Hanzō · Revividos (Edo Tensei)
   salamandra: { habs: [
     { n:"Secreción cutánea tóxica", desc:"Gana 30 de defensa destructible.",
       costo:["comodin", "comodin", "comodin"], recarga:6, clases:[],
@@ -440,7 +344,7 @@ export const MOVESETS_DOC = {
       costo:["montana"], recarga:0, clases:["fisico", "toxina"],
       efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "toxina": true}] },
   ] },
-  // Fuguki Suikazan · Revividos (Edo Tensei)
+  // Tiburón martillo → Fuguki Suikazan · Revividos (Edo Tensei)
   tiburon_martillo: { habs: [
     { n:"Punzada profunda", desc:"15 de daño a un enemigo (ignora la defensa).",
       costo:["agua"], recarga:1, clases:["fisico", "rango"],
@@ -452,8 +356,1291 @@ export const MOVESETS_DOC = {
       costo:["agua", "comodin"], recarga:2, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}] },
   ] },
+  // Tapir (Danta) → Hashirama Senju · Revividos (Edo Tensei)
+  danta: { habs: [
+    { n:"Cuero grueso", desc:"Invulnerable 1 turno.",
+      costo:["montana", "comodin"], recarga:2, clases:["natural", "melee"],
+      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
+    { n:"Embestida", desc:"20 de daño a un enemigo.",
+      costo:["montana", "comodin"], recarga:2, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+    { n:"Postura defensiva", desc:"Gana 30 de defensa destructible permanente a todo el equipo.",
+      costo:["montana", "montana"], recarga:5, clases:["fisico"],
+      efectos:[{"t": "defensa", "v": 30, "obj": "equipo", "permanente": true}] },
+  ] },
+  // Delfín nariz de botella → Iruka Umino · Original (Parte 1)
+  delfin: { habs: [
+    { n:"Ecolocalización de impacto", desc:"20 de daño a un enemigo.",
+      costo:["bosque"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+    { n:"Coordinación de manada", desc:"Invulnerable 1 turno a un aliado.",
+      costo:["comodin"], recarga:1, clases:["fisico"],
+      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "aliado"}] },
+    { n:"Proyectil certero", desc:"40 de daño a un enemigo (ignora la invulnerabilidad).",
+      costo:["agua"], recarga:2, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 40, "obj": "enemigo", "ignoraInvulnerable": true}] },
+  ] },
+  // Cocodrilo americano → Tobirama Senju · Revividos (Edo Tensei)
+  cocodrilo: { habs: [
+    { n:"Proyectil certero", desc:"15 de daño a un enemigo.",
+      costo:["agua"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Mordida y giro", desc:"15 de daño a un enemigo.",
+      costo:["agua", "sabana"], recarga:3, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Piel acorazada", desc:"Invulnerable 1 turno.",
+      costo:["sabana"], recarga:3, clases:["instinto"],
+      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
+  ] },
+  // Mariposa morpho → Konan · Shippuden
+  mariposa: { habs: [
+    { n:"Estocada perforante", desc:"25 de daño a un enemigo (ignora la defensa). Su próximo golpe pega +5.",
+      costo:["montana"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "ignoraDefensa": true}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
+    { n:"Sacudida paralizante", desc:"15 de daño a un enemigo.",
+      costo:["montana", "agua"], recarga:3, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Descarga a distancia", desc:"25 de daño a un enemigo.",
+      costo:["agua", "comodin"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
+  ] },
+  // Cangrejo terrestre → Demon Brothers · Original (Parte 1)
+  cangrejo: { habs: [
+    { n:"Pinza inmovilizante", desc:"Aturde sus habilidades físicas 1 turno. Aturde sus habilidades naturales 1 turno.",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}] },
+    { n:"Toxina corrosiva", desc:"30 de daño a un enemigo. Su próximo golpe pega +10.",
+      costo:["comodin", "comodin"], recarga:0, clases:["fisico", "melee", "toxina"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "amplificar", "v": 10, "turnos": 2, "obj": "self"}] },
+    { n:"Caparazón", desc:"Gana 20 de defensa destructible permanente.",
+      costo:["comodin", "comodin"], recarga:1, clases:["natural"],
+      efectos:[{"t": "defensa", "v": 20, "obj": "self", "permanente": true}] },
+  ] },
+  // Colibrí → Hinata Hyūga · Shippuden
+  colibri_talamanca: { habs: [
+    { n:"Picotazo", desc:"20 de daño a un enemigo.",
+      costo:["bosque", "comodin"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+    { n:"Embestida feroz", desc:"15 de daño a TODOS los enemigos. Gana 10 de defensa destructible. Su próximo golpe pega +5.",
+      costo:["agua", "comodin"], recarga:0, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "todos"}, {"t": "defensa", "v": 10, "obj": "self"}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
+    { n:"Golpe demoledor", desc:"Recibe 15 menos de daño durante 4 turnos.",
+      costo:["comodin"], recarga:4, clases:["instinto"],
+      efectos:[{"t": "reducir", "v": 15, "turnos": 4, "obj": "self"}] },
+  ] },
+  // Toboba → Anko Mitarashi · Original (Parte 1)
+  bocaraca: { habs: [
+    { n:"Embestida serpentina", desc:"5 de daño a un enemigo. Su próximo golpe pega +5.",
+      costo:[], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 5, "obj": "enemigo"}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
+    { n:"Ponzoña necrótica", desc:"10 de daño a TODOS los enemigos (toxina: atraviesa la invulnerabilidad).",
+      costo:["agua"], recarga:2, clases:["toxina", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "todos", "toxina": true}] },
+    { n:"Veneno neurotóxico", desc:"20 de daño a un enemigo. 5 de toxina por turno durante 3 turnos a un enemigo.",
+      costo:["agua", "comodin"], recarga:0, clases:["toxina", "fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "danoTurnos", "v": 5, "turnos": 3, "obj": "enemigo"}] },
+  ] },
+  // Geco → Mū · Revividos (Edo Tensei)
+  geco: { habs: [
+    { n:"Empalada", desc:"25 de daño a un enemigo (ignora la defensa, ignora la invulnerabilidad).",
+      costo:["agua", "comodin"], recarga:0, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "ignoraDefensa": true, "ignoraInvulnerable": true}] },
+    { n:"Sacudida paralizante", desc:"Recibe 15 menos de daño durante 2 turnos. Cura 15 a sí mismo.",
+      costo:["agua"], recarga:4, clases:["natural"],
+      efectos:[{"t": "reducir", "v": 15, "turnos": 2, "obj": "self"}, {"t": "curar", "v": 15, "obj": "self"}] },
+    { n:"Perforación", desc:"40 de daño a un enemigo (ignora la defensa, ignora la invulnerabilidad).",
+      costo:["agua", "comodin", "comodin"], recarga:1, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 40, "obj": "enemigo", "ignoraDefensa": true, "ignoraInvulnerable": true}] },
+  ] },
+  // Pez globo → Chōza Akimichi · Original (Parte 1)
+  perezoso: { habs: [
+    { n:"Embate", desc:"5 de daño a un enemigo. Gana 5 de defensa destructible permanente.",
+      costo:["comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 5, "obj": "enemigo"}, {"t": "defensa", "v": 5, "obj": "self", "permanente": true}] },
+    { n:"Dentellada", desc:"15 de daño a un enemigo. Gana 10 de defensa destructible a todo el equipo.",
+      costo:["montana", "comodin"], recarga:3, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}, {"t": "defensa", "v": 10, "obj": "equipo"}] },
+    { n:"Contraataque reflejo", desc:"10 de daño a un enemigo (ignora la invulnerabilidad). Contraataca: quien lo golpee recibe 25.",
+      costo:["montana"], recarga:2, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo", "ignoraInvulnerable": true}, {"t": "contraataque", "v": 25, "obj": "self"}] },
+  ] },
+  // Garrapata → Yoroi Akadō · Original (Parte 1)
+  perezoso_dos: { habs: [
+    { n:"Anclaje", desc:"20 de daño a un enemigo. Cura 20 a sí mismo. Su próximo golpe pega +5. Recibe 5 menos de daño durante 2 turnos.",
+      costo:["bosque", "comodin"], recarga:0, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "curar", "v": 20, "obj": "self"}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}, {"t": "reducir", "v": 5, "turnos": 2, "obj": "self"}] },
+    { n:"Embestida feroz", desc:"15 de daño a un enemigo. Cura 15 a sí mismo. Su próximo golpe pega +5. Recibe 5 menos de daño durante 3 turnos.",
+      costo:["bosque", "comodin", "comodin"], recarga:3, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}, {"t": "curar", "v": 15, "obj": "self"}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}, {"t": "reducir", "v": 5, "turnos": 3, "obj": "self"}] },
+    { n:"Frenesí", desc:"Le roba 1 de energía a un enemigo.",
+      costo:["comodin"], recarga:3, clases:["natural"],
+      efectos:[{"t": "robarEnergia", "n": 1, "obj": "enemigo"}] },
+  ] },
+  // Mono tití → Konohamaru Sarutobi · Shippuden
+  monocara: { habs: [
+    { n:"Golpe demoledor", desc:"25 de daño a un enemigo.",
+      costo:["comodin"], recarga:1, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
+    { n:"Defensa reactiva", desc:"Contraataca: quien lo golpee recibe 25.",
+      costo:["comodin"], recarga:0, clases:["fisico"],
+      efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
+    { n:"Regeneración", desc:"Cura 15 a un aliado.",
+      costo:["comodin"], recarga:1, clases:["fisico"],
+      efectos:[{"t": "curar", "v": 15, "obj": "aliado"}] },
+  ] },
+  // Coyote → Kiba Inuzuka · Shippuden
+  caucel: { habs: [
+    { n:"Embestida feroz", desc:"30 de daño a un enemigo. Su próximo golpe pega +5.",
+      costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
+    { n:"Golpe demoledor", desc:"15 de daño a TODOS los enemigos. Recibe 15 menos de daño durante 3 turnos.",
+      costo:["bosque", "montana"], recarga:3, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "todos"}, {"t": "reducir", "v": 15, "turnos": 3, "obj": "self"}] },
+    { n:"Ponzoña persistente", desc:"Queda expuesto 3 turnos (no puede volverse invulnerable).",
+      costo:[], recarga:0, clases:["toxina", "rango"],
+      efectos:[{"t": "exponer", "turnos": 3, "obj": "enemigo"}] },
+  ] },
+  // Coyote → Kakashi Hatake · Shippuden
+  tigrillo: { habs: [
+    { n:"Contraataque reflejo", desc:"Contraataca: quien lo golpee recibe 25.",
+      costo:["montana"], recarga:2, clases:["natural", "melee"],
+      efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
+    { n:"Aturdimiento", desc:"Lo aturde 1 turno.",
+      costo:["agua", "comodin"], recarga:2, clases:["rango"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Punzada profunda", desc:"50 de daño a un enemigo (ignora la defensa).",
+      costo:["bosque", "agua"], recarga:1, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 50, "obj": "enemigo", "ignoraDefensa": true}] },
+  ] },
+  // Escarabajo rinoceronte → Jirōbō · Revividos (Edo Tensei)
+  saino: { habs: [
+    { n:"Embestida de cuerno", desc:"30 de daño a un enemigo. Su próximo golpe pega +10.",
+      costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "amplificar", "v": 10, "turnos": 2, "obj": "self"}] },
+    { n:"Proyectil certero", desc:"20 de daño a TODOS los enemigos. Su próximo golpe pega +5.",
+      costo:["bosque", "comodin"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "todos"}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
+    { n:"Exoesqueleto acorazado", desc:"Gana 35 de defensa destructible.",
+      costo:["agua", "agua", "comodin"], recarga:6, clases:["natural", "rango"],
+      efectos:[{"t": "defensa", "v": 35, "obj": "self"}] },
+  ] },
+  // Araña de seda dorada → Shikamaru Nara · Shippuden
+  venado: { habs: [
+    { n:"Postura amenazante", desc:"15 de daño a un enemigo.",
+      costo:[], recarga:0, clases:["instinto", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Pelos urticantes", desc:"15 de daño a un enemigo. Queda expuesto 1 turno (no puede volverse invulnerable).",
+      costo:["sabana"], recarga:1, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}, {"t": "exponer", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Sacudida paralizante", desc:"Aturde sus habilidades físicas 1 turno. Aturde sus habilidades naturales 1 turno.",
+      costo:["sabana", "comodin"], recarga:3, clases:["natural", "rango"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "todos", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "todos", "clase": "natural"}] },
+  ] },
+  // Mantis orquídea → Rock Lee · Shippuden
+  cabro_monte: { habs: [
+    { n:"Golpe raptor", desc:"10 de daño a un enemigo. Recibe 10 menos de daño durante 3 turnos. Su próximo golpe pega +15.",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}, {"t": "reducir", "v": 10, "turnos": 3, "obj": "self"}, {"t": "amplificar", "v": 15, "turnos": 2, "obj": "self"}] },
+    { n:"Zarpazo espinado", desc:"30 de daño a un enemigo. Su próximo golpe pega +30.",
+      costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "amplificar", "v": 30, "turnos": 2, "obj": "self"}] },
+    { n:"Mimetismo vegetal", desc:"Le quita los efectos dañinos.",
+      costo:["bosque"], recarga:4, clases:["instinto"],
+      efectos:[{"t": "limpiar", "obj": "self"}] },
+  ] },
+  // Ratonera → Misumi Tsurugi · Original (Parte 1)
+  pizote: { habs: [
+    { n:"Constricción asfixiante", desc:"15 de daño a un enemigo (ignora la invulnerabilidad). Recibe 15 menos de daño durante 1 turnos a un aliado.",
+      costo:["comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo", "ignoraInvulnerable": true}, {"t": "reducir", "v": 15, "turnos": 1, "obj": "aliado"}] },
+    { n:"Contraataque reflejo", desc:"Queda expuesto 2 turnos (no puede volverse invulnerable). Contraataca: quien lo golpee recibe 25.",
+      costo:["comodin", "comodin"], recarga:4, clases:["fisico", "melee"],
+      efectos:[{"t": "exponer", "turnos": 2, "obj": "enemigo"}, {"t": "contraataque", "v": 25, "obj": "self"}] },
+    { n:"Constricción inmovilizante", desc:"20 de daño a un enemigo.",
+      costo:["comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+  ] },
+  // Hormiga león → Gaara · Original (Parte 1)
+  mapache: { habs: [
+    { n:"Trampa de arena", desc:"Aturde sus habilidades físicas 2 turnos. Aturde sus habilidades naturales 2 turnos.",
+      costo:["agua", "comodin"], recarga:2, clases:["fisico", "rango"],
+      efectos:[{"t": "aturdir", "turnos": 2, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 2, "obj": "enemigo", "clase": "natural"}] },
+    { n:"Arena abrasiva", desc:"15 de daño a un enemigo.",
+      costo:[], recarga:2, clases:["fisico"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Foso de arena", desc:"Gana 40 de defensa destructible.",
+      costo:["comodin"], recarga:4, clases:["natural"],
+      efectos:[{"t": "defensa", "v": 40, "obj": "self"}] },
+  ] },
+  // Hormiga león → Rehabilitated Gaara · Original (Parte 1)
+  mapache_cangrejero: { habs: [
+    { n:"Proyectil certero", desc:"15 de daño a un enemigo. Gana 35 de defensa destructible.",
+      costo:["comodin", "comodin"], recarga:3, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}, {"t": "defensa", "v": 35, "obj": "self"}] },
+    { n:"Frenesí", desc:"20 de daño a un enemigo.",
+      costo:["agua"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+    { n:"Descarga a distancia", desc:"15 de daño a TODOS los enemigos.",
+      costo:["agua", "agua"], recarga:4, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "todos"}] },
+  ] },
+  // Salamanqueja → Hayate Gekkō · Original (Parte 1)
+  martilla: { habs: [
+    { n:"Dentellada", desc:"15 de daño a un enemigo.",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Contraataque reflejo", desc:"30 de daño a un enemigo. Contraataca: quien lo golpee recibe 25.",
+      costo:["sabana", "comodin"], recarga:1, clases:["instinto", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "contraataque", "v": 25, "obj": "self"}] },
+    { n:"Embestida feroz", desc:"Recibe 10 menos de daño durante 2 turnos.",
+      costo:["sabana"], recarga:3, clases:["instinto"],
+      efectos:[{"t": "reducir", "v": 10, "turnos": 2, "obj": "self"}] },
+  ] },
+  // Murciélago pescador → C · Shippuden
+  olingo: { habs: [
+    { n:"Ataque por ecolocalización", desc:"20 de daño a un enemigo.",
+      costo:["sabana"], recarga:1, clases:["instinto", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+    { n:"Regeneración", desc:"Cura 25 a un aliado.",
+      costo:["agua"], recarga:0, clases:["natural"],
+      efectos:[{"t": "curar", "v": 25, "obj": "aliado"}] },
+    { n:"Saliva anticoagulante", desc:"35 de daño a un enemigo (ignora la defensa).",
+      costo:["sabana", "comodin"], recarga:1, clases:["toxina", "instinto", "rango"],
+      efectos:[{"t": "dano", "v": 35, "obj": "enemigo", "ignoraDefensa": true}] },
+  ] },
+  // Tiburón punta blanca → Darui · Shippuden
+  tolomuco: { habs: [
+    { n:"Toxina corrosiva", desc:"20 de daño a un enemigo (ignora la defensa, ignora la invulnerabilidad).",
+      costo:["agua", "comodin"], recarga:1, clases:["toxina", "natural", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraDefensa": true, "ignoraInvulnerable": true}] },
+    { n:"Ponzoña persistente", desc:"5 de daño a TODOS los enemigos (toxina: atraviesa la invulnerabilidad).",
+      costo:["comodin"], recarga:1, clases:["toxina", "natural", "rango"],
+      efectos:[{"t": "dano", "v": 5, "obj": "todos", "toxina": true}] },
+    { n:"Dientes serrados", desc:"45 de daño a un enemigo (ignora la defensa). Su próximo golpe pega +5.",
+      costo:["montana", "agua"], recarga:1, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 45, "obj": "enemigo", "ignoraDefensa": true}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
+  ] },
+  // Cangrejo ermitaño → Atsui · Shippuden
+  grison: { habs: [
+    { n:"Ponzoña persistente", desc:"10 de daño a un enemigo (toxina: atraviesa la invulnerabilidad). Recibe 10 menos de daño durante 3 turnos.",
+      costo:["comodin"], recarga:4, clases:["toxina", "natural", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo", "toxina": true}, {"t": "reducir", "v": 10, "turnos": 3, "obj": "self"}] },
+    { n:"Secreción tóxica", desc:"20 de daño a un enemigo (toxina: atraviesa la invulnerabilidad, ignora la invulnerabilidad).",
+      costo:["agua", "comodin"], recarga:1, clases:["toxina", "natural", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "toxina": true, "ignoraInvulnerable": true}] },
+    { n:"Infección supurante", desc:"25 de daño a un enemigo (ignora la defensa). Su próximo golpe pega +10.",
+      costo:["bosque"], recarga:0, clases:["toxina", "fisico", "melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "ignoraDefensa": true}, {"t": "amplificar", "v": 10, "turnos": 2, "obj": "self"}] },
+  ] },
+  // Sábalo → Suigetsu Hōzuki · Shippuden
+  nutria: { habs: [
+    { n:"Embestida feroz", desc:"20 de daño a un enemigo. Gana 10 de defensa destructible.",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "defensa", "v": 10, "obj": "self"}] },
+    { n:"Estocada perforante", desc:"40 de daño a un enemigo (ignora la defensa).",
+      costo:["bosque", "agua"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 40, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Inflado con púas", desc:"Gana 10 de defensa destructible permanente. Invulnerable 1 turno.",
+      costo:["comodin", "comodin"], recarga:4, clases:["natural"],
+      efectos:[{"t": "defensa", "v": 10, "obj": "self", "permanente": true}, {"t": "invulnerable", "turnos": 1, "obj": "self"}] },
+  ] },
+  // Murciélago vampiro → Karin · Shippuden
+  comadreja: { habs: [
+    { n:"Defensa reactiva", desc:"Contraataca: quien lo golpee recibe 25.",
+      costo:["comodin"], recarga:2, clases:["instinto", "rango"],
+      efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
+    { n:"Golpe aturdidor", desc:"30 de daño a un enemigo (ignora la invulnerabilidad). Lo aturde 1 turno.",
+      costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo", "ignoraInvulnerable": true}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Reposo curativo", desc:"Cura 30 a sí mismo.",
+      costo:["montana"], recarga:1, clases:["natural"],
+      efectos:[{"t": "curar", "v": 30, "obj": "self"}] },
+  ] },
+  // Zorro gris → Naruto Uzumaki · Shippuden
+  zorro_pelon: { habs: [
+    { n:"Dentellada", desc:"20 de daño a un enemigo. Su próximo golpe pega +10.",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "amplificar", "v": 10, "turnos": 2, "obj": "self"}] },
+    { n:"Sacudida paralizante", desc:"45 de daño a un enemigo. Lo aturde 1 turno.",
+      costo:["agua", "comodin"], recarga:1, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 45, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Placaje", desc:"Recibe 15 menos de daño durante 4 turnos.",
+      costo:["comodin"], recarga:3, clases:["natural"],
+      efectos:[{"t": "reducir", "v": 15, "turnos": 4, "obj": "self"}] },
+  ] },
+  // Camarón mantis → Asura Path Pain · Shippuden
+  oso_hormiguero: { habs: [
+    { n:"Toxina corrosiva", desc:"15 de daño a un enemigo (ignora la defensa). Se hace 10 de daño (toxina: atraviesa la invulnerabilidad).",
+      costo:["bosque", "comodin"], recarga:2, clases:["toxina", "fisico", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo", "ignoraDefensa": true}, {"t": "dano", "v": 10, "obj": "self", "toxina": true}] },
+    { n:"Proyectil certero", desc:"10 de daño a un enemigo.",
+      costo:["comodin", "comodin"], recarga:3, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}] },
+    { n:"Acopio de energía", desc:"15 de daño a un enemigo.",
+      costo:[], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+  ] },
+  // Luciérnaga → Fukasaku and Shima · Shippuden
+  serafin: { habs: [
+    { n:"Secreción tóxica", desc:"20 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
+      costo:["comodin"], recarga:1, clases:["instinto", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "toxina": true}] },
+    { n:"Postura defensiva", desc:"Invulnerable 1 turno.",
+      costo:["agua"], recarga:2, clases:["fisico"],
+      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
+    { n:"Aturdimiento", desc:"Lo aturde 2 turnos.",
+      costo:["sabana"], recarga:0, clases:["instinto", "rango"],
+      efectos:[{"t": "aturdir", "turnos": 2, "obj": "enemigo"}] },
+  ] },
+  // Sapo común → Dodai · Shippuden
+  tepezcuintle: { habs: [
+    { n:"Golpe aturdidor", desc:"Lo aturde 1 turno.",
+      costo:["montana", "comodin"], recarga:5, clases:["fisico", "rango"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Sacudida paralizante", desc:"20 de daño a un enemigo (ignora la defensa). Lo aturde 1 turno.",
+      costo:["sabana"], recarga:1, clases:["instinto", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraDefensa": true}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Rociada", desc:"35 de daño a un enemigo.",
+      costo:["sabana"], recarga:1, clases:["instinto", "rango"],
+      efectos:[{"t": "dano", "v": 35, "obj": "enemigo"}] },
+  ] },
+  // Saltamontes → Kin Tsuchi · Original (Parte 1)
+  guatusa: { habs: [
+    { n:"Evasión ágil", desc:"15 de daño a un enemigo. Invulnerable 1 turno. Su próximo golpe pega +25.",
+      costo:["comodin"], recarga:0, clases:["instinto", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}, {"t": "invulnerable", "turnos": 1, "obj": "self"}, {"t": "amplificar", "v": 25, "turnos": 2, "obj": "self"}] },
+    { n:"Golpe aturdidor", desc:"10 de daño a un enemigo. Queda expuesto 2 turnos (no puede volverse invulnerable).",
+      costo:["comodin"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}, {"t": "exponer", "turnos": 2, "obj": "enemigo"}] },
+    { n:"Proyectil certero", desc:"Lo aturde 1 turno.",
+      costo:["sabana"], recarga:2, clases:["instinto", "rango"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+  ] },
+  // Grillo → Dosu Kinuta · Original (Parte 1)
+  ardilla: { habs: [
+    { n:"Embate", desc:"20 de daño a un enemigo. Su próximo golpe pega +20. Queda expuesto 2 turnos (no puede volverse invulnerable).",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "amplificar", "v": 20, "turnos": 2, "obj": "self"}, {"t": "exponer", "turnos": 2, "obj": "enemigo"}] },
+    { n:"Toxina corrosiva", desc:"10 de daño a un enemigo. Su próximo golpe pega +10.",
+      costo:["sabana"], recarga:1, clases:["instinto", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}, {"t": "amplificar", "v": 10, "turnos": 2, "obj": "self"}] },
+    { n:"Frenesí", desc:"20 de daño a un enemigo.",
+      costo:["comodin"], recarga:4, clases:["fisico"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+  ] },
+  // Murciélago narigudo → Inoichi Yamanaka · Original (Parte 1)
+  murcielago: { habs: [
+    { n:"Contraataque reflejo", desc:"20 de daño a un enemigo (ignora la invulnerabilidad).",
+      costo:["agua"], recarga:1, clases:["instinto", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraInvulnerable": true}] },
+    { n:"Recuperación", desc:"Cura 10 a todo el equipo.",
+      costo:["agua"], recarga:0, clases:["instinto", "rango"],
+      efectos:[{"t": "curar", "v": 10, "obj": "equipo"}] },
+    { n:"Postura defensiva", desc:"Invulnerable 1 turno.",
+      costo:["comodin"], recarga:4, clases:["instinto", "rango"],
+      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
+  ] },
+  // Babosa gigante → Tsunade · Shippuden
+  manati: { habs: [
+    { n:"Golpe aturdidor", desc:"30 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades de instinto 1 turno.",
+      costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "instinto"}] },
+    { n:"Mucosa regeneradora", desc:"Le quita los efectos dañinos.",
+      costo:["agua", "agua"], recarga:3, clases:["natural"],
+      efectos:[{"t": "limpiar", "obj": "self"}] },
+    { n:"Recuperación", desc:"Cura 5 a sí mismo.",
+      costo:["montana", "agua", "sabana"], recarga:0, clases:[],
+      efectos:[{"t": "curar", "v": 5, "obj": "self"}] },
+  ] },
+  // Pulpo → Killer B · Shippuden
+  ballena: { habs: [
+    { n:"Estocada perforante", desc:"15 de daño a un enemigo (ignora la defensa).",
+      costo:["bosque"], recarga:4, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Punzada profunda", desc:"20 de daño a un enemigo (ignora la defensa).",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Nube de tinta", desc:"20 de daño a un enemigo (ignora la defensa).",
+      costo:["agua"], recarga:2, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraDefensa": true}] },
+  ] },
+  // Cigarra → Tayuya · Original (Parte 1)
+  yiguirro: { habs: [
+    { n:"Descarga a distancia", desc:"15 de daño a TODOS los enemigos. Recibe 10 menos de daño durante 2 turnos.",
+      costo:["sabana", "comodin"], recarga:1, clases:["rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "todos"}, {"t": "reducir", "v": 10, "turnos": 2, "obj": "self"}] },
+    { n:"Ponzoña persistente", desc:"10 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
+      costo:["comodin"], recarga:0, clases:["rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo", "toxina": true}] },
+    { n:"Sacudida paralizante", desc:"Lo aturde 1 turno.",
+      costo:["sabana", "comodin"], recarga:4, clases:["instinto", "rango"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+  ] },
+  // Urraca copetona → Itachi Uchiha · Shippuden
+  quetzal: { habs: [
+    { n:"Toxina corrosiva", desc:"15 de daño a un enemigo (toxina: atraviesa la invulnerabilidad). Se hace 15 de daño (toxina: atraviesa la invulnerabilidad).",
+      costo:["montana"], recarga:0, clases:["instinto"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo", "toxina": true}, {"t": "dano", "v": 15, "obj": "self", "toxina": true}] },
+    { n:"Ponzoña persistente", desc:"5 de daño a TODOS los enemigos (toxina: atraviesa la invulnerabilidad, ignora la invulnerabilidad).",
+      costo:["agua"], recarga:1, clases:["toxina", "rango"],
+      efectos:[{"t": "dano", "v": 5, "obj": "todos", "toxina": true, "ignoraInvulnerable": true}] },
+    { n:"Golpe aturdidor", desc:"20 de daño a un enemigo. Lo aturde 1 turno.",
+      costo:["sabana"], recarga:1, clases:["instinto", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+  ] },
+  // Sapo dorado → Sage Mode Naruto · Shippuden
+  quetzaldorado: { habs: [
+    { n:"Toxina paralizante", desc:"20 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades de cuerpo a cuerpo 1 turno.",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "melee"}] },
+    { n:"Recuperación", desc:"Cura 25 a sí mismo. Le roba 1 de energía a un enemigo.",
+      costo:["sabana"], recarga:2, clases:["natural"],
+      efectos:[{"t": "curar", "v": 25, "obj": "self"}, {"t": "robarEnergia", "n": 1, "obj": "enemigo"}] },
+    { n:"Golpe aturdidor", desc:"Lo aturde 1 turno.",
+      costo:["comodin"], recarga:0, clases:["natural", "melee"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "todos"}] },
+  ] },
+  // Hormiga de fuego → Pakura · Revividos (Edo Tensei)
+  lapa: { habs: [
+    { n:"Toxina corrosiva", desc:"20 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
+      costo:["montana"], recarga:2, clases:["natural", "rango", "toxina"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "toxina": true}] },
+    { n:"Ponzoña persistente", desc:"20 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
+      costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee", "toxina"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "toxina": true}] },
+    { n:"Secreción tóxica", desc:"40 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
+      costo:["montana", "montana"], recarga:0, clases:["natural", "melee", "toxina"],
+      efectos:[{"t": "dano", "v": 40, "obj": "enemigo", "toxina": true}] },
+  ] },
+  // Hormiga de fuego → Torune Aburame · Shippuden
+  lapa_verde: { habs: [
+    { n:"Poneratoxina", desc:"5 de daño a un enemigo (toxina: atraviesa la invulnerabilidad). 5 de toxina por turno durante 5 turnos a un enemigo. Gana 15 de defensa destructible permanente.",
+      costo:["montana"], recarga:0, clases:["toxina", "melee"],
+      efectos:[{"t": "dano", "v": 5, "obj": "enemigo", "toxina": true}, {"t": "danoTurnos", "v": 5, "turnos": 5, "obj": "enemigo"}, {"t": "defensa", "v": 15, "obj": "self", "permanente": true}] },
+    { n:"Ácido fórmico", desc:"5 de daño a un enemigo (toxina: atraviesa la invulnerabilidad). 5 de toxina por turno durante 5 turnos a un enemigo. Gana 30 de defensa destructible permanente.",
+      costo:["montana", "montana"], recarga:0, clases:["toxina", "melee"],
+      efectos:[{"t": "dano", "v": 5, "obj": "enemigo", "toxina": true}, {"t": "danoTurnos", "v": 5, "turnos": 5, "obj": "enemigo"}, {"t": "defensa", "v": 30, "obj": "self", "permanente": true}] },
+    { n:"Ponzoña", desc:"30 de daño a un enemigo.",
+      costo:["montana", "montana", "comodin"], recarga:2, clases:["toxina", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}] },
+  ] },
+  // Escarabajo bombardero → Deidara · Revividos (Edo Tensei)
+  tucan: { habs: [
+    { n:"Descarga explosiva", desc:"15 de daño a un enemigo.",
+      costo:["comodin"], recarga:0, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Postura defensiva", desc:"Gana 35 de defensa destructible.",
+      costo:["agua", "comodin"], recarga:4, clases:["natural", "rango"],
+      efectos:[{"t": "defensa", "v": 35, "obj": "self"}] },
+    { n:"Rociado cáustico", desc:"10 de daño a un enemigo (toxina: atraviesa la invulnerabilidad, ignora la invulnerabilidad).",
+      costo:["montana", "agua"], recarga:0, clases:["toxina", "natural", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo", "toxina": true, "ignoraInvulnerable": true}] },
+  ] },
+  // Escarabajo bombardero → Gari · Revividos (Edo Tensei)
+  tucan_castano: { habs: [
+    { n:"Cuerno perforante", desc:"20 de daño a un enemigo (ignora la defensa, ignora la invulnerabilidad).",
+      costo:["comodin"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraDefensa": true, "ignoraInvulnerable": true}] },
+    { n:"Embestida feroz", desc:"25 de daño a un enemigo.",
+      costo:["montana"], recarga:2, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
+    { n:"Estocada perforante", desc:"35 de daño a un enemigo (ignora la defensa).",
+      costo:["montana", "comodin"], recarga:1, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 35, "obj": "enemigo", "ignoraDefensa": true}] },
+  ] },
+  // Escarabajo joya → Ginkaku · Revividos (Edo Tensei)
+  tucancillo: { habs: [
+    { n:"Punzada profunda", desc:"25 de daño a un enemigo (ignora la defensa).",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Golpe aturdidor", desc:"Aturde sus habilidades físicas 1 turno. Aturde sus habilidades de cuerpo a cuerpo 1 turno.",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "melee"}] },
+    { n:"Toxina corrosiva", desc:"10 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
+      costo:["comodin"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo", "toxina": true}] },
+  ] },
+  // Escarabajo bombardero → Jinpachi Munashi · Revividos (Edo Tensei)
+  cusingo: { habs: [
+    { n:"Rociado cáustico", desc:"30 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
+      costo:["bosque"], recarga:0, clases:["natural", "melee", "toxina"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo", "toxina": true}] },
+    { n:"Guardia férrea", desc:"Gana 10 de defensa destructible permanente.",
+      costo:["comodin"], recarga:1, clases:["fisico"],
+      efectos:[{"t": "defensa", "v": 10, "obj": "self", "permanente": true}] },
+    { n:"Secreción tóxica", desc:"10 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
+      costo:["comodin"], recarga:2, clases:["fisico", "toxina"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo", "toxina": true}] },
+  ] },
+  // Elanio → Temari · Shippuden
+  pajaro_campana: { habs: [
+    { n:"Vuelo de caza", desc:"20 de daño a un enemigo.",
+      costo:["agua"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+    { n:"Proyectil certero", desc:"35 de daño a TODOS los enemigos.",
+      costo:["agua", "comodin", "comodin"], recarga:2, clases:["rango"],
+      efectos:[{"t": "dano", "v": 35, "obj": "todos"}] },
+    { n:"Descarga a distancia", desc:"Invulnerable 1 turno a todo el equipo.",
+      costo:["agua", "agua"], recarga:5, clases:["fisico", "rango"],
+      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "equipo"}] },
+  ] },
+  // Araña de seda dorada → Maki · Shippuden
+  oropendola: { habs: [
+    { n:"Aturdimiento", desc:"Aturde sus habilidades físicas 1 turno. Aturde sus habilidades de cuerpo a cuerpo 1 turno.",
+      costo:["comodin"], recarga:2, clases:["fisico", "rango"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "melee"}] },
+    { n:"Estocada perforante", desc:"20 de daño a un enemigo (ignora la defensa).",
+      costo:["agua"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Mordida paralizante", desc:"Lo aturde 2 turnos.",
+      costo:["agua", "sabana"], recarga:3, clases:["fisico", "rango"],
+      efectos:[{"t": "aturdir", "turnos": 2, "obj": "enemigo"}] },
+  ] },
+  // Colibrí → Hinata Hyūga · Shippuden
+  ermitano: { habs: [
+    { n:"Arremetida salvaje", desc:"10 de daño a un enemigo. Su próximo golpe pega +10.",
+      costo:["comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}, {"t": "amplificar", "v": 10, "turnos": 2, "obj": "self"}] },
+    { n:"Placaje brutal", desc:"30 de daño a un enemigo.",
+      costo:["montana", "agua"], recarga:0, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}] },
+    { n:"Metabolismo acelerado", desc:"20 de daño a un enemigo.",
+      costo:["comodin"], recarga:4, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+  ] },
+  // Pez aguja → Kushimaru Kuriarare · Revividos (Edo Tensei)
+  jacamar: { habs: [
+    { n:"Estocada de aguja", desc:"20 de daño a un enemigo (ignora la defensa). Su próximo golpe pega +5.",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraDefensa": true}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
+    { n:"Perforación", desc:"20 de daño a TODOS los enemigos (ignora la defensa).",
+      costo:["comodin", "comodin"], recarga:3, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "todos", "ignoraDefensa": true}] },
+    { n:"Sacudida paralizante", desc:"15 de daño a TODOS los enemigos. Lo aturde 1 turno.",
+      costo:[], recarga:2, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "todos"}, {"t": "aturdir", "turnos": 1, "obj": "todos"}] },
+  ] },
+  // Mochuelo → Hanabi Hyūga · Original (Parte 1)
+  momoto: { habs: [
+    { n:"Talonazo", desc:"15 de daño a un enemigo.",
+      costo:["bosque"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Golpe de garras", desc:"15 de daño a un enemigo.",
+      costo:["bosque"], recarga:1, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Impacto aturdidor", desc:"Su próximo golpe pega +5.",
+      costo:["comodin"], recarga:4, clases:["instinto"],
+      efectos:[{"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
+  ] },
+  // Avispa alfarera → Fū Yamanaka · Shippuden
+  tangara_azul: { habs: [
+    { n:"Embestida feroz", desc:"25 de daño a un enemigo. Su próximo golpe pega +15.",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}, {"t": "amplificar", "v": 15, "turnos": 2, "obj": "self"}] },
+    { n:"Postura defensiva", desc:"20 de daño a un enemigo.",
+      costo:["sabana"], recarga:3, clases:["natural"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+    { n:"Represalia", desc:"Contraataca: quien lo golpee recibe 25.",
+      costo:["sabana"], recarga:3, clases:["instinto"],
+      efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
+  ] },
+  // Escarabajo Hércules → Kinkaku · Revividos (Edo Tensei)
+  tangara_dorada: { habs: [
+    { n:"Ponzoña persistente", desc:"25 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
+      costo:["agua", "comodin"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "toxina": true}] },
+    { n:"Embestida de cuerno", desc:"35 de daño a un enemigo.",
+      costo:["agua"], recarga:2, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 35, "obj": "enemigo"}] },
+    { n:"Secreción tóxica", desc:"20 de daño a TODOS los enemigos (toxina: atraviesa la invulnerabilidad).",
+      costo:["agua", "comodin"], recarga:1, clases:["toxina", "natural", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "todos", "toxina": true}] },
+  ] },
+  // Gavilán blanco → Baki · Original (Parte 1)
+  bienteveo: { habs: [
+    { n:"Estocada perforante", desc:"20 de daño a un enemigo (ignora la defensa).",
+      costo:["sabana"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Punzada profunda", desc:"40 de daño a un enemigo (ignora la defensa).",
+      costo:["agua", "sabana"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 40, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Plumaje erizado", desc:"Gana 50 de defensa destructible permanente a un aliado.",
+      costo:["comodin", "comodin"], recarga:6, clases:["fisico"],
+      efectos:[{"t": "defensa", "v": 50, "obj": "aliado", "permanente": true}] },
+  ] },
+  // Raya látigo → Haku · Revividos (Edo Tensei)
+  garza: { habs: [
+    { n:"Carga veloz", desc:"30 de daño a TODOS los enemigos.",
+      costo:["montana", "comodin"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 30, "obj": "todos"}] },
+    { n:"Latigazo caudal", desc:"Lo aturde 1 turno.",
+      costo:["agua"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Evasión ágil", desc:"Invulnerable 1 turno.",
+      costo:["montana", "agua"], recarga:6, clases:["natural"],
+      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
+  ] },
+  // Raya látigo → Haku · Revividos (Edo Tensei)
+  espatula: { habs: [
+    { n:"Golpe aturdidor", desc:"10 de daño a un enemigo (ignora la defensa).",
+      costo:["montana"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Proyectil certero", desc:"20 de daño a un enemigo.",
+      costo:["agua"], recarga:2, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+    { n:"Recuperación", desc:"Gana 20 de defensa destructible permanente.",
+      costo:["montana", "agua"], recarga:6, clases:["natural"],
+      efectos:[{"t": "defensa", "v": 20, "obj": "self", "permanente": true}] },
+  ] },
+  // Langosta → Jinin Akebino · Revividos (Edo Tensei)
+  jabiru: { habs: [
+    { n:"Pinza defensiva", desc:"15 de daño a un enemigo (ignora la defensa).",
+      costo:["comodin"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Tenazazo", desc:"25 de daño a un enemigo.",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
+    { n:"Golpe aturdidor", desc:"35 de daño a un enemigo (ignora la invulnerabilidad).",
+      costo:["bosque", "comodin"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 35, "obj": "enemigo", "ignoraInvulnerable": true}] },
+  ] },
+  // Pez sapo → Gengetsu Hōzuki · Revividos (Edo Tensei)
+  tantalo: { habs: [
+    { n:"Represalia", desc:"Gana 80 de defensa destructible.",
+      costo:["agua", "sabana", "comodin"], recarga:5, clases:[],
+      efectos:[{"t": "defensa", "v": 80, "obj": "self"}] },
+    { n:"Punzada profunda", desc:"10 de daño a un enemigo (ignora la defensa).",
+      costo:["comodin"], recarga:0, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Recuperación", desc:"25 de daño a un enemigo.",
+      costo:["agua", "comodin"], recarga:3, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
+  ] },
+  // Estrella de mar → Hidan · Shippuden
+  ibis: { habs: [
+    { n:"Cuerpo inmortal", desc:"15 de daño a un enemigo.",
+      costo:[], recarga:0, clases:["fisico"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Golpe aturdidor", desc:"35 de daño a un enemigo (ignora la defensa). Lo aturde 1 turno.",
+      costo:["bosque", "comodin"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 35, "obj": "enemigo", "ignoraDefensa": true}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Rebrote de brazo", desc:"20 de daño a un enemigo.",
+      costo:["comodin"], recarga:0, clases:["instinto"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+  ] },
+  // Armadillo → Chōji Akimichi · Shippuden
+  pelicano: { habs: [
+    { n:"Golpe demoledor", desc:"30 de daño a un enemigo.",
+      costo:["bosque", "comodin", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}] },
+    { n:"Defensa reactiva", desc:"15 de daño a un enemigo.",
+      costo:["montana", "comodin", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Frenesí", desc:"15 de daño a un enemigo.",
+      costo:[], recarga:0, clases:["natural"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+  ] },
+  // Halcón peregrino → Minato Namikaze · Revividos (Edo Tensei)
+  fragata: { habs: [
+    { n:"Embestida feroz", desc:"30 de daño a un enemigo (ignora la invulnerabilidad).",
+      costo:["sabana", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo", "ignoraInvulnerable": true}] },
+    { n:"Caída en picada", desc:"Gana 1 de energía.",
+      costo:["agua"], recarga:3, clases:["natural", "rango"],
+      efectos:[{"t": "darEnergia", "tipo": "comodin", "obj": "self"}] },
+    { n:"Golpe demoledor", desc:"30 de daño a un enemigo.",
+      costo:["agua", "sabana"], recarga:6, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}] },
+  ] },
+  // Águila solitaria → Nagato · Revividos (Edo Tensei)
+  caracara: { habs: [
+    { n:"Embate aéreo", desc:"Recibe 10 menos de daño durante 3 turnos.",
+      costo:["montana"], recarga:4, clases:[],
+      efectos:[{"t": "reducir", "v": 10, "turnos": 3, "obj": "self"}] },
+    { n:"Empalada", desc:"20 de daño a un enemigo (ignora la defensa).",
+      costo:["sabana", "comodin"], recarga:0, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Acicalado", desc:"Cura 15 a sí mismo.",
+      costo:["montana", "agua", "sabana"], recarga:0, clases:["instinto"],
+      efectos:[{"t": "curar", "v": 15, "obj": "self"}] },
+  ] },
+  // Zopilote rey → Ibiki Morino · Original (Parte 1)
+  zopilote_negro: { habs: [
+    { n:"Talonazo", desc:"Recibe 10 menos de daño durante 2 turnos.",
+      costo:["comodin"], recarga:0, clases:["instinto", "melee"],
+      efectos:[{"t": "reducir", "v": 10, "turnos": 2, "obj": "self"}] },
+    { n:"Pico desgarrador", desc:"25 de daño a un enemigo (ignora la defensa). Gana 30 de defensa destructible permanente a todo el equipo.",
+      costo:["agua", "comodin"], recarga:3, clases:["melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "ignoraDefensa": true}, {"t": "defensa", "v": 30, "obj": "equipo", "permanente": true}] },
+    { n:"Estocada de talones", desc:"25 de daño a un enemigo (ignora la defensa). Gana 30 de defensa destructible permanente.",
+      costo:["agua", "comodin"], recarga:3, clases:["melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "ignoraDefensa": true}, {"t": "defensa", "v": 30, "obj": "self", "permanente": true}] },
+  ] },
+  // Garrapata → Preta Path Pain · Shippuden
+  zopilote_rojo: { habs: [
+    { n:"Succión de chakra", desc:"Le roba 1 de energía a un enemigo.",
+      costo:["agua", "comodin"], recarga:2, clases:["natural", "rango"],
+      efectos:[{"t": "robarEnergia", "n": 1, "obj": "enemigo"}] },
+    { n:"Golpe demoledor", desc:"25 de daño a un enemigo.",
+      costo:[], recarga:1, clases:["melee", "natural"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
+    { n:"Instinto agudizado", desc:"Le roba 1 de energía a un enemigo.",
+      costo:["comodin"], recarga:1, clases:["natural", "melee"],
+      efectos:[{"t": "robarEnergia", "n": 1, "obj": "enemigo"}] },
+  ] },
+  // Viuda negra → Puppet Master Kankurō · Shippuden
+  carpintero: { habs: [
+    { n:"Proyectil certero", desc:"15 de daño a un enemigo.",
+      costo:["comodin", "comodin"], recarga:2, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Sacudida paralizante", desc:"Lo aturde 1 turno.",
+      costo:["comodin"], recarga:5, clases:["fisico", "rango"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Represalia", desc:"Gana 40 de defensa destructible permanente a todo el equipo.",
+      costo:["comodin", "comodin", "comodin"], recarga:5, clases:["fisico"],
+      efectos:[{"t": "defensa", "v": 40, "obj": "equipo", "permanente": true}] },
+  ] },
+  // Mantis orquídea → Drunken Lee · Original (Parte 1)
+  saltarin: { habs: [
+    { n:"Golpe demoledor", desc:"20 de daño a un enemigo (ignora la invulnerabilidad).",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraInvulnerable": true}] },
+    { n:"Contraataque reflejo", desc:"Contraataca: quien lo golpee recibe 25.",
+      costo:["comodin"], recarga:2, clases:["fisico", "melee"],
+      efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
+    { n:"Arremetida salvaje", desc:"15 de daño a un enemigo.",
+      costo:["comodin", "comodin"], recarga:3, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+  ] },
+  // Búho de anteojos → Neji Hyūga · Shippuden
+  trogon: { habs: [
+    { n:"Cabezazo", desc:"25 de daño a un enemigo.",
+      costo:["bosque", "comodin"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
+    { n:"Repliegue", desc:"15 de daño a TODOS los enemigos. Invulnerable 1 turno.",
+      costo:["montana"], recarga:1, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "todos"}, {"t": "invulnerable", "turnos": 1, "obj": "self"}] },
+    { n:"Coletazo", desc:"40 de daño a un enemigo.",
+      costo:["bosque", "montana"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 40, "obj": "enemigo"}] },
+  ] },
+  // Barracuda → Chōjūrō · Shippuden
+  martin_pescador: { habs: [
+    { n:"Estocada de rostro", desc:"10 de daño a TODOS los enemigos (ignora la defensa, ignora la invulnerabilidad).",
+      costo:["agua"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "todos", "ignoraDefensa": true, "ignoraInvulnerable": true}] },
+    { n:"Picotazo", desc:"50 de daño a un enemigo (ignora la defensa).",
+      costo:["bosque", "agua"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 50, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Defensa reactiva", desc:"20 de daño a un enemigo (ignora la defensa). Contraataca: quien lo golpee recibe 25.",
+      costo:["bosque"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraDefensa": true}, {"t": "contraataque", "v": 25, "obj": "self"}] },
+  ] },
+  // Barracuda → Ameyuri Ringo · Revividos (Edo Tensei)
+  anhinga: { habs: [
+    { n:"Tetrodotoxina", desc:"5 de daño a TODOS los enemigos (toxina: atraviesa la invulnerabilidad).",
+      costo:["agua", "comodin"], recarga:4, clases:["toxina", "natural", "rango"],
+      efectos:[{"t": "dano", "v": 5, "obj": "todos", "toxina": true}] },
+    { n:"Toxina corrosiva", desc:"30 de daño a un enemigo.",
+      costo:["agua", "comodin"], recarga:0, clases:["toxina", "natural", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}] },
+    { n:"Empalada", desc:"30 de daño a TODOS los enemigos (ignora la defensa). Su próximo golpe pega +10.",
+      costo:["agua", "agua"], recarga:4, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 30, "obj": "todos", "ignoraDefensa": true}, {"t": "amplificar", "v": 10, "turnos": 2, "obj": "self"}] },
+  ] },
+  // Estucurú → Hiashi Hyūga · Original (Parte 1)
+  tinamu: { habs: [
+    { n:"Embate aéreo", desc:"20 de daño a un enemigo.",
+      costo:["bosque", "comodin"], recarga:2, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+    { n:"Zarpazo de garras", desc:"15 de daño a un enemigo.",
+      costo:["montana", "comodin"], recarga:3, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Contraataque reflejo", desc:"Contraataca: quien lo golpee recibe 25.",
+      costo:["montana"], recarga:3, clases:["natural", "melee"],
+      efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
+  ] },
+  // Chinche asesina → Sakon and Ukon · Original (Parte 1)
+  chachalaca: { habs: [
+    { n:"Embate", desc:"40 de daño a un enemigo.",
+      costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 40, "obj": "enemigo"}] },
+    { n:"Saliva tóxica", desc:"20 de daño a un enemigo (toxina: atraviesa la invulnerabilidad, ignora la invulnerabilidad). Recibe 15 menos de daño durante 2 turnos.",
+      costo:["montana", "montana"], recarga:0, clases:["toxina"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "toxina": true, "ignoraInvulnerable": true}, {"t": "reducir", "v": 15, "turnos": 2, "obj": "self"}] },
+    { n:"Recuperación", desc:"Cura 30 a sí mismo.",
+      costo:["comodin", "comodin"], recarga:2, clases:["fisico"],
+      efectos:[{"t": "curar", "v": 30, "obj": "self"}] },
+  ] },
+  // Calamar → Sai · Shippuden
+  loro: { habs: [
+    { n:"Tentáculos", desc:"30 de daño a un enemigo. Gana 20 de defensa destructible.",
+      costo:["sabana", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "defensa", "v": 20, "obj": "self"}] },
+    { n:"Mordida de pico", desc:"Aturde sus habilidades físicas 1 turno. Aturde sus habilidades naturales 1 turno.",
+      costo:["sabana"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}] },
+    { n:"Camuflaje cromático", desc:"Invulnerable 1 turno a todo el equipo. Gana 1 de energía.",
+      costo:["comodin", "comodin"], recarga:3, clases:["instinto"],
+      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "equipo"}, {"t": "darEnergia", "tipo": "comodin", "obj": "self"}] },
+  ] },
+  // Sapo dorado → Sage Mode Jiraiya · Shippuden
+  rana_ojos_rojos: { habs: [
+    { n:"Represalia", desc:"20 de daño a un enemigo. 15 de daño a un enemigo (ignora la defensa).",
+      costo:["agua", "comodin"], recarga:0, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "dano", "v": 15, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Lengua pegajosa", desc:"15 de daño a TODOS los enemigos. Invulnerable 1 turno.",
+      costo:["bosque"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "todos"}, {"t": "invulnerable", "turnos": 1, "obj": "self"}] },
+    { n:"Embate", desc:"45 de daño a un enemigo. Queda expuesto 1 turno (no puede volverse invulnerable).",
+      costo:["bosque", "agua"], recarga:1, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 45, "obj": "enemigo"}, {"t": "exponer", "turnos": 1, "obj": "enemigo"}] },
+  ] },
+  // Sapo marino → Kurotsuchi · Shippuden
+  ranadardo: { habs: [
+    { n:"Descarga a distancia", desc:"25 de daño a un enemigo.",
+      costo:["montana"], recarga:1, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
+    { n:"Toxina paralizante", desc:"20 de daño a un enemigo.",
+      costo:["agua"], recarga:0, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+    { n:"Carga veloz", desc:"15 de daño a TODOS los enemigos.",
+      costo:["montana", "comodin"], recarga:2, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "todos"}] },
+  ] },
+  // Tortuga candado → Izumo and Kotetsu · Original (Parte 1)
+  rana_lechera: { habs: [
+    { n:"Golpe aturdidor", desc:"30 de daño a un enemigo.",
+      costo:["comodin", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}] },
+    { n:"Sacudida paralizante", desc:"Lo aturde 1 turno.",
+      costo:["agua"], recarga:2, clases:["rango"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Mordida", desc:"65 de daño a un enemigo.",
+      costo:["bosque"], recarga:2, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 65, "obj": "enemigo"}] },
+  ] },
+  // Camarón pistola → Utakata · Shippuden
+  rana_tungara: { habs: [
+    { n:"Pinza perforante", desc:"15 de daño a un enemigo (ignora la defensa). Su próximo golpe pega +5.",
+      costo:["agua"], recarga:0, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo", "ignoraDefensa": true}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
+    { n:"Ponzoña persistente", desc:"10 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
+      costo:["agua"], recarga:0, clases:["natural", "rango", "toxina"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo", "toxina": true}] },
+    { n:"Secreción tóxica", desc:"Cura 25 a sí mismo.",
+      costo:["montana", "comodin"], recarga:3, clases:["natural"],
+      efectos:[{"t": "curar", "v": 25, "obj": "self"}] },
+  ] },
+  // Puma → A · Revividos (Edo Tensei)
+  rana_gladiadora: { habs: [
+    { n:"Mordida en la nuca", desc:"Lo aturde 1 turno.",
+      costo:["comodin"], recarga:0, clases:["natural", "melee"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Infección supurante", desc:"20 de daño a un enemigo.",
+      costo:["agua"], recarga:8, clases:["natural"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+    { n:"Embestida feroz", desc:"20 de daño a un enemigo. Su próximo golpe pega +5.",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
+  ] },
+  // Mantis religiosa → Omoi · Shippuden
+  rana_payaso: { habs: [
+    { n:"Defensa reactiva", desc:"20 de daño a un enemigo (ignora la defensa). Contraataca: quien lo golpee recibe 25.",
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraDefensa": true}, {"t": "contraataque", "v": 25, "obj": "self"}] },
+    { n:"Toxina corrosiva", desc:"25 de daño a un enemigo.",
+      costo:["agua"], recarga:1, clases:["natural", "melee", "toxina"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
+    { n:"Proyectil certero", desc:"20 de daño a un enemigo (ignora la invulnerabilidad).",
+      costo:["comodin"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraInvulnerable": true}] },
+  ] },
+  // Escorpión de corteza → Rasa · Revividos (Edo Tensei)
+  iguana: { habs: [
+    { n:"Carga veloz", desc:"10 de daño a un enemigo.",
+      costo:["agua"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}] },
+    { n:"Rociada", desc:"35 de daño a un enemigo.",
+      costo:["agua", "agua"], recarga:2, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 35, "obj": "enemigo"}] },
+    { n:"Defensa reactiva", desc:"Contraataca: quien lo golpee recibe 25.",
+      costo:["agua"], recarga:2, clases:["fisico", "rango"],
+      efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
+  ] },
+  // Escorpión de corteza → Shukaku Gaara · Original (Parte 1)
+  garrobo: { habs: [
+    { n:"Pinzas trituradoras", desc:"30 de daño a un enemigo. Gana 10 de defensa destructible permanente.",
+      costo:["montana", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "defensa", "v": 10, "obj": "self", "permanente": true}] },
+    { n:"Pinza defensiva", desc:"10 de daño a un enemigo. Contraataca: quien lo golpee recibe 25.",
+      costo:["montana"], recarga:2, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}, {"t": "contraataque", "v": 25, "obj": "self"}] },
+    { n:"Exoesqueleto", desc:"Gana 10 de defensa destructible permanente.",
+      costo:["comodin", "comodin"], recarga:6, clases:["instinto"],
+      efectos:[{"t": "defensa", "v": 10, "obj": "self", "permanente": true}] },
+  ] },
+  // Avispa esmeralda → Ino Yamanaka · Shippuden
+  anolis: { habs: [
+    { n:"Veneno de control", desc:"30 de daño a un enemigo (ignora la defensa, ignora la invulnerabilidad). Lo aturde 1 turno. Queda expuesto 1 turno (no puede volverse invulnerable).",
+      costo:["sabana", "comodin"], recarga:0, clases:["instinto", "rango"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo", "ignoraDefensa": true, "ignoraInvulnerable": true}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}, {"t": "exponer", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Picadura paralizante", desc:"Lo aturde 4 turnos. Queda expuesto 4 turnos (no puede volverse invulnerable).",
+      costo:["sabana", "sabana"], recarga:3, clases:["instinto", "rango"],
+      efectos:[{"t": "aturdir", "turnos": 4, "obj": "enemigo"}, {"t": "exponer", "turnos": 4, "obj": "enemigo"}] },
+    { n:"Frenesí", desc:"20 de daño a un enemigo.",
+      costo:["comodin"], recarga:1, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+  ] },
+  // Morena → Zabuza Momochi · Revividos (Edo Tensei)
+  caiman: { habs: [
+    { n:"Doble mandíbula", desc:"30 de daño a un enemigo (ignora la defensa).",
+      costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Embate aturdidor", desc:"10 de daño a TODOS los enemigos. Lo aturde 1 turno.",
+      costo:["agua"], recarga:3, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "todos"}, {"t": "aturdir", "turnos": 1, "obj": "todos"}] },
+    { n:"Carga veloz", desc:"Recibe 5 menos de daño durante 2 turnos.",
+      costo:["sabana"], recarga:3, clases:["natural", "rango"],
+      efectos:[{"t": "reducir", "v": 5, "turnos": 2, "obj": "self"}] },
+  ] },
+  // Cascabel muda → Orochimaru · Shippuden
+  lora: { habs: [
+    { n:"Colmillos retráctiles", desc:"25 de daño a un enemigo (ignora la defensa).",
+      costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Veneno hemotóxico", desc:"15 de daño a un enemigo (toxina: atraviesa la invulnerabilidad, ignora la invulnerabilidad).",
+      costo:[], recarga:3, clases:["toxina", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo", "toxina": true, "ignoraInvulnerable": true}] },
+    { n:"Latigazo veloz", desc:"45 de daño a un enemigo (ignora la invulnerabilidad).",
+      costo:["bosque", "montana", "agua"], recarga:0, clases:["melee"],
+      efectos:[{"t": "dano", "v": 45, "obj": "enemigo", "ignoraInvulnerable": true}] },
+  ] },
+  // Cascabel muda → White Snake Orochimaru · Shippuden
+  matabuey: { habs: [
+    { n:"Recuperación", desc:"35 de daño a un enemigo. Cura 35 a sí mismo.",
+      costo:["bosque", "montana"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 35, "obj": "enemigo"}, {"t": "curar", "v": 35, "obj": "self"}] },
+    { n:"Mordida neurotóxica", desc:"15 de daño a un enemigo.",
+      costo:["agua", "sabana"], recarga:3, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Regeneración", desc:"Invulnerable 1 turno a un aliado.",
+      costo:["montana", "agua"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "aliado"}] },
+  ] },
+  // Raya redonda → Shigure · Original (Parte 1)
+  serpiente_mar: { habs: [
+    { n:"Frenesí", desc:"15 de daño a un enemigo.",
+      costo:[], recarga:0, clases:["fisico"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Proyectil certero", desc:"15 de daño a TODOS los enemigos (ignora la invulnerabilidad).",
+      costo:["comodin"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "todos", "ignoraInvulnerable": true}] },
+    { n:"Descarga a distancia", desc:"15 de daño a un enemigo.",
+      costo:["comodin", "comodin", "comodin", "comodin"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+  ] },
+  // Boa → Yamato · Shippuden
+  mica: { habs: [
+    { n:"Regeneración", desc:"25 de daño a un enemigo.",
+      costo:["montana", "comodin"], recarga:0, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
+    { n:"Defensa reactiva", desc:"20 de daño a un enemigo. Gana 20 de defensa destructible permanente a un aliado.",
+      costo:["montana"], recarga:2, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "defensa", "v": 20, "obj": "aliado", "permanente": true}] },
+    { n:"Postura defensiva", desc:"Gana 20 de defensa destructible permanente a un aliado.",
+      costo:["montana", "agua"], recarga:4, clases:["natural", "rango"],
+      efectos:[{"t": "defensa", "v": 20, "obj": "aliado", "permanente": true}] },
+  ] },
+  // Tapir (Danta) → Hashirama Senju · Revividos (Edo Tensei)
+  bejuquilla: { habs: [
+    { n:"Descarga a distancia", desc:"10 de daño a TODOS los enemigos. Gana 5 de defensa destructible permanente.",
+      costo:["comodin"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "todos"}, {"t": "defensa", "v": 5, "obj": "self", "permanente": true}] },
+    { n:"Golpe aturdidor", desc:"25 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades naturales 1 turno.",
+      costo:["montana", "comodin"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}] },
+    { n:"Instinto de manada", desc:"25 de daño a un enemigo.",
+      costo:["montana", "montana"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
+  ] },
+  // Armadillo zopilote → Ittan · Shippuden
+  tortuga: { habs: [
+    { n:"Proyectil certero", desc:"Recibe 15 menos de daño durante 2 turnos.",
+      costo:["montana", "comodin"], recarga:4, clases:["fisico", "rango"],
+      efectos:[{"t": "reducir", "v": 15, "turnos": 2, "obj": "self"}] },
+    { n:"Descarga a distancia", desc:"30 de daño a un enemigo.",
+      costo:["comodin", "comodin"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}] },
+    { n:"Coraza ósea", desc:"Invulnerable 1 turno a todo el equipo.",
+      costo:["montana"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "equipo"}] },
+  ] },
+  // Ciempiés gigante → Kakuzu · Shippuden
+  tortuga_baula: { habs: [
+    { n:"Veneno paralizante", desc:"30 de daño a un enemigo. Lo aturde 1 turno.",
+      costo:["agua", "comodin"], recarga:0, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Forcípulas", desc:"30 de daño a un enemigo (ignora la defensa).",
+      costo:["sabana", "comodin"], recarga:0, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Recuperación", desc:"Cura 35 a sí mismo.",
+      costo:["comodin"], recarga:4, clases:["fisico", "melee"],
+      efectos:[{"t": "curar", "v": 35, "obj": "self"}] },
+  ] },
+  // Alacrán → Sasori · Revividos (Edo Tensei)
+  tortuga_carey: { habs: [
+    { n:"Postura defensiva", desc:"Gana 15 de defensa destructible permanente.",
+      costo:[], recarga:0, clases:["fisico"],
+      efectos:[{"t": "defensa", "v": 15, "obj": "self", "permanente": true}] },
+    { n:"Veneno neurotóxico", desc:"10 de daño a un enemigo. 10 de daño a un enemigo (toxina: atraviesa la invulnerabilidad). Gana 20 de defensa destructible.",
+      costo:["comodin", "comodin"], recarga:3, clases:["toxina", "fisico", "melee"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}, {"t": "dano", "v": 10, "obj": "enemigo", "toxina": true}, {"t": "defensa", "v": 20, "obj": "self"}] },
+    { n:"Ponzoña del telson", desc:"Invulnerable 1 turno.",
+      costo:["comodin"], recarga:3, clases:["fisico", "melee"],
+      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
+  ] },
+  // Hormiga león → Kazekage Gaara · Shippuden
+  tortuga_lora: { habs: [
+    { n:"Pinzas de acecho", desc:"5 de daño a un enemigo (ignora la defensa).",
+      costo:["montana"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 5, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Trampa de arena", desc:"10 de daño a un enemigo. Lo aturde 1 turno.",
+      costo:["montana", "comodin"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+    { n:"Mandíbulas de arena", desc:"Gana 15 de defensa destructible permanente a todo el equipo. Recibe 10 menos de daño durante 2 turnos a todo el equipo.",
+      costo:["comodin", "comodin"], recarga:2, clases:["natural"],
+      efectos:[{"t": "defensa", "v": 15, "obj": "equipo", "permanente": true}, {"t": "reducir", "v": 10, "turnos": 2, "obj": "equipo"}] },
+  ] },
+  // Hormiga león → Regimental Commander Gaara · Shippuden
+  tortuga_cabezona: { habs: [
+    { n:"Carga veloz", desc:"10 de daño a TODOS los enemigos. Su próximo golpe pega +5.",
+      costo:["comodin"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "todos"}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
+    { n:"Foso de arena", desc:"Gana 40 de defensa destructible.",
+      costo:["montana", "comodin"], recarga:4, clases:["fisico"],
+      efectos:[{"t": "defensa", "v": 40, "obj": "self"}] },
+    { n:"Rociada", desc:"15 de daño a TODOS los enemigos.",
+      costo:["montana", "agua", "comodin"], recarga:4, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "todos"}] },
+  ] },
+  // Mantis religiosa → Might Guy · Shippuden
+  jicotea: { habs: [
+    { n:"Embestida feroz", desc:"30 de daño a un enemigo.",
+      costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}] },
+    { n:"Huida veloz", desc:"Invulnerable 1 turno.",
+      costo:["bosque"], recarga:4, clases:["instinto"],
+      efectos:[{"t": "invulnerable", "turnos": 1, "obj": "self"}] },
+    { n:"Emboscada raptora", desc:"30 de daño a un enemigo. Contraataca: quien lo golpee recibe 25.",
+      costo:["bosque"], recarga:2, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "contraataque", "v": 25, "obj": "self"}] },
+  ] },
+  // Tiburón toro → Kisame Hoshigaki · Shippuden
+  tiburon: { habs: [
+    { n:"Embate aturdidor", desc:"20 de daño a un enemigo. Aturde sus habilidades naturales 1 turno. Aturde sus habilidades de instinto 1 turno.",
+      costo:["bosque"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "instinto"}] },
+    { n:"Dentellada frenética", desc:"15 de daño a un enemigo.",
+      costo:["bosque", "agua"], recarga:2, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Golpe aturdidor", desc:"20 de daño a un enemigo. Lo aturde 1 turno.",
+      costo:["agua"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+  ] },
+  // Pulpo → Eight-Tailed B · Shippuden
+  tiburon_ballena: { habs: [
+    { n:"Veneno del pico", desc:"Su próximo golpe pega +5.",
+      costo:[], recarga:1, clases:["natural"],
+      efectos:[{"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
+    { n:"Agarre de ventosas", desc:"20 de daño a un enemigo.",
+      costo:["bosque", "comodin"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+    { n:"Cortina de tinta", desc:"25 de daño a un enemigo (ignora la invulnerabilidad).",
+      costo:["montana", "comodin"], recarga:1, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "ignoraInvulnerable": true}] },
+  ] },
+  // Halcón peregrino → Yondaime Minato · Original (Parte 1)
+  pez_vela: { habs: [
+    { n:"Arremetida salvaje", desc:"35 de daño a un enemigo (ignora la invulnerabilidad).",
+      costo:["agua", "sabana"], recarga:0, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 35, "obj": "enemigo", "ignoraInvulnerable": true}] },
+    { n:"Defensa reactiva", desc:"Contraataca: quien lo golpee recibe 25.",
+      costo:["sabana", "sabana"], recarga:5, clases:["natural", "rango"],
+      efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
+    { n:"Toxina corrosiva", desc:"25 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
+      costo:["comodin", "comodin"], recarga:0, clases:["melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "toxina": true}] },
+  ] },
+  // Halcón peregrino → Sasuke Uchiha · Shippuden
+  marlin: { habs: [
+    { n:"Placaje brutal", desc:"30 de daño a un enemigo. Su próximo golpe pega +15.",
+      costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "amplificar", "v": 15, "turnos": 2, "obj": "self"}] },
+    { n:"Garras perforantes", desc:"30 de daño a un enemigo (ignora la defensa). Su próximo golpe pega +25.",
+      costo:["agua", "comodin"], recarga:1, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo", "ignoraDefensa": true}, {"t": "amplificar", "v": 25, "turnos": 2, "obj": "self"}] },
+    { n:"Ataque en picada", desc:"Recibe 15 menos de daño durante 4 turnos.",
+      costo:["comodin"], recarga:4, clases:["instinto", "rango"],
+      efectos:[{"t": "reducir", "v": 15, "turnos": 4, "obj": "self"}] },
+  ] },
+  // Libélula → Ōnoki · Shippuden
+  mariposa_julia: { habs: [
+    { n:"Intercepción aérea", desc:"10 de daño a TODOS los enemigos. Gana 10 de defensa destructible permanente.",
+      costo:["agua"], recarga:1, clases:["natural", "fisico", "melee"],
+      efectos:[{"t": "dano", "v": 10, "obj": "todos"}, {"t": "defensa", "v": 10, "obj": "self", "permanente": true}] },
+    { n:"Contraataque reflejo", desc:"Recibe 10 menos de daño durante 2 turnos a un aliado.",
+      costo:["comodin"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "reducir", "v": 10, "turnos": 2, "obj": "aliado"}] },
+    { n:"Estocada perforante", desc:"20 de daño a un enemigo (ignora la defensa).",
+      costo:["agua"], recarga:0, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraDefensa": true}] },
+  ] },
+  // Hormiga guerrera → Animal Path Pain · Shippuden
+  hormiga_bala: { habs: [
+    { n:"Picadura paralizante", desc:"15 de daño a un enemigo.",
+      costo:["agua"], recarga:2, clases:["melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Postura defensiva", desc:"Gana 20 de defensa destructible permanente a un aliado.",
+      costo:["montana", "agua"], recarga:4, clases:[],
+      efectos:[{"t": "defensa", "v": 20, "obj": "aliado", "permanente": true}] },
+    { n:"Tijeras foliares", desc:"10 de daño a TODOS los enemigos (ignora la invulnerabilidad).",
+      costo:["montana", "comodin"], recarga:3, clases:["melee"],
+      efectos:[{"t": "dano", "v": 10, "obj": "todos", "ignoraInvulnerable": true}] },
+  ] },
+  // Avispa parasitoide → Shino Aburame · Shippuden
+  abeja: { habs: [
+    { n:"Oviposición parasitaria", desc:"20 de daño a un enemigo (toxina: atraviesa la invulnerabilidad). Su próximo golpe pega +5.",
+      costo:["montana", "comodin"], recarga:1, clases:["toxina", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "toxina": true}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
+    { n:"Proyectil certero", desc:"Recibe 5 menos de daño durante 4 turnos.",
+      costo:["comodin"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "reducir", "v": 5, "turnos": 4, "obj": "self"}] },
+    { n:"Exoesqueleto", desc:"Gana 20 de defensa destructible permanente.",
+      costo:["montana", "comodin"], recarga:3, clases:["fisico"],
+      efectos:[{"t": "defensa", "v": 20, "obj": "self", "permanente": true}] },
+  ] },
+  // Araña banana → Kidōmaru · Original (Parte 1)
+  tarantula: { habs: [
+    { n:"Quelíceros", desc:"50 de daño a un enemigo (ignora la defensa).",
+      costo:["montana", "agua"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 50, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Telaraña", desc:"10 de daño a TODOS los enemigos. Recibe 10 menos de daño durante 5 turnos.",
+      costo:["montana", "agua"], recarga:4, clases:["rango"],
+      efectos:[{"t": "dano", "v": 10, "obj": "todos"}, {"t": "reducir", "v": 10, "turnos": 5, "obj": "self"}] },
+    { n:"Pelos urticantes", desc:"Contraataca: quien lo golpee recibe 25.",
+      costo:["montana"], recarga:2, clases:["fisico"],
+      efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
+  ] },
+  // Coyote → Kiba Inuzuka · Shippuden
+  perro: { habs: [
+    { n:"Golpe aturdidor", desc:"Recibe 15 menos de daño durante 4 turnos.",
+      costo:["comodin"], recarga:4, clases:["fisico"],
+      efectos:[{"t": "reducir", "v": 15, "turnos": 4, "obj": "self"}] },
+    { n:"Placaje", desc:"30 de daño a un enemigo.",
+      costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}] },
+    { n:"Embestida feroz", desc:"40 de daño a un enemigo. Su próximo golpe pega +10.",
+      costo:["bosque", "montana"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 40, "obj": "enemigo"}, {"t": "amplificar", "v": 10, "turnos": 2, "obj": "self"}] },
+  ] },
+  // Mono araña → Asuma Sarutobi · Shippuden
+  gato: { habs: [
+    { n:"Embestida feroz", desc:"25 de daño a un enemigo. Gana 40 de defensa destructible permanente.",
+      costo:["montana", "comodin"], recarga:0, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}, {"t": "defensa", "v": 40, "obj": "self", "permanente": true}] },
+    { n:"Secreción tóxica", desc:"25 de daño a un enemigo.",
+      costo:["sabana", "comodin"], recarga:0, clases:["toxina", "rango"],
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
+    { n:"Recuperación", desc:"20 de daño a un enemigo.",
+      costo:["comodin"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}] },
+  ] },
+  // Zorro gris → Naruto Uzumaki · Shippuden
+  comemaiz: { habs: [
+    { n:"Mordida", desc:"40 de daño a un enemigo (ignora la invulnerabilidad).",
+      costo:["bosque", "agua"], recarga:1, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 40, "obj": "enemigo", "ignoraInvulnerable": true}] },
+    { n:"Defensa reactiva", desc:"Contraataca: quien lo golpee recibe 25.",
+      costo:["comodin"], recarga:2, clases:["fisico"],
+      efectos:[{"t": "contraataque", "v": 25, "obj": "self"}] },
+    { n:"Dentellada", desc:"Le quita los efectos dañinos. Recibe 10 menos de daño durante 1 turnos.",
+      costo:["comodin", "comodin"], recarga:3, clases:["natural"],
+      efectos:[{"t": "limpiar", "obj": "self"}, {"t": "reducir", "v": 10, "turnos": 1, "obj": "self"}] },
+  ] },
+  // Zorro gris → One-Tailed Naruto · Original (Parte 1)
+  f_cadejos: { habs: [
+    { n:"Mordida y sacudida", desc:"35 de daño a un enemigo. Su próximo golpe pega +10.",
+      costo:["agua", "comodin"], recarga:1, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 35, "obj": "enemigo"}, {"t": "amplificar", "v": 10, "turnos": 2, "obj": "self"}] },
+    { n:"Arremetida salvaje", desc:"15 de daño a TODOS los enemigos.",
+      costo:["bosque", "montana"], recarga:3, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "todos"}] },
+    { n:"Placaje brutal", desc:"Cura 15 a sí mismo. Cura 5 por turno durante 5 turnos a sí mismo. Recibe 10 menos de daño durante 5 turnos.",
+      costo:["montana", "comodin"], recarga:5, clases:["natural"],
+      efectos:[{"t": "curar", "v": 15, "obj": "self"}, {"t": "curarTurnos", "v": 5, "turnos": 5, "obj": "self"}, {"t": "reducir", "v": 10, "turnos": 5, "obj": "self"}] },
+  ] },
+  // Zorro gris → Nine-Tailed Naruto · Shippuden
+  f_segua: { habs: [
+    { n:"Cabezazo", desc:"Gana 10 de defensa destructible permanente. Recibe 10 menos de daño durante 2 turnos.",
+      costo:[], recarga:0, clases:["natural"],
+      efectos:[{"t": "defensa", "v": 10, "obj": "self", "permanente": true}, {"t": "reducir", "v": 10, "turnos": 2, "obj": "self"}] },
+    { n:"Perforación", desc:"30 de daño a un enemigo (ignora la defensa, ignora la invulnerabilidad).",
+      costo:["agua", "comodin"], recarga:0, clases:["natural", "rango"],
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo", "ignoraDefensa": true, "ignoraInvulnerable": true}] },
+    { n:"Coletazo", desc:"20 de daño a un enemigo (ignora la invulnerabilidad).",
+      costo:["montana"], recarga:0, clases:["natural", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraInvulnerable": true}] },
+  ] },
+  // Boa → Naraka Path Pain · Shippuden
+  f_llorona: { habs: [
+    { n:"Enroscamiento", desc:"Gana 20 de defensa destructible permanente.",
+      costo:["comodin"], recarga:1, clases:[],
+      efectos:[{"t": "defensa", "v": 20, "obj": "self", "permanente": true}] },
+    { n:"Aturdimiento", desc:"20 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades naturales 1 turno.",
+      costo:["bosque"], recarga:1, clases:["fisico", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}] },
+    { n:"Recuperación", desc:"20 de daño a un enemigo. Cura 20 a sí mismo.",
+      costo:["sabana", "comodin"], recarga:1, clases:["instinto", "rango"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "curar", "v": 20, "obj": "self"}] },
+  ] },
+  // Mariposa morpho → Konan of the Rain · Shippuden
+  f_tulevieja: { habs: [
+    { n:"Aturdimiento", desc:"35 de daño a un enemigo (ignora la defensa).",
+      costo:["montana", "comodin"], recarga:1, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 35, "obj": "enemigo", "ignoraDefensa": true}] },
+    { n:"Escamas tóxicas", desc:"Recibe 10 menos de daño durante 2 turnos.",
+      costo:["montana"], recarga:3, clases:["fisico", "rango", "toxina"],
+      efectos:[{"t": "reducir", "v": 10, "turnos": 2, "obj": "self"}] },
+    { n:"Carga veloz", desc:"15 de daño a un enemigo.",
+      costo:["comodin"], recarga:0, clases:["fisico", "rango"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+  ] },
+  // Chinche asesina → Human Path Pain · Shippuden
+  f_padre: { habs: [
+    { n:"Embestida feroz", desc:"15 de daño a un enemigo (ignora la invulnerabilidad).",
+      costo:["comodin"], recarga:0, clases:["instinto", "melee"],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo", "ignoraInvulnerable": true}] },
+    { n:"Regeneración", desc:"20 de daño a un enemigo. Cura 20 a sí mismo. Le roba 1 de energía a un enemigo.",
+      costo:["sabana", "comodin"], recarga:2, clases:["instinto", "melee"],
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "curar", "v": 20, "obj": "self"}, {"t": "robarEnergia", "n": 1, "obj": "enemigo"}] },
+    { n:"Reposo curativo", desc:"Lo aturde 1 turno.",
+      costo:["bosque", "sabana"], recarga:2, clases:["instinto", "melee"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
+  ] },
+  // Terciopelo → Reanimator Kabuto · Shippuden
+  f_carreta: { habs: [
+    { n:"Frenesí", desc:"15 de daño a un enemigo.",
+      costo:[], recarga:0, clases:[],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+    { n:"Sacudida paralizante", desc:"Lo aturde 1 turno. Gana 1 de energía.",
+      costo:["comodin", "comodin"], recarga:0, clases:["natural", "rango"],
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}, {"t": "darEnergia", "tipo": "comodin", "obj": "self"}] },
+    { n:"Instinto agudizado", desc:"15 de daño a un enemigo.",
+      costo:[], recarga:0, clases:[],
+      efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
+  ] },
 };
 
-// Kits alternativos que trae el documento para el mismo animal (otras
-// versiones del personaje original). Todavía no se usan.
-export const VARIANTES_DOC = {"serpiente": ["Kabuto Yakushi", "Reanimator Kabuto", "Sage Mode Kabuto"], "sapo_marino": ["Kurotsuchi"], "mono_titi": ["Konohamaru Sarutobi"], "zorro_gris": ["Naruto Uzumaki", "One-Tailed Naruto", "Nine-Tailed Naruto"], "boa": ["Naraka Path Pain", "Yamato"], "danta": ["Hashirama Senju"], "coyote": ["Kiba Inuzuka", "Kakashi Hatake"], "basilisco": ["Masked Man", "Tobi"], "escarabajo": ["Sakura Haruno", "Kinkaku", "Fukai"], "colibri_talamanca": ["Hinata Hyūga"], "armadillo": ["Chōji Akimichi"], "puercoespin": ["Kimimaro", "Tenten"], "sapo_dorado": ["Jiraiya", "Sage Mode Naruto", "Sage Mode Jiraiya"], "puma": ["A"], "mono_arana": ["Asuma Sarutobi"], "lechuza": ["Chūkichi"], "mariposa": ["Konan of the Rain"], "chancho_monte": ["Curse Mark Jūgo"]};
+// Kits del documento que quedaron SIN usar (reserva para especies nuevas).
+export const VARIANTES_DOC = ["Terciopelo · Kabuto Yakushi", "Terciopelo · Sage Mode Kabuto", "Araña lobo · Shikaku Nara", "Halcón peregrino · Sasuke Uchiha", "Halcón peregrino · Mangekyō Sasuke", "Halcón peregrino · Minato Namikaze", "Coyote · Kakashi Hatake", "Basilisco · Masked Man", "Basilisco · Tobi", "Escarabajo Hércules · Sakura Haruno", "Escarabajo Hércules · Fukai", "Avispa parasitoide · Shino Aburame", "Araña de seda dorada · Shikamaru Nara", "Avispa esmeralda · Ino Yamanaka", "Mantis orquídea · Rock Lee", "Puercoespín · Kimimaro", "Puercoespín · Tenten", "Puercoespín · Kimimaro", "Búho de anteojos · Neji Hyūga", "Viuda negra · Kankurō", "Viuda negra · Kankurō", "Elanio · Temari", "Cascabel muda · Orochimaru", "Sapo dorado · Jiraiya", "Babosa gigante · Tsunade", "Urraca copetona · Aoba Yamashiro", "Urraca copetona · Itachi Uchiha", "Morena · Zabuza Momochi", "Tiburón toro · Kisame Hoshigaki", "Escarabajo rinoceronte · Akatsuchi", "Escarabajo rinoceronte · Jirōbō", "Mantis religiosa · Might Guy", "Mantis religiosa · Eight-Gates Guy", "Escorpión de corteza · Chiyo", "Escorpión de corteza · Chiyo", "Lechuza · Chūkichi", "Escarabajo bombardero · Deidara", "Alacrán · True Form Sasori", "Alacrán · Sasori", "Ciempiés gigante · Danzō Shimura", "Águila solitaria · Nagato", "Halcón murcielaguero · Shisui Uchiha", "Chancho de monte · Curse Mark Jūgo"];

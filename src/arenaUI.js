@@ -177,13 +177,26 @@ export function abrirArena(opts) {
   }
 
   // ---- energía: columna al costado, con el icono de cada bioma ----
+  let cambioAbierto = false;    // el selector de bioma del cambio 5→1
   function pintarEnergia() {
     const pool = poolRestante(), total = A.totalE(pool);
+    // el CAMBIO (regla del original: 5 cualesquiera → 1 a elección) solo se
+    // ofrece con la cola vacía: si ya encolaste, esas 5 podrían estar
+    // reservadas para pagar lo encolado y el cambio te rompería la jugada.
+    const puedoCambiar = st.lado === 'A' && !st.fin && !animando
+      && cola.length === 0 && A.puedeCambiar(st, 'A');
     elEnergia.innerHTML = A.BIOMAS.map(b => `
       <div class="ar-e ${pool[b] ? '' : 'cero'}" title="${BIOMA_N[b]}">
         <img src="${BIOMA_ICO(b)}" alt="${BIOMA_N[b]}" draggable="false">
         <b>${pool[b]}</b>
-      </div>`).join('') + `<div class="ar-etot" title="Energía total">${total}</div>`;
+      </div>`).join('')
+      + `<div class="ar-etot" title="Energía total">${total}</div>`
+      + `<button class="ar-cambio ${puedoCambiar ? '' : 'off'}" id="arCambio"
+           title="Cambiá 5 energías cualesquiera por 1 del tipo que elijás (1 vez por turno)">⇄ 5→1</button>`
+      + (cambioAbierto && puedoCambiar ? `<div class="ar-picker">${A.BIOMAS.map(b => `
+          <button class="ar-pick" data-bioma="${b}" title="Recibir 1 de ${BIOMA_N[b]}">
+            <img src="${BIOMA_ICO(b)}" alt="${BIOMA_N[b]}" draggable="false">
+          </button>`).join('')}</div>` : '');
   }
 
   function pintarHabilidades() {
@@ -323,6 +336,17 @@ export function abrirArena(opts) {
       else return encolar(uid, hab, uid);             // a sí mismo / al equipo / a todos
       render();
     });
+    // cambio de energía 5→1
+    const bc = root.querySelector('#arCambio');
+    if (bc) bc.onclick = () => {
+      if (bc.classList.contains('off')) return;
+      cambioAbierto = !cambioAbierto;
+      render();
+    };
+    root.querySelectorAll('.ar-pick').forEach(el => el.onclick = () => {
+      if (A.cambiarEnergia(st, 'A', el.dataset.bioma)) { cambioAbierto = false; render(); }
+    });
+
     engancharCerrar();
   }
 
