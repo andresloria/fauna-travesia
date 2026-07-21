@@ -17,7 +17,11 @@ import { habsDe } from './habilidades.js';
 import { bossOf } from './historia.js';
 
 const LS = 'fauna_liga_v1';
-export const WINS_PARA_JEFE = 4;
+// EXPEDICIONES (22-jul): la liga entera medía ~96 peleas = 2,8 HORAS de reloj,
+// sin ningún corte donde soltar el juego. Ahora cada provincia es una
+// EXPEDICIÓN cerrada de ~8 peleas (~15 min) que termina en un resumen: se
+// puede jugar en el bus. Bajar de 4 a 3 victorias corta ~20% del total.
+export const WINS_PARA_JEFE = 3;
 
 // ---------- los ~30 desbloqueados de base ----------
 // Comunes (y un par de raros accesibles) cubriendo TODOS los roles y biomas.
@@ -57,7 +61,15 @@ export function nuevoEstado() {
     ultimoEquipo: [],
     vistas: {},                        // escenas de historia ya vistas
     peleasLibres: 0,                   // contador en liga libre (para jefes sorpresa)
+    exped: nuevaExpedicion(),          // lo que llevás en ESTA provincia
   };
+}
+
+// ---------- expedición: la tanda de una provincia ----------
+// Se reinicia al entrar a cada provincia. Sirve para el resumen del cierre,
+// que es el punto donde el jugador puede dejar el juego tranquilo.
+export function nuevaExpedicion() {
+  return { peleas: 0, w: 0, l: 0, liberados: 0, desbloqueos: [], turnos: 0, inicio: null };
 }
 export function cargar() {
   try {
@@ -66,6 +78,7 @@ export function cargar() {
       const st = { ...nuevoEstado(), ...JSON.parse(raw) };
       // migración suave: garantizar la BASE
       st.desbloqueados = [...new Set([...st.desbloqueados, ...BASE])];
+      if (!st.exped) st.exped = nuevaExpedicion();   // partidas viejas
       return st;
     }
   } catch {}
@@ -198,11 +211,21 @@ export function registrarResultado(st, pelea, arenaSt, equipo) {
   }
 
   // ---- progresión de provincia ----
+  // ---- contadores de la EXPEDICIÓN en curso ----
+  if (!st.exped) st.exped = nuevaExpedicion();
+  st.exped.peleas++;
+  st.exped.turnos += arenaSt.turno || 0;
+  if (gane) { st.exped.w++; st.exped.liberados += arenaSt.unidades.filter(u => u.lado === 'B').length; }
+  else st.exped.l++;
+
   if (gane && pelea.tipo === 'jefe') {
     st.jefesVencidos++;
     out.provinciaLiberada = pelea.prov.n;
     if (st.prov === 7) { st.ganoJuego = true; out.ganoJuego = true; }
     st.prov++; st.winsProv = 0;
+    // la expedición se CIERRA acá: se entrega el resumen y se arranca otra
+    out.expedicion = { ...st.exped, provincia: pelea.prov.n };
+    st.exped = nuevaExpedicion();
   } else if (gane && pelea.tipo === 'normal' && !enLigaLibre(st)) {
     st.winsProv++;
   }
@@ -232,6 +255,8 @@ export function registrarResultado(st, pelea, arenaSt, equipo) {
     if (misionCumplida(st, key, m)) {
       st.desbloqueados.push(key);
       out.desbloqueos.push(key);
+      if (out.expedicion) out.expedicion.desbloqueos.push(key);
+      else st.exped.desbloqueos.push(key);
     }
   }
 

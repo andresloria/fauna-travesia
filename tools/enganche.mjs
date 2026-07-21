@@ -59,7 +59,30 @@ console.log(`\n  PRIMER cabecilla: pelea ${med(primJefe).toFixed(1)} → ~${min(
 console.log(`\n  peor racha de derrotas al principio: ${med(derrotasSeguidas).toFixed(1)} de media`);
 console.log(`     · partidas con 4+ derrotas seguidas (frustración): ${(muerteTemprana / N * 100).toFixed(1)}%`);
 
-// cuánto dura la LIGA entera en tiempo humano
-const PELEAS_LIGA = 96, TURNOS = 26;
-console.log(`\n  ⚠️  LIGA COMPLETA: ~${PELEAS_LIGA} peleas × ${TURNOS} turnos`);
-console.log(`     = ${(PELEAS_LIGA * TURNOS / 2 * SEG_POR_TURNO / 3600).toFixed(1)} HORAS de juego real`);
+// ---- cuánto dura DE VERDAD la campaña (MEDIDO, no supuesto) ----
+// Se juega hasta ganar Monteverde: eso es el arco de historia. La liga libre
+// es infinita a propósito y no cuenta como "terminar el juego".
+const porExped = [], totales = [];
+for (let i = 0; i < Math.min(300, N); i++) {
+  const st = L.nuevoEstado();
+  st.guia = { name: 'sim', guide: 'hombre' };
+  let peleas = 0, turnos = 0, desde = 0, tDesde = 0;
+  while (!st.ganoJuego && peleas < 400) {
+    const eq = barajar(st.desbloqueados).slice(0, 3);
+    const pelea = L.proximaPelea(st);
+    const arena = A.combateAuto(eq.map(k => ({ key: k })), pelea.rivales.map(x => ({ key: x.key })));
+    const r = L.registrarResultado(st, pelea, arena, eq);
+    peleas++; turnos += arena.turno;
+    if (r.expedicion) {
+      porExped.push({ p: peleas - desde, t: turnos - tDesde });
+      desde = peleas; tDesde = turnos;
+    }
+  }
+  totales.push({ peleas, turnos });
+}
+const minDe = (turnos) => turnos / 2 * SEG_POR_TURNO / 60;
+console.log(`\n  -- LA CAMPANA (medida, hasta ganar Monteverde) --`);
+console.log(`  una EXPEDICION (provincia): ${med(porExped.map(e => e.p)).toFixed(1)} peleas`
+  + `  ->  ~${minDe(med(porExped.map(e => e.t))).toFixed(0)} min   <- LA SESION`);
+console.log(`  campana completa: ${med(totales.map(t => t.peleas)).toFixed(0)} peleas`
+  + `  ->  ${(minDe(med(totales.map(t => t.turnos))) / 60).toFixed(1)} horas, repartidas en 8 sesiones`);

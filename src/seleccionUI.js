@@ -292,8 +292,53 @@ export function crearSeleccion(root) {
         }
         if (r.ganoJuego) await avisar('🏆 ¡COSTA RICA LIBRE!',
           'Venciste al Cabecilla en Monteverde. La red cayó… pero la LIGA LIBRE apenas empieza: las leyendas del Tenebroso te esperan.');
+        // CIERRE DE EXPEDICIÓN: el punto pensado para soltar el juego
+        if (r.expedicion) await resumenExpedicion(r.expedicion);
         render();
       },
+    });
+  }
+
+  // ---------- cierre de EXPEDICIÓN ----------
+  // La liga entera son ~2,8 horas de reloj y no tenía ningún corte: el jugador
+  // no sabía cuándo podía dejarla. Cada provincia liberada cierra acá, con su
+  // resumen y DOS botones bien claros — seguir, o dejarlo hasta la próxima.
+  function resumenExpedicion(e) {
+    return new Promise(res => {
+      const mins = Math.max(1, Math.round(e.turnos / 2 * 8 / 60));
+      const prox = L.provinciaActual(st);
+      const bichos = e.desbloqueos.slice(0, 6).map(k =>
+        `<span class="sl-exb"><img src="${ART(k)}" alt=""> ${SP[k].n}</span>`).join('');
+      const ov = document.createElement('div');
+      ov.className = 'sl-ov';
+      ov.innerHTML = `<div class="sl-aviso sl-exped gbabox">
+        <div class="sl-at">🌿 ${e.provincia.toUpperCase()} LIBERADA</div>
+        <div class="sl-exgrid">
+          <div><b>${e.w}</b><span>victorias</span></div>
+          <div><b>${e.peleas}</b><span>combates</span></div>
+          <div><b>${e.liberados}</b><span>animales liberados</span></div>
+          <div><b>${mins}</b><span>minutos</span></div>
+        </div>
+        ${e.desbloqueos.length ? `<div class="sl-exnew">
+            <div class="sl-secth">Se unieron al refugio</div>
+            <div class="sl-exlist">${bichos}${e.desbloqueos.length > 6
+              ? `<span class="sl-exb">+${e.desbloqueos.length - 6} más</span>` : ''}</div>
+          </div>` : ''}
+        <div class="sl-am">${st.ganoJuego
+          ? 'Ganaste la liga. De acá en adelante es liga libre.'
+          : `Sigue <b>${prox.flag || ''} ${prox.n}</b>. Tu avance ya quedó guardado.`}</div>
+        <div class="sl-exbtns">
+          <button class="sl-btn go" id="exSeguir">▶ Seguir a ${st.ganoJuego ? 'la liga libre' : prox.n}</button>
+          <button class="sl-btn" id="exParar">Dejarlo por hoy</button>
+        </div>
+      </div>`;
+      document.body.appendChild(ov);
+      const cerrar = () => { ov.remove(); res(); };
+      ov.querySelector('#exSeguir').onclick = cerrar;
+      ov.querySelector('#exParar').onclick = () => {
+        cerrar();
+        avisar('🌿 Nos vemos', 'Todo quedó guardado en este dispositivo. Cerrá la pestaña tranquilo: cuando vuelvas seguís justo acá.');
+      };
     });
   }
 

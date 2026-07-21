@@ -5,6 +5,39 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 22 jul 2026 (noche) · EXPEDICIONES (arreglo #1 del veredicto)
+
+Tras 10.000 partidas simuladas, el problema más grave no era el balance: **la
+campaña duraba ~2,8 horas de reloj sin un solo corte** donde soltar el juego.
+
+- **Cada provincia es una EXPEDICIÓN cerrada.** `st.exped` cuenta peleas,
+  victorias, animales liberados, turnos y desbloqueos de la tanda;
+  `registrarResultado` la devuelve en `out.expedicion` al vencer al cabecilla
+  y arranca una nueva.
+- **Pantalla de cierre** (`resumenExpedicion` en seleccionUI): "SAN JOSÉ
+  LIBERADA" con las 4 cifras de la tanda, los animales que se unieron, y **dos
+  botones**: seguir a la próxima provincia, o *"Dejarlo por hoy"* — que
+  confirma que todo quedó guardado. Ese es el permiso explícito para irse.
+- **WINS_PARA_JEFE 4 → 3**: corta ~20% del total.
+
+### Medido antes y después (`tools/enganche.mjs`, nuevo)
+| | antes | después |
+|---|---|---|
+| Campaña completa | 2,8 h (supuesto) | **1,6 h MEDIDAS**, en 8 sesiones |
+| Una sesión (provincia) | no existía | **~12 min · 7 peleas** |
+| Primer cabecilla | 16 min | **13 min** |
+| Partidas con 4+ derrotas seguidas | 20,9% | **15,2%** |
+
+📌 `enganche.mjs` traía el largo de campaña **hardcodeado en 96 peleas**; lo
+"midió" sin medir nada y me dio 2,8 h aun después del cambio. Ahora juega
+campañas de verdad hasta Monteverde. **Un número que no se recalcula es un
+número que miente.**
+
+📌 Verificado en el navegador jugando de verdad hasta vencer al cabecilla de
+San José, no solo en simulación.
+
+---
+
 ## Sesión — 22 jul 2026 (tarde) · cambio 3→1, música de aventura, ANIMACIONES
 
 - **Cambio de energía: 3→1** (era 5→1 como el original; Andrés lo bajó para
