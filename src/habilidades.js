@@ -11,6 +11,7 @@
 // ============================================================
 
 import { MOVESETS_GEN } from './movesets_gen.js';
+import { MOVESETS_DOC } from './movesets_doc.js';
 
 // ⚠️ VIDA = 100 PARA TODOS y SIN NIVELES (regla ARENA, 20-jul): nada de stats
 // ni de progresión por animal. Todos entran en igualdad; la diferencia está
@@ -234,11 +235,16 @@ export const MOVESETS = {
 };
 
 // ---------- utilidades ----------
-// Los kits a mano (MOVESETS) MANDAN; los generados (MOVESETS_GEN, por
-// make_movesets.py) cubren el resto del roster. Juntos: las 136 especies.
-const kitDe = (key) => MOVESETS[key] || MOVESETS_GEN[key] || null;
+// PRIORIDAD (21-jul): manda el DOCUMENTO de Andrés (movesets_doc.js, 4
+// habilidades por animal, portadas del original). Después los kits a mano de
+// abajo y por último los generados por plantilla (movesets_gen.js), que cubren
+// las especies que el documento todavía no trae. Juntos: las 136 del roster.
+const kitDe = (key) => MOVESETS_DOC[key] || MOVESETS[key] || MOVESETS_GEN[key] || null;
 
-// Habilidades de un animal: SIEMPRE las 3 (+ la esquiva). No hay niveles ni
+// ¿este animal ya tiene su kit oficial del documento?
+export const esKitOficial = (key) => !!MOVESETS_DOC[key];
+
+// Habilidades de un animal: las suyas (+ la esquiva). No hay niveles ni
 // pasivas. El 2º argumento se ignora; queda por compatibilidad de llamadas.
 export function habsDe(key) {
   const m = kitDe(key);
@@ -246,4 +252,5 @@ export function habsDe(key) {
   return { habs: m.habs, esquiva: ESQUIVA };
 }
 export const tieneMoveset = (key) => !!kitDe(key);
-export const COBERTURA = () => new Set([...Object.keys(MOVESETS), ...Object.keys(MOVESETS_GEN)]).size;
+export const COBERTURA = () => new Set([...Object.keys(MOVESETS_DOC),
+  ...Object.keys(MOVESETS), ...Object.keys(MOVESETS_GEN)]).size;

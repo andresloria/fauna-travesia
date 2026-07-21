@@ -5,6 +5,62 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 21 jul 2026 · LOS KITS OFICIALES (documento de Andrés)
+
+Andrés mandó `fauna-travesia-habilidades.json` + `Fauna-Travesia_Ataques_final.xlsx`:
+**722 habilidades de 100 animales**, portadas 1:1 de los personajes del original
+(4 habilidades por personaje). Desde hoy **ese documento manda** sobre las
+plantillas.
+
+### Qué se hizo
+- **`make_habilidades_doc.py`** (nuevo): lee el JSON y genera `src/movesets_doc.js`
+  + `REPORTE_HABILIDADES.md`. Re-correr cuando llegue una versión nueva del doc.
+- **`src/habilidades.js`**: la prioridad ahora es `MOVESETS_DOC` → `MOVESETS`
+  (a mano) → `MOVESETS_GEN` (plantilla).
+- **Cada animal del doc trae 4 habilidades + la esquiva universal = 5 botones**
+  (antes eran 3 + esquiva). Verificado en escritorio y celular: no se desborda.
+- **Tests despegados de los datos**: 6 pruebas buscaban "Zarpazo" o "Mordida al
+  cráneo" y se rompían con cada actualización del documento. Ahora usan un KIT de
+  laboratorio que se le enchufa a la unidad, así prueban el MOTOR y no los datos.
+
+### Decisiones que quedaron fijadas
+- **Chakra → bioma** (1:1, el documento dice "sin cambios"):
+  Taijutsu=🌳bosque · Ninjutsu=🌊agua · Bloodline=⛰montaña · Genjutsu=🌾sabana ·
+  Random=⚪comodín.
+- **La descripción se GENERA desde los efectos implementados**, nunca se copia del
+  documento. Así el texto no puede prometer algo que el motor no hace. Lo que no se
+  pudo implementar sale en el reporte, no escondido en una descripción bonita.
+- **Duración desde el inglés**: 36 reducciones de daño traen el valor pero no los
+  turnos (solo 7 lo dicen). Poner 1 por defecto dejaba habilidades de recarga 5 que
+  protegían un turno — basura. Se lee del `efecto_en` ("for 4 turns"), que además es
+  la fuente autoritativa según la leyenda del Excel.
+- **27 habilidades sin mecánica estructurada** (reflejos, sellos, invocaciones,
+  vínculos de vida) se **aproximaron a mano** leyendo su efecto completo en inglés;
+  17 quedaron en kits base. Dejarlas vacías eran 27 botones muertos.
+- Cuando un animal trae varios kits (el personaje tenía versiones), se usa el
+  **primero completo**; el resto queda en `VARIANTES_DOC`, sin usar.
+
+### ⚠️ Balance: el pool quedó MEZCLADO
+`node tools/doc_vs_gen.mjs` (nuevo):
+
+| | resultado |
+|---|---|
+| documento vs plantilla | el documento gana **29%** |
+| documento vs documento | 48.8% (parejo) |
+| plantilla vs plantilla | 49.9% (parejo) |
+
+Cada mitad es coherente consigo misma, pero **las plantillas pegan más fuerte que
+los kits oficiales** (básico de 20-25 con recarga 0 contra 15 con recarga 1). Las
+37 especies oficiales quedan en desventaja mientras convivan con las 93 de
+plantilla. Se resuelve solo cuando el documento cubra las 136 — o bajando las
+plantillas a la escala del documento. **Falta la decisión de Andrés.**
+
+📌 Un tester que mide contra un equipo de referencia se vuelve mentiroso si el
+equipo de referencia también cambia: `tools/kits.mjs` marcaba 97% para medio
+roster porque la Boa (que es parte del trío de referencia) se había debilitado.
+
+---
+
 ## Sesión — 19/20 jul 2026
 
 ### Cómo está el juego HOY (lo que está en vivo y funcionando)
@@ -261,13 +317,15 @@ color celeste y poné verde con árboles"*.
 
 ## PRÓXIMOS PASOS (retomar por acá)
 
-0. **"Animales iguales que en Naruto-Arena" — falta el tramo grande**: hoy los
-   kits salen de 6 plantillas por rol, así que 2-3 animales comparten nombres y
-   estructura. Para que cada especie tenga SU identidad (como Chidori es de
-   Sasuke) hace falta una tabla a mano de 136 × 3 movimientos con su biología
-   real. Es trabajo de contenido, no de código: el motor y los iconos ya lo
-   soportan. Conviene hacerlo por tandas (empezando por los legendarios y los
-   30 de base, que son los que más se ven).
+0. ✅ **RESUELTO el 21-jul con el DOCUMENTO de Andrés** (ver sesión de abajo):
+   los kits ya no son plantillas, salen de `fauna-travesia-habilidades.json`.
+   Lo que queda de ese frente:
+   - **Crear los 62 animales que faltan** (lista completa en
+     `REPORTE_HABILIDADES.md`): sprite + entrada en el roster. El kit ya está
+     escrito, entra solo al re-correr `python make_habilidades_doc.py`.
+   - **Decidir qué hacer con las 99 especies que el documento NO trae**: hoy
+     siguen con kit de plantilla y por eso son más fuertes que las oficiales
+     (ver la nota de balance).
 
 1. **Probar el arco completo jugando**: cabecilla → provincia 2 → … → Monteverde →
    liga libre con leyendas (solo probé la 1ª provincia + el estado del jefe).
