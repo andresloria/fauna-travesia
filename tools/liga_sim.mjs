@@ -13,6 +13,11 @@ import * as L from '../src/liga.js';
 import { SP } from '../src/fauna_roster.js';
 import { habsDe } from '../src/habilidades.js';
 
+// Math.max(...arr) revienta la pila con cientos de miles de elementos (con
+// 10.000 ligas son 322.000 turnos): reduce() no tiene ese límite.
+const mayor = (a) => a.reduce((m, x) => x > m ? x : m, -Infinity);
+const menor = (a) => a.reduce((m, x) => x < m ? x : m, Infinity);
+
 const N = Number(process.argv[2] || 1000);
 const PERFIL_ARG = process.argv[3] || 'todos';
 const MAX_PELEAS = 400;          // tope por liga (para detectar ligas que no terminan)
@@ -135,7 +140,7 @@ for (const perfil of perfiles) {
     for (const k in x.winAnimal) globalWin[k] = (globalWin[k] || 0) + x.winAnimal[k];
   }
   const pct = (a, b) => b ? (a / b * 100).toFixed(1) + '%' : '—';
-  const med = (a) => a.length ? (a.reduce((s, x) => s + x, 0) / a.length).toFixed(1) : '—';
+const med = (a) => a.length ? (a.reduce((s, x) => s + x, 0) / a.length).toFixed(1) : '—';
 
   resumen[perfil] = { ganadas, peleas, w, l, tipo, ligas };
   console.log(`── ${perfil.toUpperCase()} ${'─'.repeat(46 - perfil.length)}`);
@@ -144,7 +149,7 @@ for (const perfil of perfiles) {
   console.log(`    · normales:  ${pct(tipo.normal[0], tipo.normal[0] + tipo.normal[1])}  (${tipo.normal[0]}W-${tipo.normal[1]}L)`);
   console.log(`    · cabecillas:${pct(tipo.jefe[0], tipo.jefe[0] + tipo.jefe[1])}  (${tipo.jefe[0]}W-${tipo.jefe[1]}L)`);
   console.log(`    · leyendas:  ${pct(tipo.leyenda[0], tipo.leyenda[0] + tipo.leyenda[1])}  (${tipo.leyenda[0]}W-${tipo.leyenda[1]}L)`);
-  console.log(`  peleas por liga: ${med(ligas.map(x => x.peleas))}  ·  turnos por pelea: ${med(turnos)} (máx ${Math.max(...turnos)})`);
+  console.log(`  peleas por liga: ${med(ligas.map(x => x.peleas))}  ·  turnos por pelea: ${med(turnos)} (máx ${mayor(turnos)})`);
   console.log(`  desbloqueos por liga: ${med(ligas.map(x => x.desbloqueos))}  ·  mejor racha: ${med(ligas.map(x => x.mejorRacha))}`);
   console.log(`  provincias liberadas: ${med(ligas.map(x => x.provincias))}/8`);
   console.log(`  ⚠️  excepciones: ${exc.length}${exc.length ? ' → ' + [...new Set(exc)].slice(0, 3).join(' | ') : ''}`);
@@ -163,5 +168,5 @@ if (filas.length) {
   console.log('  🏆 mejores:'); filas.slice(0, 8).forEach(f => console.log(line(f)));
   console.log('  💀 peores:');  filas.slice(-8).reverse().forEach(f => console.log(line(f)));
   const wrs = filas.map(f => f.wr);
-  console.log(`  brecha mejor–peor: ${((Math.max(...wrs) - Math.min(...wrs)) * 100).toFixed(1)} puntos\n`);
+  console.log(`  brecha mejor–peor: ${((mayor(wrs) - menor(wrs)) * 100).toFixed(1)} puntos\n`);
 }
