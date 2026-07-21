@@ -219,12 +219,21 @@ heurística del simulador no lo sabe. Hay que enseñarle a valorar la cobertura 
 energía antes de volver a usar esos números como medida de "jugar bien".
 
 **✅ HECHO (20-jul, cierre 3): los guías se veían mal.**
-El arte está bien: son sprites de **cuerpo entero** (256×256, figura alta y
-angosta). El error era el marco: una caja CUADRADA de 90px dejaba la cabeza en
-~10px y todo se leía como una mancha. Ahora el marco tiene **forma de retrato**
-(132×176, 112×150 en celular), la figura va con `object-fit:contain` apoyada
-abajo, y el fondo es un degradado cielo→pasto. Se les ve la cara, el sombrero,
-el morral y el mapa. Verificado en 1280 y en 375 (sin scroll lateral).
+El arte está bien: son **pixel art NATIVO de 256px** (bloque real 1×1 — se midió:
+cada pixel es distinto, no es un sprite chico ampliado). Por eso **cualquier
+reducción los arruina**: con `image-rendering:auto` se emborronan el pelo y los
+ojos, y con `pixelated` se pierden pixeles sueltos (los ojos son de 1px).
+Se probaron las dos y Andrés vetó las dos.
+
+**Solución: mostrarlos 1:1, sin escalar.** El marco es angosto (140×248, 120×230
+en celular) con `overflow:hidden`, y la imagen va a su tamaño natural 256×256
+centrada: se recorta SOLO el margen transparente (el dibujo ocupa ~117px de
+ancho de los 256). Escala medida en el navegador: **1.000**. Se les ve el pelo
+blanco, los anteojos, la barba, el carné, el sombrero y el mapa.
+
+📌 **Regla general para sprites de este juego**: averiguar la resolución NATIVA
+antes de elegir cómo mostrarlos. Si el arte es nativo (bloque 1×1), mostrarlo a
+1:1 o a una fracción exacta (½, ¼); nunca a una escala rara.
 
 ## PRÓXIMOS PASOS (retomar por acá)
 

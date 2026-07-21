@@ -1054,21 +1054,24 @@ body.ar-lock{overflow:hidden}
 .sl-avt{font-family:var(--px);font-size:10px;color:#7a3f18}
 .sl-input{font-family:var(--body);font-size:22px;padding:6px 10px;border:3px solid var(--line);
   border-radius:3px;background:#fff8e6;color:var(--ink-g);width:100%;text-align:center}
-/* Los guías son sprites de CUERPO ENTERO: en una caja cuadrada chica la cabeza
-   quedaba de ~10px y se veían como manchas. Marco con forma de retrato (alto),
-   la figura entera con 'contain' y apoyada abajo. */
-.sl-avopts{display:flex;gap:16px}
-.sl-avopt{position:relative;width:132px;height:176px;border:3px solid var(--line);
+/* Los guías son pixel art NATIVO de 256px (bloque real 1x1: cada pixel cuenta).
+   Cualquier reducción los arruina: con 'auto' se emborronan el pelo y los ojos,
+   con 'pixelated' se pierden pixeles sueltos. Por eso se muestran 1:1 —sin
+   escalar— dentro de un marco angosto que recorta SOLO el margen transparente
+   (el dibujo ocupa ~117px de ancho de los 256). */
+.sl-avopts{display:flex;gap:16px;justify-content:center}
+.sl-avopt{position:relative;width:140px;height:248px;border:3px solid var(--line);
   border-radius:3px;overflow:hidden;cursor:pointer;opacity:.55;
   background:linear-gradient(180deg,#cfe3f2 0%,#dceac9 62%,#bcd3a3 100%);
   box-shadow:inset 0 0 0 2px #fff8e6}
-.sl-avopt img{position:absolute;left:50%;bottom:4px;transform:translateX(-50%);
-  width:auto;height:96%;object-fit:contain;image-rendering:auto}
-.sl-avopt::after{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;
+.sl-avopt img{position:absolute;left:50%;bottom:-4px;margin-left:-128px;
+  width:256px;height:256px;max-width:none;image-rendering:pixelated}
+.sl-avopt::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;
   background:linear-gradient(180deg,transparent,rgba(90,120,70,.35))}
 .sl-avopt.sel{opacity:1;box-shadow:inset 0 0 0 2px #fff8e6,0 0 0 3px #e8c558}
-@media(max-width:420px){
-  .sl-avopt{width:112px;height:150px}
+@media(max-width:400px){
+  .sl-avopts{gap:10px}
+  .sl-avopt{width:120px;height:230px}
 }
 
 /* ficha */
