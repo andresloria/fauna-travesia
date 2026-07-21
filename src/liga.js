@@ -127,7 +127,10 @@ export function proximaPelea(st) {
   if (esJefe && enLigaLibre(st)) {
     const pendientes = ['f_carreta', 'f_segua', 'f_cadejos', 'f_tulevieja', 'f_padre', 'f_llorona']
       .filter(k => !st.folkVencidos.includes(k));
-    if (pendientes.length && Math.random() < 0.6) {
+    // SIEMPRE que quede una leyenda pendiente, el jefe de la liga libre es una
+    // leyenda. Antes era 60% al azar y las últimas dos (la Llorona, la
+    // Tulevieja) casi nunca salían: quedaban indesbloqueables de hecho.
+    if (pendientes.length) {
       const key = pendientes[Math.floor(Math.random() * pendientes.length)];
       return {
         tipo: 'leyenda', key, prov,
@@ -167,6 +170,16 @@ export function registrarResultado(st, pelea, arenaSt, equipo) {
   const caidosMios = arenaSt.unidades.filter(u => u.lado === 'A' && !u.viva).length;
   const vivosMios = arenaSt.unidades.filter(u => u.lado === 'A' && u.viva).length;
   const useEsquiva = log.some(e => e.t === 'usa' && String(e.uid).startsWith('A') && e.hab === 'Esquivar');
+  // clases de CADA habilidad que usaste (para las misiones de "solo X").
+  // El log guarda el nombre de la habilidad; las clases hay que buscarlas en la
+  // unidad. La Esquiva se salta: es universal, no dice nada de tu estilo.
+  const clasesUsadas = log
+    .filter(e => e.t === 'usa' && String(e.uid).startsWith('A') && e.hab !== 'Esquivar')
+    .map(e => {
+      const u = arenaSt.unidades.find(x => x.uid === e.uid);
+      const h = u && u.habs.find(x => x.n === e.hab);
+      return h ? (h.clases || []) : [];
+    });
   const curadoAhora = log.filter(e => e.t === 'cura' && String(e.uid).startsWith('A')).reduce((s, e) => s + (e.v || 0), 0);
   const robadoAhora = log.filter(e => e.t === 'robarEnergia' && String(e.uid).startsWith('A')).length;
   const contraAhora = log.filter(e => e.t === 'contra' && String(e.de).startsWith('A')).reduce((s, e) => s + (e.v || 0), 0);
@@ -201,11 +214,15 @@ export function registrarResultado(st, pelea, arenaSt, equipo) {
 
   // ---- misiones: actualizar contadores por misión ----
   const contexto = {
-    gane, equipo, caidosMios, vivosMios, useEsquiva, primeroElFuerte,
+    gane, equipo, caidosMios, vivosMios, useEsquiva, primeroElFuerte, clasesUsadas,
     biomaPuro: equipo.length === 3 && new Set(equipo.map(k => SP[k]?.bio)).size === 1
       ? SP[equipo[0]].bio : null,
     esJefe: pelea.tipo === 'jefe',
-    ganoJuegoAhora: out.ganoJuego,
+    // Las misiones de "ganá el juego con X" se evaluaban SOLO en la pelea final
+    // de Monteverde: si esa vez no cumplías el filtro (no tenías al Quetzal, se
+    // te escapó una Esquiva), quedaban perdidas para siempre. Ahora cada jefe
+    // de la liga libre cuenta como otra oportunidad.
+    ganoJuegoAhora: out.ganoJuego || (gane && pelea.tipo === 'jefe' && st.ganoJuego),
   };
   for (const key of Object.keys(SP)) {
     if (desbloqueado(st, key)) continue;
@@ -239,40 +256,57 @@ function cumpleFiltro(obj, ctx) {
     });
     if (!trae) return false;
   }
-  if (obj.soloClase) return false;      // (clase única: pendiente de rastreo fino)
+  // "usando SOLO habilidades de X": todas las que usaste tienen que ser de esa
+  // clase. La Esquiva NO cuenta — es universal y defensiva, si contara la misión
+  // sería "ganá sin defenderte nunca", que no es lo que dice.
+  if (obj.soloClase && ctx.clasesUsadas !== null) {
+    if (!ctx.clasesUsadas.length) return false;              // no usaste ninguna
+    if (!ctx.clasesUsadas.every(cl => cl.includes(obj.soloClase))) return false;
+  } else if (obj.soloClase) return false;
   return true;
 }
 
+// Una misión puede tener DOS objetivos: el principal y uno anidado en `obj.y`
+// (el Sapo dorado: "rescatá 12 de montaña Y ganá el juego sin perder a nadie").
+// El anidado no avanzaba nunca —el switch solo miraba obj.tipo— así que esas
+// misiones eran imposibles. Cada objetivo lleva su propio contador: el anidado
+// guarda con sufijo ':y' para no pisar al principal.
 function avanzarMision(st, key, m, ctx) {
-  const obj = m.obj;
+  avanzarObjetivo(st, key, m.obj, ctx, '');
+  if (m.obj.y) avanzarObjetivo(st, key, m.obj.y, ctx, ':y');
+}
+
+function avanzarObjetivo(st, key, obj, ctx, sufijo) {
+  const k = key + sufijo;
   switch (obj.tipo) {
     case 'racha':
-      if (ctx.gane && cumpleFiltro(obj, ctx)) st.rachasMision[key] = (st.rachasMision[key] || 0) + 1;
-      else if (!ctx.gane) st.rachasMision[key] = 0;
-      else if (obj.sinCaidos && ctx.caidosMios > 0) st.rachasMision[key] = 0;
+      if (ctx.gane && cumpleFiltro(obj, ctx)) st.rachasMision[k] = (st.rachasMision[k] || 0) + 1;
+      else if (!ctx.gane) st.rachasMision[k] = 0;
+      else if (obj.sinCaidos && ctx.caidosMios > 0) st.rachasMision[k] = 0;
       break;
     case 'total':
-      if (ctx.gane && cumpleFiltro(obj, ctx)) st.totalesMision[key] = (st.totalesMision[key] || 0) + 1;
+      if (ctx.gane && cumpleFiltro(obj, ctx)) st.totalesMision[k] = (st.totalesMision[k] || 0) + 1;
       break;
     case 'vencer':
       if (ctx.gane && ctx.esJefe && cumpleFiltro(obj, ctx))
-        st.totalesMision[key] = (st.totalesMision[key] || 0) + 1;
+        st.totalesMision[k] = (st.totalesMision[k] || 0) + 1;
       break;
     case 'ganarJuego':
-      if (ctx.ganoJuegoAhora && cumpleFiltro(obj, ctx)) st.totalesMision[key] = 1;
+      if (ctx.ganoJuegoAhora && cumpleFiltro(obj, ctx)) st.totalesMision[k] = 1;
       break;
     // liberar / rescatar / curado / robado / contraatacado / vencerFolk:
     // se evalúan directo en progresoMision (contadores globales)
   }
 }
 
-export function progresoMision(st, key, m = misionDeLiga(key)) {
+export function progresoMision(st, key, m = misionDeLiga(key), sufijo = '') {
   if (!m) return { n: 0, meta: 1 };
   const obj = m.obj;
+  const k = key + sufijo;
   switch (obj.tipo) {
-    case 'racha':   return { n: Math.min(st.rachasMision[key] || 0, obj.n), meta: obj.n };
+    case 'racha':   return { n: Math.min(st.rachasMision[k] || 0, obj.n), meta: obj.n };
     case 'total':
-    case 'vencer':  return { n: Math.min(st.totalesMision[key] || 0, obj.n || 1), meta: obj.n || 1 };
+    case 'vencer':  return { n: Math.min(st.totalesMision[k] || 0, obj.n || 1), meta: obj.n || 1 };
     case 'liberar': return { n: Math.min(st.liberados, obj.n), meta: obj.n };
     case 'rescatar': {
       // solo cuentan las especies GANADAS (las ~30 de base no valen, si no
@@ -284,7 +318,7 @@ export function progresoMision(st, key, m = misionDeLiga(key)) {
     case 'curado':  return { n: Math.min(st.stats.curado, obj.n), meta: obj.n };
     case 'robado':  return { n: Math.min(st.stats.robado, obj.n), meta: obj.n };
     case 'contraatacado': return { n: Math.min(st.stats.contraatacado, obj.n), meta: obj.n };
-    case 'ganarJuego': return { n: st.totalesMision[key] ? 1 : 0, meta: 1 };
+    case 'ganarJuego': return { n: st.totalesMision[k] ? 1 : 0, meta: 1 };
     case 'vencerFolk': return { n: st.folkVencidos.includes(obj.key) ? 1 : 0, meta: 1 };
     default: return { n: 0, meta: obj.n || 1 };
   }
@@ -294,7 +328,7 @@ export function misionCumplida(st, key, m = misionDeLiga(key)) {
   const p = progresoMision(st, key, m);
   let ok = p.n >= p.meta;
   if (ok && m.obj.y) {                     // objetivo anidado (ej: sapo dorado)
-    const py = progresoMision(st, key, { obj: m.obj.y });
+    const py = progresoMision(st, key, { obj: m.obj.y }, ':y');
     ok = py.n >= py.meta;
   }
   return ok;

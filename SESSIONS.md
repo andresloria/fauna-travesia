@@ -5,6 +5,53 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 21 jul 2026 (tarde) · AUDITORÍA DE MISIONES
+
+El modo historia ya existía y funciona (armar equipo → cazadores de la provincia
+→ cada 4 victorias el cabecilla → 8 provincias → liga libre con las leyendas).
+Lo que faltaba era que las misiones de desbloqueo **se pudieran cumplir**.
+
+`node tools/auditar_misiones.mjs` (nuevo) revisa las 105 misiones de dos formas:
+estática (¿pide algo que no existe?) y **empírica** (juega ligas completas y mira
+quién se desbloquea de verdad). Antes: **9 rotas + 4 durísimas**. Ahora: **0**.
+
+### Bugs de código que encontró
+- **`soloClase` nunca se cumplía**: `cumpleFiltro()` hacía `return false` fijo.
+  La Rana dardo era indesbloqueable. Implementado leyendo las clases de cada
+  habilidad usada en el log (la Esquiva no cuenta: es universal).
+- **Los objetivos anidados (`obj.y`) nunca avanzaban**: `avanzarMision` solo
+  miraba `obj.tipo`, así que el Sapo dorado ("rescatá N de montaña **Y** ganá el
+  juego") era imposible. Ahora cada objetivo lleva su contador (el anidado con
+  sufijo `':y'`).
+- **`sinPerder` no existe** como filtro (el real es `sinCaidos`): se ignoraba en
+  silencio.
+- **Las misiones de "ganá el juego" eran de un solo intento**: se evaluaban solo
+  en la pelea final de Monteverde. Si esa vez no cumplías el filtro, se perdían
+  para siempre. Ahora cada jefe de la liga libre da otra oportunidad.
+- Las descripciones de los kits de plantilla decían "**dano**" sin ñ (561).
+
+### Números que se ajustaron, con la razón
+- **Racha CON filtro extra → 3.** Con ~50% de victoria, encadenar 6 es 1.6% por
+  intento; sumarle "sin que caiga ninguno" o "equipo de un solo bioma" lo volvía
+  inalcanzable. Las rachas SIN filtro (3 y 5) andaban bien y quedaron igual.
+- **Leyendas: 100% en vez de 60%** cuando quedan pendientes. Con 60% al azar, la
+  Llorona y la Tulevieja casi nunca salían.
+- **Sapo dorado: 12 → 9** especies de montaña (había exactamente 12: pedía el
+  100% sin margen).
+
+📌 **El perfil del simulador decide el veredicto.** Un jugador que arma equipos
+AL AZAR nunca va a cumplir "ganá 3 seguidas con equipo de puro agua", y eso NO
+significa que la misión esté rota. Por eso el auditor mide con dos perfiles
+(azar y cazamisiones) y solo marca ROTA la que ni el cazamisiones logra.
+Y las que dependen de decisiones que la IA no toma (`sinEsquiva`, `soloClase`,
+`soloUnoVivo`) **no son simulables**: se prueban a mano en
+`test/misiones.test.mjs` (6 pruebas). Sin eso, habría "arreglado" misiones que
+estaban bien.
+
+Desbloqueos por liga: **88.4 → 92.8**. 100% de ligas terminadas, 0 excepciones.
+
+---
+
 ## Sesión — 21 jul 2026 · LOS KITS OFICIALES (documento de Andrés)
 
 Andrés mandó `fauna-travesia-habilidades.json` + `Fauna-Travesia_Ataques_final.xlsx`:

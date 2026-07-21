@@ -56,16 +56,16 @@ export const MISIONES = {
 
   // ===================== RANGO C =====================
   venado: { rango:'C', n:'Símbolo nacional',
-    desc:'Ganá 4 combates seguidos sin que caiga ninguno de tus animales.',
-    obj:{ tipo:'racha', n:4, sinCaidos:true } },
+    desc:'Ganá 3 combates seguidos sin que caiga ninguno de tus animales.',
+    obj:{ tipo:'racha', n:3, sinCaidos:true } },
 
   serpiente: { rango:'D', n:'Respeto al terciopelo',
     desc:'Ganá 3 combates seguidos con al menos un animal venenoso en el equipo.',
     obj:{ tipo:'racha', n:3, conClase:'toxina' } },
 
   puercoespin: { rango:'C', n:'No me toqués',
-    desc:'Devolvé 150 de daño con contraataques.',
-    obj:{ tipo:'contraatacado', n:150 } },
+    desc:'Devolvé 100 de daño con contraataques.',
+    obj:{ tipo:'contraatacado', n:100 } },
 
   rana_ojos_rojos: { rango:'D', n:'La cara de Costa Rica',
     desc:'Rescatá 4 especies distintas de bosque.',
@@ -73,8 +73,8 @@ export const MISIONES = {
 
   // ===================== RANGO B =====================
   cocodrilo: { rango:'B', n:'El del Tárcoles',
-    desc:'Ganá 5 combates seguidos con un equipo entero de agua.',
-    obj:{ tipo:'racha', n:5, bioma:'agua' } },
+    desc:'Ganá 3 combates seguidos con un equipo entero de agua.',
+    obj:{ tipo:'racha', n:3, bioma:'agua' } },
 
   ranadardo: { rango:'D', n:'Veneno de la hojarasca',
     desc:'Ganá 3 combates seguidos usando SOLO habilidades de toxina.',
@@ -86,16 +86,16 @@ export const MISIONES = {
 
   // ===================== RANGO A =====================
   jaguar: { rango:'A', n:'El dueño del monte',
-    desc:'Ganá 6 combates seguidos con un equipo de puro bosque.',
-    obj:{ tipo:'racha', n:6, bioma:'bosque' } },
+    desc:'Ganá 4 combates seguidos con un equipo de puro bosque.',
+    obj:{ tipo:'racha', n:4, bioma:'bosque' } },
 
   quetzal: { rango:'A', n:'El ave sagrada',
     desc:'Liberá 10 animales PLENOS a la naturaleza.',
     obj:{ tipo:'liberar', n:10 } },
 
   puma: { rango:'A', n:'Cazador solitario',
-    desc:'Ganá 5 combates seguidos quedándote con UN solo animal en pie.',
-    obj:{ tipo:'racha', n:5, soloUnoVivo:true } },
+    desc:'Ganá 3 combates seguidos quedándote con UN solo animal en pie.',
+    obj:{ tipo:'racha', n:3, soloUnoVivo:true } },
 
   danta: { rango:'A', n:'El jardinero del bosque',
     desc:'Rescatá 25 especies distintas.',
@@ -106,14 +106,14 @@ export const MISIONES = {
     obj:{ tipo:'rescatar', n:6, bioma:'agua', y:{ tipo:'liberar', n:3 } } },
 
   aguila_harpia: { rango:'A', n:'Garras del dosel',
-    desc:'Ganá 5 combates seguidos derrotando al enemigo más fuerte primero.',
-    obj:{ tipo:'racha', n:5, primeroElFuerte:true } },
+    desc:'Ganá 3 combates seguidos derrotando al enemigo más fuerte primero.',
+    obj:{ tipo:'racha', n:3, primeroElFuerte:true } },
 
   // ===================== RANGO S =====================
   sapo_dorado: { rango:'S', n:'Lo que ya no está',
-    desc:'Completá la Colección de Monteverde: rescatá 12 especies de montaña ' +
+    desc:'Completá la Colección de Monteverde: rescatá 9 especies de montaña ' +
          'y ganá el juego sin perder un solo animal.',
-    obj:{ tipo:'rescatar', n:12, bioma:'montana', y:{ tipo:'ganarJuego', sinPerder:true } } },
+    obj:{ tipo:'rescatar', n:9, bioma:'montana', y:{ tipo:'ganarJuego', sinCaidos:true } } },
 
   quetzaldorado: { rango:'A', n:'La leyenda dorada',
     desc:'Ganá el juego con el Quetzal en el equipo, sin usar la Esquiva.',
@@ -145,8 +145,8 @@ export function misionAutoDe(key, sp) {
     case 'B': return { rango, n:`Poca gente lo ve: ${n}`, auto:true,
       desc:`Ganá 5 combates seguidos.`, obj:{ tipo:'racha', n:5 } };
     case 'A': return { rango, n:`Encuentro único: ${n}`, auto:true,
-      desc:'Ganá 6 combates seguidos sin que caiga ninguno de tus animales.',
-      obj:{ tipo:'racha', n:6, sinCaidos:true } };
+      desc:'Ganá 3 combates seguidos sin que caiga ninguno de tus animales.',
+      obj:{ tipo:'racha', n:3, sinCaidos:true } };
     default:  return { rango:'S', n:`Lo imposible: ${n}`, auto:true,
       desc:'Vencé a 8 cabecillas.', obj:{ tipo:'vencer', n:8 } };
   }
