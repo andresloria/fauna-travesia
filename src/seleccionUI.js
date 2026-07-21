@@ -16,11 +16,15 @@ import { playScene } from './dialogo.js';
 import { HISTORIA, TENEBROSO, bossOf } from './historia.js';
 
 const ART = (key) => (SP[key] && SP[key].folk) ? `assets/folclor/${key}.png` : `assets/animales/${key}.png`;
-const RCOLOR = { D: '#6f6552', C: '#2f6f8f', B: '#6b3f9e', A: '#a8791a', S: '#a8442a' };
-const BCOLOR = { bosque: '#3f8f4a', sabana: '#c8923f', agua: '#2f6f8f', montana: '#8a6f9a', noche: '#4a3a63' };
-// versión OSCURA para cuando el color de bioma se usa como TEXTO sobre crema
-// (los tonos de arriba quedan en ~3.1 de contraste: ilegibles en letra chica)
-const BCOLOR_TXT = { bosque: '#25602e', sabana: '#7a5514', agua: '#1c4359', montana: '#54406b', noche: '#332748' };
+// Colores de RANGO (fondo de la insignia, con letra blanca encima). Subidos de
+// brillo con el tema oscuro: los tonos viejos daban 3.9 de contraste.
+const RCOLOR = { D: '#8d8266', C: '#3f92bd', B: '#ac7ee6', A: '#d3a134', S: '#d95e42' };
+const BCOLOR = { bosque: '#4caf6a', sabana: '#d9a441', agua: '#3f9bd6', montana: '#9b7bc4', noche: '#6a5490' };
+// versión para cuando el color de bioma se usa como TEXTO.
+// ⚠️ Ojo con esta tabla: se INVIERTE cuando cambia el fondo. Con el skin GBA
+// (crema) tenía que ser oscura; con el tema oscuro tiene que ser CLARA. Los
+// tonos oscuros de antes daban 2.33 de contraste sobre los paneles nuevos.
+const BCOLOR_TXT = { bosque: '#7fe0a0', sabana: '#f0c46a', agua: '#7fc8f5', montana: '#c3a8e8', noche: '#a894d8' };
 const BEMO = { bosque: '🌳', sabana: '🌾', agua: '🌊', montana: '⛰️', noche: '🌑' };
 const ORBC = { bosque: '#3f8f4a', sabana: '#c8923f', agua: '#2f6f8f', montana: '#8a6f9a', comodin: '#9a9a9a' };
 

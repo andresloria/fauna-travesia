@@ -5,6 +5,42 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 21 jul 2026 (noche) · SE FUE EL SKIN GBA
+
+El juego quedaba partido en dos: entrabas con el skin GBA (cielo celeste,
+paneles crema, marcos de 3px, tipografía pixel) y peleabas con la arena nueva.
+Ahora **todo el juego usa el mismo lenguaje visual**: fondo oscuro, paneles
+translúcidos, esquinas redondeadas, sans del sistema.
+
+⚠️ **Los sprites y los iconos siguen siendo pixel art** — es el arte del juego.
+Lo que se modernizó es el CROMADO de la interfaz.
+
+### Cómo se hizo (sin borrar 900 líneas)
+Un bloque **`TEMA MODERNO`** al final de `styles.css` que pisa al viejo por
+orden de cascada. Lo que lo hace barato: **las variables viejas ahora apuntan al
+tema nuevo** (`--px` y `--body` → la sans; `--line`, `--ink-g`… → la paleta
+oscura), así que cientos de reglas se modernizaron solas. El CSS del juego de
+tablero descartado quedó en el archivo pero no se renderiza.
+
+### Trampas que aparecieron
+- 📌 **`details.how` le gana a `.how`.** El skin viejo pintaba con el selector de
+  dos partes, así que el `.how` del tema nuevo perdía por especificidad y la caja
+  seguía crema. Hay que repetir el selector completo.
+- 📌 **Las tablas de color de TEXTO se INVIERTEN al cambiar el fondo.**
+  `BCOLOR_TXT` en `seleccionUI.js` se había oscurecido a propósito para el fondo
+  crema; sobre los paneles oscuros daba **2.33** de contraste. Ahora es la
+  versión clara. La misma trampa, al revés.
+- 📌 **Insignias de rango: letra OSCURA.** Los colores de rango son tonos medios;
+  con letra blanca daban 3.5-3.8.
+- 📌 **Cuidado con el medidor de contraste**: al sumar los degradados de los
+  ancestros tomó el degradado del `body` como fondo de todo y marcó 141 textos
+  malos que estaban bien. Los degradados se anotan aparte y se miran a ojo.
+
+Verificado midiendo: **0 textos bajo 4.5** en inicio, armar-equipo y misiones;
+**0 elementos con el fondo crema**; **0 con fuente pixel**; sin desborde en 375px.
+
+---
+
 ## Sesión — 21 jul 2026 (tarde) · AUDITORÍA DE MISIONES
 
 El modo historia ya existía y funciona (armar equipo → cazadores de la provincia
