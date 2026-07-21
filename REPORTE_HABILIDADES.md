@@ -478,3 +478,29 @@ dice lo que de verdad hace la versión nuestra**, no la original.
 | Boa | Recuperación | Judging an enemy unworthy, the King of Hell absorbs 20 of their health. If Boa has destructible defense from [… |
 | Chinche asesina | Regeneración | Chinche asesina draws out the lifeforce of an enemy affected by [Fierce Charge], stealing 20 health and absorb… |
 | Terciopelo | Sacudida paralizante | Terciopelo directs chakra through a kunai-implanted talisman to take direct control of one of his reanimated p… |
+
+## Habilidades que estaban GRATIS y ahora cuestan (13)
+
+En el documento valían 0 porque eran de PREPARACIÓN (se transformaban en
+otra habilidad). Nuestro motor no tiene eso, así que la aproximación las
+volvió ataques — y quedaron ataques gratis. El precio sale de la economía
+real del juego (poder mediano por escalón de costo), no de números
+inventados.
+
+Escalones medidos: 1 energía → poder 20 · 2 energía → poder 30 · 3 energía → poder 40
+
+| Especie | Habilidad | Poder | Costo nuevo |
+|---|---|---|---|
+| Bocaracá | Embestida serpentina | 10 | bosque |
+| Caucel (margay) | Ponzoña persistente | 18 | bosque |
+| Venado | Postura amenazante | 15 | sabana |
+| Mapache | Arena abrasiva | 15 | bosque |
+| Oso hormiguero (tamandúa) | Acopio de energía | 15 | bosque |
+| Jacamar coliroja | Sacudida paralizante | 63 | bosque + comodin + comodin |
+| Ibis blanco | Cuerpo inmortal | 15 | agua |
+| Pelícano pardo | Frenesí | 15 | agua |
+| Zopilote cabecirrojo | Golpe demoledor | 25 | sabana |
+| Lora (víbora verde) | Veneno hemotóxico | 15 | montana |
+| Serpiente de mar | Frenesí | 15 | agua |
+| La Carreta sin Bueyes | Frenesí | 15 | comodin |
+| La Carreta sin Bueyes | Instinto agudizado | 15 | comodin |

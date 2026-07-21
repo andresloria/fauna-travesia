@@ -495,6 +495,72 @@ def solo_invulnerabilidad(r):
 
 
 # ------------------------------------------------------------------
+# 3d. COSTO para las habilidades que en el documento valen 0
+#
+# En el original, costo 0 = habilidad de PREPARACIÓN: no hace daño, se
+# transforma en otra o da cargas ("Once used, this skill becomes…"). Nuestro
+# motor no tiene transformaciones, así que la aproximación las volvió ataques
+# — y quedaron ATAQUES GRATIS. Medido el 22-jul: 16 habilidades gratis, y sus
+# dueños coparon el top del ranking (la Jacamar tenía "15 de daño a TODOS +
+# aturde" por cero energía, cada 2 turnos).
+#
+# La regla: nada que haga daño o ponga un estado duro puede salir gratis. El
+# precio NO se inventa — se saca de la economía real del propio documento
+# (`tabla_precios`), viendo cuánto cuestan las habilidades de poder parecido.
+# ------------------------------------------------------------------
+BIOMAS_MOTOR = ('bosque', 'sabana', 'agua', 'montana')
+
+
+def poder_de(efs):
+    """cuánto 'vale' una habilidad, en la misma vara para todas"""
+    v = 0
+    for f in efs:
+        if f['t'] == 'dano':
+            v += f['v'] * (3 if f.get('obj') == 'todos' else 1)
+        elif f['t'] == 'danoTurnos':
+            v += f['v'] * f.get('turnos', 1)
+        elif f['t'] in ('curar', 'curarTurnos', 'defensa'):
+            v += f.get('v', 0)
+        elif f['t'] in ('aturdir', 'exponer', 'invulnerable', 'contraataque', 'marcaPermanente'):
+            v += 18
+        elif f['t'] in ('reducir', 'amplificar'):
+            v += f.get('v', 0)
+        elif f['t'] in ('robarEnergia', 'quemarEnergia', 'darEnergia'):
+            v += 12
+    return v
+
+
+def tabla_precios(todas):
+    """poder mediano de las habilidades de 1, 2 y 3 de costo (las que SÍ cuestan)"""
+    por_costo = collections.defaultdict(list)
+    for costo, efs in todas:
+        if costo:
+            por_costo[min(len(costo), 3)].append(poder_de(efs))
+    return {c: sorted(v)[len(v) // 2] for c, v in sorted(por_costo.items()) if v}
+
+
+def cobrar(efs, precios, bioma):
+    """qué costo le toca a una habilidad que vino sin costo"""
+    ofensiva = any(f['t'] in ('dano', 'danoTurnos', 'aturdir', 'exponer', 'marcaPermanente')
+                   for f in efs)
+    if not ofensiva:
+        return []                       # buff puro sin daño: puede seguir gratis
+    p = poder_de(efs)
+    n = 1
+    for c in sorted(precios):           # el primer escalón cuyo techo supere su poder
+        if p <= precios[c] * 1.35:
+            n = c
+            break
+        n = c
+    # la primera del bioma propio (identidad), el resto comodín.
+    # ⚠️ Las 6 leyendas del folclor tienen bio "noche", que NO es uno de los 4
+    # biomas del motor: un costo así no se puede pagar NUNCA. Se cae a comodín.
+    if bioma not in BIOMAS_MOTOR:
+        bioma = 'comodin'
+    return [bioma] + ['comodin'] * (n - 1)
+
+
+# ------------------------------------------------------------------
 # 4. La descripción se escribe DESDE los efectos implementados
 # ------------------------------------------------------------------
 A_QUIEN = {'enemigo': 'a un enemigo', 'todos': 'a TODOS los enemigos',
@@ -665,6 +731,30 @@ def main():
             })
         salida[key] = {'habs': out, 'origen': f'{animal} → {pers} · {cat}'}
 
+    # ---- 2ª PASADA: ponerle precio a las que vinieron GRATIS (ver §3d) ----
+    # Va después de armar todo porque la tabla de precios se saca de la economía
+    # real del propio juego, no de números inventados.
+    bioma_de = dict(re.findall(r'^\s*([a-z_0-9]+):\s*\{[^\n]*?bio:"([a-z]+)"',
+                               (AQUI / 'src' / 'fauna_roster.js').read_text(encoding='utf-8'), re.M))
+    precios = tabla_precios([(h['costo'], h['efectos'])
+                             for kit in salida.values() for h in kit['habs']])
+    cobradas = []
+    for key, kit in salida.items():
+        for h in kit['habs']:
+            if h['costo']:
+                continue
+            nuevo_costo = cobrar(h['efectos'], precios, bioma_de.get(key, 'bosque'))
+            if nuevo_costo:
+                h['costo'] = nuevo_costo
+                cobradas.append((key, h['n'], poder_de(h['efectos']), nuevo_costo))
+
+    # ---- ningún costo puede ser IMPAGABLE ----
+    for key, kit in salida.items():
+        for h in kit['habs']:
+            for c in h['costo']:
+                if c not in BIOMAS_MOTOR and c not in ('comodin', 'TODO'):
+                    raise SystemExit(f'COSTO IMPAGABLE en {key}/{h["n"]}: "{c}" no es un bioma')
+
     # ---- NINGÚN par de especies puede compartir kit (el reclamo original) ----
     firmas = {}
     for key, kit in salida.items():
@@ -772,10 +862,24 @@ def main():
         for animal, hab, en in aproximadas:
             R.append(f'| {animal} | {hab} | {en}… |')
 
+    if cobradas:
+        R += ['', f'## Habilidades que estaban GRATIS y ahora cuestan ({len(cobradas)})', '',
+              'En el documento valían 0 porque eran de PREPARACIÓN (se transformaban en',
+              'otra habilidad). Nuestro motor no tiene eso, así que la aproximación las',
+              'volvió ataques — y quedaron ataques gratis. El precio sale de la economía',
+              'real del juego (poder mediano por escalón de costo), no de números',
+              'inventados.', '',
+              f'Escalones medidos: ' + ' · '.join(f'{c} energía → poder {v}' for c, v in precios.items()),
+              '', '| Especie | Habilidad | Poder | Costo nuevo |', '|---|---|---|---|']
+        for key, n, pod, c in cobradas:
+            R.append(f'| {nombres.get(key, key)} | {n} | {pod} | {" + ".join(c)} |')
+
+
     REPORTE.write_text('\n'.join(R), encoding='utf-8')
 
     raros = [x for x in descartes if x[3] != 'sí']
     print(f'OK {SALIDA.name}: {len(salida)}/{len(roster)} especies con kit del documento')
+    print(f'   habilidades que estaban gratis y ahora cuestan: {len(cobradas)}')
     print(f'   kits sin usar (reserva): {len(sobrantes)}')
     print(f'   4ª descartada en {len(descartes)} kits · {len(raros)} NO eran su esquiva (ver reporte)')
     print(f'   con mecánica parcial: {len(reporte_falta)} · aproximadas: {len(aproximadas)}'

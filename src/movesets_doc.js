@@ -431,7 +431,7 @@ export const MOVESETS_DOC = {
   // Toboba → Anko Mitarashi · Original (Parte 1)
   bocaraca: { habs: [
     { n:"Embestida serpentina", desc:"5 de daño a un enemigo. Su próximo golpe pega +5.",
-      costo:[], recarga:0, clases:["fisico", "melee"],
+      costo:["bosque"], recarga:0, clases:["fisico", "melee"],
       efectos:[{"t": "dano", "v": 5, "obj": "enemigo"}, {"t": "amplificar", "v": 5, "turnos": 2, "obj": "self"}] },
     { n:"Ponzoña necrótica", desc:"10 de daño a TODOS los enemigos (toxina: atraviesa la invulnerabilidad).",
       costo:["agua"], recarga:2, clases:["toxina", "rango"],
@@ -497,7 +497,7 @@ export const MOVESETS_DOC = {
       costo:["bosque", "montana"], recarga:3, clases:["fisico", "melee"],
       efectos:[{"t": "dano", "v": 15, "obj": "todos"}, {"t": "reducir", "v": 15, "turnos": 3, "obj": "self"}] },
     { n:"Ponzoña persistente", desc:"Queda expuesto 3 turnos (no puede volverse invulnerable).",
-      costo:[], recarga:0, clases:["toxina", "rango"],
+      costo:["bosque"], recarga:0, clases:["toxina", "rango"],
       efectos:[{"t": "exponer", "turnos": 3, "obj": "enemigo"}] },
   ] },
   // Coyote → Kakashi Hatake · Shippuden
@@ -527,7 +527,7 @@ export const MOVESETS_DOC = {
   // Araña de seda dorada → Shikamaru Nara · Shippuden
   venado: { habs: [
     { n:"Postura amenazante", desc:"15 de daño a un enemigo.",
-      costo:[], recarga:0, clases:["instinto", "rango"],
+      costo:["sabana"], recarga:0, clases:["instinto", "rango"],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
     { n:"Pelos urticantes", desc:"15 de daño a un enemigo. Queda expuesto 1 turno (no puede volverse invulnerable).",
       costo:["sabana"], recarga:1, clases:["natural", "rango"],
@@ -566,7 +566,7 @@ export const MOVESETS_DOC = {
       costo:["agua", "comodin"], recarga:2, clases:["fisico", "rango"],
       efectos:[{"t": "aturdir", "turnos": 2, "obj": "enemigo"}] },
     { n:"Arena abrasiva", desc:"15 de daño a un enemigo.",
-      costo:[], recarga:2, clases:["fisico"],
+      costo:["bosque"], recarga:2, clases:["fisico"],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
     { n:"Foso de arena", desc:"Gana 40 de defensa destructible.",
       costo:["comodin"], recarga:4, clases:["natural"],
@@ -677,7 +677,7 @@ export const MOVESETS_DOC = {
       costo:["comodin", "comodin"], recarga:3, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}] },
     { n:"Acopio de energía", desc:"15 de daño a un enemigo.",
-      costo:[], recarga:0, clases:["fisico", "rango"],
+      costo:["bosque"], recarga:0, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
   ] },
   // Luciérnaga → Fukasaku and Shima · Shippuden
@@ -917,7 +917,7 @@ export const MOVESETS_DOC = {
       costo:["comodin", "comodin"], recarga:3, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 20, "obj": "todos", "ignoraDefensa": true}] },
     { n:"Sacudida paralizante", desc:"15 de daño a TODOS los enemigos. Lo aturde 1 turno.",
-      costo:[], recarga:2, clases:["fisico", "rango"],
+      costo:["bosque", "comodin", "comodin"], recarga:2, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 15, "obj": "todos"}, {"t": "aturdir", "turnos": 1, "obj": "todos"}] },
   ] },
   // Mochuelo → Hanabi Hyūga · Original (Parte 1)
@@ -1019,7 +1019,7 @@ export const MOVESETS_DOC = {
   // Estrella de mar → Hidan · Shippuden
   ibis: { habs: [
     { n:"Cuerpo inmortal", desc:"15 de daño a un enemigo.",
-      costo:[], recarga:0, clases:["fisico"],
+      costo:["agua"], recarga:0, clases:["fisico"],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
     { n:"Golpe aturdidor", desc:"35 de daño a un enemigo (ignora la defensa). Lo aturde 1 turno.",
       costo:["bosque", "comodin"], recarga:1, clases:["fisico", "melee"],
@@ -1037,7 +1037,7 @@ export const MOVESETS_DOC = {
       costo:["montana", "comodin", "comodin"], recarga:0, clases:["fisico", "melee"],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
     { n:"Frenesí", desc:"15 de daño a un enemigo.",
-      costo:[], recarga:0, clases:["natural"],
+      costo:["agua"], recarga:0, clases:["natural"],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
   ] },
   // Halcón peregrino → Minato Namikaze · Revividos (Edo Tensei)
@@ -1082,7 +1082,7 @@ export const MOVESETS_DOC = {
       costo:["agua", "comodin"], recarga:2, clases:["natural", "rango"],
       efectos:[{"t": "robarEnergia", "n": 1, "obj": "enemigo"}] },
     { n:"Golpe demoledor", desc:"25 de daño a un enemigo.",
-      costo:[], recarga:1, clases:["melee", "natural"],
+      costo:["sabana"], recarga:1, clases:["melee", "natural"],
       efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
     { n:"Instinto agudizado", desc:"Le roba 1 de energía a un enemigo.",
       costo:["comodin"], recarga:1, clases:["natural", "melee"],
@@ -1310,7 +1310,7 @@ export const MOVESETS_DOC = {
       costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee"],
       efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "ignoraDefensa": true}] },
     { n:"Veneno hemotóxico", desc:"15 de daño a un enemigo (toxina: atraviesa la invulnerabilidad, ignora la invulnerabilidad).",
-      costo:[], recarga:3, clases:["toxina", "melee"],
+      costo:["montana"], recarga:3, clases:["toxina", "melee"],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo", "toxina": true, "ignoraInvulnerable": true}] },
     { n:"Latigazo veloz", desc:"45 de daño a un enemigo (ignora la invulnerabilidad).",
       costo:["bosque", "montana", "agua"], recarga:0, clases:["melee"],
@@ -1331,7 +1331,7 @@ export const MOVESETS_DOC = {
   // Raya redonda → Shigure · Original (Parte 1)
   serpiente_mar: { habs: [
     { n:"Frenesí", desc:"15 de daño a un enemigo.",
-      costo:[], recarga:0, clases:["fisico"],
+      costo:["agua"], recarga:0, clases:["fisico"],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
     { n:"Proyectil certero", desc:"15 de daño a TODOS los enemigos (ignora la invulnerabilidad).",
       costo:["comodin"], recarga:0, clases:["fisico", "rango"],
@@ -1631,13 +1631,13 @@ export const MOVESETS_DOC = {
   // Terciopelo → Reanimator Kabuto · Shippuden
   f_carreta: { habs: [
     { n:"Frenesí", desc:"15 de daño a un enemigo.",
-      costo:[], recarga:0, clases:[],
+      costo:["comodin"], recarga:0, clases:[],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
     { n:"Sacudida paralizante", desc:"Lo aturde 1 turno. Gana 1 de energía.",
       costo:["comodin", "comodin"], recarga:0, clases:["natural", "rango"],
       efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}, {"t": "darEnergia", "tipo": "comodin", "obj": "self"}] },
     { n:"Instinto agudizado", desc:"15 de daño a un enemigo.",
-      costo:[], recarga:0, clases:[],
+      costo:["comodin"], recarga:0, clases:[],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
   ] },
 };
