@@ -32,12 +32,13 @@ const CLASE_N = {
 const TURNO_SEG = 60;
 const MOVIL = () => window.innerWidth < 900;
 
-// puntitos de costo: uno por energía que cuesta
+// costo: un ICONO DEL BIOMA por cada energía que cuesta. Antes eran puntitos de
+// color y había que acordarse de cuál era cuál; con el dibujo se lee de una.
 const costoHTML = (costo) => !costo || !costo.length
   ? '<span class="ar-gratis">gratis</span>'
   : costo.map(c => c === 'TODO'
       ? '<b class="ar-todo">TODA</b>'
-      : `<i class="ar-pt b-${c}" title="${BIOMA_N[c]}"></i>`).join('');
+      : `<img class="ar-pt" src="${BIOMA_ICO(c)}" alt="${BIOMA_N[c]}" title="${BIOMA_N[c]}" draggable="false">`).join('');
 
 // ---------- abrirArena: game.js llama esto y se olvida ----------
 // opts: { miEquipo:[{key,ref}], rivalEquipo:[{key}], titulo, sub, fondo (url),
@@ -214,15 +215,15 @@ export function abrirArena(opts) {
     </button>`;
   }
 
-  function infoHTML() {
-    if (!verInfo) return `
+  function infoHTML(par = verInfo) {
+    if (!par) return `
       <div class="ar-ico vacio">👆</div>
       <div class="ar-itx">
         <h3>Elegí una habilidad</h3>
         <p>Tocá un animal tuyo para ver sus habilidades, después la habilidad y a quién se la
         tirás. El <b>orden de la cola</b> importa: cada animal usa 1 por turno.</p>
       </div>`;
-    const { u, h } = verInfo;
+    const { u, h } = par;
     const clases = (h.clases || []).map(c => CLASE_N[c] || c);
     const perfora = (h.efectos || []).some(f => f.ignoraInvulnerable || f.toxina || f.ignoraDefensa);
     return `
@@ -288,6 +289,22 @@ export function abrirArena(opts) {
       if (!objetivosValidos().includes(uid)) return;
       encolar(seleccion.uid, seleccion.hab, uid);
     });
+    // pasar el mouse por encima YA muestra qué hace (sin tener que tocarla ni
+    // encolarla). Al salir vuelve a lo que estabas mirando, así el panel no
+    // parpadea. Solo repinta la tarjeta, no toda la pantalla.
+    let infoFijada = verInfo;
+    root.querySelectorAll('.ar-h').forEach(el => {
+      el.onmouseenter = () => {
+        if (st.lado !== 'A' || st.fin || animando) return;
+        const u = u$(el.dataset.uid);
+        elInfo.innerHTML = infoHTML({ u, h: u.habs[+el.dataset.hab] });
+        engancharCerrar();
+      };
+      el.onmouseleave = () => {
+        elInfo.innerHTML = infoHTML(infoFijada);
+        engancharCerrar();
+      };
+    });
     root.querySelectorAll('.ar-h').forEach(el => el.onclick = (ev) => {
       ev.stopPropagation();
       if (st.lado !== 'A' || st.fin || animando) return;
@@ -306,6 +323,10 @@ export function abrirArena(opts) {
       else return encolar(uid, hab, uid);             // a sí mismo / al equipo / a todos
       render();
     });
+    engancharCerrar();
+  }
+
+  function engancharCerrar() {
     const c = root.querySelector('#arCerrar');
     if (c) c.onclick = () => { verInfo = null; render(); };
   }

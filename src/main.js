@@ -17,7 +17,9 @@ window.liga = sel;
 // ---------- música ----------
 // Selección de equipo = AMBIENTE RELAJANTE nuevo (assets/audio/ambiente.mp3,
 // generado con make_musica_ambiente.py: pads lentos + caja de música + pájaros).
-// Combate = pelea.ogg. arenaUI avisa con window.faunaMusic.set('battle'|'map').
+// Combate = POWER METAL (make_musica_pelea.py): guitarras con distorsión, doble
+// bombo y guitarras gemelas. Reemplaza al chiptune 8-bit de antes.
+// arenaUI avisa con window.faunaMusic.set('battle'|'map').
 (function setupMusic() {
   const btn = document.getElementById('soundBtn');
   const mk = (src, vol, pre = 'auto') => {
@@ -25,7 +27,7 @@ window.liga = sel;
   };
   const tracks = {
     map: mk('assets/audio/ambiente.mp3', 0.34),      // ambiente relajante (nuevo)
-    battle: mk('assets/audio/pelea.ogg', 0.38),
+    battle: mk('assets/audio/pelea_metal.mp3', 0.30),   // power metal, va más fuerte de por sí
     noche: mk('assets/audio/noche.mp3', 0.36, 'none'),   // leyendas del Tenebroso
   };
   let on = (localStorage.getItem('fauna_sound') || 'on') !== 'off';
@@ -61,5 +63,21 @@ window.liga = sel;
     on = !on;
     try { localStorage.setItem('fauna_sound', on ? 'on' : 'off'); } catch {}
     apply(); sync();
+  });
+})();
+
+// ---------- el botón ATRÁS no saca del juego ----------
+// El juego es una sola página: sin esto, "atrás" te manda fuera del sitio y
+// perdés la pelea que estabas jugando. Se deja siempre un estado de más en el
+// historial y se vuelve a poner cada vez que el navegador lo consume; el
+// "atrás" pasa a significar "cerrá lo que tengas abierto" (el modal de
+// misiones), y en medio de un combate no hace nada.
+(function atrasSeguro() {
+  history.pushState({ fauna: 1 }, '');
+  window.addEventListener('popstate', () => {
+    history.pushState({ fauna: 1 }, '');        // reponer el tope
+    if (document.querySelector('.ar-root')) return;   // en combate: no hacer nada
+    // avisar a la UI por si tiene algo abierto que cerrar
+    window.dispatchEvent(new CustomEvent('fauna:atras'));
   });
 })();

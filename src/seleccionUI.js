@@ -28,17 +28,30 @@ const BCOLOR_TXT = { bosque: '#7fe0a0', sabana: '#f0c46a', agua: '#7fc8f5', mont
 const BEMO = { bosque: '🌳', sabana: '🌾', agua: '🌊', montana: '⛰️', noche: '🌑' };
 const ORBC = { bosque: '#3f8f4a', sabana: '#c8923f', agua: '#2f6f8f', montana: '#8a6f9a', comodin: '#9a9a9a' };
 
+const BIOMA_N = { bosque:'Bosque', sabana:'Sabana', agua:'Agua', montana:'Montaña', comodin:'Comodín' };
+// el costo se muestra con el ICONO del bioma (mismo criterio que en la arena)
 const orbes = (costo) => !costo || !costo.length
   ? '<span class="sl-free">GRATIS</span>'
   : costo.map(c => c === 'TODO'
       ? '<b class="sl-todo">TODA</b>'
-      : `<i class="sl-orb" style="background:${ORBC[c]}"></i>`).join('');
+      : `<img class="sl-orb" src="assets/iconos/bioma_${c}.png" alt="${BIOMA_N[c] || c}"
+           title="${BIOMA_N[c] || c}" draggable="false">`).join('');
 
 export function crearSeleccion(root) {
   const st = L.cargar();
   let equipo = st.ultimoEquipo.filter(k => L.desbloqueado(st, k)).slice(0, 3);
   let fichaKey = equipo[0] || st.desbloqueados[0];
   let modal = null;   // 'misiones' | null
+
+  // El "atrás" del navegador cierra el modal en vez de sacarte del juego
+  // (main.js lo convierte en este evento; ver atrasSeguro). Se engancha UNA
+  // vez: si fuera dentro de render() se acumularía uno por repintado.
+  window.addEventListener('fauna:atras', () => {
+    if (!modal) return;
+    modal = null;
+    const b = root.querySelector('#slModal');
+    if (b) b.innerHTML = '';
+  });
 
   // ---------- avatar (primera vez) ----------
   function pedirGuia() {
