@@ -279,17 +279,41 @@ color celeste y poné verde con árboles"*.
 6. Las **fichas educativas** (fichas.js) hoy quedaron fuera del flujo — engancharlas al
    desbloquear una especie nueva (el guía te la presenta).
 
-### Pendientes viejos que siguen abiertos
-- Paneles laterales EQUIPO / MOCHILA / PROGRESO (hoy los chips van en fila arriba).
-- El **tema tico 8-bit** (`assets/audio/tema_tico.mp3`) está en el repo pero **sin cablear**.
-- Con 2 corazones, el bot que juega bien gana **81%** — quedó generoso. Revisar tras ARENA.
+### Pendientes viejos (del juego de TABLERO, que se descartó)
+Se dejan anotados solo por si algo se rescata; **ninguno aplica al juego actual**:
+paneles laterales EQUIPO/MOCHILA/PROGRESO · el balance de "2 corazones / 81% de
+victorias" (ya no hay corazones) · `assets/audio/tema_tico.mp3` sin cablear.
 
 ### Notas técnicas para el que retome
-- **Caché de módulos ES**: el `?v=N` de `index.html` no invalida los imports internos de
-  `main.js`. Para ver cambios de `src/*.js` en local hay que **subir el puerto** en
-  `.claude/launch.json` (va por 5649).
-- El **screenshot del panel de navegador no funciona** en estas sesiones: se verifica por DOM
-  (`javascript_tool`), midiendo contraste y desbordes.
+- **Caché de módulos ES**: el `?v=N` de `index.html` NO invalida los imports internos
+  de `main.js`. Para ver cambios de `src/*.js` en local hay que **subir el puerto** en
+  `.claude/launch.json` (va por **5657**).
+- **El screenshot del navegador SÍ funciona** en estas sesiones (la nota vieja decía
+  lo contrario). Se cuelga con imágenes muy grandes: si pasa, bajar el viewport.
+  Igual conviene verificar por DOM con `javascript_tool` — contraste, desbordes y
+  escalas se miden, no se miran.
+- 📌 **Antes de pelear con `image-rendering`, medir el CONTRASTE del sprite contra
+  el fondo que se le pone detrás.** Cuatro intentos se fueron en escalas y suavizado
+  cuando el problema era que un sprite beige estaba sobre fondo verde claro (2.76).
+- 📌 **Escalas de sprites: solo enteras** (×1, ×2) o fracciones exactas (½, ¼).
 - El token de PixelLab se lee **solo** de `PIXELLAB_TOKEN`; nunca va al repo.
-- Scripts de arte/música: `gen_props.py`, `gen_bosses.py`, `make_music_cr.py`, `make_fauna_data.py`
-  (este último REGENERA `src/fauna_roster.js`: editar el script, no el roster).
+  ⚠️ **La cuenta está en $0** — no se puede generar arte ahí hasta recargar.
+
+### Generadores (Python) — editar el script, nunca la salida
+| Script | Genera |
+|---|---|
+| `make_movesets.py` | `src/movesets_gen.js` — los kits de las 122 especies sin kit propio |
+| `make_iconos_hab.py` | `assets/iconos/*.png` — los 24 dibujos de habilidad |
+| `make_fondo_bosque.py` | `assets/escenarios/fondo_bosque.png` — el fondo verde tileable |
+| `make_musica_ambiente.py` | `assets/audio/ambiente.mp3` — el tema relajante |
+| `make_fauna_data.py` | `src/fauna_roster.js` — el roster de 136 especies |
+| `gen_props.py` · `gen_bosses.py` · `make_music_cr.py` | props, cabecillas y tema tico (PixelLab/numpy) |
+
+### Herramientas de medición
+| Comando | Para qué |
+|---|---|
+| `node test/arena.test.mjs` | 19 pruebas del motor de combate |
+| `node test/engine.test.mjs` | 46 pruebas del motor viejo (sigue verde) |
+| `node tools/liga_sim.mjs 1000` | juega ligas completas: victorias, turnos, cuelgues |
+| `node tools/kits.mjs` | balance por rol y los kits extremos |
+| `node tools/energia.mjs` | cuánto se queda sin jugar un equipo por falta de energía |
