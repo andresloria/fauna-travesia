@@ -13,9 +13,9 @@ export const MOVESETS_DOC = {
     { n:"Lengua pegajosa", desc:"15 de daño a TODOS los enemigos.",
       costo:["comodin", "comodin"], recarga:0, clases:["natural", "rango"],
       efectos:[{"t": "dano", "v": 15, "obj": "todos"}] },
-    { n:"Toxina paralizante", desc:"20 de daño a TODOS los enemigos. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades de instinto 1 turno.",
+    { n:"Toxina paralizante", desc:"20 de daño a TODOS los enemigos. Lo aturde 1 turno.",
       costo:["sabana", "comodin"], recarga:0, clases:["fisico", "melee"],
-      efectos:[{"t": "dano", "v": 20, "obj": "todos"}, {"t": "aturdir", "turnos": 1, "obj": "todos", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "todos", "clase": "instinto"}] },
+      efectos:[{"t": "dano", "v": 20, "obj": "todos"}, {"t": "aturdir", "turnos": 1, "obj": "todos"}] },
     { n:"Postura defensiva", desc:"Gana 30 de defensa destructible.",
       costo:["sabana", "comodin"], recarga:4, clases:["instinto"],
       efectos:[{"t": "defensa", "v": 30, "obj": "self"}] },
@@ -118,9 +118,9 @@ export const MOVESETS_DOC = {
   ] },
   // Escarabajo Hércules → Sakura Haruno · Shippuden
   escarabajo: { habs: [
-    { n:"Embestida aturdidora", desc:"20 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades de instinto 1 turno. Su próximo golpe pega +10.",
+    { n:"Embestida aturdidora", desc:"20 de daño a un enemigo. Lo aturde 1 turno. Su próximo golpe pega +10.",
       costo:["bosque"], recarga:0, clases:["fisico", "melee"],
-      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "instinto"}, {"t": "amplificar", "v": 10, "turnos": 2, "obj": "self"}] },
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}, {"t": "amplificar", "v": 10, "turnos": 2, "obj": "self"}] },
     { n:"Recuperación", desc:"Cura 25 a un aliado.",
       costo:["agua"], recarga:0, clases:["natural"],
       efectos:[{"t": "curar", "v": 25, "obj": "aliado"}] },
@@ -136,9 +136,9 @@ export const MOVESETS_DOC = {
     { n:"Contraataque reflejo", desc:"10 de daño a un enemigo.",
       costo:["montana"], recarga:2, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}] },
-    { n:"Golpe aturdidor", desc:"45 de daño a un enemigo. Aturde sus habilidades físicas 2 turnos. Aturde sus habilidades de instinto 2 turnos.",
+    { n:"Golpe aturdidor", desc:"45 de daño a un enemigo. Lo aturde 2 turnos.",
       costo:["montana", "montana"], recarga:2, clases:["fisico", "rango"],
-      efectos:[{"t": "dano", "v": 45, "obj": "enemigo"}, {"t": "aturdir", "turnos": 2, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 2, "obj": "enemigo", "clase": "instinto"}] },
+      efectos:[{"t": "dano", "v": 45, "obj": "enemigo"}, {"t": "aturdir", "turnos": 2, "obj": "enemigo"}] },
   ] },
   // Puercoespín → Tenten · Shippuden
   puercoespin: { habs: [
@@ -310,9 +310,9 @@ export const MOVESETS_DOC = {
   ] },
   // Chancho de monte → Jūgo · Shippuden
   chancho_monte: { habs: [
-    { n:"Embestida aturdidora", desc:"40 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades de cuerpo a cuerpo 1 turno.",
+    { n:"Embestida aturdidora", desc:"40 de daño a un enemigo. Lo aturde 1 turno.",
       costo:["bosque", "montana"], recarga:0, clases:["fisico", "melee"],
-      efectos:[{"t": "dano", "v": 40, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "melee"}] },
+      efectos:[{"t": "dano", "v": 40, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
     { n:"Cornada", desc:"25 de daño a un enemigo (ignora la defensa).",
       costo:["montana", "montana"], recarga:4, clases:["fisico", "melee"],
       efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "ignoraDefensa": true}] },
@@ -352,9 +352,9 @@ export const MOVESETS_DOC = {
     { n:"Dentellada frenética", desc:"Recibe 5 menos de daño durante 2 turnos.",
       costo:["agua"], recarga:5, clases:["natural"],
       efectos:[{"t": "reducir", "v": 5, "turnos": 2, "obj": "self"}] },
-    { n:"Sacudida paralizante", desc:"10 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades naturales 1 turno.",
+    { n:"Sacudida paralizante", desc:"10 de daño a un enemigo. Lo aturde 1 turno.",
       costo:["agua", "comodin"], recarga:2, clases:["fisico", "rango"],
-      efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}] },
+      efectos:[{"t": "dano", "v": 10, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
   ] },
   // Tapir (Danta) → Hashirama Senju · Revividos (Edo Tensei)
   danta: { habs: [
@@ -406,9 +406,9 @@ export const MOVESETS_DOC = {
   ] },
   // Cangrejo terrestre → Demon Brothers · Original (Parte 1)
   cangrejo: { habs: [
-    { n:"Pinza inmovilizante", desc:"Aturde sus habilidades físicas 1 turno. Aturde sus habilidades naturales 1 turno.",
+    { n:"Pinza inmovilizante", desc:"Lo aturde 1 turno.",
       costo:["bosque"], recarga:0, clases:["fisico", "melee"],
-      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}] },
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
     { n:"Toxina corrosiva", desc:"30 de daño a un enemigo. Su próximo golpe pega +10.",
       costo:["comodin", "comodin"], recarga:0, clases:["fisico", "melee", "toxina"],
       efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "amplificar", "v": 10, "turnos": 2, "obj": "self"}] },
@@ -532,9 +532,9 @@ export const MOVESETS_DOC = {
     { n:"Pelos urticantes", desc:"15 de daño a un enemigo. Queda expuesto 1 turno (no puede volverse invulnerable).",
       costo:["sabana"], recarga:1, clases:["natural", "rango"],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}, {"t": "exponer", "turnos": 1, "obj": "enemigo"}] },
-    { n:"Sacudida paralizante", desc:"Aturde sus habilidades físicas 1 turno. Aturde sus habilidades naturales 1 turno.",
+    { n:"Sacudida paralizante", desc:"Lo aturde 1 turno.",
       costo:["sabana", "comodin"], recarga:3, clases:["natural", "rango"],
-      efectos:[{"t": "aturdir", "turnos": 1, "obj": "todos", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "todos", "clase": "natural"}] },
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "todos"}] },
   ] },
   // Mantis orquídea → Rock Lee · Shippuden
   cabro_monte: { habs: [
@@ -562,9 +562,9 @@ export const MOVESETS_DOC = {
   ] },
   // Hormiga león → Gaara · Original (Parte 1)
   mapache: { habs: [
-    { n:"Trampa de arena", desc:"Aturde sus habilidades físicas 2 turnos. Aturde sus habilidades naturales 2 turnos.",
+    { n:"Trampa de arena", desc:"Lo aturde 2 turnos.",
       costo:["agua", "comodin"], recarga:2, clases:["fisico", "rango"],
-      efectos:[{"t": "aturdir", "turnos": 2, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 2, "obj": "enemigo", "clase": "natural"}] },
+      efectos:[{"t": "aturdir", "turnos": 2, "obj": "enemigo"}] },
     { n:"Arena abrasiva", desc:"15 de daño a un enemigo.",
       costo:[], recarga:2, clases:["fisico"],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
@@ -742,9 +742,9 @@ export const MOVESETS_DOC = {
   ] },
   // Babosa gigante → Tsunade · Shippuden
   manati: { habs: [
-    { n:"Golpe aturdidor", desc:"30 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades de instinto 1 turno.",
+    { n:"Golpe aturdidor", desc:"30 de daño a un enemigo. Lo aturde 1 turno.",
       costo:["bosque", "comodin"], recarga:0, clases:["fisico", "melee"],
-      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "instinto"}] },
+      efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
     { n:"Mucosa regeneradora", desc:"Le quita los efectos dañinos.",
       costo:["agua", "agua"], recarga:3, clases:["natural"],
       efectos:[{"t": "limpiar", "obj": "self"}] },
@@ -790,9 +790,9 @@ export const MOVESETS_DOC = {
   ] },
   // Sapo dorado → Sage Mode Naruto · Shippuden
   quetzaldorado: { habs: [
-    { n:"Toxina paralizante", desc:"20 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades de cuerpo a cuerpo 1 turno.",
+    { n:"Toxina paralizante", desc:"20 de daño a un enemigo. Lo aturde 1 turno.",
       costo:["bosque"], recarga:0, clases:["fisico", "melee"],
-      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "melee"}] },
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
     { n:"Recuperación", desc:"Cura 25 a sí mismo. Le roba 1 de energía a un enemigo.",
       costo:["sabana"], recarga:2, clases:["natural"],
       efectos:[{"t": "curar", "v": 25, "obj": "self"}, {"t": "robarEnergia", "n": 1, "obj": "enemigo"}] },
@@ -853,9 +853,9 @@ export const MOVESETS_DOC = {
     { n:"Punzada profunda", desc:"25 de daño a un enemigo (ignora la defensa).",
       costo:["bosque"], recarga:0, clases:["fisico", "melee"],
       efectos:[{"t": "dano", "v": 25, "obj": "enemigo", "ignoraDefensa": true}] },
-    { n:"Golpe aturdidor", desc:"Aturde sus habilidades físicas 1 turno. Aturde sus habilidades de cuerpo a cuerpo 1 turno.",
+    { n:"Golpe aturdidor", desc:"Lo aturde 1 turno.",
       costo:["bosque"], recarga:0, clases:["fisico", "melee"],
-      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "melee"}] },
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
     { n:"Toxina corrosiva", desc:"10 de daño a un enemigo (toxina: atraviesa la invulnerabilidad).",
       costo:["comodin"], recarga:1, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 10, "obj": "enemigo", "toxina": true}] },
@@ -886,9 +886,9 @@ export const MOVESETS_DOC = {
   ] },
   // Araña de seda dorada → Maki · Shippuden
   oropendola: { habs: [
-    { n:"Aturdimiento", desc:"Aturde sus habilidades físicas 1 turno. Aturde sus habilidades de cuerpo a cuerpo 1 turno.",
+    { n:"Aturdimiento", desc:"Lo aturde 1 turno.",
       costo:["comodin"], recarga:2, clases:["fisico", "rango"],
-      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "melee"}] },
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
     { n:"Estocada perforante", desc:"20 de daño a un enemigo (ignora la defensa).",
       costo:["agua"], recarga:0, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 20, "obj": "enemigo", "ignoraDefensa": true}] },
@@ -1177,9 +1177,9 @@ export const MOVESETS_DOC = {
     { n:"Tentáculos", desc:"30 de daño a un enemigo. Gana 20 de defensa destructible.",
       costo:["sabana", "comodin"], recarga:0, clases:["fisico", "melee"],
       efectos:[{"t": "dano", "v": 30, "obj": "enemigo"}, {"t": "defensa", "v": 20, "obj": "self"}] },
-    { n:"Mordida de pico", desc:"Aturde sus habilidades físicas 1 turno. Aturde sus habilidades naturales 1 turno.",
+    { n:"Mordida de pico", desc:"Lo aturde 1 turno.",
       costo:["sabana"], recarga:0, clases:["fisico", "melee"],
-      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}] },
+      efectos:[{"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
     { n:"Camuflaje cromático", desc:"Invulnerable 1 turno a todo el equipo. Gana 1 de energía.",
       costo:["comodin", "comodin"], recarga:3, clases:["instinto"],
       efectos:[{"t": "invulnerable", "turnos": 1, "obj": "equipo"}, {"t": "darEnergia", "tipo": "comodin", "obj": "self"}] },
@@ -1357,9 +1357,9 @@ export const MOVESETS_DOC = {
     { n:"Descarga a distancia", desc:"10 de daño a TODOS los enemigos. Gana 5 de defensa destructible permanente.",
       costo:["comodin"], recarga:1, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 10, "obj": "todos"}, {"t": "defensa", "v": 5, "obj": "self", "permanente": true}] },
-    { n:"Golpe aturdidor", desc:"25 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades naturales 1 turno.",
+    { n:"Golpe aturdidor", desc:"25 de daño a un enemigo. Lo aturde 1 turno.",
       costo:["montana", "comodin"], recarga:0, clases:["fisico", "rango"],
-      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}] },
+      efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
     { n:"Instinto de manada", desc:"25 de daño a un enemigo.",
       costo:["montana", "montana"], recarga:0, clases:["fisico", "rango"],
       efectos:[{"t": "dano", "v": 25, "obj": "enemigo"}] },
@@ -1438,9 +1438,9 @@ export const MOVESETS_DOC = {
   ] },
   // Tiburón toro → Kisame Hoshigaki · Shippuden
   tiburon: { habs: [
-    { n:"Embate aturdidor", desc:"20 de daño a un enemigo. Aturde sus habilidades naturales 1 turno. Aturde sus habilidades de instinto 1 turno.",
+    { n:"Embate aturdidor", desc:"20 de daño a un enemigo. Lo aturde 1 turno.",
       costo:["bosque"], recarga:1, clases:["fisico", "melee"],
-      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "instinto"}] },
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
     { n:"Dentellada frenética", desc:"15 de daño a un enemigo.",
       costo:["bosque", "agua"], recarga:2, clases:["fisico", "melee"],
       efectos:[{"t": "dano", "v": 15, "obj": "enemigo"}] },
@@ -1597,9 +1597,9 @@ export const MOVESETS_DOC = {
     { n:"Enroscamiento", desc:"Gana 20 de defensa destructible permanente.",
       costo:["comodin"], recarga:1, clases:[],
       efectos:[{"t": "defensa", "v": 20, "obj": "self", "permanente": true}] },
-    { n:"Aturdimiento", desc:"20 de daño a un enemigo. Aturde sus habilidades físicas 1 turno. Aturde sus habilidades naturales 1 turno.",
+    { n:"Aturdimiento", desc:"20 de daño a un enemigo. Lo aturde 1 turno.",
       costo:["bosque"], recarga:1, clases:["fisico", "melee"],
-      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "fisico"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo", "clase": "natural"}] },
+      efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "aturdir", "turnos": 1, "obj": "enemigo"}] },
     { n:"Recuperación", desc:"20 de daño a un enemigo. Cura 20 a sí mismo.",
       costo:["sabana", "comodin"], recarga:1, clases:["instinto", "rango"],
       efectos:[{"t": "dano", "v": 20, "obj": "enemigo"}, {"t": "curar", "v": 20, "obj": "self"}] },

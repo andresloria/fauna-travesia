@@ -59,8 +59,13 @@ OBJETIVO = {
     '': 'self',
 }
 
-# aturdir: el motor guarda UNA clase por efecto, así que un aturdido de varias
-# clases se emite como varios efectos de aturdir.
+# ATURDIR: en el original el aturdimiento es POR CLASE ("no puede usar sus
+# habilidades físicas"). Medido el 22-jul, eso salía carísimo y no ganaba
+# combates: el fondo de la tabla tenía 9x más control que el top, porque
+# gastar una habilidad entera en bloquear UNA clase casi nunca corta la jugada
+# del rival. Decisión de Andrés: **todo aturdimiento aturde COMPLETO**.
+# El detalle de clases queda acá por si hay que volver atrás (`POR_CLASE=True`).
+POR_CLASE = False
 ATURDE_CLASES = {
     'todas': [None],
     'físicas y de chakra': ['fisico', 'natural'],
@@ -274,7 +279,8 @@ def efectos_de(m, bypass, efecto_en=''):
                     'turnos': m.get('afliccion_turnos') or turnos_en(efecto_en), 'obj': objp})
 
     if m.get('aturde'):
-        for cl in ATURDE_CLASES.get(m['aturde'], [None]):
+        clases = ATURDE_CLASES.get(m['aturde'], [None]) if POR_CLASE else [None]
+        for cl in clases:
             e = {'t': 'aturdir', 'turnos': m.get('aturde_turnos') or 1, 'obj': objp}
             if cl:
                 e['clase'] = cl

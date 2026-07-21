@@ -5,6 +5,49 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 22 jul 2026 · DOS BUGS GRAVES DEL MOTOR + aturdir total
+
+Andrés pidió: aturdir siempre completo (no por clase), y auditar que TODAS las
+habilidades peguen lo que dicen. La auditoría destapó dos bugs de motor que
+llevaban semanas escondidos.
+
+### 🐛 BUG 1 — el aturdimiento de 1 turno NO EXISTÍA (114 habilidades)
+`caducarEfectos` corre sobre el lado que ENTRA a jugar. Un "aturdido 1 turno"
+puesto al rival se descontaba a 0 y **desaparecía antes de que el rival
+jugara**. La habilidad más común del juego no hacía absolutamente nada.
+
+Arreglo: cada efecto lleva `desde` (el turno en que nació) y **no caduca en el
+turno en que se aplicó**. Los buffs propios no cambian: siguen protegiéndote
+durante el turno rival y venciendo al empezar el tuyo (verificado).
+
+### 🐛 BUG 2 — "gana 1 de energía" tiraba la energía a la basura
+`darEnergia` hacía `pool['comodin']++` y el pool solo tiene los 4 biomas:
+creaba una llave basura `comodin: null` y la energía prometida nunca llegaba.
+Ahora el comodín entrega un bioma AL AZAR, como la energía del turno.
+
+### Aturdir completo
+`POR_CLASE = False` en el generador: todo aturdimiento aturde TODO. El detalle
+por clase queda en el código por si hay que volver.
+**No quedó roto**: especies con aturdir 50,2% vs sin aturdir 49,4%.
+
+### `tools/auditar_habilidades.mjs` (nuevo)
+Prueba las **408 habilidades una por una** en combate controlado y compara lo
+que pasó contra lo que declaran: daño, área (que toque a los 3), curación,
+toxina, aturdir, exponer, marca, invulnerable, reducción, contraataque,
+defensa, robo/quema de energía, amplificar, limpiar y dar energía. Además
+verifica que la DESCRIPCIÓN mencione los números reales.
+**Resultado final: 408/408 sin fallas.**
+
+📌 Dos veces el "fallo" era del auditor, no del juego: (1) comparar el pool de
+energía antes/después no sirve porque el rival GANA energía al entrar y tapa
+el robo — hay que mirar el evento del log; (2) marcó 7 habilidades como "sin
+efecto" cuando lo que pasaba es que no sabía medir `amplificar`, `limpiar` ni
+`darEnergia`. **Antes de acusar al juego, sospechar de la herramienta.**
+
+De paso, la compensación por abrir mejoró sola a **51,1%** (era 52,3%).
+
+---
+
 ## Sesión — 22 jul 2026 · COMPENSACIÓN POR ABRIR (arreglo #2, bloqueador de PvP)
 
 Quien abría el combate ganaba el **61,5%** (medido en ESPEJO PERFECTO: mismo

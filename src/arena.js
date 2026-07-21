@@ -240,7 +240,7 @@ export function ejecutarTurno(st, cola) {
     const ganadas = ganarEnergia(st, st.lado, n);
     eventos.push({ t: 'energia', lado: st.lado, ganadas });
     // duración de efectos del lado entrante (sus buffs caducan al empezar su turno)
-    for (const u of st.unidades) if (u.lado === st.lado) caducarEfectos(u);
+    for (const u of st.unidades) if (u.lado === st.lado) caducarEfectos(u, st.turno);
   }
   st.log.push(...eventos);
   return { ok: true, eventos };
@@ -270,6 +270,9 @@ function aplicarHabilidad(st, u, h, objetivoUid, eventos) {
   for (const f of efs) {
     for (const o of unidadesObjetivo(st, u, f, objetivoUid)) {
       aplicarEfecto(st, u, o, f, h, eventos);
+      // sello de nacimiento: en qué turno se aplicó (lo usa caducarEfectos)
+      for (const x of o.efectos) if (x.desde === undefined) x.desde = st.turno;
+      for (const x of u.efectos) if (x.desde === undefined) x.desde = st.turno;
       if (st.fin) return;
     }
   }
@@ -316,7 +319,16 @@ function aplicarEfecto(st, u, o, f, h, eventos) {
       }
       break;
     }
-    case 'darEnergia': st.energia[u.lado][f.tipo]++; break;
+    // ⚠️ BUG ARREGLADO (22-jul): esto hacía `pool['comodin']++`, y el pool solo
+    // tiene los 4 biomas — creaba una llave basura `comodin: null` y la energía
+    // prometida NO llegaba nunca. El comodín significa "cualquiera", así que
+    // ahora entrega un bioma AL AZAR, igual que la energía del turno.
+    case 'darEnergia': {
+      const b = BIOMAS.includes(f.tipo) ? f.tipo : BIOMAS[Math.floor(st.rng() * 4)];
+      st.energia[u.lado][b] += (f.n || 1);
+      eventos.push({ t: 'ganaEnergia', uid: u.uid, bioma: b });
+      break;
+    }
     case 'contraataque': u.efectos.push({ t: 'contra', v: f.v, turnos: 2 }); break;
     case 'amplificar': o.efectos.push({ t: 'amp', v: f.v, turnos: f.turnos }); break;
     case 'limpiar': o.efectos = o.efectos.filter(x => !['dot', 'aturdir', 'exponer', 'marca'].includes(x.t)); break;
@@ -396,9 +408,19 @@ function tickFinDeTurno(st, lado, eventos) {
   }
 }
 
-function caducarEfectos(u) {
-  for (const f of u.efectos)
-    if (!['dot', 'hot', 'marca'].includes(f.t)) f.turnos--;
+// ⚠️ BUG ARREGLADO (22-jul): esto corre sobre el lado que ENTRA a jugar, así
+// que un "aturdido 1 turno" que le acababas de poner al rival se descontaba a
+// 0 y desaparecía ANTES de que el rival jugara: 114 habilidades de aturdir no
+// hacían absolutamente nada. Ahora un efecto no caduca en el mismo turno en
+// que nació (`desde`), así que dura la jugada completa del que lo recibió.
+// Los buffs propios no cambian: siguen protegiéndote durante el turno rival y
+// venciendo al empezar el tuyo.
+function caducarEfectos(u, turnoActual) {
+  for (const f of u.efectos) {
+    if (['dot', 'hot', 'marca'].includes(f.t)) continue;
+    if (f.desde !== undefined && f.desde === turnoActual - 1) continue;  // recién nacido
+    f.turnos--;
+  }
   u.efectos = u.efectos.filter(f => f.turnos > 0);
   // la defensa permanente se reaplica sola (Gaara: Armor of Sand)
   if (u.defensaPerm > 0) u.defensa = Math.max(u.defensa, u.defensaPerm);
