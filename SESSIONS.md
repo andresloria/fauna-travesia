@@ -218,6 +218,14 @@ que **la diversidad de biomas pesa más que el poder bruto del kit**, y la
 heurística del simulador no lo sabe. Hay que enseñarle a valorar la cobertura de
 energía antes de volver a usar esos números como medida de "jugar bien".
 
+**✅ HECHO (20-jul, cierre 3): los guías se veían mal.**
+El arte está bien: son sprites de **cuerpo entero** (256×256, figura alta y
+angosta). El error era el marco: una caja CUADRADA de 90px dejaba la cabeza en
+~10px y todo se leía como una mancha. Ahora el marco tiene **forma de retrato**
+(132×176, 112×150 en celular), la figura va con `object-fit:contain` apoyada
+abajo, y el fondo es un degradado cielo→pasto. Se les ve la cara, el sombrero,
+el morral y el mapa. Verificado en 1280 y en 375 (sin scroll lateral).
+
 ## PRÓXIMOS PASOS (retomar por acá)
 
 0. **"Animales iguales que en Naruto-Arena" — falta el tramo grande**: hoy los
