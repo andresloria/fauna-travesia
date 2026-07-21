@@ -218,31 +218,29 @@ que **la diversidad de biomas pesa más que el poder bruto del kit**, y la
 heurística del simulador no lo sabe. Hay que enseñarle a valorar la cobertura de
 energía antes de volver a usar esos números como medida de "jugar bien".
 
-**✅ HECHO (20-jul, cierre 3): los guías se veían mal.**
-El arte está bien: son **pixel art NATIVO de 256px** (bloque real 1×1 — se midió:
-cada pixel es distinto, no es un sprite chico ampliado). Por eso **cualquier
-reducción los arruina**: con `image-rendering:auto` se emborronan el pelo y los
-ojos, y con `pixelated` se pierden pixeles sueltos (los ojos son de 1px).
-Se probaron las dos y Andrés vetó las dos.
-
-Mostrarlos 1:1 tampoco alcanzó, y la medición explicó por qué: **son sprites de
-CUERPO ENTERO, así que la cabeza mide apenas ~45px** dentro de los 256. Los ojos
-son de 2 píxeles y la barba de 4: a ese tamaño no hay CSS que los salve.
-
-**Solución: un RETRATO, no el cuerpo entero** (`make_retratos.py`). Recorta
-cabeza + hombros (detecta el centro de la cabeza mirando la franja superior del
-contenido) y lo amplía **×2 con vecino-más-cercano** — ampliar pixel art en
-enteros es SIN pérdida. La cabeza pasa de 45px a ~90px. Los dos salen en un
-lienzo común de 124×114 (→ 248×228) para que el marco no cambie de tamaño.
-Se muestra **1:1 en escritorio y a la MITAD EXACTA en celular** (124px = ½ de
-248), las dos relaciones enteras. Verificado: escala 1.000 / 0.500, sin scroll
-lateral, y el flujo elegir→empezar→refugio sigue intacto.
-Nota: el panel `.sl-avatar` pasó de 420 a 560px de ancho, porque dos retratos de
-248 no cabían y se salían de la caja crema.
-
-📌 **Regla general para sprites de este juego**: averiguar la resolución NATIVA
-antes de elegir cómo mostrarlos. Si el arte es nativo (bloque 1×1), mostrarlo a
-1:1 o a una fracción exacta (½, ¼); nunca a una escala rara.
+**✅ HECHO (20-jul, cierre 3): guías con su arte completo + FONDO DE BOSQUE.**
+Decisión final de Andrés: *"usá esos artes sin editar nada, también quitá el
+color celeste y poné verde con árboles"*.
+- **Los guías van con el PNG original, sin recortar ni retocar**, a escala 1:1
+  (256×256 nativos). En celular **se apilan** en vez de achicarse, porque
+  cualquier reducción arruina el pixel art (los ojos son de 2px). Se probaron y
+  descartaron: `pixelated` reducido (pierde píxeles), `auto` reducido (emborrona
+  pelo y barba) y un retrato recortado ×2 (se veía bien pero él quiere el arte
+  entero). El panel `.sl-avatar` pasó a 580px para que quepan los dos.
+- **Fondo: bosque verde tileable** (`make_fondo_bosque.py` → 128×128 sin
+  costura, copas vistas desde arriba en 3 verdes; se dibuja a 64px y se amplía
+  ×2 para que el píxel quede chunky como los sprites). Reemplaza el degradado
+  celeste en el `body`, con un velo oscuro arriba y abajo para que los paneles
+  crema resalten.
+- ⚠️ **El fondo oscuro rompió la legibilidad** y hubo que barrer contrastes:
+  título, bajada y encabezados estaban entre **1.24 y 1.93** (mínimo 4.5). Se
+  pasaron a claros con sombra (ahora 7.0–8.7). Además apareció que
+  `details.how` tenía `background:rgba(0,0,0,.2)` — un resto del tema oscuro
+  viejo — así que su texto quedaba ilegible: ahora es panel crema.
+  De paso se arreglaron 5 contrastes que YA venían mal sobre crema (etiquetas
+  chiquitas, el botón verde) y se agregó `BCOLOR_TXT`: el color de bioma sirve
+  para bordes, pero como TEXTO daba 3.1 y necesitaba una versión oscura.
+  **Barrido final: 0 textos por debajo de 4.5 en toda la pantalla.**
 
 ## PRÓXIMOS PASOS (retomar por acá)
 

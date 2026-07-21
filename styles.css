@@ -13,17 +13,26 @@
   --line:#2b2117;--ink-g:#2a2016;--ink-soft-g:#6a5a3f;
   --px:'PressStart',monospace;--body:'VT323',monospace;
 }
-body{background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 46%,var(--sky3) 100%);
+/* Fondo: BOSQUE verde con copas (assets/escenarios/fondo_bosque.png, generado
+   por make_fondo_bosque.py y tileable sin costura). Encima, un velo oscuro
+   arriba y abajo para que los paneles crema resalten. */
+body{background:
+    linear-gradient(180deg,rgba(16,38,20,.55) 0%,rgba(16,38,20,.12) 30%,
+                    rgba(16,38,20,.12) 70%,rgba(16,38,20,.55) 100%),
+    url('assets/escenarios/fondo_bosque.png') repeat;
+  background-size:auto,128px 128px;
   background-attachment:fixed;
   color:var(--ink-g);font-family:var(--body);font-size:19px;min-height:100vh;
   padding:14px 12px 30px;-webkit-font-smoothing:none}
 .wrap{max-width:760px;margin:0 auto}
+/* ⚠️ Estos textos van sobre el FONDO DE BOSQUE (oscuro), no sobre panel crema:
+   tienen que ser CLAROS. Con los colores viejos el contraste era 1.2-1.8. */
 .eyebrow{font-family:var(--px);font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;
-  color:#2e6f8f;text-align:center;line-height:1.9}
+  color:#bfe0a8;text-align:center;line-height:1.9;text-shadow:1px 1px 0 rgba(12,26,14,.85)}
 h1{font-family:var(--px);font-weight:400;font-size:clamp(15px,3.6vw,24px);text-align:center;
-  line-height:1.7;margin-top:8px;color:#7a3f18;text-shadow:2px 2px 0 #e9dfc2}
+  line-height:1.7;margin-top:8px;color:#f3e2b6;text-shadow:2px 2px 0 #23401f,0 0 12px rgba(10,24,12,.7)}
 h1 .sub{display:block;font-family:var(--body);font-size:clamp(16px,2.4vw,20px);
-  color:var(--ink-soft-g);margin-top:6px;text-shadow:none;line-height:1.1}
+  color:#e6f0d6;margin-top:6px;text-shadow:1px 1px 0 rgba(12,26,14,.85);line-height:1.1}
 
 /* panel crema con borde grueso y bisel (la caja base de todo el juego) */
 .gbabox,.chip,.event-box,.how,.modesel,.log,.editp,.statbox,.teampanel{
@@ -299,9 +308,9 @@ button.slot.full .rm{position:absolute;top:-5px;right:-5px;width:15px;height:15p
 .log{padding:10px 13px;font-family:var(--body);font-size:18px;line-height:1.2;max-height:120px;overflow:auto;margin-top:16px}
 .log .le{padding:3px 0;color:var(--ink-soft-g);border-bottom:1px dotted var(--cream-lo)}
 .log .le b{color:#7a3f18}
-details.how{max-width:560px;margin:6px auto;background:rgba(0,0,0,.2);border:1px solid rgba(196,160,78,.2);border-radius:9px;padding:8px 14px;font-size:13px}
+details.how{max-width:560px;margin:6px auto;background:var(--cream);border:3px solid var(--line);border-radius:3px;padding:8px 14px;font-size:13px;box-shadow:inset 0 0 0 2px var(--cream-lo),inset 0 0 0 4px var(--cream-hi),3px 4px 0 rgba(0,0,0,.22)}
 details.how{padding:11px 14px;margin-bottom:4px}
-details.how summary{cursor:pointer;font-family:var(--px);font-size:8px;letter-spacing:.04em;text-transform:uppercase;color:#2e7a41;line-height:1.7}
+details.how summary{cursor:pointer;font-family:var(--px);font-size:8px;letter-spacing:.04em;text-transform:uppercase;color:#1f5c2c;line-height:1.7}
 details.how p{margin-top:9px;font-family:var(--body);font-size:18px;color:var(--ink-soft-g);line-height:1.16}
 details.how p b{color:#7a3f18}
 
@@ -1046,32 +1055,27 @@ body.ar-lock{overflow:hidden}
    seleccionUI.js · skin GBA (gbabox) + acentos por rango/bioma.
    ============================================================ */
 .sl-head{text-align:center;margin:6px 0 12px}
-.sl-head .t{font-family:var(--px);font-size:11px;color:#7a3f18;text-shadow:2px 2px 0 #e9dfc2;line-height:1.9}
-.sl-head .s{font-size:19px;color:var(--ink-soft-g);line-height:1.1}
+.sl-head .t{font-family:var(--px);font-size:11px;color:#f3e2b6;line-height:1.9;
+  text-shadow:2px 2px 0 #23401f,0 0 12px rgba(10,24,12,.7)}
+.sl-head .s{font-size:19px;color:#e6f0d6;line-height:1.1;
+  text-shadow:1px 1px 0 rgba(12,26,14,.85)}
 
 /* avatar primera vez */
-.sl-avatar{max-width:560px;margin:0 auto;padding:18px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.sl-avatar{max-width:580px;margin:0 auto;padding:18px;display:flex;flex-direction:column;gap:14px;align-items:center}
 .sl-avt{font-family:var(--px);font-size:10px;color:#7a3f18}
 .sl-input{font-family:var(--body);font-size:22px;padding:6px 10px;border:3px solid var(--line);
   border-radius:3px;background:#fff8e6;color:var(--ink-g);width:min(100%,340px);text-align:center}
-/* Los guías son pixel art NATIVO de 256px de CUERPO ENTERO: ahí la cabeza mide
-   ~45px (ojos de 2px, barba de 4) y no se ve nada. Por eso la pantalla usa un
-   RETRATO recortado a cabeza+hombros y ampliado x2 (make_retratos.py): ampliar
-   pixel art en enteros es sin pérdida. Se muestra 1:1 en escritorio y a la
-   MITAD EXACTA en celular; nunca a una escala rara. */
-.sl-avopts{display:flex;gap:16px;justify-content:center}
-.sl-avopt{position:relative;width:248px;height:228px;border:3px solid var(--line);
+/* Los guías van con su ARTE COMPLETO, sin recortar ni retocar: el PNG nativo de
+   256×256 a escala 1:1. En celular se apilan (siguen a 1:1) en vez de achicarse,
+   porque cualquier reducción arruina el pixel art. */
+.sl-avopts{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.sl-avopt{position:relative;width:256px;height:256px;border:3px solid var(--line);
   border-radius:3px;overflow:hidden;cursor:pointer;opacity:.6;
-  background:linear-gradient(180deg,#cfe3f2 0%,#dceac9 70%,#bcd3a3 100%);
+  background:linear-gradient(180deg,#dceac9 0%,#c3dbab 68%,#a9c98f 100%);
   box-shadow:inset 0 0 0 2px #fff8e6}
-.sl-avopt img{display:block;width:248px;height:228px;max-width:none;
+.sl-avopt img{display:block;width:256px;height:256px;max-width:none;
   image-rendering:pixelated}
 .sl-avopt.sel{opacity:1;box-shadow:inset 0 0 0 2px #fff8e6,0 0 0 3px #e8c558}
-@media(max-width:560px){
-  .sl-avopts{gap:10px}
-  .sl-avopt{width:124px;height:114px}
-  .sl-avopt img{width:124px;height:114px}
-}
 
 /* ficha */
 .sl-ficha{padding:11px;display:grid;grid-template-columns:130px 1fr;gap:12px;margin-bottom:10px}
@@ -1101,7 +1105,7 @@ body.ar-lock{overflow:hidden}
 .sl-orb{width:9px;height:9px;border:2px solid var(--line);border-radius:1px;display:inline-block}
 .sl-free{font-family:var(--px);font-size:6px;color:#3f8f4a}
 .sl-todo{font-family:var(--px);font-size:6px;color:#a8791a}
-.sl-htf em{font-style:normal;margin-left:auto;font-family:var(--px);font-size:6px;color:#8a7a55}
+.sl-htf em{font-style:normal;margin-left:auto;font-family:var(--px);font-size:6px;color:#6a5a3f}
 .sl-nv{position:absolute;top:-8px;right:5px;font-family:var(--px);font-size:6px;background:var(--line);
   color:#f3e2b6;padding:3px 5px;border-radius:3px}
 .sl-mision{background:#f7e7c0;border:2px solid var(--line);border-radius:3px;padding:6px 9px;
@@ -1111,14 +1115,14 @@ body.ar-lock{overflow:hidden}
 .sl-acts{display:grid;grid-template-columns:2fr 1fr;gap:9px;margin-bottom:10px}
 .sl-btn{font-family:var(--px);font-size:9.5px;padding:14px 8px;border:3px solid var(--line);border-radius:3px;
   cursor:pointer;line-height:1.7;box-shadow:inset 0 0 0 2px rgba(255,255,255,.45),3px 4px 0 rgba(0,0,0,.25)}
-.sl-btn.go{background:#5aa86b;color:#fff;text-shadow:1px 1px 0 #2c5c38}
+.sl-btn.go{background:#2f7a42;color:#fff;text-shadow:1px 1px 0 #14381c}
 .sl-btn.go:disabled{filter:grayscale(.6) brightness(.85);cursor:not-allowed}
 .sl-btn.mis{background:#e8c558;color:#3a2c10}
 
 /* abajo: equipo · refugio · perfil */
 .sl-bottom{display:grid;grid-template-columns:140px 1fr 160px;gap:10px;align-items:start}
 .sl-panel{padding:9px}
-.sl-secth{font-family:var(--px);font-size:7.5px;text-transform:uppercase;color:#8a7a55;
+.sl-secth{font-family:var(--px);font-size:7.5px;text-transform:uppercase;color:#6a5a3f;
   display:flex;align-items:center;gap:7px;margin-bottom:8px;line-height:1.8}
 .sl-secth::after{content:"";flex:1;height:3px;background:var(--line);opacity:.3;border-radius:2px}
 .sl-slots{display:flex;flex-direction:column;gap:8px}
@@ -1159,11 +1163,11 @@ body.ar-lock{overflow:hidden}
   align-self:center;image-rendering:auto;background:#d8e6c8}
 .sl-prow{display:flex;justify-content:space-between;align-items:baseline;font-size:17px;
   border-bottom:2px dotted var(--cream-lo);padding-bottom:2px}
-.sl-prow span{font-family:var(--px);font-size:6.5px;color:#8a7a55;text-transform:uppercase}
+.sl-prow span{font-family:var(--px);font-size:6.5px;color:#6a5a3f;text-transform:uppercase}
 .sl-prow b{font-weight:400;font-variant-numeric:tabular-nums}
 .sl-racha{background:#f7e7c0;border:2px solid var(--line);border-radius:3px;padding:6px;
   font-size:16px;line-height:1.15;text-align:center}
-.sl-racha b{font-family:var(--px);font-size:11px;color:#c4382a;display:block;margin-bottom:2px}
+.sl-racha b{font-family:var(--px);font-size:11px;color:#a32a1e;display:block;margin-bottom:2px}
 .sl-racha em{font-style:normal;color:var(--ink-soft-g);font-size:14px}
 
 /* modal misiones + avisos */

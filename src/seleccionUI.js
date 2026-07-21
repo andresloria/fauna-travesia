@@ -18,6 +18,9 @@ import { HISTORIA, TENEBROSO, bossOf } from './historia.js';
 const ART = (key) => (SP[key] && SP[key].folk) ? `assets/folclor/${key}.png` : `assets/animales/${key}.png`;
 const RCOLOR = { D: '#6f6552', C: '#2f6f8f', B: '#6b3f9e', A: '#a8791a', S: '#a8442a' };
 const BCOLOR = { bosque: '#3f8f4a', sabana: '#c8923f', agua: '#2f6f8f', montana: '#8a6f9a', noche: '#4a3a63' };
+// versión OSCURA para cuando el color de bioma se usa como TEXTO sobre crema
+// (los tonos de arriba quedan en ~3.1 de contraste: ilegibles en letra chica)
+const BCOLOR_TXT = { bosque: '#25602e', sabana: '#7a5514', agua: '#1c4359', montana: '#54406b', noche: '#332748' };
 const BEMO = { bosque: '🌳', sabana: '🌾', agua: '🌊', montana: '⛰️', noche: '🌑' };
 const ORBC = { bosque: '#3f8f4a', sabana: '#c8923f', agua: '#2f6f8f', montana: '#8a6f9a', comodin: '#9a9a9a' };
 
@@ -42,8 +45,8 @@ export function crearSeleccion(root) {
         <div class="sl-avt">¿Quién sos?</div>
         <input id="slNombre" class="sl-input" maxlength="14" placeholder="Tu nombre" value="Guía">
         <div class="sl-avopts">
-          <div class="sl-avopt sel" data-g="hombre"><img src="assets/personajes/retrato_guia_hombre.png" alt="Guía"></div>
-          <div class="sl-avopt" data-g="mujer"><img src="assets/personajes/retrato_guia_mujer.png" alt="Guía"></div>
+          <div class="sl-avopt sel" data-g="hombre"><img src="assets/personajes/guia_hombre.png" alt="Guía"></div>
+          <div class="sl-avopt" data-g="mujer"><img src="assets/personajes/guia_mujer.png" alt="Guía"></div>
         </div>
         <button class="sl-btn go" id="slGo">EMPEZAR 🌿</button>
       </div>`;
@@ -91,7 +94,7 @@ export function crearSeleccion(root) {
         </div>
         <div class="sl-finfo">
           <div class="sl-fnom">${sp.n.toUpperCase()}
-            <span class="sl-fbio" style="color:${BCOLOR[sp.bio]}">${BEMO[sp.bio] || ''} ${sp.bio}</span>
+            <span class="sl-fbio" style="color:${BCOLOR_TXT[sp.bio] || BCOLOR[sp.bio]}">${BEMO[sp.bio] || ''} ${sp.bio}</span>
           </div>
           <div class="sl-habrow">${habs}</div>
           ${mision}
