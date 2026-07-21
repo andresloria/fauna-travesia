@@ -15,8 +15,9 @@ const sel = crearSeleccion(app);
 window.liga = sel;
 
 // ---------- música ----------
-// Selección de equipo = AMBIENTE RELAJANTE nuevo (assets/audio/ambiente.mp3,
-// generado con make_musica_ambiente.py: pads lentos + caja de música + pájaros).
+// Selección de equipo = TEMA DE AVENTURA (make_musica_aventura.py): rock
+// luminoso en Re mayor a 152 — Andrés pidió algo más emocionante que el
+// ambiente relajante (22-jul). La pelea sigue siendo el power metal.
 // Combate = POWER METAL (make_musica_pelea.py): guitarras con distorsión, doble
 // bombo y guitarras gemelas. Reemplaza al chiptune 8-bit de antes.
 // arenaUI avisa con window.faunaMusic.set('battle'|'map').
@@ -26,7 +27,7 @@ window.liga = sel;
     const a = new Audio(); a.preload = pre; a.src = src; a.loop = true; a.volume = 0; a._vol = vol; return a;
   };
   const tracks = {
-    map: mk('assets/audio/ambiente.mp3', 0.34),      // ambiente relajante (nuevo)
+    map: mk('assets/audio/aventura.mp3', 0.30),      // aventura enérgica (22-jul)
     battle: mk('assets/audio/pelea_metal.mp3', 0.30),   // power metal, va más fuerte de por sí
     noche: mk('assets/audio/noche.mp3', 0.36, 'none'),   // leyendas del Tenebroso
   };

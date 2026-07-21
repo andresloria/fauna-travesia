@@ -180,9 +180,9 @@ export function abrirArena(opts) {
   let cambioAbierto = false;    // el selector de bioma del cambio 5→1
   function pintarEnergia() {
     const pool = poolRestante(), total = A.totalE(pool);
-    // el CAMBIO (regla del original: 5 cualesquiera → 1 a elección) solo se
-    // ofrece con la cola vacía: si ya encolaste, esas 5 podrían estar
-    // reservadas para pagar lo encolado y el cambio te rompería la jugada.
+    // el CAMBIO (3 cualesquiera → 1 a elección) solo se ofrece con la cola
+    // vacía: si ya encolaste, esas 3 podrían estar reservadas para pagar lo
+    // encolado y el cambio te rompería la jugada.
     const puedoCambiar = st.lado === 'A' && !st.fin && !animando
       && cola.length === 0 && A.puedeCambiar(st, 'A');
     elEnergia.innerHTML = A.BIOMAS.map(b => `
@@ -192,7 +192,7 @@ export function abrirArena(opts) {
       </div>`).join('')
       + `<div class="ar-etot" title="Energía total">${total}</div>`
       + `<button class="ar-cambio ${puedoCambiar ? '' : 'off'}" id="arCambio"
-           title="Cambiá 5 energías cualesquiera por 1 del tipo que elijás (1 vez por turno)">⇄ 5→1</button>`
+           title="Cambiá 3 energías cualesquiera por 1 del tipo que elijás (1 vez por turno)">⇄ 3→1</button>`
       + (cambioAbierto && puedoCambiar ? `<div class="ar-picker">${A.BIOMAS.map(b => `
           <button class="ar-pick" data-bioma="${b}" title="Recibir 1 de ${BIOMA_N[b]}">
             <img src="${BIOMA_ICO(b)}" alt="${BIOMA_N[b]}" draggable="false">
@@ -374,12 +374,10 @@ export function abrirArena(opts) {
     pararTimer();
     const q = (auto || forzarAuto) ? A.colaAuto(st, 'A') : cola;
     if (!q.length && !auto && !forzarAuto) { /* pasar el turno vacío está permitido */ }
-    const antes = instantanea();
-    const r = A.ejecutarTurno(st, q);
-    if (!r.ok) A.ejecutarTurno(st, []);
-    const jugadas = r.ok ? q.slice() : [];
+    let r = A.ejecutarTurno(st, q);
+    if (!r.ok) r = A.ejecutarTurno(st, []);
     cola = []; seleccion = null;
-    await animarTurno(jugadas, antes);
+    await animarTurno(r.eventos || []);
     render();
     despuesDelTurno();
   }
@@ -387,10 +385,8 @@ export function abrirArena(opts) {
   async function turnoRival() {
     if (st.fin || cerrando) return;
     await espera(500);
-    const q = A.colaAuto(st, 'B');
-    const antes = instantanea();
-    A.ejecutarTurno(st, q);
-    await animarTurno(q, antes);
+    const r = A.ejecutarTurno(st, A.colaAuto(st, 'B'));
+    await animarTurno(r.eventos || []);
     render();
     despuesDelTurno();
   }
@@ -403,50 +399,100 @@ export function abrirArena(opts) {
   }
 
   // ---------------- resolución animada ----------------
-  // Se juega el turno en el motor y DESPUÉS se muestra qué pasó, jugada por
-  // jugada: cartel de quién ataca, su flecha sola, y el daño flotante.
+  // El motor ya jugó el turno; acá se RE-CUENTA lo que pasó siguiendo su log
+  // de eventos, en orden: el atacante SE LANZA hacia el rival con su flecha,
+  // cada golpe sacude y destella al que lo recibe, un bloqueo se ve como
+  // ESQUIVE (paso al costado + "¡esquivada!"), las curas suben en verde, las
+  // toxinas gotean en violeta y el que cae se desploma.
   const espera = (ms) => new Promise(r => setTimeout(r, ms));
-  const instantanea = () => Object.fromEntries(st.unidades.map(u => [u.uid, u.hp]));
 
-  async function animarTurno(jugadas, antes) {
-    if (!jugadas.length) return;
+  async function animarTurno(eventos) {
+    const VISIBLES = ['usa', 'golpe', 'bloqueado', 'cura', 'toxina', 'contra', 'agotamiento', 'cae'];
+    const pasos = (eventos || []).filter(e => VISIBLES.includes(e.t));
+    if (!pasos.length) return;
     animando = true;
+    render();                                       // apaga botones mientras tanto
     const cartel = document.createElement('div');
     cartel.className = 'ar-cartel';
+    cartel.style.display = 'none';
     esc.appendChild(cartel);
-    for (const acc of jugadas) {
-      const u = u$(acc.uid);
-      const h = u.habs[acc.hab];
-      cartel.textContent = `${u.n} · ${h.n}`;
-      cola = [acc];                                   // solo la flecha de esta jugada
-      render();
-      await espera(430);
-      cola = [];
-      await espera(320);
+
+    for (const ev of pasos) {
+      switch (ev.t) {
+        case 'usa': {
+          const u = u$(ev.uid);
+          cartel.style.display = '';
+          cartel.textContent = `${u.n} · ${ev.hab}`;
+          if (ev.objetivo && ev.objetivo !== ev.uid) {
+            cola = [{ uid: ev.uid, hab: 0, objetivo: ev.objetivo }];  // solo la flecha
+            pintarFlechas();
+          }
+          clase(ev.uid, 'ar-lanza', 420);           // el atacante se lanza
+          await espera(400);
+          cola = []; pintarFlechas();
+          break;
+        }
+        case 'golpe':
+          if (ev.v > 0) {
+            clase(ev.uid, 'ar-pega', 420);          // sacudida + destello
+            flotante(ev.uid, '-' + ev.v, ev.toxina ? 'tox' : '');
+          } else {
+            flotante(ev.uid, '🛡 absorbido', 'gris'); // la defensa se lo comió
+          }
+          await espera(330);
+          break;
+        case 'bloqueado':                           // ¡el esquive que faltaba!
+          clase(ev.uid, 'ar-esquiva', 450);
+          flotante(ev.uid, '¡esquivada!', 'esq');
+          await espera(400);
+          break;
+        case 'cura':
+          flotante(ev.uid, '+' + ev.v, 'bien');
+          await espera(240);
+          break;
+        case 'toxina':
+          clase(ev.uid, 'ar-pega', 300);
+          flotante(ev.uid, '-' + ev.v, 'tox');
+          await espera(260);
+          break;
+        case 'contra':
+          flotante(ev.uid, '-' + ev.v + ' 🌵');
+          await espera(260);
+          break;
+        case 'agotamiento':
+          flotante(ev.uid, '-' + ev.v, 'gris');
+          await espera(160);
+          break;
+        case 'cae':
+          clase(ev.uid, 'ar-ko', 600);
+          await espera(480);
+          break;
+      }
     }
-    // el daño total de la ronda, en cada unidad que lo recibió
-    for (const u of st.unidades) {
-      const dif = antes[u.uid] - u.hp;
-      if (dif > 0) flotante(u.uid, '-' + dif);
-      else if (dif < 0) flotante(u.uid, '+' + (-dif), true);
-    }
-    await espera(750);
+    await espera(320);
     cartel.remove();
     animando = false;
   }
 
-  function flotante(uid, txt, bueno = false) {
+  // ponerle una clase de animación a una tarjeta un ratito
+  function clase(uid, cls, ms) {
+    const el = root.querySelector('#ar-c-' + uid);
+    if (!el) return;
+    el.classList.add(cls);
+    setTimeout(() => el.classList.remove(cls), ms);
+  }
+
+  function flotante(uid, txt, tipo = '') {
     const el = root.querySelector('#ar-c-' + uid);
     if (!el) return;
     const R = esc.getBoundingClientRect(), b = el.getBoundingClientRect();
     const g = document.createElement('div');
-    g.className = 'ar-golpe' + (bueno ? ' bien' : '');
+    g.className = 'ar-golpe' + (tipo ? ' ' + tipo : '');
     g.textContent = txt;
-    g.style.left = (b.left - R.left + b.width / 2) + 'px';
+    // corrimiento al azar para que dos números seguidos no se tapen
+    g.style.left = (b.left - R.left + b.width / 2 + (Math.random() * 26 - 13)) + 'px';
     g.style.top = (b.top - R.top + b.height * 0.42) + 'px';
     esc.appendChild(g);
-    el.classList.add('ar-tiembla');
-    setTimeout(() => el.classList.remove('ar-tiembla'), 400);
     setTimeout(() => g.remove(), 1000);
   }
 

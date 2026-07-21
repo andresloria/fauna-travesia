@@ -5,6 +5,32 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 22 jul 2026 (tarde) · cambio 3→1, música de aventura, ANIMACIONES
+
+- **Cambio de energía: 3→1** (era 5→1 como el original; Andrés lo bajó para
+  que la válvula sirva en turnos tempranos). Motor + botón + tests al día.
+- **Música general nueva**: `make_musica_aventura.py` → `aventura.mp3` (37.8 s,
+  152 BPM). Rock de aventura en RE MAYOR limpio, a propósito distinto del
+  power metal de pelea (MI menor distorsionado a 168): el salto al combate se
+  siente. Bombo en negras, bajo pulsante en corcheas, I–V–vi–IV, arpegio de
+  pluck y melodía heroica pentatónica en la 2ª vuelta. Verificada por espectro.
+- **ANIMACIONES DE COMBATE de verdad**: `animarTurno` ya no re-cuenta jugadas —
+  sigue el **log de eventos del motor** en orden:
+  · `usa` → el atacante SE LANZA hacia la fila contraria (mis tarjetas suben,
+    las del rival bajan) con su flecha y el cartel
+  · `golpe` → sacudida + destello + número (violeta si es toxina); si la
+    defensa lo absorbió todo, "🛡 absorbido"
+  · `bloqueado` → **EL ESQUIVE**: paso al costado con fantasma + "¡esquivada!"
+  · `cura` verde · `contra` con 🌵 · `agotamiento` gris · `cae` → se desploma
+  Números flotantes con corrimiento al azar para que no se tapen.
+- Verificado con MutationObserver en vivo: ar-lanza, ar-pega y ar-esquiva
+  dispararon en una pelea AUTO real, 0 errores de consola.
+
+📌 Animar desde el LOG del motor y no desde la cola del jugador: la cola no
+sabe de contraataques, toxinas ni esquives — el log sí.
+
+---
+
 ## Sesión — 22 jul 2026 · KIT ÚNICO PARA LAS 136 ESPECIES + cambio de energía
 
 Reclamo de Andrés (con razón): el documento trae **179 kits completos** y el

@@ -219,14 +219,14 @@ test('sin la energía del bioma, la habilidad no se puede usar (aunque exista)',
   assert.equal(A.puedeUsar(st, jag, iZar).ok, true, 'el básico nunca deja sin jugar');
 });
 
-// ---------- cambio de energía (regla del original: 5 cualquiera -> 1 a elección) ----------
-test('cambio de energía: paga 5 cualesquiera y recibe 1 del tipo elegido', () => {
+// ---------- cambio de energía (3 cualquiera -> 1 a elección; el original usa 5) ----------
+test('cambio de energía: paga 3 cualesquiera y recibe 1 del tipo elegido', () => {
   const st = A.mkCombate(TA(), TB(), { abre: 'A', rng: rngFijo([0.0]) });
   st.energia.A = { bosque: 4, sabana: 2, agua: 0, montana: 0 };
   assert.equal(A.puedeCambiar(st, 'A'), true);
   assert.equal(A.cambiarEnergia(st, 'A', 'agua'), true);
   assert.equal(st.energia.A.agua, 1, 'ganó el agua elegida');
-  assert.equal(A.totalE(st.energia.A), 2, '6 - 5 + 1 = 2');
+  assert.equal(A.totalE(st.energia.A), 4, '6 - 3 + 1 = 4');
   // solo una vez por turno
   st.energia.A = { bosque: 9, sabana: 0, agua: 0, montana: 0 };
   assert.equal(A.cambiarEnergia(st, 'A', 'agua'), false, 'ya cambió este turno');
@@ -237,12 +237,12 @@ test('cambio de energía: paga 5 cualesquiera y recibe 1 del tipo elegido', () =
   assert.equal(A.cambiarEnergia(st, 'A', 'montana'), true, 'turno nuevo, cambio nuevo');
 });
 
-test('cambio de energía: con menos de 5 no se puede', () => {
+test('cambio de energía: con menos de 3 no se puede', () => {
   const st = A.mkCombate(TA(), TB(), { abre: 'A', rng: rngFijo([0.0]) });
-  st.energia.A = { bosque: 2, sabana: 2, agua: 0, montana: 0 };
+  st.energia.A = { bosque: 1, sabana: 1, agua: 0, montana: 0 };
   assert.equal(A.puedeCambiar(st, 'A'), false);
   assert.equal(A.cambiarEnergia(st, 'A', 'agua'), false);
-  assert.equal(A.totalE(st.energia.A), 4, 'no tocó nada');
+  assert.equal(A.totalE(st.energia.A), 2, 'no tocó nada');
 });
 
 // ---------- fin del combate ----------

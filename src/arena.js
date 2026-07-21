@@ -113,18 +113,18 @@ export function pagar(pool, costo) {
 }
 
 // ---------- cambio de energía ----------
-// Regla del juego original: podés cambiar 5 energías CUALESQUIERA por 1 del
-// tipo que elijás, una vez por turno. Es la válvula de escape cuando el azar
-// no te da el bioma que tu equipo necesita.
+// Podés cambiar 3 energías CUALESQUIERA por 1 del tipo que elijás, una vez
+// por turno. (El original usa 5; Andrés lo bajó a 3 el 22-jul para que la
+// válvula de escape se pueda usar de verdad en turnos tempranos.)
 export function puedeCambiar(st, lado) {
   return !st.fin && !(st.cambioUsado && st.cambioUsado[lado])
-      && totalE(st.energia[lado]) >= 5;
+      && totalE(st.energia[lado]) >= 3;
 }
 export function cambiarEnergia(st, lado, tipo) {
   if (!BIOMAS.includes(tipo) || !puedeCambiar(st, lado)) return false;
   const pool = st.energia[lado];
-  // paga las 5 sacando siempre del montón más grande (conserva las escasas)
-  for (let i = 0; i < 5; i++) {
+  // paga las 3 sacando siempre del montón más grande (conserva las escasas)
+  for (let i = 0; i < 3; i++) {
     const b = BIOMAS.slice().sort((x, y) => pool[y] - pool[x])[0];
     pool[b]--;
   }
