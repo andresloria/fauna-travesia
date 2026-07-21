@@ -235,6 +235,15 @@ color celeste y poné verde con árboles"*.
   reducido (emborrona pelo y barba) y un retrato recortado ×2 (legible pero él
   quiere el arte entero). También se descartó ensanchar el `.wrap` con `:has()`
   para ponerlos lado a lado: el panel de 1040px se salía de la página.
+- **✅ LO QUE FINALMENTE LO ARREGLÓ: FONDO OSCURO detrás del guía** (idea de
+  Andrés). El sprite es de ropa tan/beige — su color medio es (140,122,100) —
+  y yo lo tenía sobre verde CLARO: contraste **2.76**, se fundía con el fondo.
+  Con un radial oscuro (#33513a→#16240f) el figura resalta y además le brillan
+  las partes claras (canas, carné, reflejos). Se le sumó un `drop-shadow`
+  blanco de 2px que separa la silueta **sin tocar los colores del sprite**.
+  Ahí por fin se leen el pelo, los anteojos, la barba, el carné y el portapapeles.
+  📌 Lección: antes de pelear con `image-rendering`, medir el CONTRASTE del
+  sprite contra el fondo que se le pone detrás.
 - **Fondo: bosque verde tileable** (`make_fondo_bosque.py` → 128×128 sin
   costura, copas vistas desde arriba en 3 verdes; se dibuja a 64px y se amplía
   ×2 para que el píxel quede chunky como los sprites). Reemplaza el degradado
