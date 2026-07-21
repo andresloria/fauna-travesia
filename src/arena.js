@@ -69,6 +69,7 @@ export function mkCombate(equipoA, equipoB, opts = {}) {
   // cuánta energía extra recibe el que RESPONDE en su primer turno (ver
   // COMPENSA_SEGUNDO). opts.compensa existe para poder medirlo desde tools/.
   st.compensa = opts.compensa === undefined ? COMPENSA_SEGUNDO : opts.compensa;
+  st.sesgo = opts.sesgo || 0;
   st.abrio = st.lado;                         // quién abrió, para saber quién compensa
   ganarEnergia(st, st.lado, 1);               // regla: tu primer turno da 1 energía
   return st;
@@ -89,10 +90,18 @@ export const aturdida = (u, clases = []) =>
 export const enModo = (u) => tiene(u, 'modo');
 
 // ---------- energía ----------
+// EXPERIMENTO (opts.sesgo): con `sesgo` entre 0 y 1, una fracción de la energía
+// sale de los BIOMAS DE TU EQUIPO en vez de 25% al azar. Sirve para medir si el
+// problema de balance es que a los animales de costo específico nunca les llega
+// su energía. sesgo:0 = la regla original.
 export function ganarEnergia(st, lado, n) {
   const ganadas = [];
+  const sesgo = st.sesgo || 0;
+  const mios = sesgo ? st.unidades.filter(u => u.lado === lado && u.viva).map(u => u.bio) : [];
   for (let i = 0; i < n; i++) {
-    const b = BIOMAS[Math.floor(st.rng() * 4)];   // 25% cada tipo, como el original
+    const b = (sesgo && mios.length && st.rng() < sesgo)
+      ? mios[Math.floor(st.rng() * mios.length)]
+      : BIOMAS[Math.floor(st.rng() * 4)];   // 25% cada tipo, como el original
     st.energia[lado][b]++;
     ganadas.push(b);
   }

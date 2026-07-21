@@ -504,3 +504,63 @@ Escalones medidos: 1 energía → poder 20 · 2 energía → poder 30 · 3 energ
 | Serpiente de mar | Frenesí | 15 | agua |
 | La Carreta sin Bueyes | Frenesí | 15 | comodin |
 | La Carreta sin Bueyes | Instinto agudizado | 15 | comodin |
+
+## Kits LEVANTADOS al piso de poder (48)
+
+Lo que predice ganar NO es el poder del kit sino la ACTIVIDAD: cuántas
+veces el animal consigue jugar por turno (correlación +0,56 contra +0,17
+del daño). Los que perdían no eran débiles: no podían pagar sus propias
+habilidades. Por eso el piso ABARATA en vez de inflar.
+
+Piso = 92% de la mediana de actividad (0.57).
+
+| Especie | Actividad estimada | Qué se abarató |
+|---|---|---|
+| Danta (tapir) | 0.25 → **0.57** | Cuero grueso: recarga 2 → 0; Postura defensiva: recarga 5 → 2; Cuero grueso: 2 → 1 (bosque); Postura defensiva: 2 biomas → 1 + comodines |
+| Hormiga bala | 0.26 → **0.56** | Picadura paralizante: recarga 2 → 0; Postura defensiva: recarga 4 → 2; Postura defensiva: 2 biomas → 1 + comodines |
+| Boa (béquer) | 0.26 → **0.57** | Golpe aturdidor: recarga 1 → 0; Silbido: recarga 5 → 2; Sacudida paralizante: recarga 4 → 2; Golpe aturdidor: 2 → 1 (bosque); Sacudida paralizante: 2 biomas → 1 + comodines |
+| Tarántula | 0.27 → **0.52** | Quelíceros: recarga 1 → 0; Telaraña: recarga 4 → 2; Quelíceros: 2 biomas → 1 + comodines; Telaraña: 2 biomas → 1 + comodines |
+| El Cadejos | 0.27 → **0.84** | Mordida y sacudida: recarga 1 → 0; Placaje brutal: recarga 5 → 2; Mordida y sacudida: 2 → 1 (comodin); Arremetida salvaje: 2 biomas → 1 + comodines |
+| Tinamú grande | 0.29 → **0.48** | Embate aéreo: recarga 2 → 0 |
+| Cascabel | 0.32 → **0.56** | Ponzoña persistente: recarga 1 → 0; Secreción tóxica: recarga 5 → 2; Ponzoña persistente: 2 biomas → 1 + comodines; Secreción tóxica: 2 biomas → 1 + comodines; Secreción tóxica: −1 de costo (el kit pedía 6) |
+| Tigrillo (oncilla) | 0.33 → **0.52** | Punzada profunda: recarga 1 → 0; Punzada profunda: 2 biomas → 1 + comodines |
+| Rana dardo verdinegra | 0.34 → **0.48** | Estocada perforante: recarga 1 → 0 |
+| Armadillo (cusuco) | 0.35 → **0.52** | Coraza reactiva: recarga 1 → 0; Golpe aturdidor: 2 biomas → 1 + comodines |
+| Tiburón martillo | 0.37 → **0.59** | Punzada profunda: recarga 1 → 0; Dentellada frenética: recarga 5 → 2 |
+| Mapache | 0.37 → **0.60** | Trampa de arena: recarga 2 → 0; Foso de arena: recarga 4 → 2 |
+| Chancho de monte | 0.37 → **0.60** | Cornada: recarga 4 → 2; Embestida aturdidora: 2 → 1 (bosque); Cornada: 2 biomas → 1 + comodines |
+| Pájaro carpintero | 0.38 → **0.79** | Proyectil certero: recarga 2 → 0; Sacudida paralizante: recarga 5 → 2; Represalia: recarga 5 → 2; Represalia: −1 de costo (el kit pedía 6) |
+| Iguana | 0.39 → **0.59** | Carga veloz: recarga 1 → 0; Rociada: 2 biomas → 1 + comodines |
+| Matabuey (bushmaster) | 0.40 → **0.68** | Recuperación: 2 → 1 (bosque); Mordida neurotóxica: 2 biomas → 1 + comodines; Regeneración: 2 biomas → 1 + comodines |
+| Mariposa búho | 0.40 → **0.65** | Proyectil certero: recarga 2 → 0; Golpe aturdidor: recarga 4 → 2; Golpe aturdidor: 2 biomas → 1 + comodines |
+| Trogón | 0.43 → **0.59** | Cabezazo: recarga 1 → 0; Coletazo: 2 biomas → 1 + comodines |
+| Pato aguja (anhinga) | 0.43 → **0.52** | Tetrodotoxina: recarga 4 → 2; Empalada: recarga 4 → 2; Tetrodotoxina: 2 → 1 (agua); Empalada: 2 biomas → 1 + comodines |
+| Tepezcuintle | 0.44 → **0.62** | Sacudida paralizante: recarga 1 → 0; Golpe aturdidor: recarga 5 → 2 |
+| Tiburón | 0.44 → **0.62** | Embate aturdidor: recarga 1 → 0; Dentellada frenética: 2 biomas → 1 + comodines |
+| Comemaíz | 0.45 → **0.61** | Mordida: recarga 1 → 0; Mordida: 2 biomas → 1 + comodines |
+| Manatí del Caribe | 0.45 → **0.68** | Golpe aturdidor: 2 → 1 (agua); Mucosa regeneradora: 2 biomas → 1 + comodines; Recuperación: 3 biomas → 1 + comodines; Recuperación: −1 de costo (el kit pedía 6) |
+| Rabihorcado (fragata) | 0.45 → **0.50** | Golpe demoledor: recarga 6 → 2; Golpe demoledor: 2 biomas → 1 + comodines |
+| Martín pescador | 0.46 → **0.65** | Estocada de rostro: recarga 1 → 0; Picotazo: 2 biomas → 1 + comodines |
+| Caracara | 0.47 → **0.65** | Embate aéreo: recarga 4 → 2; Acicalado: 3 biomas → 1 + comodines; Acicalado: −1 de costo (el kit pedía 6) |
+| Mica (zopilota) | 0.48 → **0.52** | Postura defensiva: recarga 4 → 2; Postura defensiva: 2 biomas → 1 + comodines |
+| Lora (víbora verde) | 0.48 → **0.64** | Latigazo veloz: 3 biomas → 1 + comodines; Latigazo veloz: −1 de costo (el kit pedía 6) |
+| Momoto cejiceleste | 0.50 → **0.69** | Talonazo: recarga 1 → 0; Impacto aturdidor: recarga 4 → 2 |
+| Salamanqueja (geco) | 0.50 → **0.55** | Sacudida paralizante: recarga 4 → 2; Perforación: −1 de costo (el kit pedía 6) |
+| Jicotea | 0.50 → **0.54** | Huida veloz: recarga 4 → 2 |
+| Garrobo | 0.51 → **0.57** | Exoesqueleto: recarga 6 → 2 |
+| Perro | 0.52 → **0.62** | Golpe aturdidor: recarga 4 → 2; Embestida feroz: 2 biomas → 1 + comodines |
+| Garza | 0.52 → **0.56** | Evasión ágil: recarga 6 → 2; Evasión ágil: 2 biomas → 1 + comodines |
+| Pájaro campana | 0.52 → **0.57** | Descarga a distancia: recarga 5 → 2; Descarga a distancia: 2 biomas → 1 + comodines; Proyectil certero: −1 de costo (el kit pedía 6) |
+| Perezoso de dos dedos | 0.52 → **0.53** | Embestida feroz: −1 de costo (el kit pedía 6) |
+| Cocodrilo | 0.54 → **0.56** | Mordida y giro: 2 biomas → 1 + comodines |
+| Espátula rosada | 0.55 → **0.59** | Recuperación: recarga 6 → 2; Recuperación: 2 biomas → 1 + comodines |
+| Abeja | 0.55 → **0.65** | Oviposición parasitaria: recarga 1 → 0 |
+| Rana de ojos rojos | 0.55 → **0.59** | Embate: 2 biomas → 1 + comodines |
+| Sapo dorado (extinto) | 0.56 → **0.65** | Toxina corrosiva: 3 biomas → 1 + comodines |
+| Mapache cangrejero | 0.56 → **0.59** | Descarga a distancia: recarga 4 → 2; Descarga a distancia: 2 biomas → 1 + comodines |
+| Tolomuco | 0.56 → **0.69** | Toxina corrosiva: recarga 1 → 0; Dientes serrados: 2 biomas → 1 + comodines |
+| Colibrí de Talamanca | 0.56 → **0.62** | Golpe demoledor: recarga 4 → 2 |
+| Marlin azul | 0.56 → **0.62** | Ataque en picada: recarga 4 → 2 |
+| Lapa roja | 0.57 → **0.65** | Secreción tóxica: 2 biomas → 1 + comodines |
+| Terciopelo | 0.57 → **0.60** | Muda de piel: recarga 5 → 2 |
+| Nutria de río | 0.57 → **0.65** | Inflado con púas: recarga 4 → 2; Estocada perforante: 2 biomas → 1 + comodines |

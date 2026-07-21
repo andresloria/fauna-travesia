@@ -80,4 +80,17 @@ for (const [etq, campo] of [['daño total  ', 'dmg'], ['costo total ', 'costo'],
   console.log(`  ${etq}  ${prom(top, campo).toFixed(1).padStart(6)}   ${prom(bot, campo).toFixed(1).padStart(6)}`);
 }
 console.log(`\n  daño por energía:  ${(prom(top, 'dmg') / prom(top, 'costo')).toFixed(1)}   vs   ${(prom(bot, 'dmg') / prom(bot, 'costo')).toFixed(1)}`);
-console.log(`\n  media del roster: ${media.toFixed(1)}%  ·  brecha: ${(filas[0].wr - filas.at(-1).wr).toFixed(1)} puntos`);
+// ⚠️ La "brecha" (mejor − peor) es el MÁXIMO MENOS EL MÍNIMO de 130
+// estimaciones ruidosas: con N combates el error típico de cada una es
+// ±sqrt(0.25/N)·100, y el extremo de 130 muestras se mueve varios puntos entre
+// corridas SOLO por azar. Sirve para titular, no para decidir. Las medidas que
+// sí aguantan comparación son la DESVIACIÓN TÍPICA y el promedio de los 12 de
+// arriba contra los 12 de abajo.
+const desv = Math.sqrt(filas.reduce((s2, f) => s2 + (f.wr - media) ** 2, 0) / filas.length);
+const promTop = top.reduce((s2, f) => s2 + f.wr, 0) / 12;
+const promBot = bot.reduce((s2, f) => s2 + f.wr, 0) / 12;
+const errorTipico = Math.sqrt(0.25 / N) * 100;
+console.log(`\n  media del roster: ${media.toFixed(1)}%`);
+console.log(`  DESVIACIÓN TÍPICA: ${desv.toFixed(2)} puntos      <- la medida honesta`);
+console.log(`  promedio top-12 ${promTop.toFixed(1)}%  vs  fondo-12 ${promBot.toFixed(1)}%  (separación ${(promTop - promBot).toFixed(1)})`);
+console.log(`  brecha mejor-peor: ${(filas[0].wr - filas.at(-1).wr).toFixed(1)} pts (ruidosa: +-${errorTipico.toFixed(1)} por medición)`);

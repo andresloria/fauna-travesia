@@ -5,6 +5,52 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 22 jul 2026 · #3 BALANCE: CINCO PALANCAS, NINGUNA FUNCIONÓ
+
+Objetivo: cerrar la brecha entre los 12 que siempre ganan (71%) y los 12 que
+siempre pierden (32%). **No se logró.** Queda documentado para no repetirlo.
+
+### Lo que SÍ se arregló (correctitud, no balance)
+- **13 habilidades hacían daño GRATIS.** En el documento costaban 0 porque eran
+  de preparación ("se transforma en otra"); la aproximación las volvió ataques.
+  El precio sale de la economía real del juego (`tabla_precios`: poder mediano
+  por escalón de costo), no de números inventados.
+- **2 habilidades eran IMPAGABLES.** Las 6 leyendas tienen bioma `noche`, que no
+  es uno de los 4 del motor: La Carreta tenía costo `["noche"]`, imposible de
+  pagar. Ahora cae a comodín + guarda que revienta el generador si vuelve a pasar.
+
+### Las cinco palancas, todas medidas
+| Palanca | Desviación típica |
+|---|---|
+| (control, sin tocar nada) | 11,20 |
+| Subir el daño de los flojos | 11,00 |
+| Abaratar sus costos | 11,21 |
+| Bajarles las recargas | 11,21 |
+| Elegirlos por actividad estimada | **10,97** |
+| Energía sesgada al bioma del equipo (100%) | 9,83 † |
+
+† única que mueve algo, pero cambia una regla central del juego (25% al azar).
+
+### Por qué fallaron (lo que sí se aprendió)
+`tools/que_gana.mjs` midió la correlación de cada rasgo con ganar:
+**ningún rasgo del kit predice ganar.** Daño +0,17 · perforar +0,03 · área
+−0,02 · control +0,03. Lo único con señal es la **ACTIVIDAD** (+0,56): cuántas
+veces el animal consigue jugar por turno. León breñero juega 0,69 → gana 77%;
+Oso hormiguero juega 0,28 → gana 26%.
+
+Pero subir la actividad tampoco movió el resultado. **La hipótesis viva es que
+el driver sea la IA (`colaAuto`), no los datos**: si el bot no sabe usar un
+kit, ningún número que le suba lo salva. Eso explicaría por qué cinco cambios
+distintos en los datos dan lo mismo. **Verificarlo antes de tocar más números.**
+
+📌 **La "brecha mejor−peor" es una métrica basura**: es el máximo menos el
+mínimo de 130 estimaciones ruidosas y se mueve ±3 puntos entre corridas solo
+por azar. Estuve persiguiendo ruido varias iteraciones. Las que aguantan
+comparación son la **desviación típica** y el promedio top-12 vs fondo-12 —
+`tools/ranking.mjs` ahora reporta las tres y avisa cuál es cuál.
+
+---
+
 ## Sesión — 22 jul 2026 · DOS BUGS GRAVES DEL MOTOR + aturdir total
 
 Andrés pidió: aturdir siempre completo (no por clase), y auditar que TODAS las

@@ -560,6 +560,115 @@ def cobrar(efs, precios, bioma):
     return [bioma] + ['comodin'] * (n - 1)
 
 
+
+# ------------------------------------------------------------------
+# 3e. PISO DE JUGABILIDAD — que ningún animal se quede mirando
+#
+# Primero probé subirles el DAÑO a los kits flojos: la brecha bajó 2 puntos y
+# nada más. Entonces medí qué predice de verdad ganar (`tools/que_gana.mjs`) y
+# el resultado tumbó la teoría: **ningún rasgo del kit correlaciona fuerte con
+# ganar** — ni el daño (+0,17), ni perforar (+0,03), ni el área (−0,02).
+#
+# Lo que SÍ correlaciona es la ACTIVIDAD: cuántas veces el animal consigue
+# usar una habilidad por turno (+0,56, el doble que cualquier otra cosa).
+#   · León breñero: juega 0,69 veces por turno → gana 77%
+#   · Oso hormiguero: juega 0,28 → gana 26%
+#
+# O sea: los que pierden no son débiles, es que NO PUEDEN JUGAR. Su energía no
+# les alcanza y se quedan mirando. Por eso el piso ahora abarata en vez de
+# inflar: garantiza que todo animal tenga al menos una habilidad de 1 sola
+# energía DE SU BIOMA (la que siempre va a poder pagar) y convierte costos
+# específicos de más en comodín, que se paga con cualquier cosa.
+# ------------------------------------------------------------------
+PISO_FRACCION = 0.92      # piso = 92% de la mediana de ACTIVIDAD estimada
+COSTO_MAX_KIT = 5         # ningún kit flojo debería pedir más que esto en total
+
+
+
+def actividad_estimada(habs):
+    """Probabilidad aproximada de poder JUGAR algo en un turno cualquiera.
+
+    Es lo único que correlaciona fuerte con ganar (+0,56 medido). Se estima
+    sin simular: una habilidad de recarga R está disponible 1/(R+1) de los
+    turnos, y su costo se paga con probabilidad p. Con la energía repartida
+    25% por bioma, un costo específico es bastante más difícil que un comodín.
+    """
+    libre = 1.0
+    for h in habs:
+        disp = 1.0 / (h['recarga'] + 1)
+        p = 1.0
+        for c in h['costo']:
+            if c == 'TODO':
+                p *= 0.25
+            elif c == 'comodin':
+                p *= 0.80          # se paga con cualquier cosa
+            else:
+                p *= 0.45          # hay que tener ESE bioma
+        libre *= (1 - disp * p)    # probabilidad de que ESTA no se pueda usar
+    return 1 - libre               # ...de que al menos una sí
+
+
+def valor_por_energia(habs):
+    poder = sum(poder_de(h['efectos']) for h in habs)
+    costo = sum(len(h['costo']) or 0.5 for h in habs)
+    return poder / costo if costo else 0
+
+
+def abaratar(habs, bioma):
+    """hace jugable un kit flojo. Devuelve la lista de cambios hechos."""
+    if bioma not in BIOMAS_MOTOR:
+        bioma = 'comodin'
+    cambios = []
+
+    # 0. LAS RECARGAS son lo que de verdad deja mudo a un animal. De todos los
+    #    rasgos medidos, la recarga media es el que más correlaciona con perder
+    #    (−0,31). El Mono tití tenía cd4 + cd3 + cd0: una sola habilidad usable
+    #    casi todos los turnos, y jugaba 0,30 veces por turno (la media es 0,40).
+    #    Un kit flojo no puede tener TODAS sus habilidades en recarga larga.
+    if min(h['recarga'] for h in habs) > 0:          # ninguna de uso libre
+        libre = min(habs, key=lambda h: h['recarga'])
+        cambios.append(f"{libre['n']}: recarga {libre['recarga']} → 0")
+        libre['recarga'] = 0
+    for h in habs:
+        if h['recarga'] >= 4:                        # nada de esperar 4 turnos
+            cambios.append(f"{h['n']}: recarga {h['recarga']} → 2")
+            h['recarga'] = 2
+
+    # 1. su habilidad más barata pasa a costar 1 SOLA energía de su bioma:
+    #    esa es la que va a poder pagar casi siempre
+    barata = min(habs, key=lambda h: len(h['costo']))
+    if len(barata['costo']) > 1:
+        cambios.append(f"{barata['n']}: {len(barata['costo'])} → 1 ({bioma})")
+        barata['costo'] = [bioma]
+
+    # 2. el resto: si pide 2+ energías específicas, todas menos la primera
+    #    pasan a comodín (pagable con lo que tengas)
+    for h in habs:
+        if h is barata:
+            continue
+        esp = [c for c in h['costo'] if c not in ('comodin', 'TODO')]
+        if len(esp) >= 2:
+            nuevos, visto = [], False
+            for c in h['costo']:
+                if c in ('comodin', 'TODO'):
+                    nuevos.append(c)
+                elif not visto:
+                    nuevos.append(c); visto = True
+                else:
+                    nuevos.append('comodin')
+            cambios.append(f"{h['n']}: {len(esp)} biomas → 1 + comodines")
+            h['costo'] = nuevos
+
+    # 3. si aun así el kit entero pide demasiado, recortar la más cara
+    total = sum(len(h['costo']) for h in habs)
+    if total > COSTO_MAX_KIT:
+        cara = max(habs, key=lambda h: len(h['costo']))
+        if len(cara['costo']) > 1:
+            cara['costo'] = cara['costo'][:-1]
+            cambios.append(f"{cara['n']}: −1 de costo (el kit pedía {total})")
+    return cambios
+
+
 # ------------------------------------------------------------------
 # 4. La descripción se escribe DESDE los efectos implementados
 # ------------------------------------------------------------------
@@ -748,6 +857,27 @@ def main():
                 h['costo'] = nuevo_costo
                 cobradas.append((key, h['n'], poder_de(h['efectos']), nuevo_costo))
 
+    # ---- 3ª PASADA: levantar el fondo de la tabla (ver §3e) ----
+    # ⚠️ Antes se elegía por PODER por energía y no servía de nada: cuatro
+    # intentos de balanceo automático (subir daño, abaratar costo, sesgar la
+    # energía, bajar recargas) movieron la desviación menos de 0,2 puntos. El
+    # motivo: estaba arreglando a los animales equivocados. Lo que correlaciona
+    # con ganar es la ACTIVIDAD (+0,56), no el poder (+0,17), así que el piso
+    # ahora selecciona por ahí.
+    act = {k: actividad_estimada(kit['habs']) for k, kit in salida.items()}
+    orden = sorted(act.values())
+    mediana = orden[len(orden) // 2]
+    piso = mediana * PISO_FRACCION
+    vpe = act
+    levantados = []
+    for key, kit in salida.items():
+        if act[key] >= piso:
+            continue
+        antes = act[key]
+        cambios = abaratar(kit['habs'], bioma_de.get(key, 'bosque'))
+        if cambios:
+            levantados.append((key, antes, actividad_estimada(kit['habs']), cambios))
+
     # ---- ningún costo puede ser IMPAGABLE ----
     for key, kit in salida.items():
         for h in kit['habs']:
@@ -875,11 +1005,23 @@ def main():
             R.append(f'| {nombres.get(key, key)} | {n} | {pod} | {" + ".join(c)} |')
 
 
+    if levantados:
+        R += ['', f'## Kits LEVANTADOS al piso de poder ({len(levantados)})', '',
+              f'Lo que predice ganar NO es el poder del kit sino la ACTIVIDAD: cuántas',
+              f'veces el animal consigue jugar por turno (correlación +0,56 contra +0,17',
+              f'del daño). Los que perdían no eran débiles: no podían pagar sus propias',
+              f'habilidades. Por eso el piso ABARATA en vez de inflar.', '',
+              f'Piso = {PISO_FRACCION:.0%} de la mediana de actividad ({piso:.2f}).', '',
+              '| Especie | Actividad estimada | Qué se abarató |', '|---|---|---|']
+        for key, a, d, cambios in sorted(levantados, key=lambda x: x[1]):
+            R.append(f'| {nombres.get(key, key)} | {a:.2f} → **{d:.2f}** | {"; ".join(cambios)} |')
+
     REPORTE.write_text('\n'.join(R), encoding='utf-8')
 
     raros = [x for x in descartes if x[3] != 'sí']
     print(f'OK {SALIDA.name}: {len(salida)}/{len(roster)} especies con kit del documento')
     print(f'   habilidades que estaban gratis y ahora cuestan: {len(cobradas)}')
+    print(f'   kits levantados al piso: {len(levantados)} (actividad piso {piso:.2f}, mediana {mediana:.2f})')
     print(f'   kits sin usar (reserva): {len(sobrantes)}')
     print(f'   4ª descartada en {len(descartes)} kits · {len(raros)} NO eran su esquiva (ver reporte)')
     print(f'   con mecánica parcial: {len(reporte_falta)} · aproximadas: {len(aproximadas)}'
