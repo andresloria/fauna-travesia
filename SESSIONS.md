@@ -5,6 +5,41 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 22 jul 2026 · COMPENSACIÓN POR ABRIR (arreglo #2, bloqueador de PvP)
+
+Quien abría el combate ganaba el **61,5%** (medido en ESPEJO PERFECTO: mismo
+equipo de los dos lados, así lo único que cambia es quién mueve primero). Y el
+primer animal en caer era del que responde el **63,5%** de las veces: tempo
+puro. Para un 1v1 con ranking eso es letal — la mitad de las derrotas se
+sienten robadas.
+
+**Arreglo: el que RESPONDE arranca con +1 energía** (`COMPENSA_SEGUNDO`).
+
+`tools/compensa.mjs` (nuevo) probó los cuatro valores con la misma semilla:
+
+| compensa | gana el que abre | 1ª caída es suya |
+|---|---|---|
+| +0 | 61,5% ❌ | 36,5% |
+| **+1** | **52,3%** ✅ | 45,6% |
+| +2 | 40,7% ❌ | 56,4% |
+| +3 | 30,6% ❌ | 66,2% |
+
+**52,3% es aceptable para competitivo**: las blancas en ajedrez rondan ese
+mismo número y es el juego competitivo más estudiado que existe. +2 se pasa de
+rosca y le da la ventaja al que responde. No hay valor entero perfecto.
+
+`opts.compensa` existe para poder APAGARLA y medirla (lo usa la herramienta y
+hay un test que lo cubre).
+
+Efecto lateral en la campaña: la frustración temprana bajó otro poco
+(15,2% → **12,8%** de partidas con 4+ derrotas seguidas), porque el jugador ya
+no come el turno gratis del rival cuando el sorteo le va en contra.
+
+⚠️ **Lo que esto NO arregla**: la brecha entre animales. top-12 vs peores
+sigue en **90,9%** (era 91,7%). Ese es el arreglo #3.
+
+---
+
 ## Sesión — 22 jul 2026 (noche) · EXPEDICIONES (arreglo #1 del veredicto)
 
 Tras 10.000 partidas simuladas, el problema más grave no era el balance: **la

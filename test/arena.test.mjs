@@ -219,6 +219,23 @@ test('sin la energía del bioma, la habilidad no se puede usar (aunque exista)',
   assert.equal(A.puedeUsar(st, jag, iZar).ok, true, 'el básico nunca deja sin jugar');
 });
 
+// ---------- compensación por abrir ----------
+test('el que RESPONDE arranca con energía extra (compensación por tempo)', () => {
+  const st = A.mkCombate(TA(), TB(), { abre: 'A', rng: rngFijo([0.1]) });
+  assert.equal(A.totalE(st.energia.A), 1, 'el que abre recibe 1');
+  A.ejecutarTurno(st, []);                         // A pasa -> entra B
+  assert.equal(A.totalE(st.energia.B), 1 + A.COMPENSA_SEGUNDO,
+    'el que responde recibe 1 + la compensación');
+  A.ejecutarTurno(st, []);                         // B pasa -> vuelve A
+  assert.equal(A.totalE(st.energia.A), 1 + 3, 'a partir del 2º turno: 1 por vivo, sin extra');
+});
+
+test('la compensación se puede apagar para medirla (opts.compensa)', () => {
+  const st = A.mkCombate(TA(), TB(), { abre: 'A', rng: rngFijo([0.1]), compensa: 0 });
+  A.ejecutarTurno(st, []);
+  assert.equal(A.totalE(st.energia.B), 1, 'sin compensación, los dos arrancan con 1');
+});
+
 // ---------- cambio de energía (3 cualquiera -> 1 a elección; el original usa 5) ----------
 test('cambio de energía: paga 3 cualesquiera y recibe 1 del tipo elegido', () => {
   const st = A.mkCombate(TA(), TB(), { abre: 'A', rng: rngFijo([0.0]) });

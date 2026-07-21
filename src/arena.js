@@ -22,6 +22,15 @@ import { habsDe, ESQUIVA } from './habilidades.js';
 export const BIOMAS = ['bosque', 'sabana', 'agua', 'montana'];
 export const VIDA = 100;
 
+// ---------- compensación por abrir ----------
+// Medido en espejo perfecto (mismo equipo de los dos lados, 6000 combates):
+// quien ABRE ganaba el 61,1%, y el primer animal en caer era del que responde
+// el 63,5% de las veces. Es TEMPO puro: pegar primero adelanta las muertes.
+// Para un juego 1v1 con ranking eso es letal — la mitad de las derrotas se
+// sienten robadas. El que responde arranca con energía extra en su 1er turno.
+// El valor sale de la tabla que midió tools/compensa.mjs.
+export const COMPENSA_SEGUNDO = 1;
+
 // ---------- construcción ----------
 // equipo: [{key}] ×3  →  unidades listas para combatir.
 // SIN NIVELES y SIN PASIVAS: todos entran con sus 3 habilidades + esquiva.
@@ -57,6 +66,10 @@ export function mkCombate(equipoA, equipoB, opts = {}) {
     log: [],
     fin: null,                                // 'A' | 'B' cuando alguien gana
   };
+  // cuánta energía extra recibe el que RESPONDE en su primer turno (ver
+  // COMPENSA_SEGUNDO). opts.compensa existe para poder medirlo desde tools/.
+  st.compensa = opts.compensa === undefined ? COMPENSA_SEGUNDO : opts.compensa;
+  st.abrio = st.lado;                         // quién abrió, para saber quién compensa
   ganarEnergia(st, st.lado, 1);               // regla: tu primer turno da 1 energía
   return st;
 }
@@ -220,7 +233,10 @@ export function ejecutarTurno(st, cola) {
   // 4. energía del lado entrante: SU primer turno = 1; después, 1 por vivo
   if (st.cambioUsado) st.cambioUsado[st.lado] = false;   // puede volver a cambiar
   if (!st.fin) {
-    const n = st.jugados[st.lado] === 0 ? 1 : vivos(st, st.lado).length;
+    // primer turno = 1 (+ compensación si NO abriste); después, 1 por vivo
+    const n = st.jugados[st.lado] === 0
+      ? 1 + (st.lado !== st.abrio ? (st.compensa || 0) : 0)
+      : vivos(st, st.lado).length;
     const ganadas = ganarEnergia(st, st.lado, n);
     eventos.push({ t: 'energia', lado: st.lado, ganadas });
     // duración de efectos del lado entrante (sus buffs caducan al empezar su turno)
