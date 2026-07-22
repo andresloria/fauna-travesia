@@ -700,25 +700,40 @@ color celeste y poné verde con árboles"*.
 
 ## PRÓXIMOS PASOS (retomar por acá)
 
-0. ✅ **RESUELTO el 21-jul con el DOCUMENTO de Andrés** (ver sesión de abajo):
-   los kits ya no son plantillas, salen de `fauna-travesia-habilidades.json`.
-   Lo que queda de ese frente:
-   - **Crear los 62 animales que faltan** (lista completa en
-     `REPORTE_HABILIDADES.md`): sprite + entrada en el roster. El kit ya está
-     escrito, entra solo al re-correr `python make_habilidades_doc.py`.
-   - **Decidir qué hacer con las 99 especies que el documento NO trae**: hoy
-     siguen con kit de plantilla y por eso son más fuertes que las oficiales
-     (ver la nota de balance).
+0. 🔴 **EL BALANCE — el pendiente más grande.** 12 animales ganan ~71% y 12
+   ~32%. **Cinco palancas de datos probadas, ninguna movió la desviación**
+   (subir daño, abaratar, recargas, energía sesgada, selección por actividad).
+   `tools/que_gana.mjs` mostró que NINGÚN rasgo del kit predice ganar (+0,17 el
+   daño); lo único con señal es la ACTIVIDAD (+0,56). **Hipótesis viva: el
+   problema es la IA (`colaAuto`), no los kits.** VERIFICAR antes de tocar
+   números: enfrentar el mismo kit contra sí mismo con dos IAs distintas, y/o
+   jugar VERSUS con humanos (ahí no juega la IA). Si con humanos la brecha se
+   achica, el balance de datos ya está bien y hay que arreglar el bot.
 
-1. **Probar el arco completo jugando**: cabecilla → provincia 2 → … → Monteverde →
-   liga libre con leyendas (solo probé la 1ª provincia + el estado del jefe).
-2. **Kits a mano para los 13 marcados TODO** en `movesets_gen.js` (legendarios + leyendas).
-3. **Retirar del repo el juego viejo** (game.js, ui.js, partes de engine.js y sus tests)
-   cuando el nuevo esté rodado — o dejarlo como archivo histórico.
-4. **Rebalancear con `combateAuto`**: nivel de rivales por provincia vs curva de XP.
-5. Pulir la arena: daño flotante, sonido de golpes, indicador de sostenidos/control.
-6. Las **fichas educativas** (fichas.js) hoy quedaron fuera del flujo — engancharlas al
-   desbloquear una especie nueva (el guía te la presenta).
+1. **Jugar VERSUS de verdad con dos personas** (Andrés + alguien): probar si los
+   animales del fondo (Tinamú, Boa, Tiburón martillo) se defienden en manos
+   humanas. Es la medición que decide el punto 0.
+
+2. **Crear los animales que faltan** (`REPORTE_HABILIDADES.md`): las 136 del
+   roster YA tienen kit del documento, pero el documento trae 43 kits en
+   RESERVA para especies nuevas. Cada animal nuevo = sprite + entrada en el
+   roster (`make_fauna_data.py`) → el kit entra solo al re-correr
+   `python make_habilidades_doc.py`.
+
+3. **Probar el arco completo jugando**: solo verifiqué hasta el cabecilla de
+   San José. Falta provincia 2 → … → Monteverde → liga libre con leyendas.
+
+4. **22 habilidades genéricas** (sellos/invocaciones que el motor no tiene):
+   listadas en `REPORTE_HABILIDADES.md`, candidatas a curar a mano.
+
+5. **Retirar del repo el juego viejo** (game.js, ui.js, partes de engine.js) —
+   o dejarlo como archivo histórico. Su CSS ya no se renderiza (lo pisa el tema
+   moderno) pero infla styles.css.
+
+6. Las **fichas educativas** (fichas.js) quedaron fuera del flujo — engancharlas
+   al desbloquear una especie (el guía te la presenta).
+
+7. Pulir la arena: sonido de golpes, indicador de sostenidos/control.
 
 ### Pendientes viejos (del juego de TABLERO, que se descartó)
 Se dejan anotados solo por si algo se rescata; **ninguno aplica al juego actual**:
