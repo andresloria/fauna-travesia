@@ -81,7 +81,9 @@ test('el que abre recibe SOLO 1 energía en su primer turno', () => {
 });
 
 test('el segundo jugador también recibe 1 en SU primer turno; después 1 por vivo', () => {
-  const st = A.mkCombate(TA(), TB(), { abre: 'A', rng: rngFijo([0.1, 0.4, 0.7, 0.9]) });
+  // compensa:0 para medir la REGLA BASE aislada (la compensación por tempo
+  // tiene sus propios tests más abajo); si no, B respondería con 1 + COMPENSA.
+  const st = A.mkCombate(TA(), TB(), { abre: 'A', compensa: 0, rng: rngFijo([0.1, 0.4, 0.7, 0.9]) });
   A.ejecutarTurno(st, []);                       // A pasa
   assert.equal(A.totalE(st.energia.B), 1, 'primer turno de B = 1');
   A.ejecutarTurno(st, []);                       // B pasa

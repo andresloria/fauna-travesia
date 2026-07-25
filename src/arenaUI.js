@@ -32,6 +32,32 @@ const CLASE_N = {
 const TURNO_SEG = 60;
 const MOVIL = () => window.innerWidth < 900;
 
+// ---- iconos SVG de la interfaz ----
+// Antes eran emojis del sistema (🛡☣💚✨💫🎯🌵🔆🩸⬆ 🤖🏳👆🪤🏆💀): cada aparato
+// los dibuja distinto y el trazo no combina con el resto. Ahora son SVG propios,
+// mismo trazo en todos lados, y toman el color del chip por currentColor.
+const SVG = (p, s = 12) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const ICO = {
+  defensa: '<path d="M12 3l7 3v5c0 4-3 7-7 8-4-1-7-4-7-8V6z"/>',
+  reducir: '<path d="M12 3l7 3v5c0 4-3 7-7 8-4-1-7-4-7-8V6z"/><path d="M9 12h6"/>',
+  toxina:  '<path d="M12 3c3 4 5 6 5 9a5 5 0 0 1-10 0c0-3 2-5 5-9z"/><circle cx="12" cy="13.5" r="1.5" fill="currentColor" stroke="none"/>',
+  cura:    '<path d="M12 6v12M6 12h12"/>',
+  invuln:  '<path d="M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8z"/>',
+  aturdir: '<path d="M16 8a4.5 4.5 0 1 0 1.2 4.6"/><circle cx="8.5" cy="17" r="1.3" fill="currentColor" stroke="none"/>',
+  exponer: '<circle cx="12" cy="12" r="5.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/>',
+  contra:  '<path d="M10 8L6 12l4 4"/><path d="M6 12h8a4 4 0 0 1 4 4v1.5"/>',
+  modo:    '<path d="M13 3c.5 3 3 4 3 7a4 4 0 0 1-8 0c0-2 1-3 2-4 .2 1.8 1.2 2.5 2 2.5-1.2-2 0-4 1-7.5z"/>',
+  marca:   '<path d="M12 3c3 4 5 6 5 9a5 5 0 0 1-10 0c0-3 2-5 5-9z" fill="currentColor" stroke="none"/>',
+  amp:     '<path d="M12 19V6M6 12l6-6 6 6"/>',
+  robot:   '<rect x="5" y="8" width="14" height="10" rx="2"/><path d="M12 8V5M9 13h.01M15 13h.01"/>',
+  bandera: '<path d="M6 21V4M6 4h10l-2 3.5L16 11H6"/>',
+  toque:   '<path d="M9 11.5V6.5a1.5 1.5 0 0 1 3 0v4M12 10.5V4.5a1.5 1.5 0 0 1 3 0v6M15 10.5V6.5a1.5 1.5 0 0 1 3 0v6a6 6 0 0 1-6 6h-1a5 5 0 0 1-4-2l-2.5-3.2a1.6 1.6 0 0 1 2.4-2.1L9 12"/>',
+  trofeo:  '<path d="M8 4h8v4a4 4 0 0 1-8 0z"/><path d="M8 6H5v1a3 3 0 0 0 3 3M16 6h3v1a3 3 0 0 1-3 3M10 12.5h4M12 12.5V16M9 19h6M10 19l.5-3M14 19l-.5-3"/>',
+  calavera:'<path d="M6 12a6 6 0 1 1 12 0v3a2 2 0 0 1-2 2h-1v2H9v-2H8a2 2 0 0 1-2-2z"/><circle cx="9.5" cy="11" r="1.4" fill="currentColor" stroke="none"/><circle cx="14.5" cy="11" r="1.4" fill="currentColor" stroke="none"/>',
+  trampa:  '<circle cx="12" cy="12" r="7"/><path d="M12 5v3M12 16v3M5 12h3M16 12h3"/>',
+};
+const icoSVG = (name, s = 12) => SVG(ICO[name] || '', s);
+
 // costo: un ICONO DEL BIOMA por cada energía que cuesta. Antes eran puntitos de
 // color y había que acordarse de cuál era cuál; con el dibujo se lee de una.
 const costoHTML = (costo) => !costo || !costo.length
@@ -101,7 +127,7 @@ export function abrirArena(opts) {
           <b id="arSegs">–</b>
         </div>
         <div class="ar-lado der">
-          ${opts.rivalArt ? `<img src="${opts.rivalArt}" alt="">` : '<div class="ar-sinart">🪤</div>'}
+          ${opts.rivalArt ? `<img src="${opts.rivalArt}" alt="">` : `<div class="ar-sinart">${icoSVG('trampa', 20)}</div>`}
           <div id="arLadoDer"><b>${opts.titulo || 'Cazadores'}</b><span>${opts.sub || ''}</span></div>
         </div>
       </header>
@@ -119,8 +145,8 @@ export function abrirArena(opts) {
         <div class="ar-tiras" id="arTiras"></div>
         <div class="ar-habs" id="arHabs"></div>
         <div class="ar-acciones">
-          <button class="ar-chico" id="arAuto">🤖 Auto</button>
-          <button class="ar-chico mal" id="arHuir">🏳 Rendirse</button>
+          <button class="ar-chico" id="arAuto">${icoSVG('robot', 15)} Auto</button>
+          <button class="ar-chico mal" id="arHuir">${icoSVG('bandera', 15)} Rendirse</button>
           <button class="ar-listo" id="arListo">▶ LISTO</button>
         </div>
       </div>
@@ -179,19 +205,21 @@ export function abrirArena(opts) {
   }
 
   function fxs(u) {
+    const chip = (name, title, num = '', cls = '') =>
+      `<i class="${cls}" title="${title}">${icoSVG(name)}${num !== '' && num != null ? `<b>${num}</b>` : ''}</i>`;
     const out = [];
-    if (u.defensa > 0) out.push(`<i title="Defensa ${u.defensa}">🛡${u.defensa}</i>`);
+    if (u.defensa > 0) out.push(chip('defensa', `Defensa ${u.defensa}`, u.defensa));
     for (const f of u.efectos) {
-      if (f.t === 'dot') out.push(`<i class="mal" title="Toxina ${f.v} por turno">☣${f.turnos}</i>`);
-      if (f.t === 'hot') out.push(`<i title="Curándose">💚${f.turnos}</i>`);
-      if (f.t === 'invulnerable') out.push('<i title="Invulnerable">✨</i>');
-      if (f.t === 'aturdir') out.push('<i class="mal" title="Aturdida">💫</i>');
-      if (f.t === 'exponer') out.push('<i class="mal" title="Expuesta">🎯</i>');
-      if (f.t === 'reducir') out.push(`<i title="Recibe ${f.v} menos">🛡·</i>`);
-      if (f.t === 'contra') out.push('<i title="Contraataca">🌵</i>');
-      if (f.t === 'modo') out.push(`<i title="Modo activo">🔆${f.turnos}</i>`);
-      if (f.t === 'marca') out.push(`<i class="mal" title="Marcada +${f.v}">🩸</i>`);
-      if (f.t === 'amp') out.push(`<i title="Amplificado +${f.v}">⬆</i>`);
+      if (f.t === 'dot') out.push(chip('toxina', `Toxina ${f.v} por turno`, f.turnos, 'mal'));
+      if (f.t === 'hot') out.push(chip('cura', 'Curándose', f.turnos));
+      if (f.t === 'invulnerable') out.push(chip('invuln', 'Invulnerable'));
+      if (f.t === 'aturdir') out.push(chip('aturdir', 'Aturdida', '', 'mal'));
+      if (f.t === 'exponer') out.push(chip('exponer', 'Expuesta', '', 'mal'));
+      if (f.t === 'reducir') out.push(chip('reducir', `Recibe ${f.v} menos`));
+      if (f.t === 'contra') out.push(chip('contra', 'Contraataca'));
+      if (f.t === 'modo') out.push(chip('modo', 'Modo activo', f.turnos));
+      if (f.t === 'marca') out.push(chip('marca', `Marcada +${f.v}`, '', 'mal'));
+      if (f.t === 'amp') out.push(chip('amp', `Amplificado +${f.v}`));
     }
     return out.join('');
   }
@@ -250,7 +278,7 @@ export function abrirArena(opts) {
 
   function infoHTML(par = verInfo) {
     if (!par) return `
-      <div class="ar-ico vacio">👆</div>
+      <div class="ar-ico vacio">${icoSVG('toque', 22)}</div>
       <div class="ar-itx">
         <h3>Elegí una habilidad</h3>
         <p>Tocá un animal tuyo para ver sus habilidades, después la habilidad y a quién se la
@@ -578,7 +606,7 @@ export function abrirArena(opts) {
     const fin = document.createElement('div');
     fin.className = 'ar-fin ' + (gane ? 'win' : 'lose');
     fin.innerHTML = `<div class="ar-finbox">
-      <div class="ar-fint">${gane ? '🏆 ¡Victoria!' : rendicion ? '🏳 Te retiraste' : '💀 Derrota'}</div>
+      <div class="ar-fint" style="display:flex;align-items:center;justify-content:center;gap:9px">${gane ? `${icoSVG('trofeo', 22)} ¡Victoria!` : rendicion ? `${icoSVG('bandera', 22)} Te retiraste` : `${icoSVG('calavera', 22)} Derrota`}</div>
       <button class="ar-listo">Continuar</button></div>`;
     esc.appendChild(fin);
     fin.querySelector('button').onclick = () => {
