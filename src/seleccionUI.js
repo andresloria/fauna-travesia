@@ -37,6 +37,14 @@ const orbes = (costo) => !costo || !costo.length
       : `<img class="sl-orb" src="assets/iconos/bioma_${c}.png" alt="${BIOMA_N[c] || c}"
            title="${BIOMA_N[c] || c}" draggable="false">`).join('');
 
+// bioma de la ficha: el MISMO icono PNG que usa el costo (antes era emoji del
+// sistema 🌳🌾🌊⛰, que cambia de forma entre aparatos y chocaba con el icono del
+// costo en la misma ficha). 'noche' (las 6 leyendas del folclor) no tiene PNG,
+// así que ahí queda el 🌑 de respaldo.
+const biomaIco = (b) => ['bosque', 'sabana', 'agua', 'montana'].includes(b)
+  ? `<img class="sl-fbio-ic" src="assets/iconos/bioma_${b}.png" alt="" draggable="false">`
+  : (BEMO[b] ? BEMO[b] + ' ' : '');
+
 export function crearSeleccion(root) {
   const st = L.cargar();
   let equipo = st.ultimoEquipo.filter(k => L.desbloqueado(st, k)).slice(0, 3);
@@ -111,7 +119,7 @@ export function crearSeleccion(root) {
         </div>
         <div class="sl-finfo">
           <div class="sl-fnom">${sp.n.toUpperCase()}
-            <span class="sl-fbio" style="color:${BCOLOR_TXT[sp.bio] || BCOLOR[sp.bio]}">${BEMO[sp.bio] || ''} ${sp.bio}</span>
+            <span class="sl-fbio" style="color:${BCOLOR_TXT[sp.bio] || BCOLOR[sp.bio]}">${biomaIco(sp.bio)}${sp.bio}</span>
           </div>
           <div class="sl-habrow">${habs}</div>
           ${mision}

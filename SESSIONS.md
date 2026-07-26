@@ -5,6 +5,24 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 25 jul 2026 · Accesibilidad de la pantalla de armar equipo
+
+Segunda pasada del review UI/UX, ahora sobre `seleccionUI.js`. **Medido en vivo:
+la pantalla YA estaba modernizada** por el bloque TEMA MODERNO (tiles oscuros
+95×95, textos 11–12.5px claros, botón 50px) — mi lectura del CSS *crudo* estaba
+desactualizada, por eso conviene medir y no leer nomás. Quedaban dos cosas:
+
+- **Toques <44px**: la ✕ de quitar del equipo (14×25) y la ✕ de los modales
+  (32×32) → **área 44×44** con el mismo `::before` invisible de la arena.
+- **Bioma de la ficha**: emoji 🌳🌾🌊⛰ → **icono PNG de bioma** (el mismo que ya
+  usa el costo en esa misma ficha; helper `biomaIco`). `noche` (6 leyendas, sin
+  PNG) conserva 🌑 de respaldo. Los emojis de **botones** (📜⚔🔒🔥🌿) se dejaron
+  a propósito (decisión de Andrés: dan calidez).
+
+Solo `seleccionUI.js` + `styles.css`. Consola limpia, `node --check` OK.
+
+---
+
 ## Sesión — 25 jul 2026 · Accesibilidad de la arena (review UI/UX)
 
 Pasada de calidad sobre la pantalla de combate contra el checklist de UI/UX.

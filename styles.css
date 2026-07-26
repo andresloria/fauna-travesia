@@ -1575,7 +1575,8 @@ details.how b{color:var(--m-acc2); font-weight:700}
 }
 .sl-fnom{font-family:var(--m-sans); font-size:18px; font-weight:800; color:var(--m-tx);
   line-height:1.2; letter-spacing:-.01em}
-.sl-fbio{font-size:13px; color:var(--m-tx2)}
+.sl-fbio{font-size:13px; color:var(--m-tx2); display:inline-flex; align-items:center; gap:4px}
+.sl-fbio-ic{width:15px; height:15px; image-rendering:auto; display:inline-block}
 .sl-fnv{font-size:13px; color:var(--m-tx2)}
 
 /* tarjetitas de habilidad de la ficha */
@@ -1607,7 +1608,10 @@ details.how b{color:var(--m-acc2); font-weight:700}
 .sl-slot .sn{font-family:var(--m-sans); font-size:10px; font-weight:800; border-radius:6px;
   padding:2px 5px; top:5px; left:5px}
 .sl-slot .slb{font-size:12px; color:var(--m-tx)}
-.sl-slot .qx{color:var(--m-mal); font-size:17px}
+.sl-slot .qx{color:var(--m-mal); font-size:17px; position:absolute;
+  width:28px; height:28px; display:grid; place-items:center}
+/* el ✕ de quitar del equipo era 14×25: área de toque a 44 sin agrandar el glifo */
+.sl-slot .qx::before{content:""; position:absolute; inset:-8px}
 .sl-slot.vacio .mas{font-family:var(--m-sans); font-size:24px; color:var(--m-tx2); opacity:.5}
 
 .sl-grid{grid-template-columns:repeat(auto-fill,minmax(92px,1fr)); gap:9px}
@@ -1644,8 +1648,11 @@ details.how b{color:var(--m-acc2); font-weight:700}
 .sl-x{
   font-family:var(--m-sans); font-size:16px; border:1px solid var(--m-linea);
   border-radius:50%; width:32px; height:32px; background:rgba(255,255,255,.08);
-  color:var(--m-tx2); cursor:pointer;
+  color:var(--m-tx2); cursor:pointer; position:relative;
+  display:grid; place-items:center;
 }
+/* dibujo de 32, área de toque 44 (mismo criterio que el resto) */
+.sl-x::before{content:""; position:absolute; inset:-6px}
 .sl-mr b{
   font-family:var(--m-sans); font-size:11px; font-weight:800; border:0; border-radius:7px;
   padding:3px 8px; color:#0e1620;    /* oscura: los colores de rango son tonos medios */
