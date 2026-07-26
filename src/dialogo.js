@@ -57,8 +57,10 @@ export function playScene(scene, ctx = {}) {
     const opts = el('div', 'dlg-opts');
     const next = el('div', 'dlg-next', '▼');
     box.append(plate, text, opts, next);
-    // botón SALTAR: cierra la escena completa de una (para quien no quiere leer)
-    const skip = el('button', 'dlg-skip', 'SALTAR ⏭');
+    // botón SALTAR: cierra la escena completa de una (para quien no quiere leer).
+    // El ⏭ era emoji del sistema (cambia de forma entre aparatos); ahora es el
+    // mismo trazo SVG que usa la arena.
+    const skip = el('button', 'dlg-skip', `SALTAR <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5l9 7-9 7z"/><path d="M19 5v14"/></svg>`);
     skip.title = 'Saltar esta conversación (Esc)';
     skip.onclick = (e) => { e.stopPropagation(); cerrar(); };
     stage.append(skip, portrait, box);

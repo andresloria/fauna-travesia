@@ -1698,8 +1698,9 @@ details.how b{color:var(--m-acc2); font-weight:700}
 .dlg-skip{
   font-family:var(--m-sans); font-size:12px; font-weight:700; border-radius:9px;
   border:1px solid var(--m-linea); background:var(--m-panel); color:var(--m-tx2);
-  padding:7px 12px;
+  min-height:44px; padding:0 14px; display:inline-flex; align-items:center; gap:6px;
 }
+.dlg-skip svg{display:block; width:14px; height:14px}
 .dlg-skip:hover{background:var(--m-panel2); color:var(--m-tx)}
 .dlg-opt{
   font-family:var(--m-sans); font-size:14px; font-weight:600; line-height:1.35;

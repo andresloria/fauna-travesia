@@ -5,6 +5,30 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 25 jul 2026 · Revisión de la novela visual (diálogos)
+
+Tercera y última pasada del review UI/UX, sobre `dialogo.js`. **Veredicto: es la
+pantalla más sana de las tres** — ya venía modernizada. Verificado renderizando
+una escena real de careo con jefe:
+
+- texto 16px (15 en celular) / interlínea 1.5 / `#e4ecf5`;
+- opciones 14px con ~44px de alto, 2 columnas → 1 en celular;
+- placa de nombre legible, caja del jefe teñida, resaltados en salmón;
+- `min-height` en la caja reserva el espacio del tecleo (no hay salto de layout);
+- teclado completo (Enter/Espacio avanzan, Esc salta) y `:focus-visible` global;
+- `prefers-reduced-motion` respetado.
+
+Único arreglo: el botón **SALTAR** estaba a ~32px → **44px**, y su ⏭ (último
+emoji del sistema de esta pantalla) pasó a **SVG** del mismo set de la arena.
+El ▼ de "seguir" se deja: es un carácter geométrico, no emoji, se ve igual en
+todos lados.
+
+📌 El screenshot del navegador necesita que el panel esté DESPLEGADO; si no,
+falla por "not compositing frames". La verificación por medición sigue andando
+igual con el panel cerrado.
+
+---
+
 ## Sesión — 25 jul 2026 · Accesibilidad de la pantalla de armar equipo
 
 Segunda pasada del review UI/UX, ahora sobre `seleccionUI.js`. **Medido en vivo:
