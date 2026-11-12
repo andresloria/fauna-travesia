@@ -63,20 +63,31 @@ export const DANO_DORADO_MIN = 10;
 export function colorDe(hab) {
   const efs = hab.efectos || [];
   if (efs.some(f => f.t === 'invulnerable' && (f.obj === 'self' || !f.obj))) return 'azul';
-  if (efs.some(esDano)) {
-    // caro o demoledor = dorado (prioridad: le gana al morado y perfora el azul)
+  // ⚠️ MEDIDO: con el daño mandando siempre, solo 28 de 136 especies tenían
+  // gajo morado y los estados salían 0.28 veces por partida — la capa de
+  // estados era contenido muerto. Si la habilidad trae daño PERO ADEMÁS un
+  // estado fuerte (aturdir/exponer), manda el estado, como en Duel.
+  const estadoFuerte = efs.some(f => (f.t === 'aturdir' || f.t === 'exponer') &&
+    (f.obj === 'enemigo' || f.obj === 'todos'));
+  // ⚠️ MEDIDO Y CORREGIDO: el dorado llegó a ser el 31.6% del peso de todas
+  // las ruedas, cuando en Duel es ~1.4% de los gajos. Como el dorado le gana
+  // al morado Y perfora el azul, tenerlo en todos lados aplastaba los estados
+  // y las esquivas. Ahora es lo que debe ser: el gajo PREMIUM y raro — solo
+  // los golpes caros Y demoledores a la vez.
+  if (efs.some(esDano) && !estadoFuerte) {
     const caro = (hab.costo || []).length >= 2;
     const fuerte = efs.filter(esDano).reduce((s, f) => s + (f.v || 0), 0) >= 35;
-    return (caro || fuerte) ? 'dorado' : 'blanco';
+    return (caro && fuerte) ? 'dorado' : 'blanco';
   }
   if (efs.some(f => ES_ESTADO.includes(f.t) || (f.t === 'reducir' && f.obj === 'enemigo'))) return 'morado';
-  return 'dorado';                       // auto-buff: dorado con daño derivado
+  return 'blanco';                       // auto-buff: golpe blanco con daño derivado
 }
 
 export function danoDe(hab) {
   const directo = (hab.efectos || []).filter(esDano).reduce((s, f) => s + (f.v || 0), 0);
   if (directo > 0) return directo;
-  if (colorDe(hab) !== 'dorado') return 0;              // azul y morado no pegan
+  const c = colorDe(hab);
+  if (c !== 'dorado' && c !== 'blanco') return 0;       // azul y morado no pegan
   return Math.max(DANO_DORADO_MIN, Math.round(potencia(hab) / 3));
 }
 
@@ -100,7 +111,15 @@ const FALLO_POR_RAREZA = { comun: 6, raro: 5, ultrararo: 4, legendario: 2, mitic
 // el 20% de la rueda y las partidas morían por límite de turnos).
 export const PESO_ESQUIVA = 3;
 
+// "Sense Danger: This Pokémon switches places with its battle opponent."
+// Los azules que vienen de una HABILIDAD (no la Esquiva universal) hacen eso:
+// ganan el duelo y además se intercambian de lugar. Es tácticamente enorme —
+// te saca al rival de su carrera y te mete a vos en la tuya.
+export const cambiaLugar = (hab) =>
+  colorDe(hab) === 'azul' && hab.n !== 'Esquivar';
+
 export const mkGajo = (hab) => ({
+  cambia: cambiaLugar(hab),
   n: hab.n, color: colorDe(hab), peso: pesoDe(hab),
   dano: danoDe(hab), estrellas: estrellasDe(hab), efectos: hab.efectos || [],
 });

@@ -223,7 +223,12 @@ export function montarTravesia(root) {
   }
 
   function arrancar() {
-    st = T.mkPartida(miEquipo, suEquipo, { abre: 'A' });
+    // QUIÉN ABRE VA AL AZAR. Abrir da ventaja y no hay forma de cobrar la
+    // media acción que vale (medido: sin compensar abre gana 60.3%, con la
+    // entrada doble 39.2% — ninguna da 50). Alternar es lo que lo empareja
+    // de verdad a lo largo de varias partidas, como en cualquier juego de
+    // mesa. Antes abrías siempre vos.
+    st = T.mkPartida(miEquipo, suEquipo, { abre: Math.random() < 0.5 ? 'A' : 'B' });
     sel = null;
     // Al empezar NADIE está en el tablero: las 6 piezas arrancan en la banca.
     // Se deja uno ya elegido para que las ENTRADAS aparezcan marcadas de una y

@@ -326,15 +326,61 @@ duelos por partida** (antes 4.6), el máximo hasta ahora. Desviación 4.7.
 `test/plates.test.mjs`: **18 pruebas** (presupuesto, sin repetir, una vez por
 duelo, encadenar varias, cada efecto, el objetivo correcto, y 300 partidas).
 
+### 🚨 EL BUG MÁS GRANDE: el dorado estaba en todos lados
+Persiguiendo por qué los estados casi no salían (0.25 por partida) se midió el
+reparto del peso de las 136 ruedas y apareció la causa de fondo:
+
+| color | nuestro (antes) | **corregido** | Duel real |
+|---|---|---|---|
+| blanco | 26.5% | **55.0%** | domina |
+| **dorado** | **31.6%** | **3.1%** | ~1.4% de los gajos |
+| morado | 8.1% | 8.1% | ~17% |
+| azul | 14.7% | 14.6% | — |
+| fallo | 19.1% | 19.0% | 8–33% |
+
+📌 **El dorado le gana al morado Y perfora el azul.** Tenerlo en el 31% de la
+rueda aplastaba las dos capas a la vez: los estados y las esquivas casi nunca
+decidían nada. La causa era mi mapeo: todos los auto-buffs iban a dorado.
+Ahora el dorado es lo que debe ser —el gajo **premium y raro**, solo los golpes
+caros Y demoledores a la vez— y los auto-buffs son golpes blancos.
+
+**Resultado de ese solo cambio: los estados casi se duplicaron** (0.25 → 0.47
+por partida) sin tocar nada de la capa de estados.
+
+📌 **Lección: cuando una mecánica "no se nota", medir el REPARTO, no la
+mecánica.** Yo había subido las especies con morado de 28 a 49 y no cambió
+nada — el problema estaba en otro color.
+
+### Azul que cambia de lugar
+*"Sense Danger: This Pokémon switches places with its battle opponent."* Los
+azules que vienen de una habilidad (no la Esquiva universal) ganan el duelo y
+además intercambian posiciones: te saca al rival de su carrera y te mete en la
+tuya. Lo tienen 14 de 136 especies; pasa 0.16 veces por partida.
+
+### Quién abre va AL AZAR (decisión final del tema)
+| | abre gana |
+|---|---|
+| sin compensar | 60.3% |
+| con entrada doble | 39.2% |
+
+Ninguna da 50 porque el desbalance vale MEDIA acción y no hay cómo cobrarla.
+Se dejó la entrada doble Y **en la interfaz quién abre se sortea** — antes
+abrías siempre vos. Alternar es lo que lo empareja de verdad en varias
+partidas, como en cualquier juego de mesa.
+
+### ✅ DECISIÓN DE ANDRÉS: el juego sigue SIN NIVELES
+En Duel se suben figuras gastando **puntos de rueda** (agrandan un gajo y
+achican el Fallo). **Andrés decidió NO traerlo**, ni siquiera a Travesía: la
+regla de que no hay niveles se mantiene y **la progresión sigue siendo
+coleccionar animales**. No volver a proponerlo sin preguntar.
+
 ### Lo que falta para ser igual que Duel
-1. **Puntos de rueda** — en Duel subir una figura **agranda un gajo y achica el
-   Fallo**. Encajaría perfecto como progresión del modo aventura… pero choca
-   con la regla de Andrés de que el juego es SIN NIVELES. **Decisión suya.**
-2. Habilidades por movimiento más ricas: dormir, confundir, apuntar a un
-   adyacente, y el azul que **cambia de lugar** con su rival.
-3. Los estados salen poco (0.28 por partida) porque apenas 28 de 136 especies
-   tienen gajo morado. Se arreglaría mandando a morado las habilidades que
-   tienen daño Y estado fuerte, a costa de bajar el daño del juego.
+1. Habilidades por movimiento más ricas: dormir, confundir, apuntar a un
+   adyacente.
+2. El morado sigue en 8.1% contra ~17% del original. **Es un problema de
+   DATOS, no del motor**: los kits de la arena son casi todo daño y no hay más
+   habilidades de estado para promover. El arreglo real sería escribir
+   habilidades nuevas (hay 43 kits del documento en reserva).
 Suites: arena 23 · engine 46 · misiones 6 · **travesía 27** · auditor 408/408.
 
 ### Lo que falta si se decide seguir

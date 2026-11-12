@@ -324,6 +324,14 @@ function duelo(st, pa, pb) {
       ev.push({ t: 'herida', uid: perdedor.uid, heridas: perdedor.heridas,
                 aguanta: st.resistencia - perdedor.heridas });
     }
+  } else if (r.tipo === 'nada' && r.ganador) {
+    // azul con "cambia de lugar": se intercambian las posiciones
+    const g = r.ganador === 'A' ? ga : gb;
+    if (g.cambia) {
+      const na = pa.nodo, nb = pb.nodo;
+      pa.nodo = nb; pb.nodo = na;
+      ev.push({ t: 'cambia', a: pa.uid, b: pb.uid });
+    }
   } else if (r.tipo === 'estado') {
     const tocado = r.ganador === 'A' ? pb : pa;
     const g = r.ganador === 'A' ? ga : gb;
