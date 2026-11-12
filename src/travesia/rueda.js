@@ -112,6 +112,23 @@ export const mpDe = (key) => {
   return s <= 3 ? 1 : s <= 6 ? 2 : 3;
 };
 
+// En Duel TODA rueda suma 96 unidades (= 360°). Se reescalan los pesos a ese
+// presupuesto para que las proporciones sean comparables entre especies, igual
+// que en el original.
+export const RUEDA_TOTAL = 96;
+function a96(gajos) {
+  const suma = gajos.reduce((s, g) => s + g.peso, 0) || 1;
+  const out = gajos.map(g => ({ ...g, peso: Math.max(1, Math.round(g.peso / suma * RUEDA_TOTAL)) }));
+  // cuadrar el redondeo contra el gajo más grande
+  let dif = RUEDA_TOTAL - out.reduce((s, g) => s + g.peso, 0);
+  if (dif) {
+    let i = 0;
+    out.forEach((g, j) => { if (g.peso > out[i].peso) i = j; });
+    out[i] = { ...out[i], peso: Math.max(1, out[i].peso + dif) };
+  }
+  return out;
+}
+
 export function ruedaDe(key) {
   const sp = SP[key] || {};
   const { habs } = habsDe(key);
@@ -121,7 +138,67 @@ export function ruedaDe(key) {
     n: 'Fallo', color: 'rojo', peso: FALLO_POR_RAREZA[sp.rarity] ?? 4,
     dano: 0, estrellas: 0, efectos: [],
   });
-  return { key, mp: mpDe(key), bio: sp.bio || null, gajos };
+  return { key, mp: mpDe(key), bio: sp.bio || null, gajos: a96(gajos) };
+}
+
+// ---------- VOLVER A GIRAR ----------
+// La segunda mecánica más común de Duel (68 de las habilidades de la muestra):
+// "Spin again until X does not land — damage is multiplied by the number of
+// spins". Acá se la quedan los gajos de daño SOSTENIDO (los que en la arena
+// pegan varios turnos): temáticamente es el bicho que no suelta la presa.
+// Lo tienen los golpes SOSTENIDOS del kit y, sobre todo, los golpes FLOJOS:
+// es el patrón del Pin Missile original (poco daño base, muchos giros). Hace
+// que un animal modesto pueda dar un golpe enorme de vez en cuando.
+export const repiteGajo = (g) =>
+  (g.efectos || []).some(f => f.t === 'danoTurnos') ||
+  (g.color === 'blanco' && g.dano > 0 && g.dano <= 15);
+
+// Gira y, si el gajo repite, sigue girando mientras vuelva a salir el mismo.
+// El daño se multiplica por la cantidad de veces.
+export function girarCompleto(rueda, rng = Math.random, tope = 5) {
+  const g = girar(rueda, rng);
+  const i = rueda.gajos.indexOf(g);          // la UI lo necesita para la aguja
+  if (!repiteGajo(g)) return { gajo: g, veces: 1, i };
+  let veces = 1;
+  while (veces < tope && girar(rueda, rng) === g) veces++;
+  return { gajo: { ...g, dano: g.dano * veces }, veces, i };
+}
+
+// ---------- ESTADOS (degradan la rueda, como en Duel) ----------
+// En el original un estado no quita vida (no hay vida): EMPEORA LA RUEDA.
+//   · paralizado → su gajo más chico pasa a ser Fallo
+//   · quemado    → −10 de daño en todo, y además su gajo más chico pasa a Fallo
+//   · lento      → marcador Mp−1 (lo maneja el tablero)
+export const ESTADOS = ['paralizado', 'quemado', 'lento'];
+
+// Qué estado deja un gajo morado, traducido de los efectos del kit de la arena.
+export function estadosDe(gajo) {
+  const out = [];
+  for (const f of gajo.efectos || []) {
+    const t = f.turnos || 2;
+    if (f.t === 'aturdir') out.push({ e: 'paralizado', turnos: t });
+    else if (f.t === 'exponer' || f.t === 'marcaPermanente') out.push({ e: 'paralizado', turnos: t });
+    else if (f.t === 'danoTurnos' || (f.t === 'reducir' && f.obj === 'enemigo')) out.push({ e: 'quemado', turnos: t });
+    else if (f.t === 'robarEnergia' || f.t === 'quemarEnergia') out.push({ e: 'lento', turnos: t });
+  }
+  return out.length ? out : [{ e: 'paralizado', turnos: 2 }];
+}
+
+export const tieneEstado = (estados, e) => (estados || []).some(x => x.e === e);
+
+export function ruedaConEstados(rueda, estados) {
+  if (!estados || !estados.length) return rueda;
+  let gajos = rueda.gajos.map(g => ({ ...g }));
+  if (tieneEstado(estados, 'quemado')) {
+    gajos = gajos.map(g => (g.dano > 0 ? { ...g, dano: Math.max(0, g.dano - 10) } : g));
+  }
+  if (tieneEstado(estados, 'paralizado') || tieneEstado(estados, 'quemado')) {
+    let idx = -1, min = Infinity;
+    gajos.forEach((g, i) => { if (g.color !== 'rojo' && g.peso < min) { min = g.peso; idx = i; } });
+    if (idx >= 0) gajos[idx] = { ...gajos[idx], color: 'rojo', dano: 0, estrellas: 0,
+      n: 'Fallo (' + gajos[idx].n + ')' };
+  }
+  return { ...rueda, gajos };
 }
 
 // EL BIOMA DEL NODO: en su propio hábitat el animal falla la mitad.

@@ -29,6 +29,13 @@ const NOMBRE_COLOR = {
   azul: 'esquiva', rojo: 'fallo',
 };
 const BIOMA_N = { bosque: 'Bosque', sabana: 'Sabana', agua: 'Agua', montana: 'Montaña' };
+// estados traídos de Duel: no quitan vida (no hay vida), EMPEORAN LA RUEDA
+const ESTADO_ICO = { paralizado: '⚡', quemado: '🔥', lento: '🐌' };
+const ESTADO_TXT = {
+  paralizado: 'Paralizado: su gajo más chico es Fallo',
+  quemado: 'Quemado: −10 de daño y su gajo más chico es Fallo',
+  lento: 'Lento: se mueve un paso menos',
+};
 
 // geometría del tablero en píxeles
 // el tablero Duel son 7 posiciones de ancho por 5 de alto
@@ -309,7 +316,10 @@ export function montarTravesia(root) {
         <image class="tv-sprite" href="${ART(p.key)}" x="${q.x - 13}" y="${q.y - 13}"
           width="26" height="26" preserveAspectRatio="xMidYMid meet"></image>
         <circle class="tv-mpbg" cx="${q.x + 12}" cy="${q.y - 12}" r="6.5"></circle>
-        <text class="tv-mp" x="${q.x + 12}" y="${q.y - 9.5}" text-anchor="middle">${p.rueda.mp}</text>
+        <text class="tv-mp" x="${q.x + 12}" y="${q.y - 9.5}" text-anchor="middle">${T.mpEfectivo(st, p)}</text>
+        ${(p.estados || []).length ? `<circle class="tv-estbg" cx="${q.x - 12}" cy="${q.y + 12}" r="6.5"></circle>
+          <text class="tv-est" x="${q.x - 12}" y="${q.y + 15}" text-anchor="middle">${
+            ESTADO_ICO[p.estados[0].e] || '!'}</text>` : ''}
       </g>`;
     }
 
@@ -355,6 +365,7 @@ export function montarTravesia(root) {
         <p>MP ${p.rueda.mp} · ${esc(BIOMA_N[p.rueda.bio] || p.rueda.bio || '—')}${
           enCasa ? ' · <b style="color:#7ef0a8">en su hábitat: falla menos</b>' : ''}</p>
         ${enBanca ? '<p style="color:#ffc861">↓ Tocá una <b>entrada</b> ✦ para meterlo al tablero</p>' : ''}
+        ${(p.estados || []).map(x => `<p style="color:#ff9a9a">${ESTADO_ICO[x.e] || ''} ${esc(ESTADO_TXT[x.e] || x.e)}</p>`).join('')}
         <div class="tv-gajos">${leyenda(p.rueda.gajos)}</div>
       </div>`;
   }
@@ -514,12 +525,14 @@ export function montarTravesia(root) {
         <div class="tv-par">
           <div class="tv-lado">
             ${donut(e.ruedaA, 125, e.iA, 'tv-big tv-gira')}
-            <h3>${nA}</h3><p style="color:${COLOR[e.colorA]}">${esc(e.gajoA)}</p>
+            <h3>${nA}</h3><p style="color:${COLOR[e.colorA]}">${esc(e.gajoA)}${
+              e.vecesA > 1 ? ` <b class="tv-x">×${e.vecesA}</b>` : ''}</p>
           </div>
           <div class="tv-vs">vs</div>
           <div class="tv-lado">
             ${donut(e.ruedaB, 125, e.iB, 'tv-big tv-gira')}
-            <h3>${nB}</h3><p style="color:${COLOR[e.colorB]}">${esc(e.gajoB)}</p>
+            <h3>${nB}</h3><p style="color:${COLOR[e.colorB]}">${esc(e.gajoB)}${
+              e.vecesB > 1 ? ` <b class="tv-x">×${e.vecesB}</b>` : ''}</p>
           </div>
         </div>
         <div class="tv-res ${clase}">${txt}</div>

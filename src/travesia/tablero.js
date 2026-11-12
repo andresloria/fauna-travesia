@@ -13,7 +13,8 @@
 // Motor PURO: cero DOM. El rng se inyecta para que todo sea reproducible.
 // ============================================================
 
-import { ruedaDe, ruedaEnBioma, girar, resolverDuelo, evDuelo } from './rueda.js';
+import { ruedaDe, ruedaEnBioma, girar, girarCompleto, resolverDuelo, evDuelo,
+         ruedaConEstados, estadosDe, tieneEstado } from './rueda.js';
 
 export const BIOMAS_T = ['bosque', 'sabana', 'agua', 'montana'];
 // EL CENTRO DE RECUPERACIÓN aguanta 2 piezas. No es un temporizador: cuando
@@ -134,7 +135,7 @@ export function mkPartida(equipoA, equipoB, opts = {}) {
     const key = e.key || e;
     piezas.push({
       uid: lado + i, key, lado, nodo: null,
-      estado: 'banca', vuelveEn: 0, efectos: [], heridas: 0,
+      estado: 'banca', vuelveEn: 0, efectos: [], estados: [], heridas: 0,
       rueda: opts.rueda ? opts.rueda(key) : ruedaDe(key),
     });
   });
@@ -192,7 +193,9 @@ export const enemigosAdyacentes = (st, p) => vecinos(st, p.nodo)
 
 // MP de esta pieza AHORA (con la penalización de apertura si corresponde).
 export const mpEfectivo = (st, p) =>
-  st.penalApertura === p.lado ? Math.max(st.penalMin ?? 2, p.rueda.mp - 1) : p.rueda.mp;
+  Math.max(1,
+    (st.penalApertura === p.lado ? Math.max(st.penalMin ?? 2, p.rueda.mp - 1) : p.rueda.mp)
+    - (tieneEstado(p.estados, 'lento') ? 1 : 0));   // marcador Mp−1 de Duel
 
 // A dónde puede llegar esta pieza: BFS hasta su mp, sin atravesar ni pisar
 // nodos ocupados (el bloqueo es la mecánica central).
@@ -236,7 +239,7 @@ export function distancias(st, desde) {
 
 // Al centro de recuperación. Si ya había 2, la más vieja sale a la banca.
 function alCentro(st, p) {
-  p.estado = 'centro'; p.nodo = null; p.efectos = []; p.heridas = 0; p.vuelveEn = 0;
+  p.estado = 'centro'; p.nodo = null; p.efectos = []; p.estados = []; p.heridas = 0; p.vuelveEn = 0;
   const cola = st.centro[p.lado];
   cola.push(p.uid);
   while (cola.length > CENTRO_CAPACIDAD) {
@@ -264,11 +267,18 @@ function revisarCercos(st, lado, ev) {
 
 // El duelo: giran las dos ruedas (ajustadas por el bioma del nodo donde está
 // parada cada una) y el color decide.
+// La rueda con la que pelea AHORA: ajustada por el bioma del nodo y degradada
+// por los estados que carga (así funcionan los estados en Duel: no quitan
+// vida —no hay vida— sino que te empeoran la rueda).
+export const ruedaActual = (st, p) =>
+  ruedaConEstados(ruedaEnBioma(p.rueda, bioDe(st, p.nodo)), p.estados);
+
 function duelo(st, pa, pb) {
   const ev = [];
-  const ra = ruedaEnBioma(pa.rueda, bioDe(st, pa.nodo));
-  const rb = ruedaEnBioma(pb.rueda, bioDe(st, pb.nodo));
-  const ga = girar(ra, st.rng), gb = girar(rb, st.rng);
+  const ra = ruedaActual(st, pa);
+  const rb = ruedaActual(st, pb);
+  const ta = girarCompleto(ra, st.rng), tb = girarCompleto(rb, st.rng);
+  const ga = ta.gajo, gb = tb.gajo;
   const r = resolverDuelo(ga, gb);
   // El evento va COMPLETO (las dos ruedas ya ajustadas por bioma y el índice
   // del gajo que salió) para que la UI pueda animar el giro leyendo solo el
@@ -277,7 +287,7 @@ function duelo(st, pa, pb) {
     t: 'duelo', a: pa.uid, b: pb.uid, ganador: r.ganador, tipo: r.tipo,
     gajoA: ga.n, colorA: ga.color, gajoB: gb.n, colorB: gb.color,
     ruedaA: ra.gajos, ruedaB: rb.gajos,
-    iA: ra.gajos.indexOf(ga), iB: rb.gajos.indexOf(gb),
+    iA: ta.i, iB: tb.i, vecesA: ta.veces, vecesB: tb.veces,
   });
   if (r.tipo === 'ko') {
     const perdedor = r.ganador === 'A' ? pb : pa;
@@ -293,8 +303,9 @@ function duelo(st, pa, pb) {
   } else if (r.tipo === 'estado') {
     const tocado = r.ganador === 'A' ? pb : pa;
     const g = r.ganador === 'A' ? ga : gb;
-    tocado.efectos.push(...g.efectos.filter(f => f.obj === 'enemigo'));
-    ev.push({ t: 'estado', uid: tocado.uid });
+    const nuevos = estadosDe(g).map(x => ({ ...x, hasta: st.turno + x.turnos * 2 }));
+    tocado.estados.push(...nuevos);
+    ev.push({ t: 'estado', uid: tocado.uid, estados: nuevos.map(x => x.e) });
   }
   return ev;
 }
@@ -310,6 +321,9 @@ export function sinSalida(st, lado) {
 
 export function pasarTurno(st) {
   st.turno++;
+  for (const p of st.piezas) {
+    if (p.estados && p.estados.length) p.estados = p.estados.filter(x => x.hasta > st.turno);
+  }
   st.lado = rival(st.lado);
   if (!st.fin && sinSalida(st, st.lado)) st.fin = rival(st.lado);
   if (st.turno > LIMITE_TURNOS && !st.fin) st.fin = 'empate';

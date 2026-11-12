@@ -156,7 +156,7 @@ test('dos FALLOS no hacen nada', () => {
 });
 
 test('el BLANCO más fuerte noquea al más débil', () => {
-  const { st } = duelo(gajo('fuerte', 'blanco', { dano: 30 }), gajo('flojo', 'blanco', { dano: 10 }));
+  const { st } = duelo(gajo('fuerte', 'blanco', { dano: 40 }), gajo('flojo', 'blanco', { dano: 20 }));
   assert.equal(T.pieza(st, 'B0').estado, 'centro');
   assert.equal(T.pieza(st, 'A0').estado, 'tablero');
 });
@@ -187,7 +187,10 @@ test('el MORADO gana al blanco y deja estado, sin noquear', () => {
   assert.equal(ev.ganador, 'A');
   assert.equal(ev.tipo, 'estado');
   assert.equal(T.pieza(st, 'B0').estado, 'tablero', 'el estado no saca la pieza');
-  assert.equal(T.pieza(st, 'B0').efectos.length, 1);
+  // los efectos del kit se TRADUCEN a estados de Duel (que degradan la rueda)
+  const es = T.pieza(st, 'B0').estados;
+  assert.equal(es.length, 1);
+  assert.equal(es[0].e, 'quemado', 'el daño por turnos se traduce a quemado');
 });
 
 test('morado contra morado: desempatan las estrellas', () => {
@@ -201,7 +204,7 @@ test('el DORADO tiene prioridad sobre el morado', () => {
 });
 
 test('el que cae va al CENTRO de recuperación', () => {
-  const { st } = duelo(gajo('fuerte', 'blanco', { dano: 30 }), gajo('flojo', 'blanco', { dano: 10 }));
+  const { st } = duelo(gajo('fuerte', 'blanco', { dano: 40 }), gajo('flojo', 'blanco', { dano: 20 }));
   const b = T.pieza(st, 'B0');
   assert.equal(b.estado, 'centro');
   assert.equal(b.nodo, null);
@@ -338,6 +341,60 @@ test('100 partidas automáticas: todas terminan y ninguna revienta', () => {
     }
   }
   assert.ok(empates < 10, 'demasiados empates: ' + empates + '/100 (se traba el tablero)');
+});
+
+// ---------- mecánicas traídas de Duel ----------
+test('toda rueda suma 96 unidades, como en Duel', () => {
+  const malas = Object.keys(SP).filter(k => R.pesoTotal(R.ruedaDe(k)) !== R.RUEDA_TOTAL);
+  assert.deepEqual(malas, []);
+});
+
+test('VOLVER A GIRAR: el golpe flojo multiplica su daño por los giros', () => {
+  const r = ruedaLab([gajo('aguijón', 'blanco', { peso: 1, dano: 10 })]);
+  const res = R.girarCompleto(r, () => 0.5);
+  assert.ok(res.veces > 1, 'con toda la rueda suya tiene que repetir');
+  assert.equal(res.gajo.dano, 10 * res.veces, 'el daño se multiplica por los giros');
+});
+
+test('el golpe fuerte NO repite', () => {
+  const r = ruedaLab([gajo('mazazo', 'blanco', { peso: 1, dano: 40 })]);
+  assert.equal(R.girarCompleto(r, () => 0.5).veces, 1);
+});
+
+test('QUEMADO: −10 de daño y su gajo más chico pasa a Fallo', () => {
+  const base = ruedaLab([
+    gajo('fuerte', 'blanco', { peso: 10, dano: 40 }),
+    gajo('chico', 'blanco', { peso: 2, dano: 30 }),
+  ]);
+  const q = R.ruedaConEstados(base, [{ e: 'quemado', turnos: 2 }]);
+  assert.equal(q.gajos[0].dano, 30, 'el grande pierde 10');
+  assert.equal(q.gajos[1].color, 'rojo', 'el más chico se vuelve Fallo');
+});
+
+test('PARALIZADO: su gajo más chico pasa a Fallo, sin tocar el daño', () => {
+  const base = ruedaLab([
+    gajo('fuerte', 'blanco', { peso: 10, dano: 40 }),
+    gajo('chico', 'blanco', { peso: 2, dano: 30 }),
+  ]);
+  const q = R.ruedaConEstados(base, [{ e: 'paralizado', turnos: 2 }]);
+  assert.equal(q.gajos[0].dano, 40, 'el daño no cambia');
+  assert.equal(q.gajos[1].color, 'rojo');
+});
+
+test('LENTO: marcador Mp−1', () => {
+  const st = partidaLab({ A0: ruedaLab([gajo('x', 'blanco', { dano: 20 })], { mp: 3 }) });
+  const p = poner(st, 'A0', 'p1_0');
+  assert.equal(T.mpEfectivo(st, p), 3);
+  p.estados = [{ e: 'lento', turnos: 2, hasta: 99 }];
+  assert.equal(T.mpEfectivo(st, p), 2, 'con Mp−1 se mueve uno menos');
+});
+
+test('los estados CADUCAN solos al pasar los turnos', () => {
+  const st = partidaLab({});
+  const p = poner(st, 'A0', 'p1_0');
+  p.estados = [{ e: 'paralizado', turnos: 1, hasta: st.turno + 1 }];
+  T.pasarTurno(st);
+  assert.equal(p.estados.length, 0, 'tenía que vencerse');
 });
 
 console.log('\n' + passed + ' pruebas OK\n');

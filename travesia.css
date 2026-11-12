@@ -190,3 +190,8 @@ button{font-family:inherit; color:inherit; cursor:pointer}
 .tv-nuevo img{width:42px; height:42px; flex:0 0 42px; object-fit:contain}
 .tv-nuevo b{display:block; font-size:13px; color:#7ef0a8}
 .tv-nuevo span{font-size:11.5px; color:var(--tx2)}
+
+/* ---------- mecánicas de Duel visibles ---------- */
+.tv-x{color:var(--acc2); font-weight:800}
+.tv-estbg{fill:#5a1f22; stroke:var(--mal); stroke-width:1.5}
+.tv-est{font-size:8px}

@@ -267,6 +267,43 @@ se va a la banca de un solo golpe?
   *"se mueve 2 puntos y gana Wait"*.
 
 Nuestras ruedas hoy son solo color + daño: **falta toda esa capa táctica.**
+
+### Mecánicas de Duel implementadas a partir de la auditoría
+* **Rueda de 96 unidades** (= 360°), como en el original. Las 136 ruedas suman 96.
+* **VOLVER A GIRAR** (el *respin* / Pin Missile): los golpes flojos (≤15 de daño)
+  y los sostenidos repiten mientras vuelva a salir el mismo gajo, y el daño se
+  multiplica por la cantidad de giros. **Medido: pasa en el 9.4% de los duelos**
+  (0.45 por partida); lo tienen 61 de 136 especies. Se autolimita solo — repetir
+  depende del tamaño del gajo.
+* **ESTADOS que degradan la rueda** (así funcionan en Duel: no quitan vida
+  porque no hay vida, te EMPEORAN la rueda):
+  - `paralizado` → su gajo más chico pasa a Fallo
+  - `quemado` → −10 de daño en todo, y su gajo más chico pasa a Fallo
+  - `lento` → marcador **Mp−1**
+  Caducan solos. Se traducen de los efectos del kit de la arena.
+  ⚠️ **Medido: solo 0.28 por partida**, porque apenas 28 de 136 especies tienen
+  gajo morado (nuestros kits son casi todo daño). Pendiente de tuneo.
+* Ambas cosas se **ven** en la interfaz: el `×N` en el duelo y la insignia del
+  estado sobre la pieza. Una mecánica que no se ve es un bug disfrazado.
+
+### Fuentes contrastadas (tres, y coinciden)
+Al repo de `gurish165` se sumó la guía oficial del remake (`pdremake.com/guides`).
+**Confirma que nuestras reglas están bien**: el cerco es *"opposing figures
+occupy all its directly connected escape spaces"*, el dorado le gana al morado,
+el morado va por estrellas, y los *respins* existen. 
+
+🚫 El repo `CyberLifeBots/PokemonDuelsRemake-Releases` **no sirve**: son solo
+binarios, sin código, sin datos del juego y sin licencia, con descargas por
+Google Drive/MEGA. No se descargó ni ejecutó nada de ahí.
+
+### Lo que falta para ser igual que Duel
+1. **Plates** — cartas de efecto táctico que se juegan durante el duelo
+   (cambian daño, habilitan evolución). Sistema entero, no lo tenemos.
+2. **Puntos de rueda** — en Duel subir una figura **agranda un gajo y achica el
+   Fallo**. Encajaría perfecto como progresión del modo aventura… pero choca
+   con la regla de Andrés de que el juego es SIN NIVELES. Decisión suya.
+3. Habilidades por movimiento más ricas: empujón, dormir, confundir, apuntar a
+   un adyacente, y el azul que **cambia de lugar** con su rival.
 Suites: arena 23 · engine 46 · misiones 6 · **travesía 27** · auditor 408/408.
 
 ### Lo que falta si se decide seguir
