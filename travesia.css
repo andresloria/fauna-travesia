@@ -195,3 +195,17 @@ button{font-family:inherit; color:inherit; cursor:pointer}
 .tv-x{color:var(--acc2); font-weight:800}
 .tv-estbg{fill:#5a1f22; stroke:var(--mal); stroke-width:1.5}
 .tv-est{font-size:8px}
+
+/* ---------- placas ---------- */
+.tv-placas{display:flex; gap:5px; flex-wrap:wrap; justify-content:center}
+.tv-pl{min-height:44px; padding:4px 9px; border-radius:10px; font-family:inherit;
+  display:inline-flex; flex-direction:column; align-items:center; justify-content:center;
+  background:var(--panel2); border:1px solid var(--linea); color:var(--tx); gap:1px}
+.tv-pl b{font-size:11px; font-weight:700; line-height:1.1}
+.tv-pl span{font-size:9.5px; color:var(--tx2)}
+.tv-pl.roja{border-color:rgba(255,91,91,.45)}
+.tv-pl.dorada{border-color:rgba(255,200,97,.45)}
+.tv-pl.morada{border-color:rgba(195,168,232,.45)}
+.tv-pl.azul{border-color:rgba(127,200,245,.45)}
+.tv-pl.sel{box-shadow:0 0 0 2px var(--acc2)}
+.tv-pl.usada,.tv-pl:disabled{opacity:.35; cursor:default}

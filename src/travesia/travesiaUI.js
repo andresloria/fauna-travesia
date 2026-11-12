@@ -16,6 +16,7 @@ import { SP } from '../fauna_roster.js';
 import * as T from './tablero.js';
 import { ruedaDe, descripcionGajo, probabilidades } from './rueda.js';
 import * as AV from './aventura.js';
+import { PLACAS } from './plates.js';
 
 const ART = (key) => (SP[key] && SP[key].folk)
   ? `assets/folclor/${key}.png` : `assets/animales/${key}.png`;
@@ -76,6 +77,7 @@ const leyenda = (gajos) => {
 // ============================================================
 export function montarTravesia(root) {
   let st = null, sel = null, selBanca = null, animando = false;
+  let selPlaca = null;        // placa elegida, esperando a quién aplicársela
 
   const claves = Object.keys(SP);
   const azar = (n) => {
@@ -270,6 +272,7 @@ export function montarTravesia(root) {
     const irA = sel ? T.alcanzables(st, sel) : [];
     const entradasOk = selBanca ? t.entradas.A.filter(e => !T.ocupante(st, e)) : [];
     const ataques = sel ? opcionesAtaque(sel) : new Map();
+    const objPlaca = selPlaca ? objetivosPlaca(selPlaca) : [];
 
     // aristas (una sola vez por par)
     const hechas = new Set();
@@ -308,7 +311,8 @@ export function montarTravesia(root) {
       if (p.estado !== 'tablero') continue;
       const q = nodoPx(t.nodos[p.nodo]);
       const esMio = p.lado === 'A';
-      const cls = [esMio ? '' : 'riv', sel === p.uid ? 'sel' : '', ataques.has(p.uid) ? 'obj' : '']
+      const cls = [esMio ? '' : 'riv', sel === p.uid ? 'sel' : '',
+        (ataques.has(p.uid) || objPlaca.includes(p.uid)) ? 'obj' : '']
         .filter(Boolean).join(' ');
       piezas += `<g class="tv-pieza ${cls}" data-uid="${p.uid}">
         <circle cx="${q.x}" cy="${q.y}" r="21" fill="none" pointer-events="all"></circle>
@@ -324,7 +328,7 @@ export function montarTravesia(root) {
     }
 
     const foco = sel ? T.pieza(st, sel) : (selBanca ? T.pieza(st, selBanca) : null);
-    const banca = st.piezas.filter(p => p.lado === 'A' && p.estado === 'banca');
+    const banca = st.piezas.filter(p => p.lado === 'A' && (p.estado === 'banca' || p.estado === 'centro'));
 
     root.innerHTML = `
       <div class="tv-top">
@@ -338,12 +342,36 @@ export function montarTravesia(root) {
         foco ? '<span class="tv-mas">ⓘ</span>' : ''}</div>
       ${banca.length ? `<div class="tv-bl">Banca · tocá uno para meterlo</div>` : ''}
       <div class="tv-banca" id="tvBanca">${banca.map(bancaHTML).join('') || ''}</div>
+      <div class="tv-placas" id="tvPlacas">${placasHTML(miTurno)}</div>
       <div class="tv-acts">
         <button class="tv-btn" id="tvNuevo">↺ Otra partida</button>
         <button class="tv-btn go" id="tvPasar" ${miTurno ? '' : 'disabled'}>Pasar turno</button>
       </div>`;
 
     conectar();
+  }
+
+  // Las placas van al principio del turno, antes de mover. Se muestran
+  // siempre para que se vea qué te queda, aunque no se puedan usar ahora.
+  function placasHTML(miTurno) {
+    const mazo = st.placas?.A || [];
+    if (!mazo.length) return '';
+    return mazo.map(c => {
+      const d = PLACAS[c.id];
+      const off = c.usada || !miTurno || st.movio;
+      return `<button class="tv-pl ${d.color} ${c.usada ? 'usada' : ''} ${selPlaca === c.id ? 'sel' : ''}"
+          data-placa="${c.id}" ${off ? 'disabled' : ''} title="${esc(d.desc)}">
+        <b>${esc(d.n)}</b><span>${d.costo}</span></button>`;
+    }).join('');
+  }
+
+  // a quién puede apuntar la placa elegida
+  function objetivosPlaca(id) {
+    const d = PLACAS[id];
+    if (!d || d.obj === 'ninguno') return [];
+    if (d.obj === 'centro') return st.piezas.filter(p => p.lado === 'A' && p.estado === 'centro').map(p => p.uid);
+    const mios = d.obj === 'mia';
+    return st.piezas.filter(p => p.estado === 'tablero' && (p.lado === 'A') === mios).map(p => p.uid);
   }
 
   function fichaHTML(p) {
@@ -371,12 +399,13 @@ export function montarTravesia(root) {
   }
 
   const bancaHTML = (p) => {
-    const lista = p.vuelveEn <= st.turno;
+    const enCentro = p.estado === 'centro';
+    const lista = !enCentro && p.vuelveEn <= st.turno;
     const faltan = Math.max(0, p.vuelveEn - st.turno);
     return `<div class="tv-b ${lista ? 'lista' : 'espera'} ${selBanca === p.uid ? 'sel' : ''}"
         data-banca="${p.uid}" title="${esc(SP[p.key]?.n || p.key)}">
       <img src="${ART(p.key)}" alt="${esc(SP[p.key]?.n || p.key)}">
-      ${lista ? '' : `<b>${faltan}</b>`}</div>`;
+      ${lista ? '' : `<b>${enCentro ? '✚' : faltan}</b>`}</div>`;
   };
 
   // ---------------- ficha completa ----------------
@@ -427,9 +456,24 @@ export function montarTravesia(root) {
   function conectar() {
     const miTurno = st.lado === 'A' && !st.fin && !animando;
 
+    root.querySelectorAll('[data-placa]').forEach(el => el.onclick = () => {
+      if (!miTurno) return;
+      const id = el.dataset.placa;
+      const d = PLACAS[id];
+      if (d.obj === 'ninguno') { T.usarPlaca(st, 'A', id, null); selPlaca = null; return pintar(); }
+      selPlaca = selPlaca === id ? null : id;
+      sel = null; selBanca = null;
+      pintar();
+    });
+
     root.querySelectorAll('.tv-pieza').forEach(el => el.onclick = () => {
       if (!miTurno) return;
       const uid = el.dataset.uid;
+      if (selPlaca) {                                  // usar la placa sobre esta pieza
+        const r = T.usarPlaca(st, 'A', selPlaca, uid);
+        if (r.ok) { selPlaca = null; return pintar(); }
+        return;
+      }
       if (mio(uid)) { sel = sel === uid ? null : uid; selBanca = null; return pintar(); }
       const acc = sel ? opcionesAtaque(sel).get(uid) : null;   // enemigo: pelearlo
       if (acc) hacer(acc);
@@ -445,6 +489,8 @@ export function montarTravesia(root) {
     root.querySelectorAll('[data-banca]').forEach(el => el.onclick = () => {
       if (!miTurno) return;
       const uid = el.dataset.banca;
+      if (selPlaca) { const r = T.usarPlaca(st, 'A', selPlaca, uid);
+        if (r.ok) { selPlaca = null; return pintar(); } return; }
       const p = T.pieza(st, uid);
       if (p.vuelveEn > st.turno) return;                       // todavía se recupera
       selBanca = selBanca === uid ? null : uid; sel = null; pintar();

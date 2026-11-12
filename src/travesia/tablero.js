@@ -13,6 +13,7 @@
 // Motor PURO: cero DOM. El rng se inyecta para que todo sea reproducible.
 // ============================================================
 
+import { PLACAS, mkMazo } from './plates.js';
 import { ruedaDe, ruedaEnBioma, girar, girarCompleto, resolverDuelo, evDuelo,
          ruedaConEstados, estadosDe, tieneEstado } from './rueda.js';
 
@@ -135,7 +136,7 @@ export function mkPartida(equipoA, equipoB, opts = {}) {
     const key = e.key || e;
     piezas.push({
       uid: lado + i, key, lado, nodo: null,
-      estado: 'banca', vuelveEn: 0, efectos: [], estados: [], heridas: 0,
+      estado: 'banca', vuelveEn: 0, efectos: [], estados: [], heridas: 0, bonus: null,
       rueda: opts.rueda ? opts.rueda(key) : ruedaDe(key),
     });
   });
@@ -148,6 +149,10 @@ export function mkPartida(equipoA, equipoB, opts = {}) {
     // suerte, pero OJO: acumular golpes hace que el kit pese más, que es
     // justo lo que infla el desbalance en la arena. Medir antes de cambiarlo.
     centro: { A: [], B: [] },
+    // Las placas solo se pueden usar AL PRINCIPIO DEL TURNO: en cuanto movés
+    // se cierran (regla del original). `movio` marca eso.
+    placas: { A: mkMazo(opts.placasA), B: mkMazo(opts.placasB) },
+    movio: false,
     // REGLA DE DUEL: el que abre tiene 1 MP menos en su primer movimiento.
     // Es la compensación del juego original por el tempo de salir primero, y
     // acá hace falta de verdad: el tablero es corto (6 pasos de la entrada al
@@ -195,7 +200,8 @@ export const enemigosAdyacentes = (st, p) => vecinos(st, p.nodo)
 export const mpEfectivo = (st, p) =>
   Math.max(1,
     (st.penalApertura === p.lado ? Math.max(st.penalMin ?? 2, p.rueda.mp - 1) : p.rueda.mp)
-    - (tieneEstado(p.estados, 'lento') ? 1 : 0));   // marcador Mp−1 de Duel
+    - (tieneEstado(p.estados, 'lento') ? 1 : 0)
+    + (p.bonus?.mp || 0));   // marcador Mp−1 de Duel y el +1 del Atajo
 
 // A dónde puede llegar esta pieza: BFS hasta su mp, sin atravesar ni pisar
 // nodos ocupados (el bloqueo es la mecánica central).
@@ -270,14 +276,27 @@ function revisarCercos(st, lado, ev) {
 // La rueda con la que pelea AHORA: ajustada por el bioma del nodo y degradada
 // por los estados que carga (así funcionan los estados en Duel: no quitan
 // vida —no hay vida— sino que te empeoran la rueda).
-export const ruedaActual = (st, p) =>
-  ruedaConEstados(ruedaEnBioma(p.rueda, bioDe(st, p.nodo)), p.estados);
+export const ruedaActual = (st, p) => {
+  let r = ruedaConEstados(ruedaEnBioma(p.rueda, bioDe(st, p.nodo)), p.estados);
+  const extra = (p.bonus?.dano || 0) + (st.bonusEquipo?.[p.lado] || 0);
+  if (extra) r = { ...r, gajos: r.gajos.map(g => (g.dano > 0 ? { ...g, dano: g.dano + extra } : g)) };
+  return r;
+};
 
 function duelo(st, pa, pb) {
   const ev = [];
   const ra = ruedaActual(st, pa);
   const rb = ruedaActual(st, pb);
-  const ta = girarCompleto(ra, st.rng), tb = girarCompleto(rb, st.rng);
+  // placa Instinto: gira dos veces y se queda con el mejor resultado
+  const tirar = (r, p) => {
+    const uno = girarCompleto(r, st.rng);
+    if (!p.bonus?.regiro) return uno;
+    p.bonus.regiro = false;
+    const dos = girarCompleto(r, st.rng);
+    const vale = (t) => (t.gajo.color === 'rojo' ? -1 : t.gajo.dano);
+    return vale(dos) > vale(uno) ? dos : uno;
+  };
+  const ta = tirar(ra, pa), tb = tirar(rb, pb);
   const ga = ta.gajo, gb = tb.gajo;
   const r = resolverDuelo(ga, gb);
   // El evento va COMPLETO (las dos ruedas ya ajustadas por bioma y el índice
@@ -291,6 +310,11 @@ function duelo(st, pa, pb) {
   });
   if (r.tipo === 'ko') {
     const perdedor = r.ganador === 'A' ? pb : pa;
+    if (perdedor.bonus?.inmune) {                      // placa Caparazón
+      perdedor.bonus.inmune = false;
+      ev.push({ t: 'aguanta', uid: perdedor.uid });
+      return ev;
+    }
     perdedor.heridas = (perdedor.heridas || 0) + 1;
     if (perdedor.heridas >= st.resistencia) {
       alCentro(st, perdedor);
@@ -321,6 +345,9 @@ export function sinSalida(st, lado) {
 
 export function pasarTurno(st) {
   st.turno++;
+  st.movio = false;
+  st.bonusEquipo = { A: 0, B: 0 };
+  for (const p of st.piezas) p.bonus = null;
   for (const p of st.piezas) {
     if (p.estados && p.estados.length) p.estados = p.estados.filter(x => x.hasta > st.turno);
   }
@@ -371,6 +398,7 @@ export function jugar(st, accion) {
     st.fin = p.lado;
     ev.push({ t: 'meta', uid: p.uid, lado: p.lado });
   }
+  st.movio = true;            // a partir de acá ya no se pueden usar placas
   st.log.push(...ev);
   // el que responde encadena su segunda entrada sin perder el turno
   const encadena = accion.tipo === 'entrar' && st.dobleEntrada === p.lado;
@@ -381,6 +409,66 @@ export function jugar(st, accion) {
     if (st.quietaAlEncadenar !== false) p.inmovilHasta = st.turno + 2;
   }
   if (!st.fin && !encadena) pasarTurno(st);
+  return { ok: true, eventos: ev };
+}
+
+// ---------- PLACAS ----------
+// Solo al principio del turno (antes de mover), una vez cada una.
+export function puedeUsarPlaca(st, lado, id) {
+  if (st.fin || st.lado !== lado || st.movio) return false;
+  const c = (st.placas[lado] || []).find(x => x.id === id);
+  return !!c && !c.usada;
+}
+
+export function usarPlaca(st, lado, id, objetivoUid) {
+  if (!puedeUsarPlaca(st, lado, id)) return { ok: false, error: 'no se puede usar ahora' };
+  const def = PLACAS[id];
+  const o = objetivoUid ? pieza(st, objetivoUid) : null;
+  const esMia = o && o.lado === lado;
+  const ev = [];
+
+  const pideMia = def.obj === 'mia';
+  const pideRival = def.obj === 'rival';
+  const pideCentro = def.obj === 'centro';
+  if (pideMia && (!o || !esMia || o.estado !== 'tablero')) return { ok: false, error: 'elegí un animal tuyo en el tablero' };
+  if (pideRival && (!o || esMia || o.estado !== 'tablero')) return { ok: false, error: 'elegí un animal rival en el tablero' };
+  if (pideCentro && (!o || !esMia || o.estado !== 'centro')) return { ok: false, error: 'elegí un animal del centro' };
+
+  switch (id) {
+    case 'rugido':   o.bonus = { ...(o.bonus || {}), dano: (o.bonus?.dano || 0) + 10 }; break;
+    case 'celo':     st.bonusEquipo = { ...(st.bonusEquipo || { A: 0, B: 0 }) };
+                     st.bonusEquipo[lado] = (st.bonusEquipo[lado] || 0) + 20; break;
+    case 'hierba':   o.estados = []; break;
+    case 'caparazon':o.bonus = { ...(o.bonus || {}), inmune: true }; break;
+    case 'atajo':    o.bonus = { ...(o.bonus || {}), mp: (o.bonus?.mp || 0) + 1 }; break;
+    case 'instinto': o.bonus = { ...(o.bonus || {}), regiro: true }; break;
+    case 'rescate': {
+      const cola = st.centro[lado];
+      const i = cola.indexOf(o.uid);
+      if (i >= 0) cola.splice(i, 1);
+      o.estado = 'banca'; o.vuelveEn = st.turno;
+      break;
+    }
+    case 'estampida': {
+      // lo empuja a un punto libre de al lado, lo más lejos posible de MI meta
+      const miMeta = metaDe(rival(lado));
+      const d = distancias(st, miMeta);
+      const libres = vecinos(st, o.nodo).filter(n => !ocupante(st, n) &&
+        st.tablero.nodos[n].tipo !== 'meta');
+      if (!libres.length) return { ok: false, error: 'no tiene a dónde ser empujado' };
+      libres.sort((a, b) => (d[b] ?? 0) - (d[a] ?? 0));
+      o.nodo = libres[0];
+      ev.push({ t: 'empuja', uid: o.uid, nodo: o.nodo });
+      break;
+    }
+    default: return { ok: false, error: 'placa desconocida' };
+  }
+
+  st.placas[lado].find(x => x.id === id).usada = true;
+  ev.push({ t: 'placa', lado, id, uid: objetivoUid || null });
+  st.log.push(...ev);
+  // usar una placa NO gasta el turno: se puede usar varias y después mover
+  if (id === 'estampida') revisarCercos(st, lado, ev);
   return { ok: true, eventos: ev };
 }
 
@@ -397,6 +485,51 @@ function tiempoDeAnotar(st, lado, dMeta) {
     mejor = Math.min(mejor, turnosPara(dMeta[p.nodo], p.rueda.mp));
   }
   return mejor;
+}
+
+// Qué placa conviene ahora. Se devuelve una sola por llamada; la UI/el bucle
+// la aplican y vuelven a preguntar, así puede encadenar varias antes de mover.
+export function placaAuto(st, lado = st.lado) {
+  if (st.movio || st.fin || st.lado !== lado) return null;
+  const libres = (st.placas[lado] || []).filter(x => !x.usada).map(x => x.id);
+  if (!libres.length) return null;
+  const mios = enTablero(st, lado);
+  const otro = rival(lado);
+  const dMiMeta = distancias(st, metaDe(otro));
+  const dMeta = distancias(st, metaDe(lado));
+
+  // 1) un rival a punto de anotar: empujarlo
+  if (libres.includes('estampida')) {
+    const amenaza = enTablero(st, otro)
+      .find(e => (dMiMeta[e.nodo] ?? 99) <= mpEfectivo(st, e) + 1);
+    if (amenaza) return { id: 'estampida', uid: amenaza.uid };
+  }
+  // 2) alguien mío a un paso de anotar: darle el Atajo
+  if (libres.includes('atajo')) {
+    const cerca = mios.find(p => {
+      const d = dMeta[p.nodo] ?? 99;
+      return d > mpEfectivo(st, p) && d <= mpEfectivo(st, p) + 1;
+    });
+    if (cerca) return { id: 'atajo', uid: cerca.uid };
+  }
+  // 3) sacar a alguien del centro si quedé con pocas piezas
+  if (libres.includes('rescate') && mios.length < 3 && st.centro[lado].length) {
+    return { id: 'rescate', uid: st.centro[lado][0] };
+  }
+  // 4) limpiar un estado feo
+  if (libres.includes('hierba')) {
+    const tocado = mios.find(p => (p.estados || []).length);
+    if (tocado) return { id: 'hierba', uid: tocado.uid };
+  }
+  // 5) si voy a pelear igual, subir el daño
+  const pegado = mios.find(p => enemigosAdyacentes(st, p).length);
+  if (pegado) {
+    if (libres.includes('rugido')) return { id: 'rugido', uid: pegado.uid };
+    if (libres.includes('caparazon')) return { id: 'caparazon', uid: pegado.uid };
+    if (libres.includes('instinto')) return { id: 'instinto', uid: pegado.uid };
+    if (libres.includes('celo')) return { id: 'celo', uid: null };
+  }
+  return null;
 }
 
 export function accionAuto(st, lado = st.lado) {
@@ -541,6 +674,11 @@ export function accionAuto(st, lado = st.lado) {
 export function jugarAuto(st, maxAcciones = LIMITE_TURNOS) {
   let n = 0;
   while (!st.fin && n++ < maxAcciones) {
+    for (let g = 0; g < 6; g++) {                  // placas antes de mover
+      const pl = placaAuto(st);
+      if (!pl) break;
+      if (!usarPlaca(st, st.lado, pl.id, pl.uid).ok) break;
+    }
     const a = accionAuto(st);
     if (!a) { pasarTurno(st); continue; }
     const r = jugar(st, a);

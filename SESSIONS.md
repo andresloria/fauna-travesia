@@ -296,14 +296,45 @@ el morado va por estrellas, y los *respins* existen.
 binarios, sin código, sin datos del juego y sin licencia, con descargas por
 Google Drive/MEGA. No se descargó ni ejecutó nada de ahí.
 
+### LAS PLACAS (`src/travesia/plates.js`) — las "Plates" del original
+Reglas tal cual Duel: **hasta 6 por equipo con presupuesto de costo 6**, **una
+vez cada una por duelo**, **solo al principio del turno antes de mover** (se
+pueden encadenar varias), y las cuatro familias por color — rojas suben daño,
+doradas curan estados o aguantan un golpe, moradas mueven piezas, azules dan
+giros extra. Usar una placa **NO gasta el turno**.
+
+Ocho placas con tema tico: Rugido (+10 daño), Época de celo (+20 a todo el
+equipo), Hierba medicinal (limpia estados), Caparazón (aguanta un duelo
+perdido), Estampida (empuja a un rival — el *knockback* de la guía), Rescate
+(saca del centro a la banca), Atajo (+1 movimiento) e Instinto (gira dos veces
+y se queda con lo mejor). Mazo de arranque de costo exacto 6.
+
+📌 **El primer mazo base que escribí costaba 7** y mi propio validador lo
+rechazaba — lo cazó el test, no yo.
+
+📌 **La regla "no hay placas después de mover" casi no muerde en este motor**,
+porque mover YA pasa el turno. Solo aplica en la segunda entrada encadenada del
+que responde. El test lo dice así en vez de fingir que es general.
+
+La IA las usa (4.4 por partida) con heurística: empuja al que va a anotar, da
+Atajo al que llega raspando, rescata si quedó corta de piezas, limpia estados y
+sube daño antes de pelear.
+
+**Medido — las placas MEJORARON el juego**: 17.9 turnos (antes 14.3) y **5.4
+duelos por partida** (antes 4.6), el máximo hasta ahora. Desviación 4.7.
+
+`test/plates.test.mjs`: **18 pruebas** (presupuesto, sin repetir, una vez por
+duelo, encadenar varias, cada efecto, el objetivo correcto, y 300 partidas).
+
 ### Lo que falta para ser igual que Duel
-1. **Plates** — cartas de efecto táctico que se juegan durante el duelo
-   (cambian daño, habilitan evolución). Sistema entero, no lo tenemos.
-2. **Puntos de rueda** — en Duel subir una figura **agranda un gajo y achica el
+1. **Puntos de rueda** — en Duel subir una figura **agranda un gajo y achica el
    Fallo**. Encajaría perfecto como progresión del modo aventura… pero choca
-   con la regla de Andrés de que el juego es SIN NIVELES. Decisión suya.
-3. Habilidades por movimiento más ricas: empujón, dormir, confundir, apuntar a
-   un adyacente, y el azul que **cambia de lugar** con su rival.
+   con la regla de Andrés de que el juego es SIN NIVELES. **Decisión suya.**
+2. Habilidades por movimiento más ricas: dormir, confundir, apuntar a un
+   adyacente, y el azul que **cambia de lugar** con su rival.
+3. Los estados salen poco (0.28 por partida) porque apenas 28 de 136 especies
+   tienen gajo morado. Se arreglaría mandando a morado las habilidades que
+   tienen daño Y estado fuerte, a costa de bajar el daño del juego.
 Suites: arena 23 · engine 46 · misiones 6 · **travesía 27** · auditor 408/408.
 
 ### Lo que falta si se decide seguir
