@@ -5,6 +5,69 @@ Repo: `github.com/andresloria/fauna-travesia` · Live: `fauna-travesia.vercel.ap
 
 ---
 
+## Sesión — 12 nov 2026 · PROTOTIPO "TRAVESÍA": motor estilo Pokémon Duel
+
+Andrés pidió investigar cómo se jugaba **Pokémon Duel** y ver si se puede hacer
+algo parecido con los sprites que ya hay. Se construyó el **motor puro, sin UI**,
+para medir si el juego es bueno ANTES de gastar en pantalla.
+
+### Qué es
+Juego de tablero: equipo de **6**, las piezas entran por tus entradas y hay que
+**llegar al refugio rival** (ganar es llegar, no matar). Una acción por turno.
+Las piezas **bloquean**. Quedar adyacente permite el **duelo**: cada animal gira
+una **rueda** y el **color** decide (blanco=daño, dorado=prioridad, morado=estado,
+azul=esquiva, rojo=fallo). El que pierde por daño va a la banca unos turnos.
+
+### Por qué encajó (hallazgos en el propio repo)
+- **El roster ya tenía los stats**: `spd` (1-8) → puntos de movimiento, más
+  `bio`, `rarity`, `atk`, `def`. Verificado que **`arena.js` solo lee `n`, `e` y
+  `bio`** — el resto quedó muerto cuando se descartó el tablero viejo.
+- **Las 136 ruedas salen solas de los kits del documento**: 3 habilidades +
+  Esquiva (azul) + Fallo (rojo). El tamaño del gajo es INVERSO al costo. Cero
+  datos nuevos escritos.
+- Está todo el **arte de casillas** (`casilla_*`) del tablero descartado.
+
+### Archivos
+`src/travesia/rueda.js` (ruedas, giro, resolución por color, `evDuelo`) ·
+`src/travesia/tablero.js` (grafo, movimiento, bloqueo, duelo, IA, `jugarAuto`) ·
+`test/travesia.test.mjs` (**27 pruebas**, con ruedas de laboratorio) ·
+`tools/travesia_sim.mjs` (mide abre/responde, duración, duelos, desviación).
+
+### 🔑 EL RESULTADO QUE IMPORTA (2000 partidas)
+| | Arena | Travesía |
+|---|---|---|
+| Desviación típica entre especies | **11.42** | **4.8** |
+| Brecha mejor-peor | 32%–71% | 37%–63% |
+
+**El cambio de formato hizo lo que cinco palancas de datos no pudieron.** En un
+juego de carrera y posición, el kit pesa mucho menos: un animal con rueda
+mediocre igual gana bloqueando y corriendo. El balance deja de ser el problema.
+
+Otros números: 19 turnos por partida, 3.6 duelos, 2.4 KOs, **0% de empates**,
+abre 54.8% (queda ventaja de abrir, se arregla como en la arena).
+
+### Dos bugs del prototipo, encontrados MIDIENDO (no a ojo)
+1. **68% de empates.** Causa: mapeé los auto-buffs a "dorado que gana pero no
+   hace nada" → el 57.7% de los duelos no resolvía, nadie despejaba bloqueos y
+   el tablero se congelaba. **En Duel el dorado ES daño**: ahora un auto-buff se
+   traduce a golpe dorado con daño derivado de su potencia. Y la Esquiva pasó a
+   peso fijo 3 (con 5 el azul era el 20% de la rueda).
+2. **Los dos lados defendían a la vez** (la posición es simétrica, así que
+   `suTiempo <= miTiempo` era cierto para ambos) y nadie avanzaba. Con `<`
+   estricto el empate de tiempos se resuelve corriendo. Además la defensa ahora
+   mide distancia **al corredor**, no al propio refugio: con `-dMiMeta` las
+   piezas se amontonaban en casa y lo dejaban pasar por un costado.
+
+📌 **La geometría del tablero mueve el balance tanto como los números.** Barriendo
+tamaños, la ventaja de abrir oscilaba entre 50.8% y 61.6% según la PARIDAD del
+camino. Quedó en 8 filas × 5 columnas.
+
+### Estado
+Prototipo **aislado**: no lo importa nadie, no toca la arena ni el juego vivo.
+Suites: arena 23 · engine 46 · misiones 6 · **travesía 27** · auditor 408/408.
+
+---
+
 ## Sesión — 25 jul 2026 · Revisión de la novela visual (diálogos)
 
 Tercera y última pasada del review UI/UX, sobre `dialogo.js`. **Veredicto: es la
