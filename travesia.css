@@ -1,0 +1,192 @@
+/* ============================================================
+   travesia.css — prototipo del modo TRAVESÍA (estilo Pokémon Duel).
+   Página APARTE: define sus propios tokens para no arrastrar las ~1800
+   líneas de styles.css (que todavía cargan el skin GBA del tablero viejo).
+   Mismos valores que el tema oscuro del juego, para que se sienta uno solo.
+   ============================================================ */
+:root{
+  --bg:#0b1017; --panel:rgba(17,27,39,.92); --panel2:rgba(25,38,54,.94);
+  --linea:rgba(255,255,255,.10);
+  --tx:#eaf0f7; --tx2:#9fb0c4;
+  --acc:#ff8a3c; --acc2:#ffc861;
+  --ok:#3fd07a; --mal:#ff5b5b;
+  --r:14px;
+  --sombra:0 6px 24px rgba(0,0,0,.45);
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+body{
+  min-height:100dvh; background:radial-gradient(120% 80% at 50% -10%,#16283a 0%,var(--bg) 60%),var(--bg);
+  color:var(--tx); font-family:var(--sans); font-size:16px; line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  display:flex; flex-direction:column; align-items:center;
+  padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px));
+}
+button{font-family:inherit; color:inherit; cursor:pointer}
+
+.tv-wrap{width:100%; max-width:430px; display:flex; flex-direction:column; gap:9px}
+
+/* ---------- barra de arriba ---------- */
+.tv-top{display:flex; align-items:center; justify-content:space-between; gap:10px;
+  background:var(--panel); border:1px solid var(--linea); border-radius:var(--r);
+  padding:9px 13px; box-shadow:var(--sombra)}
+.tv-turno{font-size:13px; font-weight:700; color:var(--acc2)}
+.tv-turno.rival{color:var(--tx2)}
+.tv-nro{font-size:12px; color:var(--tx2); font-variant-numeric:tabular-nums}
+
+/* ---------- tablero ---------- */
+.tv-tablero{background:var(--panel); border:1px solid var(--linea); border-radius:var(--r);
+  padding:6px; box-shadow:var(--sombra)}
+/* El tablero es ALTO (8 filas + refugios). Si se escala por ancho se come la
+   pantalla entera: a 430px de ancho medía 683px de alto y no entraba el resto.
+   Se acota por ALTURA y el ancho sale solo por proporción. dvh para que sirva
+   igual en un teléfono que en una laptop baja. */
+/* El tablero de Duel es más ANCHO que alto (7 posiciones × 5), al revés que mi
+   rejilla vieja. Así que acá manda el ANCHO y la altura sale por proporción;
+   con la altura mandando quedaba una franja vacía debajo del dibujo. */
+.tv-svg{display:block; margin:0 auto; width:100%; height:auto;
+  max-height:min(52dvh,420px); touch-action:manipulation}
+.tv-arista{stroke:var(--tx2); stroke-opacity:.22; stroke-width:1.5}
+.tv-nodo{fill:#192636; stroke:rgba(255,255,255,.12); stroke-width:1.5}
+.tv-nodo.meta{fill:#4a3410; stroke:var(--acc2); stroke-width:2.5}
+.tv-nodo.entrada{fill:#192636; stroke:var(--acc2); stroke-width:2; stroke-dasharray:3 2}
+/* biomas */
+.tv-nodo.bosque{fill:#1d3326; stroke:#4caf6a; stroke-width:2}
+.tv-nodo.agua{fill:#15303f; stroke:#3f9bd6; stroke-width:2}
+.tv-nodo.sabana{fill:#3a2f14; stroke:#d9a441; stroke-width:2}
+.tv-nodo.montana{fill:#2b2340; stroke:#9b7bc4; stroke-width:2}
+/* Destino alcanzable.
+   ⚠️ Con `fill:none` SOLO la línea punteada de 2.5px recibía el toque: el
+   centro caía en el nodo de abajo (que no tiene handler) y el juego parecía
+   trabado — no se podía mover ni desplegar. `pointer-events:all` hace tocable
+   todo el disco, y el relleno tenue además lo hace LEER como "tocá acá". */
+.tv-ir{fill:rgba(255,200,97,.16); pointer-events:all;
+  stroke:var(--acc2); stroke-width:2.5; stroke-dasharray:4 3; cursor:pointer}
+.tv-ir:hover{fill:rgba(255,200,97,.3); stroke-width:3.5}
+/* los nodos son decorado: que nunca le roben el toque al marcador */
+.tv-nodo{pointer-events:none}
+@media(prefers-reduced-motion:no-preference){ .tv-ir{animation:tvLat 1.3s infinite} }
+@keyframes tvLat{50%{stroke-opacity:.45}}
+
+.tv-pieza{cursor:pointer}
+.tv-aro{fill:#1f5f3a; stroke:var(--ok); stroke-width:2.5}
+.tv-pieza.riv .tv-aro{fill:#5a1f22; stroke:var(--mal)}
+.tv-pieza.sel .tv-aro{stroke:var(--acc2); stroke-width:3.5}
+.tv-pieza.obj .tv-aro{stroke:var(--acc2); stroke-width:3.5; stroke-dasharray:4 3}
+.tv-sprite{pointer-events:none}
+.tv-mp{font-size:9px; font-weight:800; fill:#0e1620}
+.tv-mpbg{fill:var(--acc2)}
+
+/* ---------- panel de la rueda ---------- */
+.tv-info{display:flex; align-items:center; gap:11px;
+  background:var(--panel2); border:1px solid var(--linea); border-radius:var(--r);
+  padding:9px 11px; box-shadow:var(--sombra); min-height:84px}
+.tv-rueda{width:68px; height:68px; flex:0 0 68px}
+.tv-itx{min-width:0; flex:1}
+.tv-itx h2{font-size:14px; font-weight:700; line-height:1.2}
+.tv-itx p{font-size:11.5px; color:var(--tx2); line-height:1.35; margin-top:2px}
+.tv-gajos{display:flex; flex-wrap:wrap; gap:4px; margin-top:5px}
+.tv-g{font-size:10px; font-weight:700; padding:2px 6px; border-radius:6px;
+  background:rgba(255,255,255,.07); color:var(--tx2); display:inline-flex; align-items:center; gap:4px}
+.tv-g i{width:8px; height:8px; border-radius:2px; display:block; font-style:normal}
+
+/* ---------- banca ---------- */
+.tv-bl{font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--tx2); text-align:center; margin-bottom:-3px}
+.tv-banca{display:flex; gap:6px; justify-content:center; flex-wrap:wrap}
+.tv-b{width:52px; min-height:52px; border-radius:11px; background:var(--panel2);
+  border:1px solid var(--linea); display:flex; flex-direction:column; align-items:center;
+  justify-content:center; padding:3px; position:relative}
+.tv-b img{width:34px; height:34px; object-fit:contain; image-rendering:auto}
+.tv-b.lista{border-color:rgba(255,200,97,.5); cursor:pointer}
+.tv-b.sel{border-color:var(--acc2); box-shadow:0 0 0 2px rgba(255,138,60,.35)}
+.tv-b.espera{opacity:.45}
+.tv-b b{position:absolute; inset:0; display:grid; place-items:center; font-size:15px;
+  color:#ffd7d7; background:rgba(90,20,20,.55); border-radius:11px}
+
+/* ---------- acciones ---------- */
+.tv-acts{display:flex; gap:8px; align-items:center}
+.tv-btn{min-height:44px; padding:0 15px; border-radius:12px; border:1px solid var(--linea);
+  background:var(--panel2); color:var(--tx2); font-size:12px; font-weight:700;
+  display:inline-flex; align-items:center; gap:6px}
+.tv-btn.go{flex:1; justify-content:center; border:0; color:#2a1405; font-weight:800; font-size:14px;
+  background:linear-gradient(180deg,var(--acc2),var(--acc)); box-shadow:0 4px 14px rgba(255,138,60,.35)}
+.tv-btn:disabled{filter:grayscale(.7) brightness(.7); cursor:default}
+
+/* ---------- duelo ---------- */
+.tv-ov{position:fixed; inset:0; z-index:50; background:rgba(6,11,16,.82);
+  backdrop-filter:blur(4px); display:grid; place-items:center; padding:14px}
+.tv-duelo{width:min(430px,94vw); background:var(--panel2); border:1px solid var(--linea);
+  border-radius:18px; padding:18px 16px; box-shadow:var(--sombra)}
+.tv-par{display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:center}
+.tv-lado{text-align:center}
+.tv-lado h3{font-size:12.5px; font-weight:700; margin-top:5px}
+.tv-lado p{font-size:11px; color:var(--tx2); margin-top:2px; min-height:15px}
+.tv-vs{font-size:17px; font-weight:800; color:var(--tx2)}
+.tv-big{width:100%; max-width:125px; height:auto}
+.tv-aguja{fill:var(--tx2)}
+.tv-aguja.gana{fill:var(--acc2)}
+.tv-res{margin-top:14px; padding:10px 12px; border-radius:11px; text-align:center;
+  font-size:13.5px; font-weight:700;
+  background:rgba(255,255,255,.06); border:1px solid var(--linea); color:var(--tx)}
+.tv-res.ko{background:rgba(63,208,122,.12); border-color:rgba(63,208,122,.35); color:#7ef0a8}
+.tv-res.mal{background:rgba(255,91,91,.12); border-color:rgba(255,91,91,.35); color:#ff9a9a}
+
+@media(prefers-reduced-motion:no-preference){
+  .tv-gira{animation:tvGira .62s cubic-bezier(.22,.9,.26,1)}
+}
+@keyframes tvGira{from{transform:rotate(-540deg)}to{transform:rotate(0)}}
+
+/* ---------- fin ---------- */
+.tv-fin{text-align:center}
+.tv-fin h2{font-size:21px; font-weight:800; margin-bottom:6px}
+.tv-fin.win h2{color:#7ef0a8}
+.tv-fin.lose h2{color:#ff9a9a}
+.tv-fin p{font-size:13px; color:var(--tx2); margin-bottom:14px}
+
+/* pantallas bajas / escritorio */
+@media (min-width:900px){ .tv-wrap{max-width:460px} }
+
+/* ---------- ficha completa del animal ---------- */
+.tv-info.abre{cursor:pointer; position:relative}
+.tv-info.abre:hover{border-color:rgba(255,200,97,.45)}
+.tv-mas{position:absolute; top:7px; right:9px; font-size:13px; color:var(--acc2)}
+.tv-ficha{max-height:88dvh; overflow-y:auto}
+.tv-fh{display:flex; align-items:center; gap:11px; margin-bottom:12px}
+.tv-fh img{width:50px; height:50px; flex:0 0 50px; object-fit:contain; border-radius:11px;
+  background:radial-gradient(circle at 50% 35%,rgba(78,120,90,.45),rgba(10,18,14,.85))}
+.tv-fn{flex:1; min-width:0}
+.tv-fn h2{font-size:17px; font-weight:800; line-height:1.15}
+.tv-chips{display:flex; gap:5px; margin-top:4px; flex-wrap:wrap}
+.tv-chip{font-size:10px; font-weight:800; padding:2px 7px; border-radius:6px}
+.tv-chip.rar{background:#8d8266; color:#0e1620}
+.tv-chip.bio{background:rgba(76,175,106,.2); color:#7fe0a0}
+.tv-mp2{text-align:center; flex:0 0 auto}
+.tv-mp2 b{display:block; font-size:22px; font-weight:800; color:var(--acc2); line-height:1}
+.tv-mp2 span{font-size:9px; color:var(--tx2); letter-spacing:.08em}
+.tv-fbig{display:block; margin:2px auto 12px; width:122px; height:122px}
+.tv-flist{display:flex; flex-direction:column; gap:6px}
+.tv-f{display:flex; gap:9px; align-items:center; padding:8px 10px; border-radius:10px;
+  background:rgba(0,0,0,.28); border-left:3px solid var(--tx2)}
+.tv-f div{flex:1; min-width:0}
+.tv-f b{display:block; font-size:12.5px; font-weight:700; color:var(--tx)}
+.tv-f span{display:block; font-size:11px; color:var(--tx2); line-height:1.3; margin-top:1px}
+.tv-f em{font-style:normal; font-size:13px; font-weight:800; font-variant-numeric:tabular-nums}
+.tv-fpie{margin-top:12px; font-size:11px; color:#7ef0a8; text-align:center}
+
+/* ---------- selector de equipo + aventura ---------- */
+.tv-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(74px,1fr)); gap:7px;
+  max-height:40dvh; overflow-y:auto; padding-right:3px}
+.tv-t{display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 3px;
+  border-radius:11px; background:var(--panel2); border:1px solid var(--linea); color:var(--tx)}
+.tv-t img{width:38px; height:38px; object-fit:contain}
+.tv-t span{font-size:10.5px; line-height:1.15; text-align:center; color:var(--tx2);
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.tv-t.dentro{border-color:var(--acc); box-shadow:0 0 0 2px rgba(255,138,60,.35)}
+.tv-nuevo{display:flex; align-items:center; gap:11px; margin:12px 0 2px; padding:9px 11px;
+  border-radius:11px; background:rgba(63,208,122,.12); border:1px solid rgba(63,208,122,.35);
+  text-align:left}
+.tv-nuevo img{width:42px; height:42px; flex:0 0 42px; object-fit:contain}
+.tv-nuevo b{display:block; font-size:13px; color:#7ef0a8}
+.tv-nuevo span{font-size:11.5px; color:var(--tx2)}

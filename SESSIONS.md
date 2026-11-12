@@ -62,9 +62,216 @@ abre 54.8% (queda ventaja de abrir, se arregla como en la arena).
 tamaños, la ventaja de abrir oscilaba entre 50.8% y 61.6% según la PARIDAD del
 camino. Quedó en 8 filas × 5 columnas.
 
-### Estado
-Prototipo **aislado**: no lo importa nadie, no toca la arena ni el juego vivo.
+### La interfaz (aprobada con mockup)
+`travesia.html` + `travesia.css` + `src/travesia/travesiaUI.js`, **página aparte**:
+el juego vivo no se toca ni un pixel. Tablero en SVG con los sprites reales,
+nodos pintados por bioma, y lo importante — **la rueda del animal elegido está
+siempre a la vista** (esa es la sal de Duel: ves tus probabilidades antes de
+meterte). El duelo muestra las DOS ruedas girando y dónde cayó cada aguja.
+
+Se anima **leyendo el log del motor**: el evento `duelo` lleva las dos ruedas ya
+ajustadas por bioma y el índice del gajo que salió, así la UI no recalcula nada
+ni depende del estado posterior de las piezas (misma lección que la arena).
+
+📌 **El tablero es ALTO (8 filas + refugios): hay que acotarlo por ALTURA, no por
+ancho.** Escalado por ancho medía 683px de alto y no entraba nada más en el
+teléfono. Con `height:min(56dvh,500px); width:auto` queda en 297×455 y la
+pantalla entra entera sin scroll (verificado a 375×812 y a 1024×768).
+
+📌 `.click()` NO existe en elementos SVG: para probarlos hay que despachar un
+`MouseEvent`. (Un toque real de usuario sí dispara el `onclick`; es solo cosa
+de la verificación automatizada.)
+
+📌 **`fill:none` en un SVG = NO se puede tocar.** Los marcadores de destino
+tenían `fill:none`, así que solo la línea punteada de 2.5px recibía el toque:
+el centro caía en el nodo de abajo (sin handler) y el juego parecía trabado —
+Andrés no podía mover ni desplegar nada. Arreglado con `pointer-events:all` +
+un relleno tenue (que además hace que se LEA como "tocá acá") y radio 15.
+Las piezas llevan un círculo invisible de r=21 con `pointer-events="all"`.
+Medido: destino 39px, pieza 54px, ambos tocables en el centro.
+
+📌 **Despachar un evento sobre el elemento NO prueba que un humano pueda
+tocarlo.** `el.dispatchEvent(new MouseEvent('click'))` se salta el hit-test del
+navegador, así que mis pruebas pasaban con el bug de arriba presente. Para
+áreas táctiles hay que verificar con **`document.elementFromPoint(x,y)`** (¿qué
+elemento recibe de verdad el toque en ese punto?) o con un clic por coordenada.
+
+📌 **Al verificar una UI asíncrona, NO medir el DOM en el mismo tick del click.**
+El handler corre síncrono hasta el primer `await`, pero el repintado viene
+después: medí justo después de despachar y leí el DOM VIEJO (0 piezas, turno 1)
+y creí que el depósito estaba roto. Funcionaba. Medir en una llamada aparte.
+
+### Arreglo de descubribilidad (lo reportó Andrés al jugarlo)
+Al empezar **ninguna pieza está en el tablero** (las 6 arrancan en banca), pero
+el texto de ayuda decía "Tocá uno tuyo en el tablero" — mandaba a tocar algo que
+no existía, y no se encontraba cómo meter un animal. Arreglado con cuatro cosas:
+al arrancar queda **un animal de la banca ya elegido** (así las entradas
+aparecen marcadas solas), las entradas propias llevan un **✦** que el texto
+nombra, la banca tiene rótulo *"tocá uno para meterlo"*, y el mensaje de ayuda
+**cambia según lo que de verdad se puede hacer** en ese momento.
+
+Verificado jugando una partida entera por la interfaz: 8 acciones, 3 duelos
+dibujados, 0 errores de consola, terminó con su pantalla de fin.
+
+### Alineado con una implementación de referencia
+Andrés pasó `github.com/gurish165/Pokemon_Duel`. Se tomaron **reglas**, no
+código ni datos (es IP de Nintendo; el juego nuestro es de fauna tica).
+
+**Confirmó que la tabla de colores estaba exacta**, incluida la duda que las
+fuentes contradecían: *"Gold always beats purple and blue; beats white only if
+its value is higher"* → `DORADO_PERFORA_AZUL = true` era lo correcto.
+
+Faltaban **tres reglas**, ya implementadas y con pruebas:
+1. **CERCO** — tapar TODOS los puntos alrededor de una pieza rival la manda al
+   centro sin pelear. Le da sentido de verdad al bloqueo; ojo con las esquinas,
+   que tienen menos vecinos y son trampas.
+2. **EL CENTRO AGUANTA 2** — reemplaza mi temporizador fijo. Es una cola: cuando
+   cae una tercera, la más vieja sale a la banca. Se autorregula, y **nunca te
+   quedás con menos de 4 piezas disponibles** — que es la respuesta real a
+   "¿no deberían tener vida?".
+3. **WAIT WIN** — ganás si el rival queda sin piezas en el tablero y sin poder
+   meter ninguna (entradas tapadas).
+
+⚠️ **Medido: la IA no usa ninguna de las dos nuevas** (0.05 cercos por partida,
+0% de Wait Win). Están para el jugador humano; enseñarle a la IA a cercar y a
+tapar entradas queda pendiente.
+
+### ¿Y si tuvieran vida? — medido, la respuesta es NO
+| Resistencia | Gana el que abre | Desviación |
+|---|---|---|
+| **1** (un golpe y al centro) | **53.4%** | **5.0** |
+| 2 | 67.3% | 5.3 |
+| 3 | 78.1% | 5.8 |
+
+📌 **El KO de un golpe no es lo injusto: es el FRENO.** Es lo único que permite
+revertir el tempo. Sin él no se puede sacar al corredor, bloquear deja de
+servir, nadie remonta y gana el que arrancó adelante (78%). Además acumular
+golpes hace que el kit pese más y empeora la desviación — justo el problema de
+la arena. La vida está parametrizada (`opts.resistencia`) por si se quiere
+volver a probar, pero el default es 1 por buenas razones medidas.
+
+Reparto de duelos (300.000 giros entre las 136 especies): **66.5% alguien cae**,
+15% uno se cubre, **13.6% empate** (7.7% mismo daño, 3.6% doble fallo, 2.1%
+doble esquiva), 4.9% queda tocado. El empate no es un hueco: es el costo de
+atacar sin ventaja.
+
+### EL TABLERO ORIGINAL DE DUEL (transcrito de la imagen del repo)
+Andrés pidió usar el tablero real. Se bajó `pokemon_duel_app/Assets/game_board.png`
+del repo de referencia y se transcribió mirándolo. **No es una rejilla**:
+
+* **anillo exterior de 20 nodos** — las 4 esquinas son las entradas, y en el
+  medio de los lados largos van los dos refugios;
+* **anillo interior de 8 nodos**;
+* **6 radios**: uno de cada esquina al vértice interior más cercano, más dos
+  desde los puntos pegados a cada refugio hacia el medio interior.
+
+Verificado: **26 puntos + 2 refugios**, que es exactamente lo que documenta
+Pokémon.com. Va rotado a vertical (refugios arriba y abajo) porque en teléfono
+conviene que lo tuyo quede abajo. `mkTableroRejilla()` queda para comparar.
+
+📌 **El grado máximo es 3** (contra 4 de una rejilla), así que **cercar es
+viable de verdad** — en la rejilla era casi imposible. Los radios son cuellos
+de botella: hay pocas rutas y bloquear pesa.
+
+📌 **El camino es más corto** (6 pasos de entrada a refugio rival contra 8):
+las partidas bajaron de 19 a ~15 turnos y la ventaja de abrir subió.
+
+### Compensación por abrir: medida, no adivinada
+| Variante | Abre gana |
+|---|---|
+| sin compensar | 60.1% |
+| **MP−1 al que abre** (la regla del Duel original) | **28.7%** |
+| **entrada doble al que responde** (nuestra) ✅ | **41.0%** |
+
+📌 **El MP−1 del original NO sirve en este tablero.** Con MP de 1 a 3 la
+palanca es binaria: o no frena nada (56%) o pasa de largo (28%). El desbalance
+vale MEDIA acción y no hay forma de cobrar media acción. Quedó la entrada doble
+(41.0%, lo más cerca de 50), y lo que de verdad lo empareja es **alternar quién
+abre entre partidas**. Las dos están parametrizadas para volver a probar.
+
+### La IA aprendió a cercar y a tapar entradas
+📌 **Bug encontrado con una posición armada a mano, no con estadística.** La IA
+tenía un cerco servido y en vez de tomarlo metía otra pieza: el bloque de
+"desplegar" **devolvía antes** de evaluar nada. Ahora entrar **compite como una
+jugada más**. Verificado: con el cerco disponible elige `mueve+duelo+cercado`.
+
+Al arreglarlo se rompió otra cosa — entrar perdía siempre contra correr (las
+entradas están lejos del refugio rival), la IA se quedaba con 1-2 piezas y las
+partidas caían a 7 turnos. Se recalibró: con menos de 3 piezas arriba, entrar
+vale mucho. Resultado: **15.2 turnos y 4.6 duelos por partida**, lo mejor hasta
+ahora. Los cercos igual siguen siendo raros en IA-vs-IA (0.00/partida): existen
+y la IA los toma, pero rara vez se dan.
+
+### La ficha del animal
+Se toca el panel de abajo (o un animal en la pantalla de inicio) y se abre la
+ficha: rueda grande, **movimiento**, rareza, bioma, y **cada gajo con lo que
+hace y su probabilidad**, ordenados de mayor a menor.
+
+📌 **El texto del gajo se GENERA (`descripcionGajo`), no se hereda.** La
+descripción del kit de la arena diría "gana 35 de defensa destructible" — acá
+no hay vida ni defensa, ese gajo es un golpe dorado de 10. Misma regla de
+siempre: el texto no miente.
+
+📌 **El viewBox del tablero se calcula de los NODOS REALES, no de filas×cols.**
+La fórmula vieja era para la rejilla y dejaba la columna derecha cortada.
+Y el tablero de Duel es **más ancho que alto**, al revés que el anterior: manda
+el ancho y la altura sale por proporción.
+
+### MODO AVENTURA (`src/travesia/aventura.js`)
+Estructura copiada de las dos puntas: de Pokémon Duel, el modo **Quests**
+(etapas con 3 sub-peleas cada una); de tu propio juego, las **7 provincias con
+sus cazadores y su cabecilla**, y que ganar **desbloquee animales**.
+
+Cómo va: 3 cazadores → cabecilla → se libera la provincia y se avanza. Cada
+victoria suma un animal de esa provincia a tu refugio. La dificultad la da el
+POOL (igual que en la liga de la arena): mientras más avanzás, más probable que
+salgan rarezas altas, y el cabecilla saca de los duros. Equipo de 6 elegido a
+mano de todo lo desbloqueado, con la ficha a un toque. Arranca con los 30
+animales de `BASE`.
+
+🚨 **GUARDA EN SU PROPIA CLAVE (`fauna_travesia_v1`).** La campaña de la arena
+usa `fauna_liga_v1`: si compartieran clave, jugar el prototipo **le pisaría a
+Andrés el progreso real**. Hay un test dedicado a que esto no pase.
+
+Pantallas: menú → aventura (provincia, progreso, equipo) → selector de equipo
+→ pelea → cierre con el animal desbloqueado y el aviso de provincia liberada.
+
+`test/aventura.test.mjs`: **10 pruebas** (arranque, rival de la provincia,
+cabecilla a las 3, desbloqueo al ganar, no-retroceso al perder, avance de
+provincia, campaña terminable que avisa UNA vez, la dificultad sube de verdad,
+guardado/cargado, y la clave separada).
+
+### Auditoría de los datos reales de Duel (70 figuras del repo de referencia)
+Se bajaron los `*_attack_JSON.json` y se analizaron para contestar: ¿de verdad
+se va a la banca de un solo golpe?
+
+* **NO EXISTE LA VIDA.** Cero menciones de HP, health, hit points o damage
+  counters en el texto completo de 70 figuras. **Confirmado: un duelo perdido
+  = afuera.** Encaja con lo que medimos acá (darles vida rompe el juego).
+* **Cada ataque SÍ tiene potencia: de 10 a 160, mediana 60.** Pero es un número
+  de COMPARACIÓN, no daño que se acumula — gana el más alto y el otro sale.
+  Es exactamente lo que hace nuestro motor.
+* **La rueda siempre suma 96 unidades** (= 360°). El gajo de fallo suele ser 8
+  de 96 (8%), y llega hasta 32 (33%).
+* **MP base 1, 2 o 3** — el 60% son MP 2. Confirma otra vez que el movimiento
+  es fijo, no por ruleta.
+* ⚠️ **"Wait N" existe** (valores 3 y 5): el centro NO es solo la cola de
+  capacidad 2 que implementamos, también hay un contador de espera que algunas
+  habilidades alargan. Nuestro modelo es una simplificación.
+* 🚨 **LO QUE NOS FALTA: las habilidades especiales.** Las lleva **el 100% de
+  los morados y la MITAD de los blancos**. Los dorados son daño puro (0 de 20
+  con habilidad). Por frecuencia: *knocked out* 116, **spin again** 68,
+  paralizar 48, dormir 44, *Wait 3* 40, quemar 36, envenenar 28, apuntar a un
+  **adyacente** 24, confundir 20, *Wait 5* 16, **MP−2** 12, *moverse 2 pasos* 8.
+  Y el azul no es solo esquivar: *"cambia de lugar con su oponente"*,
+  *"se mueve 2 puntos y gana Wait"*.
+
+Nuestras ruedas hoy son solo color + daño: **falta toda esa capa táctica.**
 Suites: arena 23 · engine 46 · misiones 6 · **travesía 27** · auditor 408/408.
+
+### Lo que falta si se decide seguir
+Elegir equipo a mano (hoy es al azar con botón de volver a tirar), compensar el
+54.8% de ventaja al abrir, hotseat de 2 jugadores, y sonido.
 
 ---
 

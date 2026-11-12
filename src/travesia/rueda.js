@@ -185,6 +185,29 @@ export function consecuencia(gajoGanador) {
   return 'nada';                                        // esquiva o preparación
 }
 
+// ---------- qué hace el gajo, en palabras ----------
+// ⚠️ NO se reusa la descripción del kit de la arena: ahí dice cosas como
+// "gana 35 de defensa destructible", y en Travesía no hay vida ni defensa —
+// ese mismo gajo es un golpe dorado de 10. El texto se GENERA de lo que el
+// gajo hace de verdad acá, para que nunca mienta (igual que en la arena).
+const ESTADO_TXT = {
+  aturdir: 'lo aturde', exponer: 'lo deja expuesto', danoTurnos: 'lo envenena',
+  marcaPermanente: 'lo marca', robarEnergia: 'le roba energía',
+  quemarEnergia: 'le quema energía', reducir: 'lo debilita',
+};
+
+export function descripcionGajo(g) {
+  if (g.color === 'rojo') return 'Pierde contra todo';
+  if (g.color === 'azul') return 'Se cubre: gana a casi todo, pero no saca a nadie';
+  if (g.color === 'morado') {
+    const qué = (g.efectos || []).map(f => ESTADO_TXT[f.t]).filter(Boolean);
+    const lista = [...new Set(qué)].join(' y ') || 'le deja un estado';
+    return `Estado: ${lista} — gana al golpe blanco, pero no lo saca`;
+  }
+  if (g.color === 'dorado') return `Golpe de ${g.dano} · prioridad — perfora la esquiva`;
+  return `Golpe de ${g.dano} — gana al que saque menos`;
+}
+
 export function resolverDuelo(gA, gB) {
   const ganador = ganadorDe(gA, gB);
   const gajo = ganador === 'A' ? gA : ganador === 'B' ? gB : null;

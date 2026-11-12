@@ -16,14 +16,77 @@
 import { ruedaDe, ruedaEnBioma, girar, resolverDuelo, evDuelo } from './rueda.js';
 
 export const BIOMAS_T = ['bosque', 'sabana', 'agua', 'montana'];
-export const ESPERA_KO = 7;        // acciones que pasa en la banca tras caer
+// EL CENTRO DE RECUPERACIÓN aguanta 2 piezas. No es un temporizador: cuando
+// cae una tercera, la más vieja sale a la banca y se puede volver a meter.
+// (Regla del Duel original — es mejor que un timer fijo porque se autorregula:
+// nunca podés quedarte con menos de 4 piezas disponibles, y mientras más
+// perdés, más rápido vuelven las anteriores.)
+export const CENTRO_CAPACIDAD = 2;
+// la que sale del centro pierde un turno antes de poder entrar
+export const ESPERA_SALIDA = 1;
 export const LIMITE_TURNOS = 300;  // igual que Duel, para que nada sea eterno
 export const EQUIPO = 6;
 
-// ---------- el tablero ----------
-// Rejilla de nodos. Fila 0 = lado B (arriba), última fila = lado A (abajo).
-// Cada lado tiene 2 entradas en las esquinas y 1 refugio al centro.
-export function mkTablero({ filas = 8, cols = 5 } = {}) {
+// ============================================================
+// EL TABLERO DE POKÉMON DUEL (transcrito del tablero original).
+//
+// No es una rejilla: son DOS ANILLOS CONCÉNTRICOS unidos por 6 radios.
+//   · anillo EXTERIOR de 20 nodos — las 4 esquinas son las entradas y en el
+//     medio de los lados corto van los dos refugios;
+//   · anillo INTERIOR de 8 nodos;
+//   · 6 radios: uno desde cada esquina al vértice interior más cercano, más
+//     dos desde los puntos pegados a cada refugio al medio interior.
+// Total: 26 puntos + 2 refugios, que es exactamente lo que documenta el juego.
+//
+// Va ROTADO a vertical (los refugios arriba y abajo en vez de a los costados)
+// porque en teléfono conviene que lo tuyo quede abajo.
+//
+// Por qué es mejor que mi rejilla: los radios son CUELLOS DE BOTELLA. Hay
+// pocas rutas, así que bloquear y cercar valen de verdad.
+// ============================================================
+export function mkTablero() {
+  const nodos = {};
+  const add = (id, x, y, tipo = 'normal', bio = null) =>
+    (nodos[id] = { id, x, y, tipo, bio, vecinos: [] });
+  const une = (a, b) => { nodos[a].vecinos.push(b); nodos[b].vecinos.push(a); };
+  const anillo = (ids) => ids.forEach((id, i) => une(id, ids[(i + 1) % ids.length]));
+
+  // --- anillo exterior (20) --- arriba el lado B, abajo el lado A
+  add('eB1', 0, 0, 'entrada'); add('p1_0', 1, 0); add('p2_0', 2, 0);
+  add('metaB', 3, 0, 'meta');
+  add('p4_0', 4, 0); add('p5_0', 5, 0); add('eB2', 6, 0, 'entrada');
+  add('p6_1', 6, 1); add('p6_2', 6, 2); add('p6_3', 6, 3);
+  add('eA2', 6, 4, 'entrada'); add('p5_4', 5, 4); add('p4_4', 4, 4);
+  add('metaA', 3, 4, 'meta');
+  add('p2_4', 2, 4); add('p1_4', 1, 4); add('eA1', 0, 4, 'entrada');
+  add('p0_3', 0, 3); add('p0_2', 0, 2); add('p0_1', 0, 1);
+  anillo(['eB1', 'p1_0', 'p2_0', 'metaB', 'p4_0', 'p5_0', 'eB2',
+          'p6_1', 'p6_2', 'p6_3', 'eA2', 'p5_4', 'p4_4', 'metaA',
+          'p2_4', 'p1_4', 'eA1', 'p0_3', 'p0_2', 'p0_1']);
+
+  // --- anillo interior (8) ---
+  add('i2_1', 2, 1); add('i3_1', 3, 1); add('i4_1', 4, 1); add('i4_2', 4, 2);
+  add('i4_3', 4, 3); add('i3_3', 3, 3); add('i2_3', 2, 3); add('i2_2', 2, 2);
+  anillo(['i2_1', 'i3_1', 'i4_1', 'i4_2', 'i4_3', 'i3_3', 'i2_3', 'i2_2']);
+
+  // --- los 6 radios ---
+  une('eB1', 'i2_1'); une('eB2', 'i4_1');
+  une('eA1', 'i2_3'); une('eA2', 'i4_3');
+  une('p4_0', 'i3_1'); une('p2_4', 'i3_3');   // los pegados a cada refugio
+
+  // biomas: fijos (sin rng) para que todo sea reproducible
+  const BIO = {
+    p1_0: 'agua', p5_0: 'montana', p6_2: 'sabana', p0_2: 'bosque',
+    p1_4: 'montana', p5_4: 'agua', p2_0: 'bosque', p4_4: 'sabana',
+    i3_1: 'bosque', i2_2: 'sabana', i4_2: 'agua', i3_3: 'montana',
+  };
+  for (const [id, b] of Object.entries(BIO)) if (nodos[id]) nodos[id].bio = b;
+
+  return { nodos, filas: 4, cols: 6, entradas: { A: ['eA1', 'eA2'], B: ['eB1', 'eB2'] } };
+}
+
+// La rejilla vieja queda para poder comparar los dos tableros midiendo.
+export function mkTableroRejilla({ filas = 8, cols = 5 } = {}) {
   const nodos = {};
   const add = (id, x, y, tipo = 'normal', bio = null) => {
     nodos[id] = { id, x, y, tipo, bio, vecinos: [] };
@@ -60,6 +123,8 @@ export function mkTablero({ filas = 8, cols = 5 } = {}) {
   return { nodos, filas, cols, entradas: { A: ['eA1', 'eA2'], B: ['eB1', 'eB2'] } };
 }
 
+const rivalLado = (l) => (l === 'A' ? 'B' : 'A');
+
 // ---------- partida ----------
 export function mkPartida(equipoA, equipoB, opts = {}) {
   const rng = opts.rng || Math.random;
@@ -69,7 +134,7 @@ export function mkPartida(equipoA, equipoB, opts = {}) {
     const key = e.key || e;
     piezas.push({
       uid: lado + i, key, lado, nodo: null,
-      estado: 'banca', vuelveEn: 0, efectos: [],
+      estado: 'banca', vuelveEn: 0, efectos: [], heridas: 0,
       rueda: opts.rueda ? opts.rueda(key) : ruedaDe(key),
     });
   });
@@ -77,6 +142,35 @@ export function mkPartida(equipoA, equipoB, opts = {}) {
   return {
     rng, tablero, piezas, turno: 1,
     lado: opts.abre || (rng() < 0.5 ? 'A' : 'B'),
+    // Cuántos duelos perdidos aguanta una pieza antes de ir a la banca.
+    // 1 = regla de Pokémon Duel (un giro malo y afuera). Subirlo suaviza la
+    // suerte, pero OJO: acumular golpes hace que el kit pese más, que es
+    // justo lo que infla el desbalance en la arena. Medir antes de cambiarlo.
+    centro: { A: [], B: [] },
+    // REGLA DE DUEL: el que abre tiene 1 MP menos en su primer movimiento.
+    // Es la compensación del juego original por el tempo de salir primero, y
+    // acá hace falta de verdad: el tablero es corto (6 pasos de la entrada al
+    // refugio rival) y sin esto abrir gana el 56.3%.
+    penalApertura: opts.penalApertura ? (opts.abre || null) : null,
+    // piso del MP penalizado: con 1 la penalización pesa ~2 acciones y pasa de
+    // largo (abre cae a 28.7%); con 2 solo frena a los más rápidos.
+    penalMin: opts.penalMin ?? 2,
+    // COMPENSACIÓN POR ABRIR (nuestra, no de Duel): el que responde mete DOS
+    // animales en su primer turno. Vale exactamente una acción, que es el
+    // tamaño del desbalance. El MP-1 del original resultó demasiado grueso en
+    // este tablero corto: o no hace nada (56%) o pasa de largo (28%).
+    // ⚠️ ENCENDIDA, y es una decisión MEDIDA (tablero Duel, IA actual):
+    //   sin compensar .............. abre gana 60.1%
+    //   con entrada doble .......... abre gana 41.0%
+    // Ninguna da 50 clavado porque el desbalance vale MEDIA acción y no hay
+    // forma de cobrar media acción. 41.0 queda más cerca que 60.1, así que va
+    // encendida; igual conviene ALTERNAR quién abre entre partidas, que es lo
+    // que lo vuelve justo de verdad en una serie. Se apaga con
+    // `dobleEntrada: false`.
+    dobleEntrada: opts.dobleEntrada === false ? null : rivalLado(opts.abre || 'A'),
+    resistencia: opts.resistencia || 1,
+    // turnos que pierde la pieza al salir del centro
+    espera: opts.espera ?? ESPERA_SALIDA,
     fin: null, log: [],
   };
 }
@@ -96,6 +190,10 @@ export const bioDe = (st, nodo) => st.tablero.nodos[nodo].bio;
 export const enemigosAdyacentes = (st, p) => vecinos(st, p.nodo)
   .map(n => ocupante(st, n)).filter(o => o && o.lado !== p.lado);
 
+// MP de esta pieza AHORA (con la penalización de apertura si corresponde).
+export const mpEfectivo = (st, p) =>
+  st.penalApertura === p.lado ? Math.max(st.penalMin ?? 2, p.rueda.mp - 1) : p.rueda.mp;
+
 // A dónde puede llegar esta pieza: BFS hasta su mp, sin atravesar ni pisar
 // nodos ocupados (el bloqueo es la mecánica central).
 export function alcanzables(st, uid) {
@@ -104,7 +202,9 @@ export function alcanzables(st, uid) {
   const vistos = new Set([p.nodo]);
   let borde = [p.nodo];
   const out = [];
-  for (let paso = 0; paso < p.rueda.mp; paso++) {
+  if (p.inmovilHasta && st.turno < p.inmovilHasta) return [];   // entró quieta
+  const mp = mpEfectivo(st, p);
+  for (let paso = 0; paso < mp; paso++) {
     const sig = [];
     for (const n of borde) {
       for (const v of vecinos(st, n)) {
@@ -134,9 +234,32 @@ export function distancias(st, desde) {
   return d;
 }
 
-function noquear(st, p) {
-  p.estado = 'banca'; p.nodo = null; p.efectos = [];
-  p.vuelveEn = st.turno + ESPERA_KO;
+// Al centro de recuperación. Si ya había 2, la más vieja sale a la banca.
+function alCentro(st, p) {
+  p.estado = 'centro'; p.nodo = null; p.efectos = []; p.heridas = 0; p.vuelveEn = 0;
+  const cola = st.centro[p.lado];
+  cola.push(p.uid);
+  while (cola.length > CENTRO_CAPACIDAD) {
+    const q = pieza(st, cola.shift());
+    q.estado = 'banca';
+    q.vuelveEn = st.turno + (st.espera ?? ESPERA_SALIDA);
+  }
+}
+
+// CERCO: si TODOS los puntos alrededor de una pieza están tapados por el
+// rival, se va al centro sin pelear. Es la segunda forma de sacar piezas y lo
+// que le da sentido táctico al bloqueo (ojo con las esquinas: tienen menos
+// vecinos, así que ahí es mucho más fácil quedar cercado).
+function revisarCercos(st, lado, ev) {
+  for (const e of enTablero(st, rival(lado))) {
+    const vs = vecinos(st, e.nodo);
+    if (!vs.length) continue;
+    const cercada = vs.every(n => {
+      const o = ocupante(st, n);
+      return o && o.lado === lado;
+    });
+    if (cercada) { alCentro(st, e); ev.push({ t: 'cercado', uid: e.uid }); }
+  }
 }
 
 // El duelo: giran las dos ruedas (ajustadas por el bioma del nodo donde está
@@ -147,14 +270,26 @@ function duelo(st, pa, pb) {
   const rb = ruedaEnBioma(pb.rueda, bioDe(st, pb.nodo));
   const ga = girar(ra, st.rng), gb = girar(rb, st.rng);
   const r = resolverDuelo(ga, gb);
+  // El evento va COMPLETO (las dos ruedas ya ajustadas por bioma y el índice
+  // del gajo que salió) para que la UI pueda animar el giro leyendo solo el
+  // log, sin recalcular nada ni depender del estado posterior de las piezas.
   ev.push({
     t: 'duelo', a: pa.uid, b: pb.uid, ganador: r.ganador, tipo: r.tipo,
     gajoA: ga.n, colorA: ga.color, gajoB: gb.n, colorB: gb.color,
+    ruedaA: ra.gajos, ruedaB: rb.gajos,
+    iA: ra.gajos.indexOf(ga), iB: rb.gajos.indexOf(gb),
   });
   if (r.tipo === 'ko') {
     const perdedor = r.ganador === 'A' ? pb : pa;
-    noquear(st, perdedor);
-    ev.push({ t: 'ko', uid: perdedor.uid });
+    perdedor.heridas = (perdedor.heridas || 0) + 1;
+    if (perdedor.heridas >= st.resistencia) {
+      alCentro(st, perdedor);
+      ev.push({ t: 'ko', uid: perdedor.uid });
+    } else {
+      // aguanta: queda tocada en el tablero (se le curan las heridas si cae)
+      ev.push({ t: 'herida', uid: perdedor.uid, heridas: perdedor.heridas,
+                aguanta: st.resistencia - perdedor.heridas });
+    }
   } else if (r.tipo === 'estado') {
     const tocado = r.ganador === 'A' ? pb : pa;
     const g = r.ganador === 'A' ? ga : gb;
@@ -164,9 +299,19 @@ function duelo(st, pa, pb) {
   return ev;
 }
 
+// WAIT WIN: se gana también dejando al rival sin forma de jugar — sin piezas
+// en el tablero y sin poder meter ninguna (entradas tapadas, o nada en banca).
+// Es lo que vuelve el bloqueo de entradas una jugada ganadora de verdad.
+export function sinSalida(st, lado) {
+  if (enTablero(st, lado).length) return false;
+  if (!enBanca(st, lado).length) return true;                 // nada que meter
+  return !st.tablero.entradas[lado].some(e => !ocupante(st, e)); // entradas tapadas
+}
+
 export function pasarTurno(st) {
   st.turno++;
   st.lado = rival(st.lado);
+  if (!st.fin && sinSalida(st, st.lado)) st.fin = rival(st.lado);
   if (st.turno > LIMITE_TURNOS && !st.fin) st.fin = 'empate';
 }
 
@@ -192,6 +337,7 @@ export function jugar(st, accion) {
     if (!alcanzables(st, p.uid).includes(accion.hasta)) return { ok: false, error: 'fuera de alcance' };
     p.nodo = accion.hasta;
     ev.push({ t: 'mueve', uid: p.uid, nodo: p.nodo });
+    if (st.penalApertura === p.lado) st.penalApertura = null;   // se gasta una sola vez
   } else if (accion.tipo !== 'atacar') {
     return { ok: false, error: 'acción desconocida' };
   }
@@ -205,12 +351,22 @@ export function jugar(st, accion) {
     ev.push(...duelo(st, p, o));
   }
 
+  revisarCercos(st, p.lado, ev);
+
   if (p.estado === 'tablero' && p.nodo === metaDe(p.lado)) {
     st.fin = p.lado;
     ev.push({ t: 'meta', uid: p.uid, lado: p.lado });
   }
   st.log.push(...ev);
-  if (!st.fin) pasarTurno(st);
+  // el que responde encadena su segunda entrada sin perder el turno
+  const encadena = accion.tipo === 'entrar' && st.dobleEntrada === p.lado;
+  if (encadena) {
+    st.dobleEntrada = null;
+    // la segunda entra QUIETA un turno suyo: la entrada doble completa valía
+    // una acción y el desbalance era de media (medido: 43% contra 56.3%).
+    if (st.quietaAlEncadenar !== false) p.inmovilHasta = st.turno + 2;
+  }
+  if (!st.fin && !encadena) pasarTurno(st);
   return { ok: true, eventos: ev };
 }
 
@@ -245,10 +401,10 @@ export function accionAuto(st, lado = st.lado) {
   const banca = enBanca(st, lado);
   const libres = st.tablero.entradas[lado].filter(e => !ocupante(st, e));
 
-  // 2) desplegar si hay poca gente arriba (sin piezas no se ataca ni se tapa)
-  if (banca.length && libres.length && mios.length < 3) {
-    const mejor = banca.reduce((a, b) => (b.rueda.mp > a.rueda.mp ? b : a));
-    return { tipo: 'entrar', uid: mejor.uid, hasta: libres[0] };
+  // 2) sin NADA en el tablero no hay nada que evaluar: hay que entrar
+  if (!mios.length && banca.length && libres.length) {
+    const r = banca.reduce((a, b) => (b.rueda.mp > a.rueda.mp ? b : a));
+    return { tipo: 'entrar', uid: r.uid, hasta: libres[0] };
   }
 
   // 3) la carrera
@@ -302,6 +458,27 @@ export function accionAuto(st, lado = st.lado) {
       if (atacar && mejorEv > 0) s += mejorEv * 30;
       else if (hayEnemigo) s -= 6;                         // quedar al lado sin ventaja
 
+      // ¿pararme acá CERCA a alguien? Lo saca del tablero sin pelear, así que
+      // vale más que casi cualquier duelo. (En este tablero los puntos tienen
+      // 2 o 3 rutas, así que cercar es de verdad posible.)
+      for (const n of vecinos(st, destino)) {
+        const o = ocupante(st, n);
+        if (!o || o.lado === lado) continue;
+        const faltan = vecinos(st, o.nodo).filter(v => v !== destino).filter(v => {
+          const q = ocupante(st, v);
+          return !(q && q.lado === lado);
+        }).length;
+        if (faltan === 0) s += 70;                         // queda cercado YA
+        else if (faltan === 1) s += 14;                    // a un paso
+      }
+
+      // tapar las entradas del rival: si se queda sin piezas arriba y sin
+      // entradas libres, pierde por Wait Win.
+      if (st.tablero.entradas[otro].includes(destino)) {
+        const suyasArriba = enTablero(st, otro).length;
+        s += suyasArriba === 0 ? 55 : suyasArriba === 1 ? 16 : 4;
+      }
+
       if (s > mejorS) {
         mejorS = s;
         const usar = atacar && mejorEv > 0 ? atacar : null;
@@ -321,6 +498,22 @@ export function accionAuto(st, lado = st.lado) {
       }
     }
   }
+  // ENTRAR compite como una jugada más, no antes que todas.
+  // (Antes el despliegue cortocircuitaba la evaluación: con un cerco servido
+  // la IA igual metía otra pieza. Medido con una posición armada a mano.)
+  for (const b of banca) {
+    for (const e of libres) {
+      // Las entradas están LEJOS del refugio rival, así que por distancia pura
+      // entrar siempre perdía contra correr: la IA se quedaba con 1-2 piezas,
+      // nadie bloqueaba y las partidas caían a 7 turnos. Con pocas piezas
+      // arriba, meter vale mucho (pero menos que un cerco servido).
+      let s = -(dMeta[e] ?? 99) * 10 + 10;
+      s += mios.length < 3 ? 45 : -55;
+      if (defender) s -= 15;                    // con el corredor encima, urge frenarlo
+      if (s > mejorS) { mejorS = s; mejor = { tipo: 'entrar', uid: b.uid, hasta: e }; }
+    }
+  }
+
   if (mejor) return mejor;
 
   // 4) no se puede mover nada: meter lo que haya en la banca

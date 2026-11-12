@@ -42,6 +42,7 @@ function partidaLab(ruedas, opts = {}) {
   const st = T.mkPartida(['a0', 'a1'], ['b0', 'b1'], {
     tablero: opts.tablero || pasillo(),
     abre: opts.abre || 'A',
+    penalApertura: false,          // las pruebas de mecánica miden el mp puro
     rng: opts.rng || (() => 0.5),
     rueda: () => ruedaLab([gajo('vacío', 'blanco', { dano: 1 })]),
   });
@@ -53,6 +54,18 @@ const poner = (st, uid, nodo) => {
 };
 
 // ---------- tablero ----------
+test('el tablero es el de Duel: 26 puntos + 2 refugios', () => {
+  const t = T.mkTablero();
+  const ids = Object.keys(t.nodos);
+  const metas = ids.filter(i => t.nodos[i].tipo === 'meta');
+  assert.equal(metas.length, 2);
+  assert.equal(ids.length - metas.length, 26, 'el tablero original tiene 26 puntos');
+  // todo conectado y ningún nodo con más de 3 rutas (por eso cercar es posible)
+  const grados = ids.map(i => t.nodos[i].vecinos.length);
+  assert.equal(Math.max(...grados), 3, 'ningún punto tiene más de 3 rutas');
+  assert.equal(Math.min(...grados) >= 2, true);
+});
+
 test('el tablero estándar tiene refugios y 2 entradas por lado', () => {
   const t = T.mkTablero();
   assert.ok(t.nodos.metaA && t.nodos.metaB, 'faltan refugios');
@@ -132,7 +145,7 @@ const duelo = (gA, gB) => {
 test('el FALLO pierde contra todo', () => {
   const { st, ev } = duelo(gajo('fallo', 'rojo'), gajo('golpe', 'blanco', { dano: 20 }));
   assert.equal(ev.ganador, 'B');
-  assert.equal(T.pieza(st, 'A0').estado, 'banca', 'el que falla cae');
+  assert.equal(T.pieza(st, 'A0').estado, 'centro', 'el que falla cae');
 });
 
 test('dos FALLOS no hacen nada', () => {
@@ -144,7 +157,7 @@ test('dos FALLOS no hacen nada', () => {
 
 test('el BLANCO más fuerte noquea al más débil', () => {
   const { st } = duelo(gajo('fuerte', 'blanco', { dano: 30 }), gajo('flojo', 'blanco', { dano: 10 }));
-  assert.equal(T.pieza(st, 'B0').estado, 'banca');
+  assert.equal(T.pieza(st, 'B0').estado, 'centro');
   assert.equal(T.pieza(st, 'A0').estado, 'tablero');
 });
 
@@ -165,7 +178,7 @@ test('la ESQUIVA (azul) frena al blanco, pero no lo saca del tablero', () => {
 test('el DORADO perfora la esquiva', () => {
   const { st, ev } = duelo(gajo('esquiva', 'azul'), gajo('dorado', 'dorado', { dano: 25 }));
   assert.equal(ev.ganador, 'B');
-  assert.equal(T.pieza(st, 'A0').estado, 'banca');
+  assert.equal(T.pieza(st, 'A0').estado, 'centro');
 });
 
 test('el MORADO gana al blanco y deja estado, sin noquear', () => {
@@ -187,12 +200,75 @@ test('el DORADO tiene prioridad sobre el morado', () => {
   assert.equal(ev.ganador, 'A');
 });
 
-test('el que cae va a la BANCA y vuelve varios turnos después', () => {
+test('el que cae va al CENTRO de recuperación', () => {
   const { st } = duelo(gajo('fuerte', 'blanco', { dano: 30 }), gajo('flojo', 'blanco', { dano: 10 }));
   const b = T.pieza(st, 'B0');
-  assert.equal(b.estado, 'banca');
+  assert.equal(b.estado, 'centro');
   assert.equal(b.nodo, null);
-  assert.ok(b.vuelveEn > st.turno, 'tiene que esperar para volver');
+  assert.deepEqual(st.centro.B, ['B0']);
+  assert.equal(T.enBanca(st, 'B').some(p => p.uid === 'B0'), false, 'desde el centro no se puede meter');
+});
+
+test('el centro aguanta 2: el tercer KO empuja al más viejo a la banca', () => {
+  // se provocan TRES KOs de verdad contra B y se mira la cola del centro
+  const golpe = ruedaLab([gajo('golpe', 'blanco', { dano: 30 })]);
+  const fallo = ruedaLab([gajo('fallo', 'rojo')]);
+  const st = T.mkPartida(['a', 'a', 'a'], ['b', 'b', 'b'], {
+    tablero: T.mkTablero(), abre: 'A', rng: () => 0.5,
+    rueda: () => ruedaLab([gajo('x', 'blanco', { dano: 1 })]),
+  });
+  T.pieza(st, 'A0').rueda = golpe;
+  for (const uid of ['B0', 'B1', 'B2']) T.pieza(st, uid).rueda = fallo;
+  poner(st, 'A0', 'p1_0');
+
+  for (const uid of ['B0', 'B1', 'B2']) {
+    poner(st, uid, 'p2_0');              // se para al lado y recibe
+    st.lado = 'A';
+    const r = T.jugar(st, { tipo: 'atacar', uid: 'A0', objetivo: uid });
+    assert.equal(r.ok, true, r.error);
+    assert.equal(T.pieza(st, uid).estado !== 'tablero', true, uid + ' tenía que caer');
+  }
+  assert.equal(st.centro.B.length, T.CENTRO_CAPACIDAD, 'el centro no pasa de 2');
+  assert.equal(T.pieza(st, 'B0').estado, 'banca', 'el más viejo salió a la banca');
+  assert.deepEqual(st.centro.B, ['B1', 'B2']);
+});
+
+test('CERCO: rodear a un enemigo por todos sus lados lo manda al centro', () => {
+  // en el pasillo, n2 solo tiene dos vecinos: n1 y n3
+  const st = partidaLab({});
+  poner(st, 'B0', 'n2');
+  poner(st, 'A0', 'n1');
+  st.lado = 'A';
+  // al ocupar n3 con la otra pieza mía, B0 queda cercada
+  T.pieza(st, 'A1').estado = 'tablero'; T.pieza(st, 'A1').nodo = 'eB';
+  const r = T.jugar(st, { tipo: 'mover', uid: 'A1', hasta: 'n3' });
+  assert.equal(r.ok, true, r.error);
+  assert.equal(T.pieza(st, 'B0').estado, 'centro', 'cercada = al centro');
+  assert.ok(r.eventos.some(e => e.t === 'cercado'));
+});
+
+test('no se cerca con piezas propias de por medio', () => {
+  const st = partidaLab({});
+  poner(st, 'B0', 'n2');
+  poner(st, 'B1', 'n1');      // vecino ocupado por su PROPIO aliado
+  poner(st, 'A0', 'eB');
+  st.lado = 'A';
+  T.jugar(st, { tipo: 'mover', uid: 'A0', hasta: 'n3' });
+  assert.equal(T.pieza(st, 'B0').estado, 'tablero', 'un aliado al lado no la cerca');
+});
+
+test('WAIT WIN: sin piezas y con las entradas tapadas, se pierde', () => {
+  const st = partidaLab({});
+  // B no tiene nada en el tablero y su única entrada está ocupada por mí
+  poner(st, 'A0', 'eB');
+  assert.equal(T.sinSalida(st, 'B'), true);
+  assert.equal(T.sinSalida(st, 'A'), false, 'A sí puede jugar');
+});
+
+test('al empezar nadie está sin salida', () => {
+  const st = partidaLab({});
+  assert.equal(T.sinSalida(st, 'A'), false);
+  assert.equal(T.sinSalida(st, 'B'), false);
 });
 
 // ---------- rueda ----------

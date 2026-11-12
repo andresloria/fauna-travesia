@@ -10,10 +10,14 @@
 // ============================================================
 
 import { SP } from '../src/fauna_roster.js';
-import { mkPartida, jugarAuto, mkTablero } from '../src/travesia/tablero.js';
+import { mkPartida, jugarAuto, mkTablero, mkTableroRejilla } from '../src/travesia/tablero.js';
 
 const N = +(process.argv[2] || 300);
-const FILAS = +(process.argv[3] || 8);
+const TAB = process.argv[3] || 'duel';        // 'duel' (el original) o 'rejilla'
+const mkTab = () => TAB === 'rejilla' ? mkTableroRejilla({ filas: 8, cols: 5 }) : mkTablero();
+const PENAL = process.argv[4] || '2';   // piso del MP penalizado, o 'no'
+const RESIST = +(process.argv[6] || 1);   // duelos perdidos que aguanta una pieza
+const ESPERA = +(process.argv[5] || 7);   // acciones en la banca tras caer
 
 const KEYS = Object.keys(SP);
 const rngSemilla = (s) => { let x = s >>> 0 || 1;
@@ -26,7 +30,7 @@ const equipo = (rng) => {
 };
 
 let ganaAbre = 0, ganaResponde = 0, empates = 0;
-let sumTurnos = 0, sumDuelos = 0, sumKOs = 0, sumMetas = 0;
+let sumTurnos = 0, sumDuelos = 0, sumKOs = 0, sumMetas = 0, sumCercos = 0, sumWait = 0;
 const porEspecie = {};   // key -> {j, g}
 
 const t0 = Date.now();
@@ -34,12 +38,15 @@ for (let i = 0; i < N; i++) {
   const rng = rngSemilla(i * 2654435761 + 11);
   const A = equipo(rng), B = equipo(rng);
   const abre = rng() < 0.5 ? 'A' : 'B';
-  const st = mkPartida(A, B, { rng, abre, tablero: mkTablero({ filas: FILAS, cols: 5 }) });
+  const st = mkPartida(A, B, { rng, abre, resistencia: RESIST, espera: ESPERA, tablero: mkTab(),
+    dobleEntrada: PENAL === 'no' ? false : undefined, quietaAlEncadenar: PENAL !== 'libre' });
   jugarAuto(st);
 
   sumTurnos += st.turno;
   sumDuelos += st.log.filter(e => e.t === 'duelo').length;
   sumKOs += st.log.filter(e => e.t === 'ko').length;
+  sumCercos += st.log.filter(e => e.t === 'cercado').length;
+  if (st.fin !== 'empate' && !st.log.some(e => e.t === 'meta')) sumWait++;
   if (st.fin === 'empate') empates++;
   else {
     sumMetas++;
@@ -58,7 +65,7 @@ const pct = (n, d) => d ? (n / d * 100).toFixed(1) + '%' : '—';
 const decididas = ganaAbre + ganaResponde;
 
 console.log('');
-console.log('TRAVESÍA — ' + N + ' partidas, tablero ' + FILAS + ' filas  (' + (Date.now() - t0) + ' ms)');
+console.log('TRAVESÍA — ' + N + ' partidas, tablero ' + TAB + ', penal ' + PENAL + ', resistencia ' + RESIST + '  (' + (Date.now() - t0) + ' ms)');
 console.log('─'.repeat(58));
 console.log('  gana el que ABRE      ' + pct(ganaAbre, decididas).padStart(7) +
             '   (50% = parejo; >55% hay que compensar)');
@@ -67,6 +74,8 @@ console.log('  empates               ' + pct(empates, N).padStart(7) + '   (alto
 console.log('  turnos por partida    ' + (sumTurnos / N).toFixed(1).padStart(7));
 console.log('  duelos por partida    ' + (sumDuelos / N).toFixed(1).padStart(7) + '   (bajo = es un desfile, no un juego)');
 console.log('  KOs por partida       ' + (sumKOs / N).toFixed(1).padStart(7));
+console.log('  CERCOS por partida    ' + (sumCercos / N).toFixed(2).padStart(7) + '   (sacar sin pelear)');
+console.log('  ganadas por WAIT WIN  ' + pct(sumWait, N).padStart(7) + '   (ahogando al rival)');
 console.log('');
 
 // ¿qué tan disparejas quedan las especies? La desviación típica es la medida
